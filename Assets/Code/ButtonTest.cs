@@ -3,17 +3,29 @@ using System.Collections;
 
 public class ButtonTest : MonoBehaviour 
 {
+	public bool ShowDebugLogs = true;
+
     Canvas can_0;
 
     public void ButtonPress()
     {
-            Debug.Log("Button Press");
+		Debug.Log("Button Press");
     }
 
     public void ButtonPress(string buttonName)
     {
         Debug.Log(buttonName);
     }
+
+	public void Start()
+	{
+
+	}
+
+	public void CreateGame()
+	{
+		SessionManager.Instance.CreateRoom();
+	}
 
     public void SwitchCamera(string canvasName)
     {
@@ -33,4 +45,37 @@ public class ButtonTest : MonoBehaviour
         //else
         //    Debug.LogError("Cannot find Canvas in scene.");
     }
+
+	/// <summary>
+	/// Called when a room is created
+	/// </summary>
+	private void RoomCreated()
+	{
+		// Change menu to reflect a room being created
+		this.Log("Created Room");
+	}
+
+	private void connected()
+	{
+		Debug.Log ("Button Test: Connected");
+	}
+
+	private void disconnected(DisconnectCause cause)
+	{
+		Debug.Log("DISCONNECT: " + cause.ToString());
+	}
+
+	#region MessageHandling
+	protected void Log(string message)
+	{
+		if(ShowDebugLogs)
+			Debug.Log("[MenuManager] " + message);
+	}
+	
+	protected void LogError(string message)
+	{
+		if(ShowDebugLogs)
+			Debug.LogError("[MenuManager] " + message);
+	}
+	#endregion
 }
