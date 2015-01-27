@@ -8,7 +8,6 @@ using System.Collections;
 public class SessionManager : MonoBehaviour
 {
 	private static SessionManager instance;
-	private RoomInfo[] RoomList;
 
 	/// <summary>
 	/// Define whether to show debug messages in the console window or hide them
@@ -127,13 +126,22 @@ public class SessionManager : MonoBehaviour
 	
 	}
 
-	public void StartSession()
+	/// <summary>
+	/// Start the network session - only if one is not currently started
+	/// </summary>
+	public void StartSession(bool autoJoinLobby = false)
 	{
+		// By default, do not join a lobby
+		PhotonNetwork.autoJoinLobby = autoJoinLobby;
+
 		// Only connect if the player is not already connected
 		if(!PhotonNetwork.connected)
 			PhotonNetwork.ConnectUsingSettings("v1.0");
 	}
 
+	/// <summary>
+	/// End the current network session - only if one is currently open
+	/// </summary>
 	public void EndSession()
 	{
 		// Only disconnect if the player is already connected
@@ -141,6 +149,27 @@ public class SessionManager : MonoBehaviour
 			PhotonNetwork.Disconnect();
 	}
 
+	/// <summary>
+	/// Joins the default lobby (master server lobby)
+	/// </summary>
+	public void JoinLobby()
+	{
+		if(!PhotonNetwork.insideLobby)
+			PhotonNetwork.JoinLobby();
+	}
+
+	/// <summary>
+	/// Leaves the player's current lobby
+	/// </summary>
+	public void LeaveLobby()
+	{
+		if(PhotonNetwork.insideLobby)
+			PhotonNetwork.LeaveLobby();
+	}
+
+	/// <summary>
+	/// Creates and joins a new room
+	/// </summary>
 	public void CreateRoom()
 	{
 		// Only attempt to create a room if you are not currently in a room
@@ -148,6 +177,22 @@ public class SessionManager : MonoBehaviour
 			PhotonNetwork.CreateRoom("");
 	}
 
+	/// <summary>
+	/// Creates and joins a new room with predefined options
+	/// </summary>
+	/// <param name="name">Name - empty string forces server to create random name</param>
+	/// <param name="roomOptions">Room options.</param>
+	/// <param name="typedLobby">Default or SQL - SQL allows for complex 'where' clauses.</param>
+	public void CreateRoom(string name, RoomOptions roomOptions, TypedLobby typedLobby)
+	{
+		if(!PhotonNetwork.inRoom)
+			PhotonNetwork.CreateRoom(name, roomOptions, typedLobby);
+	}
+
+	/// <summary>
+	/// Joins a room
+	/// </summary>
+	/// <param name="roomName">Room name.</param>
 	public void JoinRoom(string roomName)
 	{
 		// Only attempt to create a room if you are not currently in a room
@@ -155,6 +200,9 @@ public class SessionManager : MonoBehaviour
 			PhotonNetwork.JoinRoom(roomName);
 	}
 
+	/// <summary>
+	/// Leaves the current room - only if the player is in one
+	/// </summary>
 	public void LeaveRoom()
 	{
 		// Only attempt to leave a room if the player is in a room
@@ -162,32 +210,86 @@ public class SessionManager : MonoBehaviour
 			PhotonNetwork.LeaveRoom();
 	}
 
+	/// <summary>
+	/// Gets the list of rooms in the current lobby
+	/// </summary>
+	/// <returns>The room list</returns>
 	public RoomInfo[] GetRoomList()
 	{
-		return RoomList;
+		return PhotonNetwork.GetRoomList();
 	}
 
+	/// <summary>
+	/// Gets the room information of the current room
+	/// </summary>
+	/// <returns>The current room info.</returns>
 	public Room GetCurrentRoomInfo()
 	{
 		return PhotonNetwork.room;
 	}
 
+	/// <summary>
+	/// Gets a list of all players in the room, including the current player
+	/// </summary>
+	/// <returns>The all players in room.</returns>
+	public PhotonPlayer[] GetAllPlayersInRoom()
+	{
+		return PhotonNetwork.playerList;
+	}
+
+	/// <summary>
+	/// Gets a list of all other players in the room - this does not include the current player
+	/// </summary>
+	/// <returns>The other players in room.</returns>
+	public PhotonPlayer[] GetOtherPlayersInRoom()
+	{
+		return PhotonNetwork.otherPlayers;
+	}
+
+	/// <summary>
+	/// Gets the current players information
+	/// </summary>
+	/// <returns>The player info.</returns>
+	public PhotonPlayer GetPlayerInfo()
+	{
+		return PhotonNetwork.player;
+	}
+
+	/// <summary>
+	/// Gets the current room's max player size
+	/// </summary>
+	/// <returns>The max room size.</returns>
+	public int GetMaxRoomSize()
+	{
+		return PhotonNetwork.room.maxPlayers;
+	}
+
+	/// <summary>
+	/// Gets the number of players currently in the room
+	/// </summary>
+	/// <returns>The room player count.</returns>
+	public int GetRoomPlayerCount()
+	{
+		return PhotonNetwork.room.playerCount;
+	}
+
+	/// <summary>
+	/// Returns if the room has reached the maximum number of players
+	/// </summary>
+	/// <returns><c>true</c> if the current room filled; otherwise, <c>false</c>.</returns>
+	public bool IsRoomFilled()
+	{
+		return (PhotonNetwork.room.maxPlayers == PhotonNetwork.room.playerCount);
+	}
+
 	#region PHOTON CONNECT/DISCONNECT
 	/// <summary>
 	/// Called when the initial connection got established but before you can use the server.
+	/// Technically nothing should happen at this point in time because network services are not available
 	/// </summary>
 	private void OnConnectedToPhoton()
 	{
 		this.Log("PHOTON: Connected");
-
-		// This connection should only be called if Photon does not plan to autoconnect to a master lobby. If autojoin is enabled
-		// then Photon will call OnConnectedToMaster when connection is fully established
-		/*if(PhotonNetwork.autoJoinLobby)
-		{
-			// Call delegate event linked to this action 
-			if(OnSMConnected != null)
-				OnSMConnected();
-		}*/
 	}
 
 	/// <summary>
@@ -265,7 +367,6 @@ public class SessionManager : MonoBehaviour
 	private void OnJoinedLobby()
 	{
 		this.Log("PHOTON: Connected to Master Server's lobby");
-		RoomList = PhotonNetwork.GetRoomList();
 
 		// Call delegate event linked to this action
 		if(OnSMJoinedLobby != null)
@@ -344,6 +445,8 @@ public class SessionManager : MonoBehaviour
 	{
 		//PhotonNetwork.playerList  Room.customProperties
 		this.Log("PHOTON: Joined Room");
+
+
 
 		// Call delegate event linked to this action
 		if(OnSMJoinedRoom != null)
