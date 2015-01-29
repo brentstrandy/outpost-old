@@ -57,7 +57,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Code\ButtonTest.cs" />
+    <Compile Include="Assets\Code\GUIMenuManager.cs" />
+    <Compile Include="Assets\Code\MenuManager\MenuManager.cs" />
     <Compile Include="Assets\Code\SessionManager\SessionManager.cs" />
     <Compile Include="Assets\Code\iTween.cs" />
     <Compile Include="Assets\Photon\Demos\DemoBoxes\OnAwakePhysicsSettings.cs" />

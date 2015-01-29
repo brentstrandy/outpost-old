@@ -43,22 +43,26 @@ public class MenuManager : MonoBehaviour
 	
 	}
 
+    // FITZGERALD
 	public void StartSession_Click()
 	{
 		// Maybe GUI should have an initial "Start" button. When pressed, the game attampts to connect to the network
 		SessionManager.Instance.StartSession();
 	}
 
+    // FITZGERALD
 	public void CreateGame_Click()
 	{
 		SessionManager.Instance.CreateRoom();
 	}
 
+    // FITZGERALD
 	public void JoinGame_Click()
 	{
 		
 	}
 
+    // FITZGERALD (called when session manager succesfull connects to network)
 	private void ConnectedToNetwork()
 	{
 		// Perform actions necessary to tell user they are successfully connected
