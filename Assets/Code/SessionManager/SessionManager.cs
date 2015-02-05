@@ -431,7 +431,7 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	private void OnCreatedRoom()
 	{
-		this.Log("PHOTON: Created Room");
+		this.Log("PHOTON: Created Room (" + PhotonNetwork.room.name +")");
 
 		// Call delegate event linked to this action
 		if(OnSMCreatedRoom != null)
@@ -445,8 +445,6 @@ public class SessionManager : MonoBehaviour
 	{
 		//PhotonNetwork.playerList  Room.customProperties
 		this.Log("PHOTON: Joined Room");
-
-
 
 		// Call delegate event linked to this action
 		if(OnSMJoinedRoom != null)

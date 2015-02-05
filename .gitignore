@@ -2,3 +2,9 @@ Library/metadata
 Library/ScriptAssemblies
 Temp
 *.meta
+TestBuild_OSX.app
+*.csproj
+*.sln
+Outpost.userprefs
+Outpost-csharp.userprefs
+CurrentLayout.dwlt

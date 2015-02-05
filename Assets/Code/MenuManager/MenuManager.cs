@@ -220,8 +220,7 @@ public class MenuManager : MonoBehaviour
 		PlayShortClick();
 
 		// Ask the session manager to create a new room
-		SessionManager.Instance.CreateRoom();
-        PlayShortClick();
+		SessionManager.Instance.CreateRoom("", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 8 }, TypedLobby.Default);
 	}
 
 	public void JoinGame_Click()
@@ -232,10 +231,10 @@ public class MenuManager : MonoBehaviour
 		SessionManager.Instance.JoinLobby();
 	}
 
-	/*public void JoinRoom_Click()
+	public void JoinRoom_Click()
 	{
 
-	}*/
+	}
 
 	public void MatchmakingGame_Click()
 	{
@@ -279,10 +278,10 @@ public class MenuManager : MonoBehaviour
 		int index = 0;
 
 		SetCurrentMenuPanel(JoinGamePanel);
-		/*
+
 		// Get the list of rooms currently in the lobby
 		RoomList = SessionManager.Instance.GetRoomList();
-
+		Debug.Log("Room Count: " + RoomList.Length);
 		// Display each room currently in the lobby
 		foreach(Room room in RoomList)
 		{
@@ -292,7 +291,7 @@ public class MenuManager : MonoBehaviour
 			obj.GetComponent<Button>().onClick.AddListener(() => JoinRoom_Click());
 			obj.transform.parent = JoinGamePanel.transform;
 			index++;
-		}*/
+		}
 	}
 
 	/// <summary>
