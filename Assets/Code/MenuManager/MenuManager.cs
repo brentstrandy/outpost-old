@@ -5,9 +5,27 @@ using System.Collections.Generic;
 
 public class MenuManager : MonoBehaviour 
 {
+	private static MenuManager instance;
+
 	public bool ShowDebugLogs = true;
     public bool ShowRoomInfo = true;
-	private static MenuManager instance;
+
+	// Menu Panels
+	public GameObject StartMenuPanel;
+	public GameObject MainMenuPanel;
+	public GameObject CreateGamePanel;
+	public GameObject JoinGamePanel;
+	public GameObject MatchmakingGamePanel;
+	public GameObject MainSettingsPanel;
+	public GameObject AudioSettingsPanel;
+	public GameObject VideoSettingsPanel;
+	public GameObject ControlSettingsPanel;
+	public GameObject GameplaySettingsPanel;
+
+	// Menu Join Game Details
+	public GameObject JoinGameDetails_Prefab;
+
+	private GameObject CurrentMenuPanel;
 
     #region Lists of Legacy GUI Menu variables
     //public List<GameObject> Canvases, Panels, MenuHeaders, Buttons;
@@ -16,7 +34,8 @@ public class MenuManager : MonoBehaviour
     //[HideInInspector]
     //public GameObject CurrentMenu_GO, PreviousMenu_GO;
     #endregion
-    public RoomInfo Room;
+
+    public RoomInfo[] RoomList;
     public Text TextCurrentPlayers;
     private int CurrentPlayers = 0;
     public AudioClip ShortClick, LongClick;
@@ -83,23 +102,26 @@ public class MenuManager : MonoBehaviour
         LongClick = Resources.Load(soundEffectsPath + "long_click_01") as AudioClip;
         #endregion
 
-        #region Photon
+		// Set the current menu panel as the start menu
+		SetCurrentMenuPanel(StartMenuPanel);
+
+        #region Network Session
         // Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMConnected += ConnectedToNetwork;
+		SessionManager.Instance.OnSMJoinedLobby += JoinedLobby;
 		SessionManager.Instance.OnSMConnectionFail += DisconnectedFromNetwork;
 		SessionManager.Instance.OnSMCreatedRoom += RoomCreated;
-		SessionManager.Instance.StartSession();
         #endregion
     }
 
     void Update ()
     {
         // update number of players in room
-        if (ShowRoomInfo && Room != null)
-        {
-            if (Room.playerCount != CurrentPlayers)
-                CurrentPlayers = Room.playerCount;
-        }
+        //if (ShowRoomInfo && Room != null)
+        //{
+        //    if (Room.playerCount != CurrentPlayers)
+        //        CurrentPlayers = Room.playerCount;
+        //}
     }
 
     #region USED WITH LEGACY GUI SCENE
@@ -179,12 +201,15 @@ public class MenuManager : MonoBehaviour
 
     public void GatherNewRoomInfo()
     {
-        Room = SessionManager.Instance.GetCurrentRoomInfo();
+        //Room = SessionManager.Instance.GetCurrentRoomInfo();
         ShowRoomInfo = true;
     }
 
+	#region OnClick
 	public void StartSession_Click()
 	{
+		PlayShortClick();
+
 		// Maybe GUI should have an initial "Start" button. When pressed, the game attampts to connect to the network
         // Like a pre-screen that waits for user input. After user presses something the attempt to connect to network occurs
 		SessionManager.Instance.StartSession();
@@ -192,30 +217,116 @@ public class MenuManager : MonoBehaviour
 
 	public void CreateGame_Click()
 	{
+		PlayShortClick();
+
+		// Ask the session manager to create a new room
 		SessionManager.Instance.CreateRoom();
         PlayShortClick();
 	}
 
 	public void JoinGame_Click()
 	{
-        PlayShortClick();
+		PlayShortClick();
+
+		// Ask the session manager to join the default lobby
+		SessionManager.Instance.JoinLobby();
 	}
 
+	/*public void JoinRoom_Click()
+	{
+
+	}*/
+
+	public void MatchmakingGame_Click()
+	{
+		PlayShortClick();
+
+		SetCurrentMenuPanel(MatchmakingGamePanel);
+	}
+
+	public void MainSettings_Click()
+	{
+		PlayShortClick();
+
+		SetCurrentMenuPanel(MainSettingsPanel);
+	}
+
+	public void MainMenu_Click()
+	{
+		PlayLongClick();
+
+		// When returning to the main menu leave any room or lobby
+		SessionManager.Instance.LeaveRoom();
+		SessionManager.Instance.LeaveLobby();
+
+		SetCurrentMenuPanel(MainMenuPanel);
+	}
+	#endregion
+
+	/// <summary>
+	/// Called whenever the SessionManager connects to the network
+	/// </summary>
 	private void ConnectedToNetwork()
 	{
-		// Perform actions necessary to tell user they are successfully connected
+		SetCurrentMenuPanel(MainMenuPanel);
 	}
 
+	/// <summary>
+	/// Called whenever the SessionManager joins a lobby
+	/// </summary>
+	private void JoinedLobby()
+	{
+		int index = 0;
+
+		SetCurrentMenuPanel(JoinGamePanel);
+		/*
+		// Get the list of rooms currently in the lobby
+		RoomList = SessionManager.Instance.GetRoomList();
+
+		// Display each room currently in the lobby
+		foreach(Room room in RoomList)
+		{
+			// Instantiate row for each room and add it as a child of the JoinGame UI Panel
+			GameObject obj = Instantiate(JoinGameDetails_Prefab, new Vector3(0, -70 + (-70 * index), 0), Quaternion.identity) as GameObject;
+			obj.GetComponentInChildren<Text>().text = room.name;
+			obj.GetComponent<Button>().onClick.AddListener(() => JoinRoom_Click());
+			obj.transform.parent = JoinGamePanel.transform;
+			index++;
+		}*/
+	}
+
+	/// <summary>
+	/// Called whenever the SessionManager is disconnected from the network
+	/// </summary>
+	/// <param name="cause">Cause.</param>
 	private void DisconnectedFromNetwork(DisconnectCause cause)
 	{
-		// Perform actoins necessary to tell the user they have been disconnected
         ShowRoomInfo = false;
+
+		SetCurrentMenuPanel(StartMenuPanel);
 	}
 
+	/// <summary>
+	/// Called whenever the SessionManager creates a room
+	/// </summary>
 	private void RoomCreated()
 	{
-        PlayShortClick();
-    }
+		SetCurrentMenuPanel(CreateGamePanel);
+	}
+
+	/// <summary>
+	/// Set the currently visible menu panel
+	/// </summary>
+	/// <param name="newMenuPanel">New menu panel</param>
+	private void SetCurrentMenuPanel(GameObject newMenuPanel)
+	{
+		// Deactivate the current panel
+		if(CurrentMenuPanel != null)
+			CurrentMenuPanel.SetActive(false);
+		// Activate the new panel
+		newMenuPanel.SetActive(true);
+		CurrentMenuPanel = newMenuPanel;
+	}
 
 	#region MessageHandling
 	protected void Log(string message)

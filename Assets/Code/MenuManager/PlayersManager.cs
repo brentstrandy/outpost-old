@@ -10,8 +10,8 @@ public class PlayersManager : MonoBehaviour
 	void Awake () 
     {
         text = GetComponent<Text>();
-        if (MenuManager.Instance.Room != null)
-            players = MenuManager.Instance.Room.playerCount;
+        //if (MenuManager.Instance.Room != null)
+        //    players = MenuManager.Instance.Room.playerCount;
 	}
 	
 	void Update () 
