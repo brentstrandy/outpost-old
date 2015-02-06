@@ -48,9 +48,10 @@ public class SessionManager : MonoBehaviour
 	/// Called when player successfully joins a room
 	/// </summary>
 	public event SessionManagerAction OnSMJoinedRoom;
+	public event SessionManagerAction OnSMReceivedRoomListUpdate;
 	/// <summary>
 	/// Called when player leaves a room
-	/// </summary>
+	/// </summa
 	public event SessionManagerAction OnSMLeftRoom;
 	/// <summary>
 	/// Called when another player joins the current room
@@ -69,9 +70,13 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	public event SessionManagerActionRoomFailure OnSMCreateRoomFail;
 	/// <summary>
-	/// called when the player failed to join the room
+	/// Called when the player failed to join the room
 	/// </summary>
 	public event SessionManagerActionRoomFailure OnSMJoinRoomFail;
+	/// <summary>
+	/// Called when the player failed to randomly join a room
+	/// </summary>
+	public event SessionManagerActionRoomFailure OnSMRandomJoinFail;
 	/// <summary>
 	/// Called when the master client was switched to a different client
 	/// </summary>
@@ -89,7 +94,7 @@ public class SessionManager : MonoBehaviour
 			{
 				instance = GameObject.FindObjectOfType<SessionManager>();
 				
-				//Tell unity not to destroy this object when loading a new scene!
+				// Tell unity not to destroy this object when loading a new scene!
 				DontDestroyOnLoad(instance.gameObject);
 			}
 			
@@ -129,7 +134,7 @@ public class SessionManager : MonoBehaviour
 	/// <summary>
 	/// Start the network session - only if one is not currently started
 	/// </summary>
-	public void StartSession(bool autoJoinLobby = false)
+	public void StartSession(bool autoJoinLobby = true)
 	{
 		// By default, do not join a lobby
 		PhotonNetwork.autoJoinLobby = autoJoinLobby;
@@ -198,6 +203,14 @@ public class SessionManager : MonoBehaviour
 		// Only attempt to create a room if you are not currently in a room
 		if(!PhotonNetwork.inRoom)
 			PhotonNetwork.JoinRoom(roomName);
+	}
+
+	/// <summary>
+	/// Attempts to join a random room
+	/// </summary>
+	public void JoinRandomRoom()
+	{
+		PhotonNetwork.JoinRandomRoom();
 	}
 
 	/// <summary>
@@ -289,7 +302,11 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	private void OnConnectedToPhoton()
 	{
-		this.Log("PHOTON: Connected");
+		this.Log("Connected");
+
+		// Call delegate event linked to this action 
+		if(OnSMConnected != null)
+			OnSMConnected();
 	}
 
 	/// <summary>
@@ -297,7 +314,7 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	private void OnConnectedToMaster()
 	{
-		this.Log("PHOTON: Connected to Master - no rooms available unless connecting to a lobby");
+		this.Log("Connected to Master - no rooms available unless connecting to a lobby");
 
 		// Call delegate event linked to this action 
 		if(OnSMConnected != null)
@@ -310,7 +327,7 @@ public class SessionManager : MonoBehaviour
 	/// <param name="cause">Cause for failure.</param>
 	private void OnFailedToConnectToPhoton(DisconnectCause cause)
 	{
-		this.LogError("PHOTON: Failed to connect - connection not established");
+		this.LogError("Failed to connect - connection not established");
 
 		// Call delegate event linked to this action
 		if(OnSMConnectionFail != null)
@@ -324,7 +341,7 @@ public class SessionManager : MonoBehaviour
 	/// <param name="cause">Cause for failure.</param>
 	private void OnConnectionFail(DisconnectCause cause)
 	{
-		this.LogError("PHOTON: Failed to connect after establishing connection");
+		this.LogError("Failed to connect after establishing connection");
 
 		// Call delegate event linked to this action
 		if(OnSMConnectionFail != null)
@@ -338,7 +355,7 @@ public class SessionManager : MonoBehaviour
 	/// <param name="cause">Cause for failure.</param>
 	private void OnDisconnectedFromPhoton()
 	{
-		this.Log("PHOTON: Disconnected from Photon");
+		this.Log("Disconnected from Photon");
 
 		// Call delegate event linked to this action
 		if(OnSMDisconnected != null)
@@ -351,7 +368,7 @@ public class SessionManager : MonoBehaviour
 	/// <param name="debugMessage">Debug message.</param>
 	private void OnCustomAuthenticationFailed(string debugMessage)
 	{
-		this.LogError("PHOTON: " + debugMessage);
+		this.LogError("Custom authentication failed: " + debugMessage);
 
 		// Call delegate event linked to this action
 		if(OnSMDisconnected != null)
@@ -366,7 +383,7 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	private void OnJoinedLobby()
 	{
-		this.Log("PHOTON: Connected to Master Server's lobby");
+		this.Log("Connected to Master Server's lobby");
 
 		// Call delegate event linked to this action
 		if(OnSMJoinedLobby != null)
@@ -378,7 +395,7 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	private void OnLeftLobby()
 	{
-		this.Log("PHOTON: Left Lobby");
+		this.Log("Left Lobby");
 
 		// Call delegate event linked to this action
 		if(OnSMLeftLobby != null)
@@ -392,11 +409,23 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	private void OnLeftRoom()
 	{
-		this.Log("PHOTON: Left Room");
+		this.Log("Left Room");
 
 		// Call delegate event linked to this action
 		if(OnSMLeftRoom != null)
 			OnSMLeftRoom();
+	}
+
+	/// <summary>
+	/// Called whenever the room list is updated
+	/// </summary>
+	private void OnReceivedRoomListUpdate()
+	{
+		this.Log ("Received Room list update.");
+
+		// Call delegate event linked to this action
+		if(OnSMReceivedRoomListUpdate != null)
+			OnSMReceivedRoomListUpdate();
 	}
 
 	/// <summary>
@@ -405,11 +434,20 @@ public class SessionManager : MonoBehaviour
 	/// <param name="codeAndMsg">codeAndMsg[0] is int ErrorCode. codeAndMsg[1] is string debug msg.</param>
 	private void OnPhotonCreateRoomFailed(object[] codeAndMsg)
 	{
-		this.LogError("PHOTON: (" + codeAndMsg[0] + ") " + codeAndMsg[1]);
+		this.LogError("Failed to create room (" + codeAndMsg[0] + ") " + codeAndMsg[1]);
 
 		// Call delegate event linked to this action
 		if(OnSMCreateRoomFail != null)
 			OnSMCreateRoomFail(codeAndMsg);
+	}
+
+	private void OnPhotonRandomJoinFailed(object[] codeAndMsg)
+	{
+		this.LogError("Failed to join random room.");
+
+		// Call delegate event linked to this action
+		if(OnSMRandomJoinFail != null)
+			OnSMRandomJoinFail(codeAndMsg);
 	}
 
 	/// <summary>
@@ -418,7 +456,7 @@ public class SessionManager : MonoBehaviour
 	/// <param name="codeAndMsg[0] is int ErrorCode. codeAndMsg[1] is string debug msg.</param>
 	private void OnPhotonJoinRoomFailed(object[] codeAndMsg)
 	{
-		this.LogError("PHOTON: (" + codeAndMsg[0] + ") " + codeAndMsg[1]);
+		this.LogError("Failed to join room (" + codeAndMsg[0] + ") " + codeAndMsg[1]);
 
 		// Call delegate event linked to this action
 		if(OnSMJoinRoomFail != null)
@@ -431,7 +469,7 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	private void OnCreatedRoom()
 	{
-		this.Log("PHOTON: Created Room (" + PhotonNetwork.room.name +")");
+		this.Log("Created Room (" + PhotonNetwork.room.name +")");
 
 		// Call delegate event linked to this action
 		if(OnSMCreatedRoom != null)
@@ -444,7 +482,7 @@ public class SessionManager : MonoBehaviour
 	private void OnJoinedRoom()
 	{
 		//PhotonNetwork.playerList  Room.customProperties
-		this.Log("PHOTON: Joined Room");
+		this.Log("Joined Room");
 
 		// Call delegate event linked to this action
 		if(OnSMJoinedRoom != null)
@@ -457,7 +495,7 @@ public class SessionManager : MonoBehaviour
 	/// <param name="newMasterClient">New master client.</param>
 	private void OnMasterClientSwitched(PhotonPlayer newMasterClient)
 	{
-		this.Log("PHOTON: MasterClient left. Switched Master Client to " + newMasterClient.name);
+		this.Log("MasterClient left. Switched Master Client to " + newMasterClient.name);
 
 		// Call delegate event linked to this action
 		if(OnSMSwitchMaster != null)
@@ -475,7 +513,7 @@ public class SessionManager : MonoBehaviour
 		// TODO: Check player count to see if game can start
 		//Room.playerCount
 		
-		this.Log("PHOTON: " + player.name + " joined the room");
+		this.Log("Player (" + player.name + ") joined the room");
 
 		// Call delegate event linked to this action
 		if(OnSMPlayerJoinedRoom != null)
@@ -488,7 +526,7 @@ public class SessionManager : MonoBehaviour
 	/// <param name="newPlayer">Disconnected player.</param>
 	private void OnPhotonPlayerDisconnected(PhotonPlayer player)
 	{
-		this.Log("PHOTON: " + player.name + " left the room");
+		this.Log("Player (" + player.name + ") left the room");
 
 		// Call delegate event linked to this action
 		if(OnSMPlayerLeftRoom != null)
