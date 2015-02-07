@@ -6,30 +6,46 @@ using System.Collections.Generic;
 public class GameDetails_Menu : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
+
+	public GameObject[] PlayerNameText;
+	public GameObject RoomTitleText;
 	
 	private void OnEnable()
 	{
 		// Establish listeners for all applicable events
+		SessionManager.Instance.OnSMJoinedRoom += JoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerJoinedRoom += PlayerJoinedRoom_Event;
-		
-		// TODO: Display a waiting animation to show something is happening
+		SessionManager.Instance.OnSMPlayerLeftRoom += PlayerLeftRoom_Event;
 	}
 	
 	private void OnDisable()
 	{
 		// Remove listeners for all applicable events
+		SessionManager.Instance.OnSMJoinedRoom -= JoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerJoinedRoom -= PlayerJoinedRoom_Event;
+		SessionManager.Instance.OnSMPlayerLeftRoom -= PlayerLeftRoom_Event;
 	}
 	
 	#region OnClick
+	public void StartGame_Click()
+	{
+		// TO DO: Start the game
+	}
+
 	public void Back_Click()
 	{
-		// TODO: Ask the user if they're sure they want to leave
+		// TO DO: Ask the user if they're sure they want to leave
 
 		SessionManager.Instance.LeaveRoom();
 
 		// Tell the MenuManager to transition back
 		MenuManager.Instance.ShowMainMenu();
+	}
+
+	public void RoomTitle_AfterUpdate()
+	{
+		this.Log("updating title");
+		SessionManager.Instance.GetCurrentRoomInfo().name = RoomTitleText.GetComponent<InputField>().text;
 	}
 	#endregion
 	
@@ -37,9 +53,49 @@ public class GameDetails_Menu : MonoBehaviour
 	private void PlayerJoinedRoom_Event(PhotonPlayer player)
 	{
 		this.Log("Player Joined Room: " + player.name);
+
+		RefreshPlayerNames();
+	}
+
+	private void PlayerLeftRoom_Event(PhotonPlayer player)
+	{
+		this.Log("Player Left Room: " + player.name);
+		
+		RefreshPlayerNames();
+	}
+
+	private void JoinedRoom_Event()
+	{
+		// Immediately refresh the player name list to show the host
+		RefreshPlayerNames();
+		
+		// Immediately refresh the room details
+		RefreshRoomDetails();
 	}
 	#endregion
-	
+
+	/// <summary>
+	/// Refresh the names of all players currently in the room
+	/// </summary>
+	private void RefreshPlayerNames()
+	{
+		PhotonPlayer[] playerList = SessionManager.Instance.GetAllPlayersInRoom();
+
+		// Reset all names to blank
+		for(int i = 0; i < PlayerNameText.Length; i++)
+		{
+			if(playerList.Length > i)
+				PlayerNameText[i].GetComponent<Text>().text = playerList[i].name;
+			else
+				PlayerNameText[i].GetComponent<Text>().text = "<OPEN>";
+		}
+	}
+
+	private void RefreshRoomDetails()
+	{
+		RoomTitleText.GetComponent<InputField>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
+	}
+
 	#region MessageHandling
 	protected void Log(string message)
 	{

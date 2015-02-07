@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class Start_Menu : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
+	public GameObject InputField;
 	
 	private void OnEnable()
 	{
@@ -24,6 +25,9 @@ public class Start_Menu : MonoBehaviour
 	#region OnClick
 	public void Start_Click()
 	{
+		// Tell the SessionManager the name of the user logging in
+		SessionManager.Instance.AuthenticatePlayer(InputField.GetComponent<Text>().text);
+
 		// Tell the MenuManager to transition back
 		SessionManager.Instance.StartSession();
 	}
@@ -32,7 +36,6 @@ public class Start_Menu : MonoBehaviour
 	#region Events
 	private void Connected_Event()
 	{
-		this.Log("Connected");
 		MenuManager.Instance.ShowMainMenu();
 	}
 	#endregion

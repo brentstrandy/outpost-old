@@ -154,6 +154,12 @@ public class SessionManager : MonoBehaviour
 			PhotonNetwork.Disconnect();
 	}
 
+	public void AuthenticatePlayer(string name)
+	{
+		// TO DO: Actually authenticate the player
+		PhotonNetwork.player.name = name;
+	}
+
 	/// <summary>
 	/// Joins the default lobby (master server lobby)
 	/// </summary>
@@ -443,7 +449,7 @@ public class SessionManager : MonoBehaviour
 
 	private void OnPhotonRandomJoinFailed(object[] codeAndMsg)
 	{
-		this.LogError("Failed to join random room.");
+		this.Log("Failed to join random room.");
 
 		// Call delegate event linked to this action
 		if(OnSMRandomJoinFail != null)
