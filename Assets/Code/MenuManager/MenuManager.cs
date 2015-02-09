@@ -9,6 +9,8 @@ public class MenuManager : MonoBehaviour
 
 	public bool ShowDebugLogs = true;
 
+	public bool RoomHost { get; private set; }
+
 	// Menu Panels
 	public GameObject StartMenuPanel;
 	public GameObject MainMenuPanel;
@@ -102,8 +104,9 @@ public class MenuManager : MonoBehaviour
 		SetCurrentMenuPanel(MainMenuPanel);
 	}
 
-	public void ShowRoomDetailsMenu()
+	public void ShowRoomDetailsMenu(bool host = false)
 	{
+		RoomHost = false;
 		SetCurrentMenuPanel(RoomDetailsPanel);
 	}
 

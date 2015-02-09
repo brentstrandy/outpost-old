@@ -74,7 +74,7 @@ public class MatchmakingGame_Menu : MonoBehaviour
 	private void CreatedRoom_Event()
 	{
 		// Tell the MenuManager to transition to the room
-		MenuManager.Instance.ShowRoomDetailsMenu();
+		MenuManager.Instance.ShowRoomDetailsMenu(true);
 	}
 				
 	private void CreateRoomFailed_Event(object[] codeAndMsg)
@@ -89,14 +89,14 @@ public class MatchmakingGame_Menu : MonoBehaviour
 		// Tell the MenuManager to transition to the room
 		MenuManager.Instance.ShowRoomDetailsMenu();
 	}
-	
+	#endregion
+
 	private void JoinRandomRoom()
 	{
 		// TODO: Use predefined options when searching for rooms to find
 		SessionManager.Instance.JoinRandomRoom();
 	}
-	#endregion
-	
+
 	#region MessageHandling
 	protected void Log(string message)
 	{

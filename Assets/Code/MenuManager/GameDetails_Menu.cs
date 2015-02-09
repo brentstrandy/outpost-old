@@ -16,6 +16,22 @@ public class GameDetails_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMJoinedRoom += JoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerJoinedRoom += PlayerJoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerLeftRoom += PlayerLeftRoom_Event;
+
+		// Immediately refresh the player name list to show the host
+		RefreshPlayerNames();
+		
+		// Immediately refresh the room details
+		RefreshRoomDetails();
+
+		// See if the player is currently the room owner or just joining
+		if(MenuManager.Instance.RoomHost)
+		{
+			RoomTitleText.GetComponent<InputField>().enabled = true;
+		}
+		else
+		{
+			RoomTitleText.GetComponent<InputField>().enabled = false;
+		}
 	}
 	
 	private void OnDisable()
