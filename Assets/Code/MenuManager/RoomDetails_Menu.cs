@@ -3,12 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameDetails_Menu : MonoBehaviour
+public class RoomDetails_Menu : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
 
-	public GameObject[] PlayerNameText;
-	public GameObject RoomTitleText;
+	public GameObject[] PlayerName_GUIText;
+	public GameObject RoomTitle_GUIInput;
+	public GameObject Chat_GUIText;
+	public GameObject SendChat_GUIInput;
 	
 	private void OnEnable()
 	{
@@ -24,13 +26,13 @@ public class GameDetails_Menu : MonoBehaviour
 		RefreshRoomDetails();
 
 		// See if the player is currently the room owner or just joining
-		if(MenuManager.Instance.RoomHost)
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			RoomTitleText.GetComponent<InputField>().enabled = true;
+			RoomTitle_GUIInput.GetComponent<InputField>().enabled = true;
 		}
 		else
 		{
-			RoomTitleText.GetComponent<InputField>().enabled = false;
+			RoomTitle_GUIInput.GetComponent<InputField>().enabled = false;
 		}
 	}
 	
@@ -60,23 +62,29 @@ public class GameDetails_Menu : MonoBehaviour
 
 	public void RoomTitle_AfterUpdate()
 	{
-		this.Log("updating title");
-		SessionManager.Instance.GetCurrentRoomInfo().name = RoomTitleText.GetComponent<InputField>().text;
+		// Set the custom properties of a room
+		//Room.SetCustomProperties(Hashtable propertiesToSet);
+		SessionManager.Instance.GetCurrentRoomInfo().name = RoomTitle_GUIInput.GetComponent<InputField>().text;
+	}
+
+	public void SendChat_Click()
+	{
+		if(SendChat_GUIInput.GetComponent<InputField>().text != "")
+		{
+			PhotonView photonView = PhotonView.Get(this);
+			photonView.RPC("SendChatMessage", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name, SendChat_GUIInput.GetComponent<InputField>().text);
+		}
 	}
 	#endregion
 	
 	#region Events
 	private void PlayerJoinedRoom_Event(PhotonPlayer player)
 	{
-		this.Log("Player Joined Room: " + player.name);
-
 		RefreshPlayerNames();
 	}
 
 	private void PlayerLeftRoom_Event(PhotonPlayer player)
 	{
-		this.Log("Player Left Room: " + player.name);
-		
 		RefreshPlayerNames();
 	}
 
@@ -90,6 +98,13 @@ public class GameDetails_Menu : MonoBehaviour
 	}
 	#endregion
 
+	[RPC]
+	void SendChatMessage(string playerName, string msg)
+	{
+		Chat_GUIText.GetComponent<Text>().text += System.Environment.NewLine + "[" + playerName + "]: " + msg;
+		SendChat_GUIInput.GetComponent<InputField>().text = "";
+	}
+
 	/// <summary>
 	/// Refresh the names of all players currently in the room
 	/// </summary>
@@ -98,18 +113,18 @@ public class GameDetails_Menu : MonoBehaviour
 		PhotonPlayer[] playerList = SessionManager.Instance.GetAllPlayersInRoom();
 
 		// Reset all names to blank
-		for(int i = 0; i < PlayerNameText.Length; i++)
+		for(int i = 0; i < PlayerName_GUIText.Length; i++)
 		{
 			if(playerList.Length > i)
-				PlayerNameText[i].GetComponent<Text>().text = playerList[i].name;
+				PlayerName_GUIText[i].GetComponent<Text>().text = playerList[i].name;
 			else
-				PlayerNameText[i].GetComponent<Text>().text = "<OPEN>";
+				PlayerName_GUIText[i].GetComponent<Text>().text = "<OPEN>";
 		}
 	}
 
 	private void RefreshRoomDetails()
 	{
-		RoomTitleText.GetComponent<InputField>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
+		RoomTitle_GUIInput.GetComponent<InputField>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
 	}
 
 	#region MessageHandling
