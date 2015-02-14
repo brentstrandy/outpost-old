@@ -108,13 +108,13 @@ public class JoinGame_Menu : MonoBehaviour
 	protected void Log(string message)
 	{
 		if(ShowDebugLogs)
-			Debug.Log("[MatchmakingGame_Menu] " + message);
+			Debug.Log("[JoinGame_Menu] " + message);
 	}
 	
 	protected void LogError(string message)
 	{
 		if(ShowDebugLogs)
-			Debug.LogError("[MatchmakingGame_Menu] " + message);
+			Debug.LogError("[JoinGame_Menu] " + message);
 	}
 	#endregion
 }

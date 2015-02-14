@@ -11,7 +11,15 @@ public class RoomDetails_Menu : MonoBehaviour
 	public GameObject RoomTitle_GUIInput;
 	public GameObject Chat_GUIText;
 	public GameObject SendChat_GUIInput;
-	
+
+	private PhotonView photonView;
+
+	public void Start()
+	{
+		// Save a handle to the photon view associated with this GameObject for use later
+		photonView = PhotonView.Get(this);
+	}
+
 	private void OnEnable()
 	{
 		// Establish listeners for all applicable events
@@ -48,6 +56,9 @@ public class RoomDetails_Menu : MonoBehaviour
 	public void StartGame_Click()
 	{
 		// TO DO: Start the game
+		photonView.RPC ("StartGame", PhotonTargets.All, null);
+
+
 	}
 
 	public void Back_Click()
@@ -71,7 +82,6 @@ public class RoomDetails_Menu : MonoBehaviour
 	{
 		if(SendChat_GUIInput.GetComponent<InputField>().text != "")
 		{
-			PhotonView photonView = PhotonView.Get(this);
 			photonView.RPC("SendChatMessage", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name, SendChat_GUIInput.GetComponent<InputField>().text);
 		}
 	}
@@ -103,6 +113,12 @@ public class RoomDetails_Menu : MonoBehaviour
 	{
 		Chat_GUIText.GetComponent<Text>().text += System.Environment.NewLine + "[" + playerName + "]: " + msg;
 		SendChat_GUIInput.GetComponent<InputField>().text = "";
+	}
+
+	[RPC]
+	void StartGame()
+	{
+		MenuManager.Instance.ShowStartGame();
 	}
 
 	/// <summary>

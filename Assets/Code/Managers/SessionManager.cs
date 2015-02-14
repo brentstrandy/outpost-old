@@ -301,6 +301,16 @@ public class SessionManager : MonoBehaviour
 		return (PhotonNetwork.room.maxPlayers == PhotonNetwork.room.playerCount);
 	}
 
+	public void InstantiateObject(string name, Vector3 position, Quaternion rotation)
+	{
+		PhotonNetwork.Instantiate(name, position, rotation, 0);
+	}
+
+	public void DestroyObject(GameObject obj)
+	{
+		PhotonNetwork.Destroy(obj);
+	}
+
 	#region PHOTON CONNECT/DISCONNECT
 	/// <summary>
 	/// Called when the initial connection got established but before you can use the server.

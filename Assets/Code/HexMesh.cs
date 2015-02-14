@@ -6,6 +6,7 @@ using System.Collections;
 public class HexMesh : MonoBehaviour
 {
 	// Properties adjustable in the inspector
+	public bool ShowDebugLogs = true;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
 	public float HexagonDiameter = 1.0f;
@@ -71,7 +72,7 @@ public class HexMesh : MonoBehaviour
 		//var mesh = new Mesh();
 		
 		// Get the mesh instance
-		var mesh = GetComponent<MeshFilter>().mesh;
+		var mesh = GetComponent<MeshFilter>().sharedMesh;
 		
 		// Calculate some properties of the mesh
 		int numberOfHexagons = GetNumHexagons(gridWidth, gridHeight);
@@ -79,9 +80,9 @@ public class HexMesh : MonoBehaviour
 		int numberOfIndices = GetNumIndices(gridWidth, gridHeight);
 		float hexagonRadius = hexagonDiameter * 0.5f;
 
-		Debug.Log("Number of Hexagons: " + numberOfHexagons);
-		Debug.Log("Number of Vertices: " + numberOfVertices);
-		Debug.Log("Number of Indices: " + numberOfIndices);
+		this.Log("Number of Hexagons: " + numberOfHexagons);
+		this.Log("Number of Vertices: " + numberOfVertices);
+		this.Log("Number of Indices: " + numberOfIndices);
 		
 		// Allocate vertices and indices
 		var vertices = new Vector3[numberOfVertices];
@@ -105,7 +106,7 @@ public class HexMesh : MonoBehaviour
 				float z = r * hexagonRadius;
 				vertices[vertIndex] = new Vector3(x, y, z);
 				
-				Debug.Log("v" + vertIndex + ": " + vertices[vertIndex]);
+				this.Log("v" + vertIndex + ": " + vertices[vertIndex]);
 
 				vertIndex++;
 			}
@@ -118,11 +119,11 @@ public class HexMesh : MonoBehaviour
 		int hexIndex = 0;
 		for (int r = 0; r < gridHeight; r++)
 		{
-			Debug.Log("Row " + r);
+			this.Log("Row " + r);
 			int numHexagonColumns = r % 2 == 0 ? numHexagonColumnsA : numHexagonColumnsB; // The number of columns varies depending on whether the row index is even or odd
 			for (int c = 0; c < numHexagonColumns; c++)
 			{
-				Debug.Log("Column " + c);
+				this.Log("Column " + c);
 				// Clockwise order:
 				// JS 2015-02-20: This should be correct but it comes out backwards and I'm not sure why
 				/*
@@ -132,7 +133,7 @@ public class HexMesh : MonoBehaviour
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p >= 6 ? 1 : p + 1);
 					
-					Debug.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
+					this.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
 				}
 				*/
 
@@ -143,7 +144,7 @@ public class HexMesh : MonoBehaviour
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p >= 7 ? 1 : p);
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p - 1);
 					
-					Debug.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
+					this.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
 				}
 			}
 		}
@@ -328,4 +329,18 @@ public class HexMesh : MonoBehaviour
 			}
 		}
 	}
+
+	#region MessageHandling
+	protected void Log(string message)
+	{
+		if(ShowDebugLogs)
+			Debug.Log("[HexMesh] " + message);
+	}
+	
+	protected void LogError(string message)
+	{
+		if(ShowDebugLogs)
+			Debug.LogError("[HexMesh] " + message);
+	}
+	#endregion
 }

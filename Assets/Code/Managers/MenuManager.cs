@@ -8,8 +8,8 @@ public class MenuManager : MonoBehaviour
 	private static MenuManager instance;
 
 	public bool ShowDebugLogs = true;
-
-	public bool RoomHost { get; private set; }
+	public Camera GUICamera;
+	public Camera GameCamera;
 
 	// Menu Panels
 	public GameObject StartMenuPanel;
@@ -57,19 +57,11 @@ public class MenuManager : MonoBehaviour
 
 	void Start ()
 	{
-        #region Audio
-        string soundEffectsPath = "Audio/Effects/";
-        ShortClick = Resources.Load(soundEffectsPath + "short_click_01") as AudioClip;
-        LongClick = Resources.Load(soundEffectsPath + "long_click_01") as AudioClip;
-        #endregion
-
 		// Set the current menu panel as the start menu
 		SetCurrentMenuPanel(StartMenuPanel);
 
-        #region Network Session
         // Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMConnectionFail += DisconnectedFromNetwork;
-        #endregion
     }
 
     void Update ()
@@ -89,6 +81,18 @@ public class MenuManager : MonoBehaviour
 
 
 	#region Menu Transitions
+	public void ShowStartGame()
+	{
+		// Set the current menu to null - clearing any menu
+		SetCurrentMenuPanel(null);
+
+		// For now, simply just switch cameras
+		GUICamera.enabled = false;
+		GameCamera.enabled = true;
+
+		GameManager.Instance.StartNewGame();
+	}
+
 	public void ShowJoinGameMenu()
 	{
 		SetCurrentMenuPanel(JoinGamePanel);
@@ -106,7 +110,6 @@ public class MenuManager : MonoBehaviour
 
 	public void ShowRoomDetailsMenu(bool host = false)
 	{
-		RoomHost = false;
 		SetCurrentMenuPanel(RoomDetailsPanel);
 	}
 
@@ -137,30 +140,6 @@ public class MenuManager : MonoBehaviour
 	#endregion
 
 	/// <summary>
-	/// Called whenever the SessionManager joins a lobby
-	/// </summary>
-	/*private void JoinedLobby()
-	{
-		int index = 0;
-
-		SetCurrentMenuPanel(JoinGamePanel);
-
-		// Get the list of rooms currently in the lobby
-		RoomList = SessionManager.Instance.GetRoomList();
-		Debug.Log("Room Count: " + RoomList.Length);
-		// Display each room currently in the lobby
-		foreach(Room room in RoomList)
-		{
-			// Instantiate row for each room and add it as a child of the JoinGame UI Panel
-			GameObject obj = Instantiate(JoinGameDetails_Prefab, new Vector3(0, -70 + (-70 * index), 0), Quaternion.identity) as GameObject;
-			obj.GetComponentInChildren<Text>().text = room.name;
-			//obj.GetComponent<Button>().onClick.AddListener(() => JoinRoom_Click());
-			obj.transform.parent = JoinGamePanel.transform;
-			index++;
-		}
-	}*/
-
-	/// <summary>
 	/// Called whenever the SessionManager is disconnected from the network
 	/// </summary>
 	/// <param name="cause">Cause.</param>
@@ -178,8 +157,11 @@ public class MenuManager : MonoBehaviour
 		// Deactivate the current panel
 		if(CurrentMenuPanel != null)
 			CurrentMenuPanel.SetActive(false);
+
 		// Activate the new panel
-		newMenuPanel.SetActive(true);
+		if(newMenuPanel != null)
+			newMenuPanel.SetActive(true);
+
 		CurrentMenuPanel = newMenuPanel;
 	}
 
