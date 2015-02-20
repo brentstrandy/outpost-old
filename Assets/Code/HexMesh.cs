@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 [ExecuteInEditMode]
 public class HexMesh : MonoBehaviour
@@ -10,19 +11,39 @@ public class HexMesh : MonoBehaviour
 	public int GridWidth = 5;
 	public int GridHeight = 5;
 	public float HexagonDiameter = 1.0f;
+	public Color OutlineColor = Color.yellow;
+
+	//private GameObject Outlines;
 
 	// Use this for initialization
 	void Start ()
 	{
 		if (GetComponent<MeshFilter>() == null)
 		{
-			gameObject.AddComponent("MeshFilter");
+			gameObject.AddComponent<MeshFilter>();
 		}
 		
 		if (GetComponent<MeshRenderer>() == null)
 		{
-			gameObject.AddComponent("MeshRenderer");
+			gameObject.AddComponent<MeshRenderer>();
+
 		}
+
+		/*
+		if (Outlines == null)
+		{
+			Outlines = new GameObject("HexOutlines");
+			Outlines.transform.parent = gameObject.transform;
+			Outlines.transform.localRotation = Quaternion.identity;
+			Outlines.transform.localPosition = Vector3.zero;
+			Outlines.transform.localScale = Vector3.one;
+
+			if (Outlines.GetComponent<LineRenderer> == null)
+			{
+				Outlines.AddComponent<LineRenderer>();
+			}
+		}
+		*/
 
 		/*
 		if (Collide && GetComponent<MeshCollider>() == null)
@@ -158,6 +179,76 @@ public class HexMesh : MonoBehaviour
 		mesh.RecalculateNormals();
 		mesh.RecalculateBounds();
 		mesh.Optimize();
+
+		// Destroy any existing outlines
+		DestroyOutlines();
+
+		// Build the new outlines
+		BuildOutlines(gridWidth, gridHeight, vertices);
+	}
+	
+	private void BuildOutlines(int gridWidth, int gridHeight, Vector3[] vertices)
+	{
+
+		int numHexagonColumnsA = (gridWidth + 1) / 2;
+		int numHexagonColumnsB = (gridWidth - 1) / 2;
+
+		int member = 0;
+		for (int r = 0; r < gridHeight; r++)
+		{
+			int numHexagonColumns = r % 2 == 0 ? numHexagonColumnsA : numHexagonColumnsB; // The number of columns varies depending on whether the row index is even or odd
+			for (int c = 0; c < numHexagonColumns; c++)
+			{
+				// Prepare the outline game object
+				string name = "HexOutline" + member.ToString();
+				Log("Creating " + name);
+				var outline = new GameObject(name);
+
+				// Prepare the line renderer
+				var lineRenderer = outline.AddComponent<LineRenderer>();
+				lineRenderer.material = new Material (Shader.Find("Particles/Additive"));
+				lineRenderer.SetColors(OutlineColor, OutlineColor);
+				lineRenderer.SetWidth(0.02f, 0.02f);
+				lineRenderer.SetVertexCount(7);
+				lineRenderer.useWorldSpace = false;
+
+				// Build the vertex list
+				for (int p = 0; p < 7; p++)
+				{
+					int index = GetHexagonIndex(gridWidth, gridHeight, r, c, p > 5 ? 1 : p + 1);
+					lineRenderer.SetPosition(p, vertices[index]);
+				}
+
+				//var center = vertices[GetHexagonIndex(gridWidth, gridHeight, r, c, 0)];
+				
+				outline.transform.SetParent(gameObject.transform, false);
+				outline.transform.localRotation = Quaternion.identity;
+				//outline.transform.localPosition = center;
+				outline.transform.localPosition = new Vector3(0.0f, 0.01f, 0.0f); // Hover above the terrain just slightly
+				outline.transform.localScale = Vector3.one;
+				//outline.transform.position = center;
+
+				member++;
+			}
+		}
+	}
+	
+	private void DestroyOutlines()
+	{
+		var outlines = new List<GameObject>();
+		foreach (Transform child in transform)
+		{
+			if (child.gameObject.name.StartsWith("HexOutline"))
+		    {
+				outlines.Add(child.gameObject);
+			}
+		}
+
+		foreach (var child in outlines)
+		{
+			Log("Destroying " + child.name);
+			DestroyImmediate(child);
+		}
 	}
 
 	/*
