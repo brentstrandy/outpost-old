@@ -3,23 +3,14 @@ using System.Collections;
 
 /// <summary>
 /// Manages Network Session - Singleton
-/// Owner: Brent Strandys
+/// Owner: Brent Strandy
 /// </summary>
 public class SessionManager : MonoBehaviour
 {
 	private static SessionManager instance;
-
-	/// <summary>
-	/// Define whether to show debug messages in the console window or hide them
-	/// </summary>
 	public bool ShowDebugLogs = true;
 
-	/// <summary>
-	/// Gets the session I.
-	/// </summary>
-	/// <value>The session I.</value>
-	public int SessionID { get; private set; }
-	
+	#region EVENTS (DELEGATES)
 	public delegate void SessionManagerAction();
 	public delegate void SessionManagerActionFailure(DisconnectCause cause);
 	public delegate void SessionManagerActionRoomFailure(object[] codeAndMsg);
@@ -48,6 +39,9 @@ public class SessionManager : MonoBehaviour
 	/// Called when player successfully joins a room
 	/// </summary>
 	public event SessionManagerAction OnSMJoinedRoom;
+	/// <summary>
+	/// Called when the list of rooms in a lobby is updated
+	/// </summary>
 	public event SessionManagerAction OnSMReceivedRoomListUpdate;
 	/// <summary>
 	/// Called when player leaves a room
@@ -81,9 +75,11 @@ public class SessionManager : MonoBehaviour
 	/// Called when the master client was switched to a different client
 	/// </summary>
 	public event SessionManagerActionPlayer OnSMSwitchMaster;
+	#endregion
 
+	#region INSTANCE (SINGLETON)
 	/// <summary>
-	/// Persistent Singleton - this object lasts between scenes
+	/// Singleton - There can only be one
 	/// </summary>
 	/// <value>The instance.</value>
 	public static SessionManager Instance
@@ -93,44 +89,14 @@ public class SessionManager : MonoBehaviour
 			if(instance == null)
 			{
 				instance = GameObject.FindObjectOfType<SessionManager>();
-				
-				// Tell unity not to destroy this object when loading a new scene!
-				DontDestroyOnLoad(instance.gameObject);
 			}
 			
 			return instance;
 		}
 	}
+	#endregion
 
-	void Awake()
-	{
-		if(instance == null)
-		{
-			//If I am the first instance, make me the Singleton
-			instance = this;
-			DontDestroyOnLoad(this);
-		}
-		else
-		{
-			//If a Singleton already exists and you find
-			//another reference in scene, destroy it!
-			if(this != instance)
-				Destroy(this.gameObject);
-		}
-	}
-
-	// Use this for initialization
-	void Start ()
-	{
-
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
-	}
-
+	#region ACTIONS
 	/// <summary>
 	/// Start the network session - only if one is not currently started
 	/// </summary>
@@ -230,66 +196,34 @@ public class SessionManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Gets the list of rooms in the current lobby
+	/// Instantiate an object and propogate the object across the network
 	/// </summary>
-	/// <returns>The room list</returns>
-	public RoomInfo[] GetRoomList()
+	/// <param name="name">Prefab name - must be found in \Resources.</param>
+	/// <param name="position">Starting Position of Game Object.</param>
+	/// <param name="rotation">Starting Rotation (usually Quaterion.identity)</param>
+	public void InstantiateObject(string name, Vector3 position, Quaternion rotation)
 	{
-		return PhotonNetwork.GetRoomList();
+		PhotonNetwork.Instantiate(name, position, rotation, 0);
 	}
 
 	/// <summary>
-	/// Gets the room information of the current room
+	/// Destroy an object and tell all clients to destroy the game object
 	/// </summary>
-	/// <returns>The current room info.</returns>
-	public Room GetCurrentRoomInfo()
+	/// <param name="obj">Object to be destroyed</param>
+	public void DestroyObject(GameObject obj)
 	{
-		return PhotonNetwork.room;
+		PhotonNetwork.Destroy(obj);
 	}
+	#endregion
 
+	#region INFORMATION
 	/// <summary>
-	/// Gets a list of all players in the room, including the current player
+	/// Returns if the player is currently in a room
 	/// </summary>
-	/// <returns>The all players in room.</returns>
-	public PhotonPlayer[] GetAllPlayersInRoom()
+	/// <returns><c>true</c>, if in room, <c>false</c> otherwise.</returns>
+	public bool InRoom()
 	{
-		return PhotonNetwork.playerList;
-	}
-
-	/// <summary>
-	/// Gets a list of all other players in the room - this does not include the current player
-	/// </summary>
-	/// <returns>The other players in room.</returns>
-	public PhotonPlayer[] GetOtherPlayersInRoom()
-	{
-		return PhotonNetwork.otherPlayers;
-	}
-
-	/// <summary>
-	/// Gets the current players information
-	/// </summary>
-	/// <returns>The player info.</returns>
-	public PhotonPlayer GetPlayerInfo()
-	{
-		return PhotonNetwork.player;
-	}
-
-	/// <summary>
-	/// Gets the current room's max player size
-	/// </summary>
-	/// <returns>The max room size.</returns>
-	public int GetMaxRoomSize()
-	{
-		return PhotonNetwork.room.maxPlayers;
-	}
-
-	/// <summary>
-	/// Gets the number of players currently in the room
-	/// </summary>
-	/// <returns>The room player count.</returns>
-	public int GetRoomPlayerCount()
-	{
-		return PhotonNetwork.room.playerCount;
+		return PhotonNetwork.inRoom;
 	}
 
 	/// <summary>
@@ -301,15 +235,71 @@ public class SessionManager : MonoBehaviour
 		return (PhotonNetwork.room.maxPlayers == PhotonNetwork.room.playerCount);
 	}
 
-	public void InstantiateObject(string name, Vector3 position, Quaternion rotation)
+	/// <summary>
+	/// Gets the current players information
+	/// </summary>
+	/// <returns>The player info.</returns>
+	public PhotonPlayer GetPlayerInfo()
 	{
-		PhotonNetwork.Instantiate(name, position, rotation, 0);
+		return PhotonNetwork.player;
+	}
+	
+	/// <summary>
+	/// Gets the current room's max player size
+	/// </summary>
+	/// <returns>The max room size.</returns>
+	public int GetMaxRoomSize()
+	{
+		return PhotonNetwork.room.maxPlayers;
+	}
+	
+	/// <summary>
+	/// Gets the number of players currently in the room
+	/// </summary>
+	/// <returns>The room player count.</returns>
+	public int GetRoomPlayerCount()
+	{
+		return PhotonNetwork.room.playerCount;
 	}
 
-	public void DestroyObject(GameObject obj)
+	
+	/// <summary>
+	/// Gets the list of rooms in the current lobby
+	/// </summary>
+	/// <returns>The room list</returns>
+	public RoomInfo[] GetRoomList()
 	{
-		PhotonNetwork.Destroy(obj);
+		return PhotonNetwork.GetRoomList();
 	}
+	
+	/// <summary>
+	/// Gets the room information of the current room
+	/// </summary>
+	/// <returns>The current room info.</returns>
+	public Room GetCurrentRoomInfo()
+	{
+		return PhotonNetwork.room;
+	}
+	
+	/// <summary>
+	/// Gets a list of all players in the room, including the current player
+	/// </summary>
+	/// <returns>The all players in room.</returns>
+	public PhotonPlayer[] GetAllPlayersInRoom()
+	{
+		return PhotonNetwork.playerList;
+	}
+	
+	/// <summary>
+	/// Gets a list of all other players in the room - this does not include the current player
+	/// </summary>
+	/// <returns>The other players in room.</returns>
+	public PhotonPlayer[] GetOtherPlayersInRoom()
+	{
+		return PhotonNetwork.otherPlayers;
+	}
+
+	#endregion
 
 	#region PHOTON CONNECT/DISCONNECT
 	/// <summary>

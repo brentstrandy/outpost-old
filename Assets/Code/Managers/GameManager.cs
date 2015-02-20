@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Manages all high-level game functions. Is responsible for starting and stopping Levels
+/// Owner: Brent Strandy
+/// </summary>
 public class GameManager : MonoBehaviour
 {
 	private static GameManager instance;
@@ -10,8 +14,9 @@ public class GameManager : MonoBehaviour
 
 	private EnemySpawner Spawner;
 
+	#region INSTANCE (SINGLETON)
 	/// <summary>
-	/// Persistent Singleton - this object lasts between scenes
+	/// Singleton - There can only be one
 	/// </summary>
 	/// <value>The instance.</value>
 	public static GameManager Instance
@@ -21,14 +26,12 @@ public class GameManager : MonoBehaviour
 			if(instance == null)
 			{
 				instance = GameObject.FindObjectOfType<GameManager>();
-				
-				//Tell unity not to destroy this object when loading a new scene!
-				DontDestroyOnLoad(instance.gameObject);
 			}
 			
 			return instance;
 		}
 	}
+	#endregion
 
 	// Use this for initialization
 	void Start () 
@@ -45,7 +48,7 @@ public class GameManager : MonoBehaviour
 	{
 		if(GameRunning)
 		{
-			// When the game is running, the host manages when enemy's spawn
+			// When the game is running, the Master Client manages when enemy's spawn
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			{
 				if(Spawner != null)
@@ -53,6 +56,15 @@ public class GameManager : MonoBehaviour
 
 			}
 		}
+	}
+
+	/// <summary>
+	/// Loads specified Level
+	/// </summary>
+	/// <param name="level">Level Name</param>
+	public void LoadLevel(string level)
+	{
+		// TO DO: Load a new scene
 	}
 
 	public void StartNewGame()

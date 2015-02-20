@@ -3,11 +3,16 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Manages high-level menu operations. Is responsible for transitioning to new menus
+/// Owner: John Fitzgerald
+/// </summary>
 public class MenuManager : MonoBehaviour 
 {
 	private static MenuManager instance;
 
 	public bool ShowDebugLogs = true;
+	// Need a handle to the GUI camera in order to transition back to the camera
 	public Camera GUICamera;
 	public Camera GameCamera;
 
@@ -25,18 +30,9 @@ public class MenuManager : MonoBehaviour
 
 	private GameObject CurrentMenuPanel;
 
-    #region Lists of Legacy GUI Menu variables
-    //public List<GameObject> Canvases, Panels, MenuHeaders, Buttons;
-    //[HideInInspector]
-    //public string CurrentMenu, PreviousMenu;
-    //[HideInInspector]
-    //public GameObject CurrentMenu_GO, PreviousMenu_GO;
-    #endregion
-
-    public AudioClip ShortClick, LongClick;
-
+	#region INSTANCE (SINGLETON)
 	/// <summary>
-	/// Persistent Singleton - this object lasts between scenes
+	/// Singleton - There can be only one
 	/// </summary>
 	/// <value>The instance.</value>
 	public static MenuManager Instance
@@ -54,6 +50,7 @@ public class MenuManager : MonoBehaviour
 			return instance;
 		}
 	}
+	#endregion
 
 	void Start ()
 	{
@@ -62,25 +59,9 @@ public class MenuManager : MonoBehaviour
 
         // Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMConnectionFail += DisconnectedFromNetwork;
-    }
-
-    void Update ()
-    {
-
-    }
-
-    public void PlayShortClick()
-    {
-        audio.PlayOneShot(ShortClick);
-    }
-
-    public void PlayLongClick()
-    {
-        audio.PlayOneShot(LongClick);
-    }
-
-
-	#region Menu Transitions
+	}
+	
+	#region MENU TRANSITIONS
 	public void ShowStartGame()
 	{
 		// Set the current menu to null - clearing any menu
