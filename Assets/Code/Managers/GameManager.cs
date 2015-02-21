@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour
 	public bool GameRunning = false;
 	public GameObject OutpostStation;
 
-	public EnemySpawner Spawner;
-
 	#region INSTANCE (SINGLETON)
 	/// <summary>
 	/// Singleton - There can only be one
@@ -38,24 +36,12 @@ public class GameManager : MonoBehaviour
 	{
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
-	
-		// Every player has an enemy spawner - but only the master client is responsible for instantiating 
-		Spawner = new EnemySpawner();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if(GameRunning)
-		{
-			// When the game is running, the Master Client manages when enemy's spawn
-			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-			{
-				if(Spawner != null)
-					Spawner.Update();
 
-			}
-		}
 	}
 
 	/// <summary>
@@ -65,6 +51,7 @@ public class GameManager : MonoBehaviour
 	public void LoadLevel(string level)
 	{
 		// TO DO: Load a new scene
+		Application.LoadLevel("Level1");
 	}
 
 	public void StartNewGame()
@@ -73,8 +60,6 @@ public class GameManager : MonoBehaviour
 		if(!GameRunning)
 		{
 			GameRunning = true;
-
-			Spawner.Start(SessionManager.Instance.GetPlayerInfo().isMasterClient);
 		}
 	}
 
@@ -84,18 +69,16 @@ public class GameManager : MonoBehaviour
 		if(GameRunning)
 		{
 			GameRunning = false;
-
-			Spawner.Stop();
 		}
+	}
+
+	private void OnLevelWasLoaded(int level)
+	{
+		StartNewGame();
 	}
 
 	private void OnSwitchMaster(PhotonPlayer player)
 	{
-		// Check if the current player has recently become the master client and give them the appropriate controls
-		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-		{
-			// Set the spawner to instantiate enemies
-			Spawner.PerformSpawnActions = true;
-		}
+
 	}
 }

@@ -5,7 +5,7 @@ public class LightSpeeder : Enemy
 {
 	public LightSpeeder()
 	{
-		OutpostObject = GameManager.Instance.OutpostStation;
+
 	}
 
 	// Use this for initialization

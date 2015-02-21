@@ -67,11 +67,8 @@ public class MenuManager : MonoBehaviour
 		// Set the current menu to null - clearing any menu
 		SetCurrentMenuPanel(null);
 
-		// For now, simply just switch cameras
-		GUICamera.enabled = false;
-		GameCamera.enabled = true;
-
-		GameManager.Instance.StartNewGame();
+		// Load the proper level and start the game
+		GameManager.Instance.LoadLevel("Level1");
 	}
 
 	public void ShowJoinGameMenu()

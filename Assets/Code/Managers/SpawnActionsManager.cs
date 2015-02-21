@@ -5,6 +5,9 @@ using System.Xml.Serialization;
 
 public class SpawnActionsManager : MonoBehaviour
 {
+	public bool ShowDebugLogs = true;
+	public SpawnActionsManager_ListContainer container;
+
     public SpawnActionsManager() 
     {
         container = new SpawnActionsManager_ListContainer();
@@ -17,8 +20,6 @@ public class SpawnActionsManager : MonoBehaviour
         foreach (SpawnAction action in XMLSpawnActions)
             container.SpawnAction_List.Add(action);
     }
-
-    public SpawnActionsManager_ListContainer container;
 
     [Serializable]
     public class SpawnActionsManager_ListContainer
