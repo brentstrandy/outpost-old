@@ -206,6 +206,15 @@ public class SessionManager : MonoBehaviour
 		PhotonNetwork.Instantiate(name, position, rotation, 0);
 	}
 
+    /// <summary>
+    /// Instantiate a SingleSpawnAction object and propogate the object across the network
+    /// </summary>
+    public void InstantiateObject(SpawnAction obj)
+    {
+        // FITZGERALD: fix StartAngle to reflect StartPositon once we have consensus on spawn placement
+        PhotonNetwork.Instantiate(obj.EnemyName, new Vector3(Random.Range(2.0f, 14.0f), 0f, Random.Range(2.0f, 9.0f)), Quaternion.identity, 0);
+    }
+
 	/// <summary>
 	/// Destroy an object and tell all clients to destroy the game object
 	/// </summary>
@@ -289,7 +298,7 @@ public class SessionManager : MonoBehaviour
 	{
 		return PhotonNetwork.playerList;
 	}
-	
+
 	/// <summary>
 	/// Gets a list of all other players in the room - this does not include the current player
 	/// </summary>

@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 	public bool GameRunning = false;
 	public GameObject OutpostStation;
 
-	private EnemySpawner Spawner;
+	public EnemySpawner Spawner;
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>

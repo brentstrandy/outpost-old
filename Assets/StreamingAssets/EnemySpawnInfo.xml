@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<ArrayOfSpawnAction xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>0</StartTime>
+    <StartAngle>21</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>1</StartTime>
+    <StartAngle>45</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>2</StartTime>
+    <StartAngle>30</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>3</StartTime>
+    <StartAngle>28</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>4</StartTime>
+    <StartAngle>40</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>5</StartTime>
+    <StartAngle>74</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>6</StartTime>
+    <StartAngle>32</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>7</StartTime>
+    <StartAngle>69</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>47</StartAngle>
+  </SpawnAction>
+  <SpawnAction>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>9</StartTime>
+    <StartAngle>40</StartAngle>
+  </SpawnAction>
+</ArrayOfSpawnAction>

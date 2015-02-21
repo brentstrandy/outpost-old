@@ -57,42 +57,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Code\MenuManager\MenuManager.cs" />
-    <Compile Include="Assets\Code\MenuManager\PlayersManager.cs" />
-    <Compile Include="Assets\Code\SessionManager\SessionManager.cs" />
+    <Compile Include="Assets\Code\Enemies\Enemy.cs" />
+    <Compile Include="Assets\Code\Enemies\EnemySpawner.cs" />
+    <Compile Include="Assets\Code\Enemies\LightSpeeder.cs" />
+    <Compile Include="Assets\Code\HexMesh.cs" />
+    <Compile Include="Assets\Code\Managers\GameManager.cs" />
+    <Compile Include="Assets\Code\Managers\MenuManager.cs" />
+    <Compile Include="Assets\Code\Managers\SessionManager.cs" />
+    <Compile Include="Assets\Code\Managers\SpawnAction.cs" />
+    <Compile Include="Assets\Code\Managers\SpawnActionsManager.cs" />
+    <Compile Include="Assets\Code\Menu\AudioSettings_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\ControlSettings_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\GameplaySettings_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\JoinGame_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\MainMenu_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\MainSettings_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\MatchmakingGame_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\PlayersManager.cs" />
+    <Compile Include="Assets\Code\Menu\RoomDetails_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\Start_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\VideoSettings_Menu.cs" />
+    <Compile Include="Assets\Code\Serializer\XMLParser.cs" />
+    <Compile Include="Assets\Code\Towers\Tower.cs" />
+    <Compile Include="Assets\Code\Utilities\DontDestroyOnLoad.cs" />
     <Compile Include="Assets\Code\iTween.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoBoxes\OnAwakePhysicsSettings.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoBoxes\TestGuiInstantiate.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoFriendsAndCustomAuth\GUICustomAuth.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoFriendsAndCustomAuth\GUIFriendFinding.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoFriendsAndCustomAuth\GUIFriendsInRoom.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoHub\MoveCam.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoSynchronization\CubeExtra.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoSynchronization\CubeInter.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoSynchronization\CubeLerp.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoSynchronization\IELdemo.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoWorker\Scripts\Game\Player\ThirdPersonCamera.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoWorker\Scripts\Game\Player\ThirdPersonController.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoWorker\Scripts\Game\Player\ThirdPersonNetwork.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoWorker\Scripts\WorkerInGame.cs" />
-    <Compile Include="Assets\Photon\Demos\DemoWorker\Scripts\WorkerMenu.cs" />
-    <Compile Include="Assets\Photon\Demos\MarcoPolo-Tutorial\AudioRpc.cs" />
-    <Compile Include="Assets\Photon\Demos\MarcoPolo-Tutorial\ClickDetector.cs" />
-    <Compile Include="Assets\Photon\Demos\MarcoPolo-Tutorial\GameLogic.cs" />
-    <Compile Include="Assets\Photon\Demos\MarcoPolo-Tutorial\Monstergame\Resources\Scripts\myThirdPersonController.cs" />
-    <Compile Include="Assets\Photon\Demos\MarcoPolo-Tutorial\NetworkCharacter.cs" />
-    <Compile Include="Assets\Photon\Demos\MarcoPolo-Tutorial\RandomMatchmaker.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_MenuScene\BackToMainMenu.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_MenuScene\MenuScript.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_MenuScene\Rotator.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 1\Scripts\Connect1A.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 1\Scripts\Connect1B.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 1\Scripts\Connect1C.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 2\C#\Tutorial_2A1.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 2\C#\Tutorial_2A2.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 2\C#\Tutorial_2A3.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 2\C#\Tutorial_2B_Playerscript.cs" />
-    <Compile Include="Assets\Photon\Demos\PUNGuide_M2H\_Tutorial 2\C#\Tutorial_2B_Spawnscript.cs" />
+    <Compile Include="Assets\OutpostStation.cs" />
     <Compile Include="Assets\Photon\Plugins\PhotonNetwork\CustomTypes.cs" />
     <Compile Include="Assets\Photon\Plugins\PhotonNetwork\Enums.cs" />
     <Compile Include="Assets\Photon\Plugins\PhotonNetwork\Extensions.cs" />
@@ -130,11 +119,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon\changelog.txt" />
-    <None Include="Assets\Photon\Demos\DemoBoxes\Resources\eurof_tt.txt" />
-    <None Include="Assets\Photon\Demos\MarcoPolo-Tutorial\marcopolo-readme.txt" />
     <None Include="Assets\Photon\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\Photon\Plugins\release_history.txt" />
     <None Include="Assets\Photon\readme.txt" />
+    <None Include="Assets\StreamingAssets\EnemySpawnInfo.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>
