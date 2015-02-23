@@ -45,7 +45,7 @@ public static class XMLParser<T>
 
         //if (availableClasses.Contains(currentClasss))
 
-        if (typeof(T) == typeof(SpawnAction))
+        if (typeof(T) == typeof(EnemySpawnAction))
         {
             SerializeToXML_List(obj);
         }
@@ -77,12 +77,11 @@ public static class XMLParser<T>
     ///  Deserialize a List of classes from an XML file
     /// </summary>
     /// <returns></returns>
-    public static List<T> XMLDeserializer_List()
+    public static List<T> XMLDeserializer_List(string filename)
     {
-        if (typeof(T) == typeof(SpawnAction))
+        if (typeof(T) == typeof(EnemySpawnAction))
         {
-            string name = "";
-            return (List<T>)DeserializeFromXML_List(name);
+            return (List<T>)DeserializeFromXML_List(filename);
         }
         else
         {
@@ -122,9 +121,9 @@ public static class XMLParser<T>
         FileStream stream = null;
         string name = "";
 
-        if (typeof(U) == typeof(SpawnAction))
+        if (typeof(U) == typeof(EnemySpawnAction))
         {
-            serializer = new XmlSerializer(typeof(List<SpawnAction>));
+            serializer = new XmlSerializer(typeof(List<EnemySpawnAction>));
 
             name = Application.streamingAssetsPath + "/EnemySpawnInfo.xml";
             if (!File.Exists(name))
@@ -160,22 +159,21 @@ public static class XMLParser<T>
         return default(T);
     }
 
-    private static List<T> DeserializeFromXML_List(string name)
+    private static List<T> DeserializeFromXML_List(string filename)
     {
         XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
         TextReader reader = null;
         List<T> classList = new List<T>();
 
-        if (typeof(T) == typeof(SpawnAction))
+        if (typeof(T) == typeof(EnemySpawnAction))
         {
-            name = Application.streamingAssetsPath + "/EnemySpawnInfo.xml";
-            reader = new StreamReader(name);
+            reader = new StreamReader(filename);
         }
 
         classList = (List<T>)deserializer.Deserialize(reader);
         reader.Close();
 
-        Log("Deserialized: " + name);
+        Log("Deserialized: " + filename);
 
         return classList;
     }

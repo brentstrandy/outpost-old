@@ -3,22 +3,22 @@ using System;
 using System.Xml.Serialization;
 
 [Serializable]
-public class SpawnAction
+public class EnemySpawnAction
 {
-    public SpawnAction() { }
+	public EnemySpawnAction() { }
 
-    public SpawnAction(SpawnAction obj)
+	public EnemySpawnAction(EnemySpawnAction obj)
     {
         EnemyName = obj.EnemyName;
         StartTime = obj.StartTime;
         StartAngle = obj.StartAngle;
     }
 
-    public SpawnAction(string _EnemyName, float _StartTime, int _StartAngle)
+	public EnemySpawnAction(string enemyName, float startTime, int startAngle)
     {
-        EnemyName = _EnemyName;
-        StartTime = _StartTime;
-        StartAngle = _StartAngle;
+        EnemyName = enemyName;
+        StartTime = startTime;
+        StartAngle = startAngle;
     }
 
     [XmlElement("EnemyName")]
@@ -27,6 +27,4 @@ public class SpawnAction
     public float StartTime;
     [XmlElement("StartAngle")]
     public int StartAngle;
-    //[XmlElement("StartPosition")]
-    //public Vector3 StartPosition;
 }

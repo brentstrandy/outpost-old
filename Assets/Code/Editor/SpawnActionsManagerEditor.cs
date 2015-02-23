@@ -1,20 +1,21 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(SpawnActionsManager))]
+[CustomEditor(typeof(EnemySpawnActionHandler))]
 public class SpawnActionsManagerEditor : Editor 
 {
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
-        SpawnActionsManager myScript = (SpawnActionsManager)target;
+        /*DrawDefaultInspector();
+		EnemySpawnActionHandler myScript = (EnemySpawnActionHandler)target;
 
         if (Application.isPlaying)
         {
             if (GUILayout.Button("Save Data"))
             {
-                XMLParser<SpawnAction>.XMLSerializer_List(myScript.container.SpawnAction_List);
+                XMLParser<EnemySpawnAction>.XMLSerializer_List(myScript.container.SpawnAction_List);
             }
         }
+        */
     }
 }

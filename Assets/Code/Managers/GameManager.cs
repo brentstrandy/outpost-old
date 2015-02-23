@@ -36,11 +36,13 @@ public class GameManager : MonoBehaviour
 	{
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
+		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+
 
 	}
 
@@ -74,11 +76,23 @@ public class GameManager : MonoBehaviour
 
 	private void OnLevelWasLoaded(int level)
 	{
+		// Save a reference to the Mining Outpost for GameObjects to use later
+		OutpostStation = GameObject.FindWithTag("OutpostStation");
+
 		StartNewGame();
 	}
 
 	private void OnSwitchMaster(PhotonPlayer player)
 	{
 
+	}
+
+	private void OnPlayerLeft(PhotonPlayer player)
+	{
+		// Respond appropriately to a player leaving
+		if(GameRunning)
+		{
+
+		}
 	}
 }
