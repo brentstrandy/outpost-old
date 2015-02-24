@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class HexMesh : MonoBehaviour
 {
 	// Properties adjustable in the inspector
+	public bool GenerateNoise = true;
 	public bool ShowDebugLogs = true;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
@@ -127,7 +128,7 @@ public class HexMesh : MonoBehaviour
 				float z = r * hexagonRadius;
 				vertices[vertIndex] = new Vector3(x, y, z);
 				
-				this.Log("v" + vertIndex + ": " + vertices[vertIndex]);
+				//this.Log("v" + vertIndex + ": " + vertices[vertIndex]);
 
 				vertIndex++;
 			}
@@ -140,11 +141,11 @@ public class HexMesh : MonoBehaviour
 		int hexIndex = 0;
 		for (int r = 0; r < gridHeight; r++)
 		{
-			this.Log("Row " + r);
+			//this.Log("Row " + r);
 			int numHexagonColumns = r % 2 == 0 ? numHexagonColumnsA : numHexagonColumnsB; // The number of columns varies depending on whether the row index is even or odd
 			for (int c = 0; c < numHexagonColumns; c++)
 			{
-				this.Log("Column " + c);
+				//this.Log("Column " + c);
 				// Clockwise order:
 				// JS 2015-02-20: This should be correct but it comes out backwards and I'm not sure why
 				/*
@@ -154,7 +155,7 @@ public class HexMesh : MonoBehaviour
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p >= 6 ? 1 : p + 1);
 					
-					this.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
+					//this.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
 				}
 				*/
 
@@ -165,9 +166,15 @@ public class HexMesh : MonoBehaviour
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p >= 7 ? 1 : p);
 					indices[hexIndex++] = GetHexagonIndex(gridWidth, gridHeight, r, c, p - 1);
 					
-					this.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
+					//this.Log("i" + (hexIndex - 3) + ": " + indices[hexIndex - 3] + "," + indices[hexIndex - 2] + "," + indices[hexIndex - 1]);
 				}
 			}
+		}
+
+		// Apply noise
+		if (GenerateNoise)
+		{
+			ApplyNoise(gridWidth, gridHeight, vertices);
 		}
 
 		// Assign data to the mesh
@@ -186,10 +193,40 @@ public class HexMesh : MonoBehaviour
 		// Build the new outlines
 		BuildOutlines(gridWidth, gridHeight, vertices);
 	}
+
+	private void ApplyNoise(int gridWidth, int gridHeight, Vector3[] vertices)
+	{
+		int numHexagonColumnsA = (gridWidth + 1) / 2;
+		int numHexagonColumnsB = (gridWidth - 1) / 2;
+
+		for (int r = 0; r < gridHeight; r++)
+		{
+			int numHexagonColumns = r % 2 == 0 ? numHexagonColumnsA : numHexagonColumnsB; // The number of columns varies depending on whether the row index is even or odd
+			for (int c = 0; c < numHexagonColumns; c++)
+			{
+				float baseline = (float)(r * c) * 0.001f;
+				float variation = 0.8f;
+				float target = baseline * baseline + UnityEngine.Random.Range(0.0f, variation);
+				float neighbor = 0.0f;
+				for (int p = 0; p < 7; p++)
+				{
+					int index = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
+					neighbor = Mathf.Max(neighbor, vertices[index].y);
+				}
+				float hexDiff = neighbor - target;
+				target += hexDiff * 0.5f;
+				for (int p = 0; p < 7; p++)
+				{
+					int index = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
+					float vertexDiff = p > 0 ? vertices[index].y - target : 0.0f;
+					vertices[index].y = target + vertexDiff * 0.5f;
+				}
+			}
+		}
+	}
 	
 	private void BuildOutlines(int gridWidth, int gridHeight, Vector3[] vertices)
 	{
-
 		int numHexagonColumnsA = (gridWidth + 1) / 2;
 		int numHexagonColumnsB = (gridWidth - 1) / 2;
 
@@ -201,7 +238,7 @@ public class HexMesh : MonoBehaviour
 			{
 				// Prepare the outline game object
 				string name = "HexOutline" + member.ToString();
-				Log("Creating " + name);
+				//Log("Creating " + name);
 				var outline = new GameObject(name);
 
 				// Prepare the line renderer
@@ -246,7 +283,7 @@ public class HexMesh : MonoBehaviour
 
 		foreach (var child in outlines)
 		{
-			Log("Destroying " + child.name);
+			//Log("Destroying " + child.name);
 			DestroyImmediate(child);
 		}
 	}
