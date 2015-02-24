@@ -13,12 +13,12 @@ public class RoomDetails_Menu : MonoBehaviour
 	public GameObject Chat_GUIText;
 	public GameObject SendChat_GUIInput;
 
-	private PhotonView photonView;
+	private PhotonView ObjPhotonView;
 
 	public void Start()
 	{
 		// Save a handle to the photon view associated with this GameObject for use later
-		photonView = PhotonView.Get(this);
+		ObjPhotonView = PhotonView.Get(this);
 	}
 
 	/// <summary>
@@ -68,7 +68,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	public void StartGame_Click()
 	{
 		// TO DO: Start the game
-		photonView.RPC ("StartGame", PhotonTargets.All, null);
+		ObjPhotonView.RPC ("StartGame", PhotonTargets.All, null);
 	}
 
 	/// <summary>
@@ -101,7 +101,7 @@ public class RoomDetails_Menu : MonoBehaviour
 		if(SendChat_GUIInput.GetComponent<InputField>().text != "")
 		{
 			// Tell all clients that a chat message has been sent
-			photonView.RPC("ReceiveChatMessage", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name, SendChat_GUIInput.GetComponent<InputField>().text);
+			ObjPhotonView.RPC("ReceiveChatMessage", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name, SendChat_GUIInput.GetComponent<InputField>().text);
 			// Clear chat message from the GUI Input field to show it was sent
 			SendChat_GUIInput.GetComponent<InputField>().text = "";
 		}

@@ -41,7 +41,6 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void SpawnEnemy(EnemySpawnAction spawnDetails)
     {
-        Debug.Log(spawnDetails.EnemyName + " " + spawnDetails.StartTime + " " + spawnDetails.StartAngle);
         try
         {
             SessionManager.Instance.InstantiateObject(spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
@@ -60,10 +59,8 @@ public class EnemySpawnManager : MonoBehaviour
 	private Vector3 AngleToPosition(int angle)
 	{
         float radians = (Mathf.PI / 180) * angle; // Mathf.Deg2Rad;
-        Vector3 coordinates = new Vector3(Mathf.Cos(radians), 0, Mathf.Sin(radians)) * 10;
-        Debug.Log("x: " + coordinates.x + "z: " + coordinates.z);
-        return coordinates;
-        //return new Vector3(Mathf.Sin(radians), 0, Mathf.Cos(radians)) * 10;
+        
+		return new Vector3(Mathf.Sin(radians), 0, Mathf.Cos(radians)) * 10;
 	}
 					
 	IEnumerator SpawnEnemies()

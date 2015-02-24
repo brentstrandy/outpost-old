@@ -7,14 +7,14 @@ public class Tower : MonoBehaviour
 	public bool ShowDebugLogs = true;
 
 	// Use this for initialization
-	void Start ()
+	public virtual void Start () 
 	{
-	
+		//OutpostObject = GameManager.Instance.OutpostObject;
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	public virtual void Update()
 	{
-	
+		
 	}
 }
