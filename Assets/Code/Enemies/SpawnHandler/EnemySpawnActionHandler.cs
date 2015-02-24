@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-public class EnemySpawnActionHandler : MonoBehaviour
+public class EnemySpawnActionHandler : EnemySpawnManager
 {
-	public bool ShowDebugLogs = true;
+	//public bool ShowDebugLogs = true;
 	public SpawnActionsManager_ListContainer container;
 
 	public EnemySpawnActionHandler() 

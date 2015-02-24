@@ -38,7 +38,7 @@ public static class XMLParser<T>
     ///  Serialize a List of classes to an XML file
     /// </summary>
     /// <param name="obj"></param>
-    public static void XMLSerializer_List(List<T> obj)
+    public static void XMLSerializer_List(List<T> obj, string fileName)
     {
         //string[] availableClasses = { "spawnaction" };
         //string currentClasss = typeof(T).ToString().ToLower();
@@ -47,7 +47,7 @@ public static class XMLParser<T>
 
         if (typeof(T) == typeof(EnemySpawnAction))
         {
-            SerializeToXML_List(obj);
+            SerializeToXML_List(obj, fileName);
         }
         else
         {
@@ -85,7 +85,7 @@ public static class XMLParser<T>
         }
         else
         {
-            LogError("Unknown class deserialized" + typeof(T));
+            LogError("Unknown class deserialized: " + typeof(T));
             return default(List<T>);
         }
     }
@@ -115,27 +115,22 @@ public static class XMLParser<T>
         //Log("Serialized: " + Path.GetFileName(name));
     }
 
-    private static void SerializeToXML_List<U>(List<U> obj)
+    private static void SerializeToXML_List<U>(List<U> obj, string fileName)
     {
         XmlSerializer serializer = null;
         FileStream stream = null;
-        string name = "";
+        serializer = new XmlSerializer(typeof(List<U>));
 
-        if (typeof(U) == typeof(EnemySpawnAction))
-        {
-            serializer = new XmlSerializer(typeof(List<EnemySpawnAction>));
+        // create directory if it doesn't exist
+        if (!File.Exists(fileName))
+            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
 
-            name = Application.streamingAssetsPath + "/EnemySpawnInfo.xml";
-            if (!File.Exists(name))
-                Directory.CreateDirectory(Path.GetDirectoryName(name));
-
-            stream = new FileStream(name, FileMode.Create);
-        }
+        stream = new FileStream(fileName, FileMode.Create);
 
         serializer.Serialize(stream, obj);
         stream.Close();
 
-        Log("Serialized: " + Path.GetFileName(name));
+        Log("Serialized: " + Path.GetFileName(fileName));
     }
 
     private static T DeserializeFromXML(string name)
@@ -159,21 +154,18 @@ public static class XMLParser<T>
         return default(T);
     }
 
-    private static List<T> DeserializeFromXML_List(string filename)
+    private static List<T> DeserializeFromXML_List(string fileName)
     {
         XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
         TextReader reader = null;
         List<T> classList = new List<T>();
 
-        if (typeof(T) == typeof(EnemySpawnAction))
-        {
-            reader = new StreamReader(filename);
-        }
+        reader = new StreamReader(fileName);
 
         classList = (List<T>)deserializer.Deserialize(reader);
         reader.Close();
 
-        Log("Deserialized: " + filename);
+        Log("Deserialized: " + fileName);
 
         return classList;
     }

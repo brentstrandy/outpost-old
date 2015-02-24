@@ -7,14 +7,16 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9C8704BE-D72B-9D04-4B25-A2B736C2A198}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>Assembly-CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneOSXIntel:4</UnityBuildTarget>
     <UnityVersion>4.6.2f1</UnityVersion>
@@ -58,14 +60,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Code\Enemies\Enemy.cs" />
-    <Compile Include="Assets\Code\Enemies\EnemySpawner.cs" />
     <Compile Include="Assets\Code\Enemies\LightSpeeder.cs" />
+    <Compile Include="Assets\Code\Enemies\SpawnHandler\EnemySpawnAction.cs" />
+    <Compile Include="Assets\Code\Enemies\SpawnHandler\EnemySpawnActionHandler.cs" />
     <Compile Include="Assets\Code\HexMesh.cs" />
+    <Compile Include="Assets\Code\Managers\EnemySpawnManager.cs" />
     <Compile Include="Assets\Code\Managers\GameManager.cs" />
     <Compile Include="Assets\Code\Managers\MenuManager.cs" />
     <Compile Include="Assets\Code\Managers\SessionManager.cs" />
-    <Compile Include="Assets\Code\Managers\SpawnAction.cs" />
-    <Compile Include="Assets\Code\Managers\SpawnActionsManager.cs" />
     <Compile Include="Assets\Code\Menu\AudioSettings_Menu.cs" />
     <Compile Include="Assets\Code\Menu\ControlSettings_Menu.cs" />
     <Compile Include="Assets\Code\Menu\GameplaySettings_Menu.cs" />
@@ -122,7 +124,11 @@
     <None Include="Assets\Photon\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\Photon\Plugins\release_history.txt" />
     <None Include="Assets\Photon\readme.txt" />
-    <None Include="Assets\StreamingAssets\EnemySpawnInfo.xml" />
+    <None Include="Assets\StreamingAssets\EnemySpawnInfo.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\StreamingAssets\Level1.xml" />
+    <None Include="Assets\StreamingAssets\Level2.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

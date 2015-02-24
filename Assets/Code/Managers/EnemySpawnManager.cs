@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class EnemySpawnManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class EnemySpawnManager : MonoBehaviour
 
 	public void Start()
 	{
+        LevelName = Application.loadedLevelName;
 		FisnishedSpawning = false;
 		LoadSpawnData();
 		StartTime = Time.time;
@@ -37,9 +39,17 @@ public class EnemySpawnManager : MonoBehaviour
 		StopCoroutine("SpawnEnemies");
 	}
 
-	private void SpawnEnemy(EnemySpawnAction spawnDetails)
-	{
-		SessionManager.Instance.InstantiateObject(spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
+    private void SpawnEnemy(EnemySpawnAction spawnDetails)
+    {
+        Debug.Log(spawnDetails.EnemyName + " " + spawnDetails.StartTime + " " + spawnDetails.StartAngle);
+        try
+        {
+            SessionManager.Instance.InstantiateObject(spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Exception: " + e);
+        }
     }
 
 	/// <summary>
@@ -49,8 +59,11 @@ public class EnemySpawnManager : MonoBehaviour
 	/// <param name="angle">Angle.</param>
 	private Vector3 AngleToPosition(int angle)
 	{
-		float radians = (Mathf.PI / 180) * angle;
-		return new Vector3(Mathf.Sin(radians), 0, Mathf.Cos(radians)) * 10;
+        float radians = (Mathf.PI / 180) * angle; // Mathf.Deg2Rad;
+        Vector3 coordinates = new Vector3(Mathf.Cos(radians), 0, Mathf.Sin(radians)) * 10;
+        Debug.Log("x: " + coordinates.x + "z: " + coordinates.z);
+        return coordinates;
+        //return new Vector3(Mathf.Sin(radians), 0, Mathf.Cos(radians)) * 10;
 	}
 					
 	IEnumerator SpawnEnemies()

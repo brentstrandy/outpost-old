@@ -2,13 +2,8 @@
 <ArrayOfEnemySpawnAction xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EnemySpawnAction>
     <EnemyName>Light Speeder</EnemyName>
-    <StartTime>0</StartTime>
-    <StartAngle>10</StartAngle>
-  </EnemySpawnAction>
-  <EnemySpawnAction>
-    <EnemyName>Light Speeder</EnemyName>
     <StartTime>2</StartTime>
-    <StartAngle>20</StartAngle>
+    <StartAngle>21</StartAngle>
   </EnemySpawnAction>
   <EnemySpawnAction>
     <EnemyName>Light Speeder</EnemyName>
@@ -34,7 +29,7 @@
     <EnemyName>Light Speeder</EnemyName>
     <StartTime>12</StartTime>
     <StartAngle>70</StartAngle>
-  </EnemySpawnAction>>
+  </EnemySpawnAction>
   <EnemySpawnAction>
     <EnemyName>Light Speeder</EnemyName>
     <StartTime>14</StartTime>
