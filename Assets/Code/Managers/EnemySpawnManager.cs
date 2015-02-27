@@ -7,11 +7,12 @@ public class EnemySpawnManager : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	public string LevelName;
 	public bool FisnishedSpawning { get; private set; }
-	public EnemySpawnActionHandler SpawnActionHandler;
+	private EnemySpawnActionHandler SpawnActionHandler;
 	private float StartTime;
 
 	public void Start()
 	{
+		SpawnActionHandler = new EnemySpawnActionHandler();
         LevelName = Application.loadedLevelName;
 		FisnishedSpawning = false;
 		LoadSpawnData();

@@ -3,16 +3,16 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 
-public class EnemySpawnActionHandler : MonoBehaviour
+public class EnemySpawnActionHandler
 {
 	public bool ShowDebugLogs = true;
-	public SpawnActionsManager_ListContainer container;
+
+	private List<EnemySpawnAction> SpawnActionList;
 
 	public EnemySpawnActionHandler() 
     {
-        container = new SpawnActionsManager_ListContainer();
+		SpawnActionList = new List<EnemySpawnAction>();
     }
 
     public void LoadActions(string filename)
@@ -23,10 +23,10 @@ public class EnemySpawnActionHandler : MonoBehaviour
 		if (File.Exists(enemySpawnXMLPath))
 		{
 			foreach (EnemySpawnAction action in XMLParser<EnemySpawnAction>.XMLDeserializer_List(enemySpawnXMLPath))
-	            container.SpawnAction_List.Add(action);
+				SpawnActionList.Add(action);
 
 			// Sort list by time to make sure actions are executed in order
-			container.SortListByStartTime();
+			this.SortListByStartTime();
 
 			Log("Loaded Enemy Spawn XML data");
 		}
@@ -38,67 +38,36 @@ public class EnemySpawnActionHandler : MonoBehaviour
 	{
 		float startTime = -1;
 
-		if(container.SpawnAction_List.Count() > 0)
-			startTime = container.SpawnAction_List[0].StartTime;
+		if(SpawnActionList.Count() > 0)
+			startTime = SpawnActionList[0].StartTime;
 
 		return startTime;
 	}
 
 	public bool SpawnListEmpty()
 	{
-		return container.SpawnAction_List.Count == 0;
+		return SpawnActionList.Count == 0;
 	}
 
 	public EnemySpawnAction SpawnNext()
 	{
 		EnemySpawnAction action = null;
 
-		if(container.SpawnAction_List.Count() > 0)
+		if(SpawnActionList.Count() > 0)
 		{
-			action = container.SpawnAction_List[0];
-			container.SpawnAction_List.RemoveAt(0);
+			action = SpawnActionList[0];
+			SpawnActionList.RemoveAt(0);
 		}
 
 		return action;
 	}
 
-	/*
-	/// <summary>
-	///  Populates and creates a light speeder spawn action XML
-	/// </summary>
-	private void CreateXML(string path)
+	public void SortListByStartTime()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
-		
-		List<SpawnAction> ListOfActions = new List<SpawnAction>();
-		
-		// create ten random light speeder spawns
-		for (float i = 0.0f; i < 10.0f; ++i)
-		{
-			ListOfActions.Add(new SpawnAction("Light Speeder", i, Random.Range(10, 80)));
-			//ListOfActions.Add(new SpawnAction("Light Speeder", i, new Vector3(Random.Range(2.0f, 14.0f), 0f, Random.Range(2.0f, 9.0f))));
-		}
-		SpawnActionsHandler.PopulateActions(ListOfActions);
-		XMLParser<SpawnAction>.XMLSerializer_List(ListOfActions);
-	}*/
-
-    [Serializable]
-    public class SpawnActionsManager_ListContainer
-    {
-        public SpawnActionsManager_ListContainer() 
-        {
-            SpawnAction_List = new List<EnemySpawnAction>();
-        }
-
-		public void SortListByStartTime()
-		{
-			SpawnAction_List = SpawnAction_List.OrderBy(o=>o.StartTime).ToList();
-		}
-
-        [XmlArray("SpawnActions"), XmlArrayItem(typeof(EnemySpawnAction), ElementName = "SpawnAction")]
-        public List<EnemySpawnAction> SpawnAction_List;
-    }
-
+		if(SpawnActionList != null)
+			SpawnActionList = SpawnActionList.OrderBy(o=>o.StartTime).ToList();
+	}
+  
 	#region MessageHandling
 	protected void Log(string message)
 	{
