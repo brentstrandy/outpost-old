@@ -8,9 +8,10 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
 	private static GameManager instance;
-
+	
 	public bool GameRunning = false;
 	public GameObject OutpostStation;
+	public TowerDataManager TowerDataMngr { get; private set; }
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -37,6 +38,9 @@ public class GameManager : MonoBehaviour
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
+
+		// Load all tower data for the game
+		TowerDataMngr = new TowerDataManager();
 	}
 	
 	// Update is called once per frame

@@ -27,6 +27,7 @@ public class MenuManager : MonoBehaviour
 	public GameObject VideoSettingsPanel;
 	public GameObject ControlSettingsPanel;
 	public GameObject GameplaySettingsPanel;
+	public GameObject InGamePanel;
 
 	private GameObject CurrentMenuPanel;
 
@@ -42,9 +43,6 @@ public class MenuManager : MonoBehaviour
 			if(instance == null)
 			{
 				instance = GameObject.FindObjectOfType<MenuManager>();
-				
-				//Tell unity not to destroy this object when loading a new scene!
-				DontDestroyOnLoad(instance.gameObject);
 			}
 			
 			return instance;
@@ -64,8 +62,8 @@ public class MenuManager : MonoBehaviour
 	#region MENU TRANSITIONS
 	public void ShowStartGame()
 	{
-		// Set the current menu to null - clearing any menu
-		SetCurrentMenuPanel(null);
+		// Show the InGame menu
+		SetCurrentMenuPanel(InGamePanel);
 
 		// Load the proper level and start the game
 		GameManager.Instance.LoadLevel("Level1");

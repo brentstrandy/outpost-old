@@ -13,10 +13,15 @@ public class RoomDetails_Menu : MonoBehaviour
 	public GameObject Chat_GUIText;
 	public GameObject SendChat_GUIInput;
 
+	private List<GameObject> TowerLoadoutSelections;
+	private List<TowerData> TowerLoadoutData;
 	private PhotonView ObjPhotonView;
 
 	public void Start()
 	{
+		TowerLoadoutSelections = new List<GameObject>();
+		TowerLoadoutData = new List<TowerData>();
+
 		// Save a handle to the photon view associated with this GameObject for use later
 		ObjPhotonView = PhotonView.Get(this);
 	}
@@ -36,6 +41,9 @@ public class RoomDetails_Menu : MonoBehaviour
 		
 		// Immediately refresh the room details
 		RefreshRoomDetails();
+
+		// Add Tower Butttons for each Tower
+		InitiateTowerButtons();
 
 		// See if the player is currently the room owner or just joining
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -67,7 +75,6 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// </summary>
 	public void StartGame_Click()
 	{
-		// TO DO: Start the game
 		ObjPhotonView.RPC ("StartGame", PhotonTargets.All, null);
 	}
 
@@ -105,6 +112,12 @@ public class RoomDetails_Menu : MonoBehaviour
 			// Clear chat message from the GUI Input field to show it was sent
 			SendChat_GUIInput.GetComponent<InputField>().text = "";
 		}
+	}
+
+	public void TowerButton_Click(GameObject towerButton, TowerData towerData)
+	{
+		Log (towerData.DisplayName);
+		UpdateTowerLoadoutSelection(towerButton, towerData);
 	}
 	#endregion
 	
@@ -147,10 +160,41 @@ public class RoomDetails_Menu : MonoBehaviour
 	[RPC]
 	void StartGame()
 	{
-		// TO DO: Load the desired level (scene)
+		foreach(TowerData td in TowerLoadoutData)
+			Log (td.DisplayName);
+
+		// Record the Loadouts chosen by the player
+		Player.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
+		// Start the game
 		MenuManager.Instance.ShowStartGame();
 	}
 	#endregion
+
+	private void UpdateTowerLoadoutSelection(GameObject towerButton, TowerData towerData)
+	{
+		// If the toggle was turned off, then remove it from the Loadout
+		if(towerButton.GetComponent<Toggle>().isOn == false)
+		{
+			TowerLoadoutSelections.Remove(towerButton);
+			TowerLoadoutData.Remove(towerData);
+		}
+		else
+		{
+			if(TowerLoadoutSelections.Count >= 2)
+			{
+				// Untoggle the last selected tower (This will trigger the event to call this function again)
+				TowerLoadoutSelections[0].GetComponent<Toggle>().isOn = false;
+				// Add the new tower to the loadout
+				TowerLoadoutSelections.Add(towerButton);
+				TowerLoadoutData.Add(towerData);
+			}
+			else
+			{
+				TowerLoadoutSelections.Add(towerButton);
+				TowerLoadoutData.Add(towerData);
+			}
+		}
+	}
 
 	/// <summary>
 	/// Refresh the names of all players currently in the room
@@ -175,6 +219,29 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void RefreshRoomDetails()
 	{
 		RoomTitle_GUIInput.GetComponent<InputField>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
+	}
+
+	private void InitiateTowerButtons()
+	{
+		int index = 0;
+
+		foreach(TowerData towerData in GameManager.Instance.TowerDataMngr.TowerDataList)
+		{
+			// Create a local variable or else the foreach "AddListener" will use a reference to the foreach towerdata's last reference
+			// and will not use unique towerData's for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)
+			TowerData td = towerData;
+			// Instantiate a button for each tower
+			GameObject obj = Instantiate(Resources.Load("GUI_TowerDetails")) as GameObject;
+			obj.GetComponentInChildren<Text>().text = towerData.DisplayName;
+			obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate{TowerButton_Click(obj, td);});
+			obj.transform.SetParent(this.transform);
+			obj.transform.localScale = new Vector3(1, 1, 1);
+			obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-160 + (60 * index), -120);
+			obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
+			obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+
+			index++;
+		}
 	}
 
 	#region MessageHandling
