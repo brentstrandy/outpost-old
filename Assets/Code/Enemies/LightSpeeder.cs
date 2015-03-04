@@ -36,7 +36,7 @@ public class LightSpeeder : Enemy
 			}
 		}*/
 
-		rigidbody.AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
+		GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
 	}
 	
 	#region MessageHandling
