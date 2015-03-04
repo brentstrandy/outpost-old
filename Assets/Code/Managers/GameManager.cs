@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 	public bool GameRunning = false;
 	public GameObject OutpostStation;
 	public TowerDataManager TowerDataMngr { get; private set; }
+	public EnemyDataManager EnemyDataMngr { get; private set; }
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -39,14 +40,14 @@ public class GameManager : MonoBehaviour
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
 
-		// Load all tower data for the game
+		// Load all Enemy and Tower data for the game
 		TowerDataMngr = new TowerDataManager();
+		EnemyDataMngr = new EnemyDataManager();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-
 
 	}
 

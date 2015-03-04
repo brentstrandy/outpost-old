@@ -11,6 +11,16 @@
     <StartAngle>30</StartAngle>
   </EnemySpawnAction>
   <EnemySpawnAction>
+    <EnemyName>Heavy Speeder</EnemyName>
+    <StartTime>4</StartTime>
+    <StartAngle>32</StartAngle>
+  </EnemySpawnAction>
+  <EnemySpawnAction>
+    <EnemyName>Heavy Speeder</EnemyName>
+    <StartTime>4</StartTime>
+    <StartAngle>35</StartAngle>
+  </EnemySpawnAction>
+  <EnemySpawnAction>
     <EnemyName>Light Speeder</EnemyName>
     <StartTime>6</StartTime>
     <StartAngle>40</StartAngle>
@@ -34,5 +44,30 @@
     <EnemyName>Light Speeder</EnemyName>
     <StartTime>14</StartTime>
     <StartAngle>80</StartAngle>
+  </EnemySpawnAction>
+  <EnemySpawnAction>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>10</StartAngle>
+  </EnemySpawnAction>
+  <EnemySpawnAction>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>11</StartAngle>
+  </EnemySpawnAction>
+  <EnemySpawnAction>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>12</StartAngle>
+  </EnemySpawnAction>
+  <EnemySpawnAction>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>13</StartAngle>
+  </EnemySpawnAction>
+  <EnemySpawnAction>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>14</StartAngle>
   </EnemySpawnAction>
 </ArrayOfEnemySpawnAction>

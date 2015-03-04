@@ -2,9 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Responsible for loading and storing Data for all Towers. 
+/// Has ability to find towers based on a single Tower attribute
+/// Owner: Brent Strandy
+/// </summary>
 public class TowerDataManager
 {
 	public bool ShowDebugLogs = true;
+	/// <summary>
+	/// Gets the TowerData list.
+	/// </summary>
+	/// <value>The tower data list.</value>
 	public List<TowerData> TowerDataList { get; private set; }
 
 	public TowerDataManager()
@@ -20,6 +29,10 @@ public class TowerDataManager
 		// -> TO HERE
 	}
 
+	/// <summary>
+	/// Total number of Towers loaded
+	/// </summary>
+	/// <returns>Total Count</returns>
 	public int TowerCount()
 	{
 		return TowerDataList.Count;

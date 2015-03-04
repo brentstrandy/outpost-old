@@ -44,7 +44,7 @@ public class EnemySpawnManager : MonoBehaviour
     {
         try
         {
-            SessionManager.Instance.InstantiateObject(spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
+            SessionManager.Instance.InstantiateObject("Enemies/" + spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
         }
         catch (Exception e)
         {
@@ -73,6 +73,8 @@ public class EnemySpawnManager : MonoBehaviour
 			if(SpawnActionHandler.GetNextStartTime() <= (Time.time - this.StartTime))
 				SpawnEnemy(SpawnActionHandler.SpawnNext());
 
+			// TO DO: Tell the coroutine to run when the next available enemy is ready
+			// SpawnActionHandler.GetNextStartTime() - Time.time
 			yield return 0;
 		}
 

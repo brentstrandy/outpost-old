@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// All details and stats for a single Tower
+/// Owner: Brent Strandy
+/// </summary>
 public class TowerData
 {
 	public bool ShowDebugLogs = true;
