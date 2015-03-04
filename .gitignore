@@ -1,7 +1,6 @@
 Library/metadata
 Library/ScriptAssemblies
 Temp
-*.meta
 TestBuild_OSX.app
 *.csproj
 *.sln
