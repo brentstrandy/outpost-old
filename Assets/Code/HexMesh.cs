@@ -97,25 +97,43 @@ public class HexMesh : MonoBehaviour
 		var mesh = GetComponent<MeshFilter>().sharedMesh;
 		
 		// Calculate some properties of the mesh
+		float apothemRatio = (float)(Math.Sqrt(3.0) * 0.5);
+
 		int numberOfHexagons = GetNumHexagons(gridWidth, gridHeight);
 		int numberOfVertices = GetNumVertices(gridWidth, gridHeight);
 		int numberOfIndices = GetNumIndices(gridWidth, gridHeight);
-		float hexagonRadius = hexagonDiameter * 0.5f;
 
-		this.Log("Number of Hexagons: " + numberOfHexagons);
-		this.Log("Number of Vertices: " + numberOfVertices);
-		this.Log("Number of Indices: " + numberOfIndices);
-		
-		// Allocate vertices and indices
-		var vertices = new Vector3[numberOfVertices];
-		var indices = new int[numberOfIndices];
-		//var uv = new Vector2[NumberOfVertices];
-
-		// Calculate vertices
 		int numVertexRows = GetNumVertexRows(gridHeight);
 		int numVertexColumnsA = (gridWidth + 1) + (gridHeight - 1) / 2;
 		int numVertexColumnsB = 3 * (gridWidth + 1) / 2;
 
+		float hexagonRadius = hexagonDiameter * 0.5f;
+		float hexagonApothem = hexagonRadius * apothemRatio;
+		float hexagonWidth = hexagonDiameter;
+		float hexagonHeight = 2.0f * hexagonApothem;
+
+		float totalWidth = (float)numVertexColumnsA + (float)numVertexColumnsB * 0.5f;
+		float fractionalHexagonWidth = 1.0f / totalWidth;
+		
+		float totalHeight = 1.0f + (float)(gridHeight - 1) * 0.5f;
+		float fractionalHexagonHeight = 1.0f / totalHeight;
+
+		this.Log("Number of Hexagons: " + numberOfHexagons);
+		this.Log("Number of Vertices: " + numberOfVertices);
+		this.Log("Number of Indices: " + numberOfIndices);
+
+		this.Log("Total Width: " + totalWidth);
+		this.Log("Fractional Width: " + fractionalHexagonWidth);
+
+		this.Log("Total Height: " + totalHeight);
+		this.Log("Fractional Height: " + fractionalHexagonHeight);
+		
+		// Allocate vertices, indices and UV coordinates
+		var vertices = new Vector3[numberOfVertices];
+		var indices = new int[numberOfIndices];
+		var uv = new Vector2[numberOfVertices];
+
+		// Calculate vertices and UV coordinates
 		int vertIndex = 0;
 		for (int r = 0; r < numVertexRows; r++)
 		{
@@ -125,8 +143,11 @@ public class HexMesh : MonoBehaviour
 				float offset = (r % 2 == 0) ? hexagonDiameter * 0.25f : 0f;
 				float x = offset + c * hexagonRadius;
 				float y = 0.0f;
-				float z = r * hexagonRadius;
+				float z = r * hexagonApothem;
+				float u = x * fractionalHexagonWidth;
+				float v = z * fractionalHexagonHeight;
 				vertices[vertIndex] = new Vector3(x, y, z);
+				uv[vertIndex] = new Vector2(u, v);
 				
 				//this.Log("v" + vertIndex + ": " + vertices[vertIndex]);
 
@@ -180,6 +201,7 @@ public class HexMesh : MonoBehaviour
 		// Assign data to the mesh
 		mesh.Clear();
 		mesh.vertices = vertices;
+		mesh.uv = uv;
 		mesh.SetTriangles(indices, 0);
 
 		// Tell the mesh to recalculate its properties
