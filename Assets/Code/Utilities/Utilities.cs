@@ -6,11 +6,3 @@ public class Utilities
 
 
 }
-
-public enum TowerNames
-{
-	SmallThraceiumTower,
-	TraceiumRainTower,
-	EMPTower,
-	UniversalEnergyTower
-}

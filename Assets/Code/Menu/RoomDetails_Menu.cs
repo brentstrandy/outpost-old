@@ -13,11 +13,17 @@ public class RoomDetails_Menu : MonoBehaviour
 	public GameObject Chat_GUIText;
 	public GameObject SendChat_GUIInput;
 
+	/// <summary>
+	/// Tracks GUI objects for each tower that is selected for the Loadout
+	/// </summary>
 	private List<GameObject> TowerLoadoutSelections;
+	/// <summary>
+	/// Tracks TowerData for each tower that is selected for the loadout
+	/// </summary>
 	private List<TowerData> TowerLoadoutData;
 	private PhotonView ObjPhotonView;
 
-	public void Start()
+	public void Awake()
 	{
 		TowerLoadoutSelections = new List<GameObject>();
 		TowerLoadoutData = new List<TowerData>();
@@ -114,10 +120,31 @@ public class RoomDetails_Menu : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Click event called when the player selects a tower within this menu
+	/// </summary>
+	/// <param name="towerButton">Tower button.</param>
+	/// <param name="towerData">Tower data.</param>
 	public void TowerButton_Click(GameObject towerButton, TowerData towerData)
 	{
-		Log (towerData.DisplayName);
-		UpdateTowerLoadoutSelection(towerButton, towerData);
+		// If the toggle was turned off, then remove it from the Loadout
+		if(towerButton.GetComponent<Toggle>().isOn == false)
+		{
+			TowerLoadoutSelections.Remove(towerButton);
+			TowerLoadoutData.Remove(towerData);
+		}
+		else
+		{
+			// Add the new tower to the loadout
+			TowerLoadoutSelections.Add(towerButton);
+			TowerLoadoutData.Add(towerData);
+
+			if(TowerLoadoutSelections.Count > 2)
+			{
+				// Untoggle the last selected tower (This will trigger the event to call this function again)
+				TowerLoadoutSelections[0].GetComponent<Toggle>().isOn = false;
+			}
+		}
 	}
 	#endregion
 	
@@ -160,42 +187,13 @@ public class RoomDetails_Menu : MonoBehaviour
 	[RPC]
 	void StartGame()
 	{
-		foreach(TowerData td in TowerLoadoutData)
-			Log (td.DisplayName);
-
 		// Record the Loadouts chosen by the player
 		Player.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
 		// Start the game
 		MenuManager.Instance.ShowStartGame();
 	}
 	#endregion
-
-	private void UpdateTowerLoadoutSelection(GameObject towerButton, TowerData towerData)
-	{
-		// If the toggle was turned off, then remove it from the Loadout
-		if(towerButton.GetComponent<Toggle>().isOn == false)
-		{
-			TowerLoadoutSelections.Remove(towerButton);
-			TowerLoadoutData.Remove(towerData);
-		}
-		else
-		{
-			if(TowerLoadoutSelections.Count >= 2)
-			{
-				// Untoggle the last selected tower (This will trigger the event to call this function again)
-				TowerLoadoutSelections[0].GetComponent<Toggle>().isOn = false;
-				// Add the new tower to the loadout
-				TowerLoadoutSelections.Add(towerButton);
-				TowerLoadoutData.Add(towerData);
-			}
-			else
-			{
-				TowerLoadoutSelections.Add(towerButton);
-				TowerLoadoutData.Add(towerData);
-			}
-		}
-	}
-
+	
 	/// <summary>
 	/// Refresh the names of all players currently in the room
 	/// </summary>
@@ -239,6 +237,13 @@ public class RoomDetails_Menu : MonoBehaviour
 			obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-160 + (60 * index), -120);
 			obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
 			obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+			// Select the first two towers by default
+			if(index < 2)
+			{
+				obj.GetComponent<Toggle>().isOn = true;
+			}
+			else
+				obj.GetComponent<Toggle>().isOn = false;
 
 			index++;
 		}

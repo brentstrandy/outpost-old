@@ -1,13 +1,73 @@
-<?xml version="1.0" encoding="us-ascii"?>
-<ArrayOfEnemySpawnAction xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <EnemySpawnAction>
+<?xml version="1.0" encoding="Windows-1252"?>
+<ArrayOfEnemySpawnData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <EnemySpawnData>
     <EnemyName>Light Speeder</EnemyName>
     <StartTime>2</StartTime>
-    <StartAngle>45</StartAngle>
-  </EnemySpawnAction>
-  <EnemySpawnAction>
+    <StartAngle>21</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
     <EnemyName>Light Speeder</EnemyName>
     <StartTime>4</StartTime>
-    <StartAngle>75</StartAngle>
-  </EnemySpawnAction>
-</ArrayOfEnemySpawnAction>
+    <StartAngle>30</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Heavy Speeder</EnemyName>
+    <StartTime>4</StartTime>
+    <StartAngle>32</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Heavy Speeder</EnemyName>
+    <StartTime>4</StartTime>
+    <StartAngle>35</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>6</StartTime>
+    <StartAngle>40</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>50</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>10</StartTime>
+    <StartAngle>60</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>12</StartTime>
+    <StartAngle>70</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>14</StartTime>
+    <StartAngle>80</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>10</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>11</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>12</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>13</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>8</StartTime>
+    <StartAngle>14</StartAngle>
+  </EnemySpawnData>
+</ArrayOfEnemySpawnData>
