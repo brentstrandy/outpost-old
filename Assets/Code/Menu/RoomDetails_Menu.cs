@@ -248,13 +248,13 @@ public class RoomDetails_Menu : MonoBehaviour
 	protected void Log(string message)
 	{
 		if(ShowDebugLogs)
-			Debug.Log("[GameDetails_Menu] " + message);
+			Debug.Log("[RoomDetails_Menu] " + message);
 	}
 	
 	protected void LogError(string message)
 	{
 		if(ShowDebugLogs)
-			Debug.LogError("[GameDetails_Menu] " + message);
+			Debug.LogError("[RoomDetails_Menu] " + message);
 	}
 	#endregion
 }

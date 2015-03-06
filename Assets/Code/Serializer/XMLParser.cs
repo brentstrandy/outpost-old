@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 //using System.Collections;
 using System.Collections.Generic;
@@ -45,7 +45,7 @@ public static class XMLParser<T>
 
         //if (availableClasses.Contains(currentClasss))
 
-        if (typeof(T) == typeof(EnemySpawnAction))
+        if (typeof(T) == typeof(EnemySpawnData))
         {
             SerializeToXML_List(obj, fileName);
         }
@@ -79,7 +79,7 @@ public static class XMLParser<T>
     /// <returns></returns>
     public static List<T> XMLDeserializer_List(string filename)
     {
-        if (typeof(T) == typeof(EnemySpawnAction))
+        if (typeof(T) == typeof(EnemySpawnData))
         {
             return (List<T>)DeserializeFromXML_List(filename);
         }

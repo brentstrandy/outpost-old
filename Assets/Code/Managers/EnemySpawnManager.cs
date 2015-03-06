@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -7,12 +7,12 @@ public class EnemySpawnManager : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	public string LevelName;
 	public bool FisnishedSpawning { get; private set; }
-	private EnemySpawnActionHandler SpawnActionHandler;
+	private EnemySpawnDataHandler SpawnActionHandler;
 	private float StartTime;
 
 	public void Start()
 	{
-		SpawnActionHandler = new EnemySpawnActionHandler();
+		SpawnActionHandler = new EnemySpawnDataHandler();
         LevelName = Application.loadedLevelName;
 		FisnishedSpawning = false;
 		LoadSpawnData();
@@ -40,7 +40,7 @@ public class EnemySpawnManager : MonoBehaviour
 		StopCoroutine("SpawnEnemies");
 	}
 
-    private void SpawnEnemy(EnemySpawnAction spawnDetails)
+    private void SpawnEnemy(EnemySpawnData spawnDetails)
     {
         try
         {

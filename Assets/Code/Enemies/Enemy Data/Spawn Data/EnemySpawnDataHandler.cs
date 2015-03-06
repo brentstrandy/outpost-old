@@ -1,18 +1,18 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-public class EnemySpawnActionHandler
+public class EnemySpawnDataHandler
 {
 	public bool ShowDebugLogs = true;
 
-	private List<EnemySpawnAction> SpawnActionList;
+	private List<EnemySpawnData> SpawnActionList;
 
-	public EnemySpawnActionHandler() 
+	public EnemySpawnDataHandler() 
     {
-		SpawnActionList = new List<EnemySpawnAction>();
+		SpawnActionList = new List<EnemySpawnData>();
     }
 
     public void LoadActions(string filename)
@@ -22,7 +22,7 @@ public class EnemySpawnActionHandler
 		// Determine if the file exists
 		if (File.Exists(enemySpawnXMLPath))
 		{
-			foreach (EnemySpawnAction action in XMLParser<EnemySpawnAction>.XMLDeserializer_List(enemySpawnXMLPath))
+			foreach (EnemySpawnData action in XMLParser<EnemySpawnData>.XMLDeserializer_List(enemySpawnXMLPath))
 				SpawnActionList.Add(action);
 
 			// Sort list by time to make sure actions are executed in order
@@ -49,9 +49,9 @@ public class EnemySpawnActionHandler
 		return SpawnActionList.Count == 0;
 	}
 
-	public EnemySpawnAction SpawnNext()
+	public EnemySpawnData SpawnNext()
 	{
-		EnemySpawnAction action = null;
+		EnemySpawnData action = null;
 
 		if(SpawnActionList.Count() > 0)
 		{

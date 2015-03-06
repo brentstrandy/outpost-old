@@ -11,3 +11,4 @@ TestBuild_OSX copy.app
 TestBuild_Win.exe
 TestBuild_Win.zip
 TestBuild_Win_Data
+Library/ShaderCache

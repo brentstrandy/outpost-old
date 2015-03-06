@@ -3,18 +3,18 @@ using System;
 using System.Xml.Serialization;
 
 [Serializable]
-public class EnemySpawnAction
+public class EnemySpawnData
 {
-	public EnemySpawnAction() { }
+	public EnemySpawnData() { }
 
-	public EnemySpawnAction(EnemySpawnAction obj)
+	public EnemySpawnData(EnemySpawnData obj)
     {
         EnemyName = obj.EnemyName;
         StartTime = obj.StartTime;
         StartAngle = obj.StartAngle;
     }
 
-	public EnemySpawnAction(string enemyName, float startTime, int startAngle)
+	public EnemySpawnData(string enemyName, float startTime, int startAngle)
     {
         EnemyName = enemyName;
         StartTime = startTime;

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(EnemySpawnEditor))]
-public class EnemySpawnActionListEditor : Editor 
+public class EnemySpawnDataListEditor : Editor 
 {
     public override void OnInspectorGUI()
     {
@@ -16,7 +16,7 @@ public class EnemySpawnActionListEditor : Editor
 	            {
 	                // saves file based on the level name that's loaded in scene
 	                string fileName = Application.streamingAssetsPath + "/" +  Application.loadedLevelName + ".xml";
-					XMLParser<EnemySpawnAction>.XMLSerializer_List(((EnemySpawnEditor)target).SpawnActionList, fileName);
+					XMLParser<EnemySpawnData>.XMLSerializer_List(((EnemySpawnEditor)target).SpawnActionList, fileName);
 	            }
 	        }
 		}
