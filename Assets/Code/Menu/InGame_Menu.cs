@@ -8,6 +8,7 @@ public class InGame_Menu : MonoBehaviour
 	public bool ShowDebugLogs = true;
 
 	public List<GameObject> TowerButtons;
+	public GameObject MoneyText;
 	
 	private void OnEnable()
 	{
@@ -23,8 +24,12 @@ public class InGame_Menu : MonoBehaviour
 			// tower name then simple disable/hide the button
 			if(towerData.Count > index)
 			{
+				// td MUST be instantiated within the foreach loop because AddListener saves a reference and will only
+				// use the last referenced TowerData variable for each of the buttons
+				TowerData td = towerData[index];
 				towerButton.SetActive(true);
 				towerButton.GetComponentInChildren<Text>().text = towerData[index].DisplayName;
+				towerButton.GetComponent<Button>().onClick.AddListener(() => Tower_Click(td));
 			}
 			else
 				towerButton.SetActive(false);
@@ -38,8 +43,17 @@ public class InGame_Menu : MonoBehaviour
 
 	}
 
+	public void Update()
+	{
+		if(this.enabled)
+		{
+			// Display how much money the player current has
+			MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
+		}
+	}
+
 	#region OnClick
-	public void Tower_Click()
+	public void Tower_Click(TowerData towerData)
 	{
 
 	}

@@ -11,7 +11,13 @@ public class Player : MonoBehaviour
 	private static Player instance;
 
 	public bool ShowDebugLogs = true;
+	public float Money { get; private set; }
 	private LoadOut GameLoadOut;
+
+	public void Start()
+	{
+		Money = 0.0f;
+	}
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -45,6 +51,11 @@ public class Player : MonoBehaviour
 			towerNames = GameLoadOut.Towers;
 
 		return towerNames;
+	}
+
+	public void EarnIncome(float amount)
+	{
+		Money += amount;
 	}
 
 	#region MessageHandling
