@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
 	
 	public bool GameRunning = false;
 	public GameObject OutpostStation;
-	public TowerDataManager TowerDataMngr { get; private set; }
-	public EnemyDataManager EnemyDataMngr { get; private set; }
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -31,6 +29,11 @@ public class GameManager : MonoBehaviour
 			return instance;
 		}
 	}
+
+	void Awake()
+	{
+		instance = this;
+	}
 	#endregion
 
 	// Use this for initialization
@@ -39,52 +42,26 @@ public class GameManager : MonoBehaviour
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
-
-		// Load all Enemy and Tower data for the game
-		TowerDataMngr = new TowerDataManager();
-		EnemyDataMngr = new EnemyDataManager();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-
-	}
-
-	/// <summary>
-	/// Loads specified Level
-	/// </summary>
-	/// <param name="level">Level Name</param>
-	public void LoadLevel(string level)
-	{
-		// TO DO: Load a new scene
-		Application.LoadLevel("Level1");
-	}
-
-	public void StartNewGame()
-	{
-		// Only start the game if the game hasn't been started
-		if(!GameRunning)
-		{
-			GameRunning = true;
-		}
-	}
-
-	public void EndGame()
-	{
-		// Only end the game if one is currently running
 		if(GameRunning)
 		{
-			GameRunning = false;
+			EndGameCheck();
 		}
 	}
 
-	private void OnLevelWasLoaded(int level)
+	private bool EndGameCheck()
 	{
-		// Save a reference to the Mining Outpost for GameObjects to use later
-		OutpostStation = GameObject.FindWithTag("OutpostStation");
+		bool endGame = false;
 
-		StartNewGame();
+		// Check to see if all the enemies have spawned and if all enemies are dead
+		if(EnemySpawnManager.Instance.FinishedSpawning)
+			endGame = true;
+
+		return endGame;
 	}
 
 	private void OnSwitchMaster(PhotonPlayer player)

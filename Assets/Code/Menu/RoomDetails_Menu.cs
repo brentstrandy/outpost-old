@@ -223,7 +223,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	{
 		int index = 0;
 
-		foreach(TowerData towerData in GameManager.Instance.TowerDataMngr.TowerDataList)
+		foreach(TowerData towerData in GameDataManager.Instance.TowerDataMngr.TowerDataList)
 		{
 			// Create a local variable or else the foreach "AddListener" will use a reference to the foreach towerdata's last reference
 			// and will not use unique towerData's for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)

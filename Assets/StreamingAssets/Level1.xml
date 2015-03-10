@@ -70,4 +70,29 @@
     <StartTime>8</StartTime>
     <StartAngle>14</StartAngle>
   </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>2</StartTime>
+    <StartAngle>40</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>2</StartTime>
+    <StartAngle>50</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>2</StartTime>
+    <StartAngle>60</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>2</StartTime>
+    <StartAngle>70</StartAngle>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>4</StartTime>
+    <StartAngle>30</StartAngle>
+  </EnemySpawnData>
 </ArrayOfEnemySpawnData>

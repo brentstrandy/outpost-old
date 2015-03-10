@@ -94,6 +94,11 @@ public class SessionManager : MonoBehaviour
 			return instance;
 		}
 	}
+
+	void Awake()
+	{
+		instance = this;
+	}
 	#endregion
 
 	#region ACTIONS

@@ -48,6 +48,11 @@ public class MenuManager : MonoBehaviour
 			return instance;
 		}
 	}
+
+	void Awake()
+	{
+		instance = this;
+	}
 	#endregion
 
 	void Start ()
@@ -66,7 +71,7 @@ public class MenuManager : MonoBehaviour
 		SetCurrentMenuPanel(InGamePanel);
 
 		// Load the proper level and start the game
-		GameManager.Instance.LoadLevel("Level1");
+		Application.LoadLevel("Level1");
 	}
 
 	public void ShowJoinGameMenu()

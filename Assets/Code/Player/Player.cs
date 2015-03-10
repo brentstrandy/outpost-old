@@ -36,6 +36,11 @@ public class Player : MonoBehaviour
 			return instance;
 		}
 	}
+
+	void Awake()
+	{
+		instance = this;
+	}
 	#endregion
 	
 	public void SetGameLoadOut(LoadOut loadOut)

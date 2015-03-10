@@ -5,17 +5,46 @@ using System.Collections;
 public class EnemySpawnManager : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
-	public string LevelName;
-	public bool FisnishedSpawning { get; private set; }
+
+	public bool FinishedSpawning { get; private set; }
+
+	private static EnemySpawnManager instance;
 	private EnemySpawnDataHandler SpawnActionHandler;
+	private string LevelName;
 	private float StartTime;
+
+	#region INSTANCE (SINGLETON)
+	/// <summary>
+	/// Singleton - There can only be one
+	/// </summary>
+	/// <value>The instance.</value>
+	public static EnemySpawnManager Instance
+	{
+		get
+		{
+			if(instance == null)
+			{
+				instance = GameObject.FindObjectOfType<EnemySpawnManager>();
+			}
+			
+			return instance;
+		}
+	}
+
+	void Awake()
+	{
+		instance = this;
+	}
+	#endregion
 
 	public void Start()
 	{
 		SpawnActionHandler = new EnemySpawnDataHandler();
         LevelName = Application.loadedLevelName;
-		FisnishedSpawning = false;
+		FinishedSpawning = false;
+
 		LoadSpawnData();
+
 		StartTime = Time.time;
 		StartCoroutine("SpawnEnemies");
 	}
@@ -81,7 +110,7 @@ public class EnemySpawnManager : MonoBehaviour
 		}
 
 		// Spawning is complete
-		FisnishedSpawning = true;
+		FinishedSpawning = true;
 	}
 	
 	#region MessageHandling
