@@ -27,7 +27,11 @@ public class HexMesh : MonoBehaviour
 		if (GetComponent<MeshRenderer>() == null)
 		{
 			gameObject.AddComponent<MeshRenderer>();
-
+		}
+		
+		if (GetComponent<MeshCollider>() == null)
+		{
+			gameObject.AddComponent<MeshCollider>();
 		}
 
 		/*
@@ -59,7 +63,14 @@ public class HexMesh : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit)) {
+			if (hit.collider == GetComponent<MeshCollider>()) {
+				print("HexMesh Collision: " + hit.triangleIndex);
+			}
+		}
 	}
 
 	public void ApplyProperties()
@@ -209,6 +220,9 @@ public class HexMesh : MonoBehaviour
 		mesh.RecalculateBounds();
 		mesh.Optimize();
 
+		// Assign the mesh to the collider
+		GetComponent<MeshCollider>().sharedMesh = mesh;
+
 		// Destroy any existing outlines
 		DestroyOutlines();
 
@@ -315,6 +329,11 @@ public class HexMesh : MonoBehaviour
 	{
 	}
 	*/
+
+	public void GetHexContainingTriangle(int triangleIndex)
+	{
+		// TODO: Write this
+	}
 	
 	public static int GetNumHexagons(int gridWidth, int gridHeight)
 	{
