@@ -1,0 +1,22 @@
+﻿using UnityEngine;
+using Settworks.Hexagons;
+
+/// <summary>
+/// When attached to a GameObject, sets its mesh to a hexagon "border" of radius 1 unit, and 0.1 units thick.
+/// </summary>
+[AddComponentMenu("")]
+[ExecuteInEditMode]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+public class HexMeshOpen : MonoBehaviour {
+
+	// This is static so that one mesh is shared between all instances.
+	static Mesh mesh;
+
+	void Start() {
+		// Set up the static mesh only if it doesn't exist yet.
+		if (mesh == null)
+			mesh = HexKit.CreateOpenMesh(0.9f);
+		// Assign the mesh to this object.
+		GetComponent<MeshFilter>().mesh = mesh;
+	}
+}
