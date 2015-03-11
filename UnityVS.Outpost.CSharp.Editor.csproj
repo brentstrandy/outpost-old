@@ -108,7 +108,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Code\Editor\EnemySpawnActionListEditor.cs" />
+    <Compile Include="Assets\Code\Editor\EnemySpawnDataContainerEditor.cs" />
     <Compile Include="Assets\Code\Editor\HexMeshInspector.cs" />
     <Compile Include="Assets\Photon\Editor\PhotonNetwork\AccountService.cs" />
     <Compile Include="Assets\Photon\Editor\PhotonNetwork\PhotonConverter.cs" />
@@ -123,7 +123,6 @@
     <None Include="Assets\Photon\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\Photon\Plugins\release_history.txt" />
     <None Include="Assets\Photon\readme.txt" />
-    <None Include="Assets\StreamingAssets\EnemySpawnInfo.xml" />
     <None Include="Assets\StreamingAssets\Level1.xml" />
     <None Include="Assets\StreamingAssets\Level2.xml" />
   </ItemGroup>

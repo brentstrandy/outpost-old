@@ -63,14 +63,27 @@
     <Compile Include="Assets\Code\Enemies\Drone.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\EnemyData.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\EnemyDataManager.cs" />
+    <Compile Include="Assets\Code\Enemies\Enemy Data\Spawn Data\EnemySpawnData.cs" />
+    <Compile Include="Assets\Code\Enemies\Enemy Data\Spawn Data\EnemySpawnDataContainer.cs" />
+    <Compile Include="Assets\Code\Enemies\Enemy Data\Spawn Data\EnemySpawnDataHandler.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy.cs" />
     <Compile Include="Assets\Code\Enemies\HeavySpeeder.cs" />
     <Compile Include="Assets\Code\Enemies\LightSpeeder.cs" />
-    <Compile Include="Assets\Code\Enemies\SpawnHandler\EnemySpawnAction.cs" />
-    <Compile Include="Assets\Code\Enemies\SpawnHandler\EnemySpawnActionHandler.cs" />
-    <Compile Include="Assets\Code\Enemies\SpawnHandler\EnemySpawnEditor.cs" />
-    <Compile Include="Assets\Code\HexMesh.cs" />
+    <Compile Include="Assets\Code\HexKit\Behaviors\HexFacing.cs" />
+    <Compile Include="Assets\Code\HexKit\Behaviors\HexLocation.cs" />
+    <Compile Include="Assets\Code\HexKit\Example\HexKitExampleSceneControl.cs" />
+    <Compile Include="Assets\Code\HexKit\Example\HexMeshOpen.cs" />
+    <Compile Include="Assets\Code\HexKit\Example\HexMeshSolid.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\HexCoord.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\HexKit.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\HexPathNode.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\HexRayHit.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\Internal Classes\Cuboid.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\Internal Classes\Deprecated\HexCoordinate.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\Internal Classes\HexBRPQ.cs" />
+    <Compile Include="Assets\Code\HexKit\Logic\Internal Classes\HexBRPQNode.cs" />
     <Compile Include="Assets\Code\Managers\EnemySpawnManager.cs" />
+    <Compile Include="Assets\Code\Managers\GameDataManager.cs" />
     <Compile Include="Assets\Code\Managers\GameManager.cs" />
     <Compile Include="Assets\Code\Managers\MenuManager.cs" />
     <Compile Include="Assets\Code\Managers\SessionManager.cs" />
@@ -89,6 +102,7 @@
     <Compile Include="Assets\Code\Player\LoadOut.cs" />
     <Compile Include="Assets\Code\Player\Player.cs" />
     <Compile Include="Assets\Code\Serializer\XMLParser.cs" />
+    <Compile Include="Assets\Code\Terrain\HexMesh.cs" />
     <Compile Include="Assets\Code\Towers\SmallThraceium.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerData.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerDataManager.cs" />
@@ -139,7 +153,6 @@
     <None Include="Assets\Photon\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\Photon\Plugins\release_history.txt" />
     <None Include="Assets\Photon\readme.txt" />
-    <None Include="Assets\StreamingAssets\EnemySpawnInfo.xml" />
     <None Include="Assets\StreamingAssets\Level1.xml" />
     <None Include="Assets\StreamingAssets\Level2.xml" />
   </ItemGroup>

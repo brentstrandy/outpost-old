@@ -9,33 +9,18 @@ using System.Xml;
 using System.Xml.Serialization;
 //using System.Linq;
 
+/// <summary>
+/// Generic de/serializer used to save and load XML files.
+/// Owner: John Fitzgerald
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public static class XMLParser<T>
 {
     static bool ShowDebugLogs = true;
 
+    #region LIST DE/SERIALIZERS
     /// <summary>
-    ///  Serialize a class to an XML file
-    /// </summary>
-    /// <param name="obj"></param>
-    public static void XMLSerializer(T obj)
-    {
-        ////string[] availableClasses = { "spawnactionsmanager" };
-        ////string currentClasss = typeof(T).ToString().ToLower();
-
-        ////if (availableClasses.Contains(currentClasss))
-
-        //if (typeof(T) == typeof(SpawnActionsManager))
-        //{
-        //    SerializeToXML(obj);
-        //}
-        //else
-        //{
-        //    LogError("Unknown class serialized: " + typeof(T));
-        //}
-    }
-
-    /// <summary>
-    ///  Serialize a List of classes to an XML file
+    /// Serialize a List of classes to an XML file.
     /// </summary>
     /// <param name="obj"></param>
     public static void XMLSerializer_List(List<T> obj, string fileName)
@@ -56,25 +41,7 @@ public static class XMLParser<T>
     }
 
     /// <summary>
-    ///  Deserialize a class from an XML file
-    /// </summary>
-    /// <returns></returns>
-    public static T XMLDeserializer()
-    {
-        //if (typeof(T) == typeof(SpawnActionsManager_Serializable))
-        //{
-        //    string name = "";
-        //    return (T)DeserializeFromXML(name);
-        //}
-        //else
-        //{
-        //    LogError("Unknown class deserialized" + typeof(T));
-            return default(T);
-        //}
-    }
-
-    /// <summary>
-    ///  Deserialize a List of classes from an XML file
+    /// Deserialize a List of classes from an XML file.
     /// </summary>
     /// <returns></returns>
     public static List<T> XMLDeserializer_List(string filename)
@@ -90,6 +57,101 @@ public static class XMLParser<T>
         }
     }
 
+    private static void SerializeToXML_List<U>(List<U> obj, string fileName)
+    {
+        XmlSerializer serializer = null;
+        FileStream stream = null;
+        serializer = new XmlSerializer(typeof(List<U>));
+
+        // create directory if it doesn't exist
+        if (!File.Exists(fileName))
+            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+        stream = new FileStream(fileName, FileMode.Create);
+
+        serializer.Serialize(stream, obj);
+        stream.Close();
+
+        Log("Serialized: " + Path.GetFileName(fileName));
+    }
+
+    private static List<T> DeserializeFromXML_List(string fileName)
+    {
+        XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
+        TextReader reader = null;
+        List<T> classList = new List<T>();
+
+        reader = new StreamReader(fileName);
+
+        classList = (List<T>)deserializer.Deserialize(reader);
+        reader.Close();
+
+        Log("Deserialized: " + fileName);
+
+        return classList;
+    }
+    #endregion
+
+    #region NON-LIST DE/SERIALIZERS
+    /// <summary>
+    /// Serialize a class to an XML file.
+    /// </summary>
+    /// <param name="obj"></param>
+    public static void XMLSerializer(T obj)
+    {
+        ////string[] availableClasses = { "spawnactionsmanager" };
+        ////string currentClasss = typeof(T).ToString().ToLower();
+
+        ////if (availableClasses.Contains(currentClasss))
+
+        //if (typeof(T) == typeof(SpawnActionsManager))
+        //{
+        //    SerializeToXML(obj);
+        //}
+        //else
+        //{
+        //    LogError("Unknown class serialized: " + typeof(T));
+        //}
+    }
+
+    /// <summary>
+    /// Deserialize a class from an XML file.
+    /// </summary>
+    /// <returns></returns>
+    public static T XMLDeserializer()
+    {
+        //if (typeof(T) == typeof(SpawnActionsManager_Serializable))
+        //{
+        //    string name = "";
+        //    return (T)DeserializeFromXML(name);
+        //}
+        //else
+        //{
+        //    LogError("Unknown class deserialized" + typeof(T));
+        return default(T);
+        //}
+    }
+
+    private static T DeserializeFromXML(string name)
+    {
+        //XmlSerializer deserializer = new XmlSerializer(typeof(T));
+        //TextReader reader = null;
+
+        //if (typeof(T) == typeof(SpawnActionsManager_Serializable))
+        //{
+        //    name = Application.streamingAssetsPath + "/EnemySpawnInfo.xml";
+        //    reader = new StreamReader(name);
+        //}
+
+        //var obj = (T)deserializer.Deserialize(reader);
+        //reader.Close();
+
+        //Log("Deserialized: " + name);
+
+        //return obj;
+
+        return default(T);
+    }
     private static void SerializeToXML<U>(U obj)
     {
         //XmlSerializer serializer = null;
@@ -114,66 +176,12 @@ public static class XMLParser<T>
 
         //Log("Serialized: " + Path.GetFileName(name));
     }
+    #endregion
 
-    private static void SerializeToXML_List<U>(List<U> obj, string fileName)
-    {
-        XmlSerializer serializer = null;
-        FileStream stream = null;
-        serializer = new XmlSerializer(typeof(List<U>));
-
-        // create directory if it doesn't exist
-        if (!File.Exists(fileName))
-            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-
-        stream = new FileStream(fileName, FileMode.Create);
-
-        serializer.Serialize(stream, obj);
-        stream.Close();
-
-        Log("Serialized: " + Path.GetFileName(fileName));
-    }
-
-    private static T DeserializeFromXML(string name)
-    {
-        //XmlSerializer deserializer = new XmlSerializer(typeof(T));
-        //TextReader reader = null;
-
-        //if (typeof(T) == typeof(SpawnActionsManager_Serializable))
-        //{
-        //    name = Application.streamingAssetsPath + "/EnemySpawnInfo.xml";
-        //    reader = new StreamReader(name);
-        //}
-
-        //var obj = (T)deserializer.Deserialize(reader);
-        //reader.Close();
-
-        //Log("Deserialized: " + name);
-
-        //return obj;
-
-        return default(T);
-    }
-
-    private static List<T> DeserializeFromXML_List(string fileName)
-    {
-        XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
-        TextReader reader = null;
-        List<T> classList = new List<T>();
-
-        reader = new StreamReader(fileName);
-
-        classList = (List<T>)deserializer.Deserialize(reader);
-        reader.Close();
-
-        Log("Deserialized: " + fileName);
-
-        return classList;
-    }
-
-    #region ENCRYPTION
+    #region ENCRYPTION DE/SERIALIZERS
 
     /// <summary>
-    ///  test of XML encryption serializer
+    /// Test of XML encryption serializer.
     /// </summary>
     /// <param name="obj"></param>
     public static void XMLSerializer_Encrypt(T obj)
@@ -215,7 +223,7 @@ public static class XMLParser<T>
     }
 
     /// <summary>
-    ///  Encrypts using AES (used instead of Rijndael)
+    /// Encrypts using AES (used instead of Rijndael).
     /// </summary>
     private static byte[] Encrypt_AES(string plainText, byte[] Key, byte[] IV)
     {
@@ -259,7 +267,7 @@ public static class XMLParser<T>
     }
 
     /// <summary>
-    ///  Decrypts using AES (used instead of Rijndael)
+    /// Decrypts using AES (used instead of Rijndael).
     /// </summary>
     private static string Decrypt_AES(byte[] cipherText, byte[] Key, byte[] IV)
     {
@@ -304,7 +312,7 @@ public static class XMLParser<T>
     }
 
     /// <summary>
-    ///  Encrypts using Rijndael (use AES instead)
+    /// Encrypts using Rijndael (use AES instead).
     /// </summary>
     private static string Encrypt(string stream)
     {
@@ -325,7 +333,7 @@ public static class XMLParser<T>
     }
 
     /// <summary>
-    ///  Decrypts using Rijndael (use AES instead)
+    /// Decrypts using Rijndael (use AES instead).
     /// </summary>
     private static string Decrypt(string stream)
     {

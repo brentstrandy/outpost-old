@@ -2,6 +2,10 @@
 using System;
 using System.Xml.Serialization;
 
+/// <summary>
+/// Enemy spawn data used to place enemies in the level.
+/// Owner: John Fitzgerald
+/// </summary>
 [Serializable]
 public class EnemySpawnData
 {
