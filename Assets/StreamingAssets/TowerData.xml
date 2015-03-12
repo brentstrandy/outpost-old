@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<ArrayOfTowerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TowerData>
+    <DisplayName>Small Thraceium Tower</DisplayName>
+    <PrefabName>SmallThraceiumTower</PrefabName>
+    <Health>100</Health>
+    <RateOfFire>0.0</RateOfFire>
+    <Cooldown>0.0</Cooldown>
+    <ThraceiumDamage>0.0</ThraceiumDamage>
+    <BallisticDamage>0.0</BallisticDamage>
+    <TransitionTime>0.0</TransitionTime>
+    <InstallCount>0.0</InstallCount>
+    <MaintenanceCost>0.0</MaintenanceCost>
+  </TowerData>
+  <TowerData>
+    <DisplayName>Thraceium Rain Tower</DisplayName>
+    <PrefabName>ThraceiumRainTower</PrefabName>
+    <Health>100</Health>
+    <RateOfFire>0.0</RateOfFire>
+    <Cooldown>0.0</Cooldown>
+    <ThraceiumDamage>0.0</ThraceiumDamage>
+    <BallisticDamage>0.0</BallisticDamage>
+    <TransitionTime>0.0</TransitionTime>
+    <InstallCount>0.0</InstallCount>
+    <MaintenanceCost>0.0</MaintenanceCost>
+  </TowerData>
+  <TowerData>
+    <DisplayName>EMP Tower</DisplayName>
+    <PrefabName>EMPTower</PrefabName>
+    <Health>100</Health>
+    <RateOfFire>0.0</RateOfFire>
+    <Cooldown>0.0</Cooldown>
+    <ThraceiumDamage>0.0</ThraceiumDamage>
+    <BallisticDamage>0.0</BallisticDamage>
+    <TransitionTime>0.0</TransitionTime>
+    <InstallCount>0.0</InstallCount>
+    <MaintenanceCost>0.0</MaintenanceCost>
+  </TowerData>
+  <TowerData>
+    <DisplayName>Universal Energy Tower</DisplayName>
+    <PrefabName>UniversalEnergyTower</PrefabName>
+    <Health>100</Health>
+    <RateOfFire>0.0</RateOfFire>
+    <Cooldown>0.0</Cooldown>
+    <ThraceiumDamage>0.0</ThraceiumDamage>
+    <BallisticDamage>0.0</BallisticDamage>
+    <TransitionTime>0.0</TransitionTime>
+    <InstallCount>0.0</InstallCount>
+    <MaintenanceCost>0.0</MaintenanceCost>
+  </TowerData>
+</ArrayOfTowerData>

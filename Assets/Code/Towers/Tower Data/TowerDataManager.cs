@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,18 +16,37 @@ public class TowerDataManager
 	/// </summary>
 	/// <value>The tower data list.</value>
 	public List<TowerData> TowerDataList { get; private set; }
+    public TowerDataContainer TowerDataContainer_Inspector;
+
 
 	public TowerDataManager()
 	{
-		// TO DO: Load TowerDataList from serialized XML
+        // location of level specific XML spawn data
+        string towerDataXMLPath = Application.streamingAssetsPath + "/TowerData.xml";
 
-		// DELETE ALL CODE FROM HERE ... ->
-		TowerDataList = new List<TowerData>();
-		TowerDataList.Add(new TowerData("Small Thraceium Tower", "SmallThraceiumTower"));
-		TowerDataList.Add(new TowerData("Thraceium Rain Tower", "ThraceiumRainTower"));
-		TowerDataList.Add(new TowerData("EMP Tower", "EMPTower"));
-		TowerDataList.Add(new TowerData("Universal Energy Tower", "UniversalEnergyTower"));
-		// -> TO HERE
+        TowerDataList = new List<TowerData>();
+        // FITZGERALD: this requires Level 1 to be loaded
+        //TowerDataContainer_Inspector = GameObject.Find("Tower Data Manager").GetComponent<TowerDataContainer>();
+
+        if (File.Exists(towerDataXMLPath))
+        {
+            // deserialize XML and add each enemy spawn to the lists
+            foreach (TowerData tower in XMLParser<TowerData>.XMLDeserializer_List(towerDataXMLPath))
+            {
+                //TowerDataContainer_Inspector.TowerDataList.Add(tower);
+                TowerDataList.Add(tower);
+            }
+        }
+        else
+            LogError("Cannot find Tower Data XML file");
+        
+        //// DELETE ALL CODE FROM HERE ... ->
+        //TowerDataList = new List<TowerData>();
+        //TowerDataList.Add(new TowerData("Small Thraceium Tower", "SmallThraceiumTower"));
+        //TowerDataList.Add(new TowerData("Thraceium Rain Tower", "ThraceiumRainTower"));
+        //TowerDataList.Add(new TowerData("EMP Tower", "EMPTower"));
+        //TowerDataList.Add(new TowerData("Universal Energy Tower", "UniversalEnergyTower"));
+        //// -> TO HERE
 	}
 
 	/// <summary>

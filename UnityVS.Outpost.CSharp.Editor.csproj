@@ -82,9 +82,6 @@
     <Reference Include="UnityEditor.OSXStandalone.Extensions">
       <HintPath>Library\UnityAssemblies\UnityEditor.OSXStandalone.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Assets\Photon\Editor\PhotonNetwork\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -110,6 +107,7 @@
   <ItemGroup>
     <Compile Include="Assets\Code\Editor\EnemySpawnDataContainerEditor.cs" />
     <Compile Include="Assets\Code\Editor\HexMeshInspector.cs" />
+    <Compile Include="Assets\Code\Editor\TowerDataContainerEditor.cs" />
     <Compile Include="Assets\Photon\Editor\PhotonNetwork\AccountService.cs" />
     <Compile Include="Assets\Photon\Editor\PhotonNetwork\PhotonConverter.cs" />
     <Compile Include="Assets\Photon\Editor\PhotonNetwork\PhotonEditor.cs" />
@@ -125,6 +123,7 @@
     <None Include="Assets\Photon\readme.txt" />
     <None Include="Assets\StreamingAssets\Level1.xml" />
     <None Include="Assets\StreamingAssets\Level2.xml" />
+    <None Include="Assets\StreamingAssets\TowerData.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

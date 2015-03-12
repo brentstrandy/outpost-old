@@ -52,9 +52,6 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="Photon3Unity3D">
       <HintPath>Assets\Photon\Plugins\Photon3Unity3D.dll</HintPath>
     </Reference>
@@ -105,6 +102,7 @@
     <Compile Include="Assets\Code\Terrain\HexMesh.cs" />
     <Compile Include="Assets\Code\Towers\SmallThraceium.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerData.cs" />
+    <Compile Include="Assets\Code\Towers\Tower Data\TowerDataContainer.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerDataManager.cs" />
     <Compile Include="Assets\Code\Towers\Tower.cs" />
     <Compile Include="Assets\Code\Towers\TowerButtonHighlight.cs" />
@@ -155,6 +153,7 @@
     <None Include="Assets\Photon\readme.txt" />
     <None Include="Assets\StreamingAssets\Level1.xml" />
     <None Include="Assets\StreamingAssets\Level2.xml" />
+    <None Include="Assets\StreamingAssets\TowerData.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

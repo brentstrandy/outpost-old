@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-//using System.Linq;
+using System.Linq;
 
 /// <summary>
 /// Generic de/serializer used to save and load XML files.
@@ -17,6 +17,8 @@ using System.Xml.Serialization;
 public static class XMLParser<T>
 {
     static bool ShowDebugLogs = true;
+    static string[] AvailableClasses = { "enemyspawndata", "towerdata" };
+
 
     #region LIST DE/SERIALIZERS
     /// <summary>
@@ -25,19 +27,12 @@ public static class XMLParser<T>
     /// <param name="obj"></param>
     public static void XMLSerializer_List(List<T> obj, string fileName)
     {
-        //string[] availableClasses = { "spawnaction" };
-        //string currentClasss = typeof(T).ToString().ToLower();
+        string currentClasss = typeof(T).ToString().ToLower();
 
-        //if (availableClasses.Contains(currentClasss))
-
-        if (typeof(T) == typeof(EnemySpawnData))
-        {
+        if (AvailableClasses.Contains(currentClasss))
             SerializeToXML_List(obj, fileName);
-        }
         else
-        {
             LogError("Unknown class serialized: " + typeof(T));
-        }
     }
 
     /// <summary>
@@ -46,10 +41,10 @@ public static class XMLParser<T>
     /// <returns></returns>
     public static List<T> XMLDeserializer_List(string filename)
     {
-        if (typeof(T) == typeof(EnemySpawnData))
-        {
+        string currentClasss = typeof(T).ToString().ToLower();
+
+        if (AvailableClasses.Contains(currentClasss))
             return (List<T>)DeserializeFromXML_List(filename);
-        }
         else
         {
             LogError("Unknown class deserialized: " + typeof(T));

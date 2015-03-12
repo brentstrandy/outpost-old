@@ -9,6 +9,13 @@ using System.Xml.Serialization;
 [Serializable]
 public class EnemySpawnData
 {
+    [XmlElement("EnemyName")]
+    public string EnemyName;
+    [XmlElement("StartTime")]
+    public float StartTime;
+    [XmlElement("StartAngle")]
+    public int StartAngle;
+
 	public EnemySpawnData() { }
 
 	public EnemySpawnData(EnemySpawnData obj)
@@ -24,11 +31,4 @@ public class EnemySpawnData
         StartTime = startTime;
         StartAngle = startAngle;
     }
-
-    [XmlElement("EnemyName")]
-    public string EnemyName;
-    [XmlElement("StartTime")]
-    public float StartTime;
-    [XmlElement("StartAngle")]
-    public int StartAngle;
 }
