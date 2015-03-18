@@ -2,15 +2,19 @@
 using System.Collections;
 
 /// <summary>
-/// Manages all high-level game functions. Is responsible for starting and stopping Levels
-/// Owner: Brent Strandy
+/// Manages single game levels. This manager is only persistent within a single game instance. It will be destroyed
+/// and recreated whenever a new level is loaded
+/// Created By: Brent Strandy
 /// </summary>
 public class GameManager : MonoBehaviour
 {
 	private static GameManager instance;
-	
-	public bool GameRunning = false;
-	public GameObject OutpostStation;
+	public bool ShowDebugLogs = true;
+	public bool Victory { get; private set; }
+	private bool GameRunning;
+
+
+	public GameObject MiningFacility;
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -42,26 +46,43 @@ public class GameManager : MonoBehaviour
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
+
+		GameRunning = true;
+		Victory = false;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+		// Only check for the end of the game while it is running
 		if(GameRunning)
 		{
+			// TO DO: This should not be checked every update loop. It can probably just be checked every 1-2 seconds
 			EndGameCheck();
 		}
 	}
 
-	private bool EndGameCheck()
+	private void EndGameCheck()
 	{
-		bool endGame = false;
-
 		// Check to see if all the enemies have spawned and if all enemies are dead
-		if(EnemySpawnManager.Instance.FinishedSpawning)
-			endGame = true;
+		if(EnemySpawnManager.Instance.FinishedSpawning && EnemyManager.Instance.ActiveEnemyCount() == 0)
+			EndGame_Victory();
+		else if(MiningFacility.GetComponent<OutpostStation>().Health <= 0)
+			EndGame_Loss();
+	}
 
-		return endGame;
+	private void EndGame_Victory()
+	{
+		Victory = true;
+		GameRunning = false;
+		MenuManager.Instance.ShowVictoryMenu();
+	}
+
+	private void EndGame_Loss()
+	{
+		Victory = false;
+		GameRunning = false;
+		MenuManager.Instance.ShowLossMenu();
 	}
 
 	private void OnSwitchMaster(PhotonPlayer player)
@@ -71,10 +92,20 @@ public class GameManager : MonoBehaviour
 
 	private void OnPlayerLeft(PhotonPlayer player)
 	{
-		// Respond appropriately to a player leaving
-		if(GameRunning)
-		{
 
-		}
 	}
+
+	#region MessageHandling
+	protected void Log(string message)
+	{
+		if(ShowDebugLogs)
+			Debug.Log("[GameManager] " + message);
+	}
+	
+	protected void LogError(string message)
+	{
+		if(ShowDebugLogs)
+			Debug.LogError("[GameManager] " + message);
+	}
+	#endregion
 }

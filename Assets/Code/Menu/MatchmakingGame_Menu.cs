@@ -74,7 +74,7 @@ public class MatchmakingGame_Menu : MonoBehaviour
 	private void CreatedRoom_Event()
 	{
 		// Tell the MenuManager to transition to the room
-		MenuManager.Instance.ShowRoomDetailsMenu(true);
+		MenuManager.Instance.ShowRoomDetailsMenu();
 	}
 				
 	private void CreateRoomFailed_Event(object[] codeAndMsg)

@@ -9,12 +9,15 @@ public class SessionManager : MonoBehaviour
 {
 	private static SessionManager instance;
 	public bool ShowDebugLogs = true;
+	public bool Offline { get; private set; }
 
 	#region EVENTS (DELEGATES)
 	public delegate void SessionManagerAction();
 	public delegate void SessionManagerActionFailure(DisconnectCause cause);
 	public delegate void SessionManagerActionRoomFailure(object[] codeAndMsg);
 	public delegate void SessionManagerActionPlayer(PhotonPlayer player);
+	public delegate void SessionManagerActionInstantiate(GameObject go);
+
 	/// <summary>
 	/// Called when authenticated (if applicable) and connected to network services
 	/// </summary>
@@ -75,6 +78,10 @@ public class SessionManager : MonoBehaviour
 	/// Called when the master client was switched to a different client
 	/// </summary>
 	public event SessionManagerActionPlayer OnSMSwitchMaster;
+	/// <summary>
+	/// Calle when a GameObject is instantiated across the network
+	/// </summary>
+	public event SessionManagerActionInstantiate OnSMInstantiate;
 	#endregion
 
 	#region INSTANCE (SINGLETON)
@@ -152,6 +159,15 @@ public class SessionManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Sets the offline mode.
+	/// </summary>
+	/// <param name="offline">If set to <c>true</c>, offline.</param>
+	public void SetOfflineMode(bool offline)
+	{
+		PhotonNetwork.offlineMode = offline;
+	}
+
+	/// <summary>
 	/// Creates and joins a new room
 	/// </summary>
 	public void CreateRoom()
@@ -208,11 +224,11 @@ public class SessionManager : MonoBehaviour
 	/// <param name="name">Prefab name - must be found in \Resources.</param>
 	/// <param name="position">Starting Position of Game Object.</param>
 	/// <param name="rotation">Starting Rotation (usually Quaterion.identity)</param>
-	public void InstantiateObject(string name, Vector3 position, Quaternion rotation)
+	public GameObject InstantiateObject(string name, Vector3 position, Quaternion rotation)
 	{
-		PhotonNetwork.Instantiate(name, position, rotation, 0);
+		return PhotonNetwork.Instantiate(name, position, rotation, 0);
 	}
-
+	
 	/// <summary>
 	/// Destroy an object and tell all clients to destroy the game object
 	/// </summary>
@@ -304,6 +320,11 @@ public class SessionManager : MonoBehaviour
 	public PhotonPlayer[] GetOtherPlayersInRoom()
 	{
 		return PhotonNetwork.otherPlayers;
+	}
+
+	public void LoadGameLevel(string level)
+	{
+		PhotonNetwork.LoadLevel(level);
 	}
 
 	#endregion
@@ -546,6 +567,20 @@ public class SessionManager : MonoBehaviour
 			OnSMPlayerLeftRoom(player);
 	}
 	#endregion
+
+	/// <summary>
+	/// Called when remote player instantiates a GameObject across the server
+	/// </summary>
+	/// <param name="msg">Message.</param>
+	/*
+	public void OnPhotonInstantiate(PhotonMessageInfo info)
+	{
+		Log("Object Instantiated over server.");
+
+		// Call delegate event linked to this action
+		if(OnSMInstantiate != null)
+			OnSMInstantiate(info.photonView.gameObject);
+	}*/
 
 	#region MessageHandling
 	protected void Log(string message)

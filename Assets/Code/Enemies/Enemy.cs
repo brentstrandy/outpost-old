@@ -13,7 +13,9 @@ public class Enemy : MonoBehaviour
 
 	public virtual void Awake()
 	{
-		OutpostObject = GameManager.Instance.OutpostStation;
+		OutpostObject = GameManager.Instance.MiningFacility;
+
+		EnemyManager.Instance.AddActiveEnemy(this);
 	}
 
 	// Use this for initialization
@@ -32,4 +34,10 @@ public class Enemy : MonoBehaviour
     {
 
     }
+
+	public void OnDestroy()
+	{
+		// Tell the enemy manager this enemy is being destroyed
+		EnemyManager.Instance.RemoveActiveEnemy(this);
+	}
 }

@@ -68,7 +68,7 @@ public class HexMesh : MonoBehaviour
 
 		if (Physics.Raycast(ray, out hit)) {
 			if (hit.collider == GetComponent<MeshCollider>()) {
-				print("HexMesh Collision: " + hit.triangleIndex);
+				Log("HexMesh Collision: " + hit.triangleIndex);
 			}
 		}
 	}

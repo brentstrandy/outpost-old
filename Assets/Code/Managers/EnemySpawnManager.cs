@@ -71,15 +71,16 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void SpawnEnemy(EnemySpawnData spawnDetails)
     {
+		// TO DO: User EnemyData to instantiate enemies!!
         try
         {
 			// Only spawn an enemy if you are the Master Client. Otherwise, the Master client will tell all clients to spawn an enemy
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-            	SessionManager.Instance.InstantiateObject("Enemies/" + spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
+				SessionManager.Instance.InstantiateObject("Enemies/" + spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
         }
         catch (Exception e)
         {
-            Debug.LogError("Exception: " + e);
+            Debug.LogError("Error Instantiating Enemy: " + e.Message);
         }
     }
 
@@ -95,7 +96,7 @@ public class EnemySpawnManager : MonoBehaviour
 		return new Vector3(Mathf.Sin(radians), 0, Mathf.Cos(radians)) * 10;
 	}
 					
-	IEnumerator SpawnEnemies()
+	private IEnumerator SpawnEnemies()
 	{
 		// Loop until there are no enemies left to spawn
 		while(!SpawnActionHandler.SpawnListEmpty())

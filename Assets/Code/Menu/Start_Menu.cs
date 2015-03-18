@@ -6,12 +6,17 @@ using System.Collections.Generic;
 public class Start_Menu : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
+
 	public GameObject InputField;
-	
+	public GameObject CannotConnectText;
+	public GameObject RetryButton;
+	public GameObject OfflineButton;
+
 	private void OnEnable()
 	{
 		// Establish listeners for all applicable events
 		SessionManager.Instance.OnSMConnected += Connected_Event;
+		SessionManager.Instance.OnSMConnectionFail += ConnectionFailed_Event;
 
 		// TODO: Display a waiting animation to show something is happening
 	}
@@ -31,12 +36,31 @@ public class Start_Menu : MonoBehaviour
 		// Tell the MenuManager to transition back
 		SessionManager.Instance.StartSession();
 	}
+
+	public void Retry_Click()
+	{
+		Start_Click();
+	}
+
+	public void Offline_Click()
+	{
+		SessionManager.Instance.SetOfflineMode(true);
+		SessionManager.Instance.StartSession();
+	}
 	#endregion
 	
 	#region Events
 	private void Connected_Event()
 	{
 		MenuManager.Instance.ShowMainMenu();
+	}
+
+	private void ConnectionFailed_Event(DisconnectCause cause)
+	{
+		InputField.SetActive(false);
+		CannotConnectText.SetActive(true);
+		RetryButton.SetActive(true);
+		OfflineButton.SetActive(true);
 	}
 	#endregion
 	

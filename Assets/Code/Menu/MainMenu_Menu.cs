@@ -50,7 +50,7 @@ public class MainMenu_Menu : MonoBehaviour
 	private void RoomCreated_Event()
 	{
 		// Tell the MenuManager to transition to the newly created room
-		MenuManager.Instance.ShowRoomDetailsMenu(true);
+		MenuManager.Instance.ShowRoomDetailsMenu();
 	}
 	
 	private void CreateRoomFail_Event(object[] codeAndMsg)

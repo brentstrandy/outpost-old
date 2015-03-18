@@ -28,6 +28,7 @@ public class MenuManager : MonoBehaviour
 	public GameObject ControlSettingsPanel;
 	public GameObject GameplaySettingsPanel;
 	public GameObject InGamePanel;
+	public GameObject EndGamePanel;
 
 	private GameObject CurrentMenuPanel;
 
@@ -71,7 +72,17 @@ public class MenuManager : MonoBehaviour
 		SetCurrentMenuPanel(InGamePanel);
 
 		// Load the proper level and start the game
+
 		Application.LoadLevel("Level1");
+	}
+
+	public void ReturnToRoomDetailsMenu()
+	{
+		// Return to the main game scene where the main menu functionality takes place
+		Application.LoadLevel("MainGame");
+
+		// Show the Room Details menu
+		SetCurrentMenuPanel(RoomDetailsPanel);
 	}
 
 	public void ShowJoinGameMenu()
@@ -89,7 +100,7 @@ public class MenuManager : MonoBehaviour
 		SetCurrentMenuPanel(MainMenuPanel);
 	}
 
-	public void ShowRoomDetailsMenu(bool host = false)
+	public void ShowRoomDetailsMenu()
 	{
 		SetCurrentMenuPanel(RoomDetailsPanel);
 	}
@@ -117,6 +128,16 @@ public class MenuManager : MonoBehaviour
 	public void ShowGameplaySettingsMenu()
 	{
 		SetCurrentMenuPanel(GameplaySettingsPanel);
+	}
+
+	public void ShowVictoryMenu()
+	{
+		SetCurrentMenuPanel(EndGamePanel);
+	}
+
+	public void ShowLossMenu()
+	{
+		SetCurrentMenuPanel(EndGamePanel);
 	}
 	#endregion
 

@@ -63,6 +63,12 @@ public class Player : MonoBehaviour
 		Money += amount;
 	}
 
+	public void ResetData()
+	{
+		GameLoadOut = null;
+		Money = 0.0f;
+	}
+
 	#region MessageHandling
 	protected void Log(string message)
 	{

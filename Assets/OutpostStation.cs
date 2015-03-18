@@ -4,6 +4,7 @@ using System.Collections;
 public class OutpostStation : MonoBehaviour
 {
 	public float IncomeAmountPerSecond { get; private set; }
+	public float Health { get; private set; }
 
 	private float LastIncomeTime;
 
@@ -12,6 +13,7 @@ public class OutpostStation : MonoBehaviour
 	{
 		IncomeAmountPerSecond = 0.5f;
 		LastIncomeTime = Time.time;
+		Health = 100.0f;
 	}
 	
 	// Update is called once per frame
@@ -20,7 +22,7 @@ public class OutpostStation : MonoBehaviour
 		EarnIncome();
 	}
 
-	void OnTriggerEnter(Collider other)
+	private void OnTriggerEnter(Collider other)
 	{
 		if(other.tag == "Enemy")
 			SessionManager.Instance.DestroyObject(other.gameObject);
