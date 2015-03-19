@@ -12,6 +12,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	public GameObject RoomTitle_GUIInput;
 	public GameObject Chat_GUIText;
 	public GameObject SendChat_GUIInput;
+	public GameObject StartGame_GUIButton;
 
 	/// <summary>
 	/// Tracks GUI objects for each tower that is selected for the Loadout
@@ -55,10 +56,12 @@ public class RoomDetails_Menu : MonoBehaviour
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
 			RoomTitle_GUIInput.GetComponent<InputField>().enabled = true;
+			StartGame_GUIButton.SetActive(true);
 		}
 		else
 		{
 			RoomTitle_GUIInput.GetComponent<InputField>().enabled = false;
+			StartGame_GUIButton.SetActive(false);
 		}
 	}
 

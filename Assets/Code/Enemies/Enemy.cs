@@ -7,8 +7,7 @@ public class Enemy : MonoBehaviour
 	
     public string Name;
     public float Speed = 0.0f;
-
-	// TO DO: This CANNOT be called here. The GameManager Instance throws an error 
+	
 	protected GameObject OutpostObject;
 
 	public virtual void Awake()

@@ -71,7 +71,6 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void SpawnEnemy(EnemySpawnData spawnDetails)
     {
-		// TO DO: User EnemyData to instantiate enemies!!
         try
         {
 			// Only spawn an enemy if you are the Master Client. Otherwise, the Master client will tell all clients to spawn an enemy
