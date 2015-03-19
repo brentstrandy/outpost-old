@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Drone : Enemy
 {
+	private GameObject Target;
+
 	public Drone()
 	{
 
@@ -12,7 +14,8 @@ public class Drone : Enemy
 	public override void Start ()
 	{
 		Name = "Drone";
-		Speed = 2.0f;
+		Speed = 15.0f;
+		Health = 5.0f;
 		this.transform.LookAt(OutpostObject.transform.position, Vector3.up);
 	}
 	
@@ -25,18 +28,29 @@ public class Drone : Enemy
 
 	public override void FixedUpdate()
 	{
-		/*RaycastHit hit;
+		if(Target != null)
+			this.transform.LookAt(Target.transform.position, Vector3.up);
+		else
+			this.transform.LookAt(OutpostObject.transform.position, Vector3.up);
 
-		foreach(GameObject obj in HoverLocation)
+		GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
+	}
+
+	public void OnTriggerEnter(Collider other)
+	{
+		// Only take action if the droid finds an enemy to follow
+		if(other.tag == "Enemy")
 		{
-			if (Physics.Raycast (obj.transform.position, Vector3.down, out hit, 1.0f))
+			// Only take action if the droid does not find another droid
+			if(other.GetComponent<Enemy>().Name != "Drone")
 			{
-				Log("HIT: " + Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime);
-				rigidbody.AddForceAtPosition(Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime, obj.transform.position, ForceMode.Force);
+				// Only start following the enemy if the Drone isn't already following an enemy
+				if(Target == null)
+				{
+					Target = other.gameObject;
+				}
 			}
-		}*/
-
-		GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
+		}
 	}
 	
 	#region MessageHandling
