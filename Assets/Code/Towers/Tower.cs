@@ -22,7 +22,8 @@ public class Tower : MonoBehaviour
 	// Use this for initialization
 	public virtual void Start () 
 	{
-
+		// Allow the first bullet to be fired when the tower is instantiated
+		TimeLastShotFired = Time.time - (RateOfFire * 2);
 	}
 	
 	// Update is called once per frame

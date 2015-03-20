@@ -9,6 +9,7 @@ public class InGame_Menu : MonoBehaviour
 
 	public List<GameObject> TowerButtons;
 	public GameObject MoneyText;
+	public GameObject OutpostHealthText;
 	
 	private void OnEnable()
 	{
@@ -49,6 +50,7 @@ public class InGame_Menu : MonoBehaviour
 		{
 			// Display how much money the player current has
 			MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
+			OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.MiningFacility.Health.ToString();
 		}
 	}
 

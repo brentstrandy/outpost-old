@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
 	public float BallisticDefense;
 	public float ThraceiumDefense;
 
-	protected GameObject OutpostObject;
+	protected OutpostStation OutpostObject;
 
 	public virtual void Awake()
 	{
@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
 	// Use this for initialization
 	public virtual void Start () 
 	{
-		//OutpostObject = GameManager.Instance.OutpostObject;
+
 	}
 
     // Update is called once per frame

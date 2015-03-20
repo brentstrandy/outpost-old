@@ -13,7 +13,7 @@ public class OutpostStation : MonoBehaviour
 	{
 		IncomeAmountPerSecond = 0.5f;
 		LastIncomeTime = Time.time;
-		Health = 100.0f;
+		Health = 10.0f;
 	}
 	
 	// Update is called once per frame
@@ -25,7 +25,10 @@ public class OutpostStation : MonoBehaviour
 	private void OnTriggerEnter(Collider other)
 	{
 		if(other.tag == "Enemy")
+		{
+			Health--;
 			SessionManager.Instance.DestroyObject(other.gameObject);
+		}
 	}
 
 	private void EarnIncome()
