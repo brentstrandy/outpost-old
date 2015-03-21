@@ -8,14 +8,22 @@ public class Enemy : MonoBehaviour
     public string Name;
 	public float Health;
     public float Speed = 0.0f;
+	public float Range;
+	public float RateOfFire;
+	protected float TimeLastShotFired;
+	protected bool Firing;
+	public float DamageDealt;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
 
-	protected OutpostStation OutpostObject;
+	protected MiningFacility MiningFacilityObject;
 
 	public virtual void Awake()
 	{
-		OutpostObject = GameManager.Instance.MiningFacility;
+		MiningFacilityObject = GameManager.Instance.MiningFacilityObject;
+
+		// Allow the first bullet to be fired when the enemy is instantiated
+		TimeLastShotFired = Time.time - (RateOfFire * 2);
 
 		EnemyManager.Instance.AddActiveEnemy(this);
 	}
@@ -64,14 +72,43 @@ public class Enemy : MonoBehaviour
 		EnemyManager.Instance.RemoveActiveEnemy(this);
 	}
 
+	public virtual void OnTriggerEnter(Collider other)
+	{
+
+	}
+
+	/// <summary>
+	/// Coroutine that allows the enemy to fire upon the Mining Facility when in range
+	/// </summary>
+	protected IEnumerator Fire()
+	{
+		while(this)
+		{
+			// If the enemy is within range of the mining faclity, then open fire
+			if(Vector3.Distance(this.transform.position, MiningFacilityObject.transform.position) <= Range)
+			{
+				if(Time.time - TimeLastShotFired >= RateOfFire)
+				{
+					MiningFacilityObject.TakeDamage(DamageDealt);
+					TimeLastShotFired = Time.time;
+				}
+				Firing = true;
+			}
+			else
+				Firing = false;
+
+			yield return 0;
+		}
+	}
+	
 	#region MessageHandling
-	protected void Log(string message)
+	protected virtual void Log(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.Log("[Enemy] " + message);
 	}
 	
-	protected void LogError(string message)
+	protected virtual void LogError(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.LogError("[Enemy] " + message);

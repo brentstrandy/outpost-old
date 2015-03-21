@@ -25,13 +25,13 @@ public class SmallThraceium : Tower
 	}
 
 	#region MessageHandling
-	protected void Log(string message)
+	protected override void Log(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.Log("[SmallThraceium] " + message);
 	}
 	
-	protected void LogError(string message)
+	protected override void LogError(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.LogError("[SmallThraceium] " + message);

@@ -13,30 +13,20 @@ public class Drone : Enemy
 	// Use this for initialization
 	public override void Start ()
 	{
-		Name = "Drone";
-		Speed = 15.0f;
-		Health = 5.0f;
-		this.transform.LookAt(OutpostObject.transform.position, Vector3.up);
+		this.transform.LookAt(MiningFacilityObject.transform.position, Vector3.up);
 	}
-	
-	// Update is called once per frame
-	public override void Update ()
-	{
-
-	}
-
 
 	public override void FixedUpdate()
 	{
 		if(Target != null)
 			this.transform.LookAt(Target.transform.position, Vector3.up);
 		else
-			this.transform.LookAt(OutpostObject.transform.position, Vector3.up);
+			this.transform.LookAt(MiningFacilityObject.transform.position, Vector3.up);
 
 		GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
 	}
 
-	public void OnTriggerEnter(Collider other)
+	public override void OnTriggerEnter(Collider other)
 	{
 		// Only take action if the droid finds an enemy to follow
 		if(other.tag == "Enemy")
@@ -51,16 +41,21 @@ public class Drone : Enemy
 				}
 			}
 		}
+		// Check to see if the Enemy encounters the Mining Facility and - if so - explode on impact
+		else if(other.tag == "Mining Facility")
+		{
+			MiningFacilityObject.TakeDamage(DamageDealt);
+		}
 	}
 	
 	#region MessageHandling
-	protected void Log(string message)
+	protected override void Log(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.Log("[Drone] " + message);
 	}
 	
-	protected void LogError(string message)
+	protected override void LogError(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.LogError("[Drone] " + message);

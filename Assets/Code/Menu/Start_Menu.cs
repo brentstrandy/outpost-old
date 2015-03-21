@@ -8,6 +8,7 @@ public class Start_Menu : MonoBehaviour
 	public bool ShowDebugLogs = true;
 
 	public GameObject InputField;
+	public GameObject StartButton;
 	public GameObject CannotConnectText;
 	public GameObject RetryButton;
 	public GameObject OfflineButton;
@@ -25,15 +26,16 @@ public class Start_Menu : MonoBehaviour
 	{
 		// Remove listeners for all applicable events
 		SessionManager.Instance.OnSMConnected -= Connected_Event;
+		SessionManager.Instance.OnSMConnectionFail -= ConnectionFailed_Event;
 	}
 	
 	#region OnClick
 	public void Start_Click()
 	{
 		// Tell the SessionManager the name of the user logging in
-		SessionManager.Instance.AuthenticatePlayer(InputField.GetComponent<Text>().text);
+		SessionManager.Instance.AuthenticatePlayer(InputField.GetComponentInChildren<Text>().text);
 
-		// Tell the MenuManager to transition back
+		// Tell the SessionManager to start a new session with the player's credentials
 		SessionManager.Instance.StartSession();
 	}
 
@@ -44,8 +46,9 @@ public class Start_Menu : MonoBehaviour
 
 	public void Offline_Click()
 	{
+		// Go into Offline mode and open the main menu
 		SessionManager.Instance.SetOfflineMode(true);
-		SessionManager.Instance.StartSession();
+		MenuManager.Instance.ShowMainMenu();
 	}
 	#endregion
 	
@@ -58,6 +61,7 @@ public class Start_Menu : MonoBehaviour
 	private void ConnectionFailed_Event(DisconnectCause cause)
 	{
 		InputField.SetActive(false);
+		StartButton.SetActive(false);
 		CannotConnectText.SetActive(true);
 		RetryButton.SetActive(true);
 		OfflineButton.SetActive(true);

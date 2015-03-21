@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 	public bool Victory { get; private set; }
 	private bool GameRunning;
 	
-	public OutpostStation MiningFacility;
+	public MiningFacility MiningFacilityObject;
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 		// Check to see if all the enemies have spawned and if all enemies are dead
 		if(EnemySpawnManager.Instance.FinishedSpawning && EnemyManager.Instance.ActiveEnemyCount() == 0)
 			EndGame_Victory();
-		else if(MiningFacility.Health <= 0)
+		else if(MiningFacilityObject.Health <= 0)
 			EndGame_Loss();
 	}
 

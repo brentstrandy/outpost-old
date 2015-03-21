@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class HeavySpeeder : Enemy
@@ -11,17 +11,11 @@ public class HeavySpeeder : Enemy
 	// Use this for initialization
 	public override void Start ()
 	{
-		Name = "Heavy Speeder";
-		Speed = 2.0f;
-		this.transform.LookAt(OutpostObject.transform.position, Vector3.up);
-	}
-	
-	// Update is called once per frame
-	public override void Update ()
-	{
+		this.transform.LookAt(MiningFacilityObject.transform.position, Vector3.up);
 
+		// Heavy Speeders can fire on the mining facility
+		StartCoroutine("Fire");
 	}
-
 
 	public override void FixedUpdate()
 	{
@@ -36,17 +30,19 @@ public class HeavySpeeder : Enemy
 			}
 		}*/
 
-		GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
+		if(!Firing)
+			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
+			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
 	}
 	
 	#region MessageHandling
-	protected void Log(string message)
+	protected override void Log(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.Log("[HeavySpeeder] " + message);
 	}
 	
-	protected void LogError(string message)
+	protected override void LogError(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.LogError("[HeavySpeeder] " + message);

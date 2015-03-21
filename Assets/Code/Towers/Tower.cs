@@ -22,7 +22,7 @@ public class Tower : MonoBehaviour
 	// Use this for initialization
 	public virtual void Start () 
 	{
-		// Allow the first bullet to be fired when the tower is instantiated
+		// Allow the first bullet to be fired immediately after the tower is instantiated
 		TimeLastShotFired = Time.time - (RateOfFire * 2);
 	}
 	
@@ -45,9 +45,12 @@ public class Tower : MonoBehaviour
 	{
 		if(TargetedEnemy != null)
 		{
-			// Remove the targeted Enemy when the enemy leaves
-			if(other.gameObject.GetComponent<Enemy>().Equals(TargetedEnemy))
-				TargetedEnemy = null;
+			if(other.tag == "Enemy")
+			{
+				// Remove the targeted Enemy when the enemy leaves
+				if(other.gameObject.GetComponent<Enemy>().Equals(TargetedEnemy))
+					TargetedEnemy = null;
+			}
 		}
 	}
 
@@ -73,13 +76,13 @@ public class Tower : MonoBehaviour
 	}
 
 	#region MessageHandling
-	protected void Log(string message)
+	protected virtual void Log(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.Log("[Tower] " + message);
 	}
 	
-	protected void LogError(string message)
+	protected virtual void LogError(string message)
 	{
 		if(ShowDebugLogs)
 			Debug.LogError("[Tower] " + message);

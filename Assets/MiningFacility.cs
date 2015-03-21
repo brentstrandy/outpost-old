@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OutpostStation : MonoBehaviour
+public class MiningFacility : MonoBehaviour
 {
 	public float IncomeAmountPerSecond { get; private set; }
 	public float Health { get; private set; }
@@ -13,13 +13,18 @@ public class OutpostStation : MonoBehaviour
 	{
 		IncomeAmountPerSecond = 0.5f;
 		LastIncomeTime = Time.time;
-		Health = 10.0f;
+		Health = 100.0f;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		EarnIncome();
+	}
+
+	public void TakeDamage(float damage)
+	{
+		Health -= damage;
 	}
 
 	private void OnTriggerEnter(Collider other)
