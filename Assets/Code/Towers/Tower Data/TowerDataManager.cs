@@ -25,28 +25,19 @@ public class TowerDataManager
         string towerDataXMLPath = Application.streamingAssetsPath + "/TowerData.xml";
 
         TowerDataList = new List<TowerData>();
-        // FITZGERALD: this requires Level 1 to be loaded
-        //TowerDataContainer_Inspector = GameObject.Find("Tower Data Manager").GetComponent<TowerDataContainer>();
+        TowerDataContainer_Inspector = GameObject.Find("TowerManager").GetComponent<TowerDataContainer>();
 
         if (File.Exists(towerDataXMLPath))
         {
             // deserialize XML and add each enemy spawn to the lists
             foreach (TowerData tower in XMLParser<TowerData>.XMLDeserializer_List(towerDataXMLPath))
             {
-                //TowerDataContainer_Inspector.TowerDataList.Add(tower);
+                TowerDataContainer_Inspector.TowerDataList.Add(tower);
                 TowerDataList.Add(tower);
             }
         }
         else
             LogError("Cannot find Tower Data XML file");
-        
-        //// DELETE ALL CODE FROM HERE ... ->
-        //TowerDataList = new List<TowerData>();
-        //TowerDataList.Add(new TowerData("Small Thraceium Tower", "SmallThraceiumTower"));
-        //TowerDataList.Add(new TowerData("Thraceium Rain Tower", "ThraceiumRainTower"));
-        //TowerDataList.Add(new TowerData("EMP Tower", "EMPTower"));
-        //TowerDataList.Add(new TowerData("Universal Energy Tower", "UniversalEnergyTower"));
-        //// -> TO HERE
 	}
 
 	/// <summary>

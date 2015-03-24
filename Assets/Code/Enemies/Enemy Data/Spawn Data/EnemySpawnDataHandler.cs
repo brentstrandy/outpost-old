@@ -9,7 +9,7 @@ public class EnemySpawnDataHandler
 	public bool ShowDebugLogs = true;
 
 	private List<EnemySpawnData> SpawnActionList;
-    private EnemySpawnDataContainer SpawnActionContainer_Inspector;
+    public EnemySpawnDataContainer SpawnActionContainer_Inspector;
 
 
 	public EnemySpawnDataHandler() 

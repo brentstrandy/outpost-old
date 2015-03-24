@@ -52,11 +52,15 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="Photon3Unity3D">
       <HintPath>Assets\Photon\Plugins\Photon3Unity3D.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Code\Camera\CameraMovement.cs" />
     <Compile Include="Assets\Code\Enemies\Drone.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\EnemyData.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\EnemyDataManager.cs" />
@@ -79,6 +83,7 @@
     <Compile Include="Assets\Code\HexKit\Logic\Internal Classes\Deprecated\HexCoordinate.cs" />
     <Compile Include="Assets\Code\HexKit\Logic\Internal Classes\HexBRPQ.cs" />
     <Compile Include="Assets\Code\HexKit\Logic\Internal Classes\HexBRPQNode.cs" />
+    <Compile Include="Assets\Code\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Code\Managers\EnemySpawnManager.cs" />
     <Compile Include="Assets\Code\Managers\GameDataManager.cs" />
     <Compile Include="Assets\Code\Managers\GameManager.cs" />
@@ -86,6 +91,7 @@
     <Compile Include="Assets\Code\Managers\SessionManager.cs" />
     <Compile Include="Assets\Code\Menu\AudioSettings_Menu.cs" />
     <Compile Include="Assets\Code\Menu\ControlSettings_Menu.cs" />
+    <Compile Include="Assets\Code\Menu\EndGame_Menu.cs" />
     <Compile Include="Assets\Code\Menu\GameplaySettings_Menu.cs" />
     <Compile Include="Assets\Code\Menu\InGame_Menu.cs" />
     <Compile Include="Assets\Code\Menu\JoinGame_Menu.cs" />
@@ -110,7 +116,7 @@
     <Compile Include="Assets\Code\Utilities\DontDestroyOnLoad.cs" />
     <Compile Include="Assets\Code\Utilities\Utilities.cs" />
     <Compile Include="Assets\Code\Utilities\iTween.cs" />
-    <Compile Include="Assets\OutpostStation.cs" />
+    <Compile Include="Assets\MiningFacility.cs" />
     <Compile Include="Assets\Photon\Plugins\PhotonNetwork\CustomTypes.cs" />
     <Compile Include="Assets\Photon\Plugins\PhotonNetwork\Enums.cs" />
     <Compile Include="Assets\Photon\Plugins\PhotonNetwork\Extensions.cs" />
@@ -145,6 +151,7 @@
     <Compile Include="Assets\Photon\UtilityScripts\SmoothSyncMovement.cs" />
     <Compile Include="Assets\Photon\UtilityScripts\TestDontDestroyOnLoad.cs" />
     <Compile Include="Assets\Photon\UtilityScripts\TimeKeeper.cs" />
+    <Compile Include="Assets\StartScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon\changelog.txt" />

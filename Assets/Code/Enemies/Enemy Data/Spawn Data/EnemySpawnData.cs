@@ -9,12 +9,16 @@ using System.Xml.Serialization;
 [Serializable]
 public class EnemySpawnData
 {
+    // EnemyName must come first in class so it replaces element tag in Inspector
     [XmlElement("EnemyName")]
     public string EnemyName;
     [XmlElement("StartTime")]
     public float StartTime;
     [XmlElement("StartAngle")]
     public int StartAngle;
+
+    [HideInInspector]
+    public bool ShowDebugLogs = true;
 
 	public EnemySpawnData() { }
 
@@ -31,4 +35,17 @@ public class EnemySpawnData
         StartTime = startTime;
         StartAngle = startAngle;
     }
+    #region MessageHandling
+    protected void Log(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.Log("[TowerData] " + message);
+    }
+
+    protected void LogError(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.LogError("[TowerData] " + message);
+    }
+    #endregion
 }
