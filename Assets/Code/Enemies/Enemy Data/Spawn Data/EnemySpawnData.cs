@@ -10,14 +10,20 @@ using System.Xml.Serialization;
 public class EnemySpawnData
 {
     // EnemyName must come first in class so it replaces element tag in Inspector
-    [XmlElement("EnemyName")]
     public string EnemyName;
-    [XmlElement("StartTime")]
     public float StartTime;
-    [XmlElement("StartAngle")]
     public int StartAngle;
+    public EnemyType Type;
 
+    // used for Inspector (Reorderable List)
     [HideInInspector]
+    public enum EnemyType 
+    {
+        Normal,
+        Boss
+    }
+
+    [HideInInspector] [XmlIgnore]
     public bool ShowDebugLogs = true;
 
 	public EnemySpawnData() { }
@@ -27,14 +33,17 @@ public class EnemySpawnData
         EnemyName = obj.EnemyName;
         StartTime = obj.StartTime;
         StartAngle = obj.StartAngle;
+        Type = obj.Type;
     }
 
-	public EnemySpawnData(string enemyName, float startTime, int startAngle)
+	public EnemySpawnData(string enemyName, float startTime, int startAngle, EnemyType type)
     {
         EnemyName = enemyName;
         StartTime = startTime;
         StartAngle = startAngle;
+        Type = type;
     }
+
     #region MessageHandling
     protected void Log(string message)
     {

@@ -32,7 +32,7 @@ public class EnemySpawnDataHandler
             // deserialize XML and add each enemy spawn to the lists
             foreach (EnemySpawnData enemy in XMLParser<EnemySpawnData>.XMLDeserializer_List(enemySpawnXMLPath))
             {
-                SpawnActionContainer_Inspector.SpawnDataList.Add(enemy);
+                SpawnActionContainer_Inspector.EnemySpawnDataList.Add(enemy);
                 SpawnActionList.Add(enemy);
             }
 
@@ -83,7 +83,7 @@ public class EnemySpawnDataHandler
         if (SpawnActionList != null)
         {
             SpawnActionList = SpawnActionList.OrderBy(o => o.StartTime).ToList();
-            SpawnActionContainer_Inspector.SpawnDataList = SpawnActionContainer_Inspector.SpawnDataList.OrderBy(o => o.StartTime).ToList();
+            SpawnActionContainer_Inspector.EnemySpawnDataList = SpawnActionContainer_Inspector.EnemySpawnDataList.OrderBy(o => o.StartTime).ToList();
         }    
     }
   

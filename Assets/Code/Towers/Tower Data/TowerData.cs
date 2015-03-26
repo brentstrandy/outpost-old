@@ -12,30 +12,21 @@ public class TowerData
 {
 	// Tower Details
     // DisplayName must come first in class so it replaces element tag in Inspector
-    [XmlElement("DisplayName")] 
 	public string DisplayName;
-    [XmlElement("PrefabName")]
     public string PrefabName;
 
 	// Tower Stats
-    [XmlElement("Health")]
 	public int Health;
-    [XmlElement("RateOfFire")]
+    public int PlayerCount; // how many players required to spawn this enemy
     public float RateOfFire;
-    [XmlElement("Cooldown")]
     public float Cooldown;
-    [XmlElement("ThraceiumDamage")]
     public float ThraceiumDamage;
-    [XmlElement("BallisticDamage")]
     public float BallisticDamage;
-    [XmlElement("TransitionTime")]
     public float TransitionTime;
-    [XmlElement("InstallCount")]
     public float InstallCount;
-    [XmlElement("MaintenanceCost")]
     public float MaintenanceCost;
 
-    [HideInInspector]
+    [HideInInspector] [XmlIgnore]
     public bool ShowDebugLogs = true;
 
 	public TowerData() { }

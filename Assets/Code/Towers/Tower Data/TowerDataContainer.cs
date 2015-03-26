@@ -12,6 +12,8 @@ using System.Xml.Serialization;
 /// </summary>
 public class TowerDataContainer : MonoBehaviour
 {
+    // FITZGERALD: hide when custom inspector is done
+    //[HideInInspector]
     [XmlArray("Towers"), XmlArrayItem(typeof(TowerData), ElementName = "Tower")]
     public List<TowerData> TowerDataList;
 

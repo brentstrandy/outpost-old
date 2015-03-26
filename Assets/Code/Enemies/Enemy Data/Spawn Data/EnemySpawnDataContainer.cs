@@ -12,11 +12,12 @@ using System.Xml.Serialization;
 /// </summary>
 public class EnemySpawnDataContainer : MonoBehaviour 
 {
+    [HideInInspector]
 	[XmlArray("EnemySpawnActions"), XmlArrayItem(typeof(EnemySpawnData), ElementName = "EnemySpawnAction")]
-	public List<EnemySpawnData> SpawnDataList;
+	public List<EnemySpawnData> EnemySpawnDataList;
 
     public EnemySpawnDataContainer()
     {
-        SpawnDataList = new List<EnemySpawnData>();
+        EnemySpawnDataList = new List<EnemySpawnData>();
     }
 }
