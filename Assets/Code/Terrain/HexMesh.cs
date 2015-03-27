@@ -67,23 +67,34 @@ public class HexMesh : MonoBehaviour
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
+		HexCoord coord;
 
 		if (Input.GetMouseButtonDown(0)) {
-			if (Physics.Raycast(ray, out hit)) {
-				if (hit.collider == GetComponent<MeshCollider>()) {
-					// Convert from world space to local space
-					var local = hit.transform.InverseTransformPoint(hit.point);
-
-					// Convert from xz to qr
-					var xy = new Vector2(local.x, local.z);
-					// TODO: Scale xy by some factor
-					var coord = HexCoord.AtPosition(new Vector2(local.x, local.z));
-
-					// Do something with the coordinate
-					Log("HexMesh Collision: " + local + " - " + coord);
-				}
+			if (IntersectRay(ray, out hit, out coord)) {
+				Log("HexMesh Collision: " + hit.point + " - " + coord);
 			}
 		}
+	}
+
+	public bool IntersectRay(Ray ray, out RaycastHit hit, out HexCoord coord)
+	{
+		if (Physics.Raycast(ray, out hit)) {
+			if (hit.collider == GetComponent<MeshCollider>()) {
+				// Convert from world space to local space
+				var xy = (Vector2)hit.transform.InverseTransformPoint(hit.point);
+
+				// Scale to fit the grid
+				float scale = 1.0f; // TODO: Base this on the hexagon diameter
+				xy *= scale;
+
+				// Convert to a hex coordinate
+				coord = HexCoord.AtPosition(xy);
+
+				return true;
+			}
+		}
+		coord = default(HexCoord);
+		return false;
 	}
 
 	public void ApplyProperties()
