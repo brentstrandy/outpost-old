@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Settworks.Hexagons;
 
 [ExecuteInEditMode]
 public class HexMesh : MonoBehaviour
@@ -13,6 +14,7 @@ public class HexMesh : MonoBehaviour
 	public int GridHeight = 5;
 	public float HexagonDiameter = 1.0f;
 	public Color OutlineColor = Color.yellow;
+	public Color HighlightColor = Color.red;
 
 	//private GameObject Outlines;
 
@@ -66,9 +68,20 @@ public class HexMesh : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 
-		if (Physics.Raycast(ray, out hit)) {
-			if (hit.collider == GetComponent<MeshCollider>()) {
-				Log("HexMesh Collision: " + hit.triangleIndex);
+		if (Input.GetMouseButtonDown(0)) {
+			if (Physics.Raycast(ray, out hit)) {
+				if (hit.collider == GetComponent<MeshCollider>()) {
+					// Convert from world space to local space
+					var local = hit.transform.InverseTransformPoint(hit.point);
+
+					// Convert from xz to qr
+					var xy = new Vector2(local.x, local.z);
+					// TODO: Scale xy by some factor
+					var coord = HexCoord.AtPosition(new Vector2(local.x, local.z));
+
+					// Do something with the coordinate
+					Log("HexMesh Collision: " + local + " - " + coord);
+				}
 			}
 		}
 	}
@@ -119,25 +132,34 @@ public class HexMesh : MonoBehaviour
 		int numVertexColumnsB = 3 * (gridWidth + 1) / 2;
 
 		float hexagonRadius = hexagonDiameter * 0.5f;
+		float hexagonHalfRadius = hexagonRadius * 0.5f;
 		float hexagonApothem = hexagonRadius * apothemRatio;
 		float hexagonWidth = hexagonDiameter;
 		float hexagonHeight = 2.0f * hexagonApothem;
 
-		float totalWidth = (float)numVertexColumnsA + (float)numVertexColumnsB * 0.5f;
-		float fractionalHexagonWidth = 1.0f / totalWidth;
-		
-		float totalHeight = 1.0f + (float)(gridHeight - 1) * 0.5f;
-		float fractionalHexagonHeight = 1.0f / totalHeight;
+		var meshDimensions = new Vector2(
+			x: (float)numVertexColumnsA * hexagonRadius,
+			y: hexagonHeight + (float)(gridHeight - 1) * hexagonApothem
+		);
+
+		var meshOffset = new Vector3(
+			x: meshDimensions.x * -0.5f,
+			y: meshDimensions.y * -0.5f,
+			z: 0.0f
+		);
+
+		var texScale = new Vector2(
+			x: 1.0f / meshDimensions.x,
+			y: 1.0f / meshDimensions.y
+		);
 
 		this.Log("Number of Hexagons: " + numberOfHexagons);
 		this.Log("Number of Vertices: " + numberOfVertices);
 		this.Log("Number of Indices: " + numberOfIndices);
 
-		this.Log("Total Width: " + totalWidth);
-		this.Log("Fractional Width: " + fractionalHexagonWidth);
-
-		this.Log("Total Height: " + totalHeight);
-		this.Log("Fractional Height: " + fractionalHexagonHeight);
+		this.Log("Mesh Dimensions: " + meshDimensions);
+		this.Log("Mesh Offset: " + meshOffset);
+		this.Log("Texture Scale: (" + texScale.x + ", " + texScale.y + ")");
 		
 		// Allocate vertices, indices and UV coordinates
 		var vertices = new Vector3[numberOfVertices];
@@ -151,14 +173,14 @@ public class HexMesh : MonoBehaviour
 			int numVertexColumns = r % 2 == 0 ? numVertexColumnsA : numVertexColumnsB; // The number of columns varies depending on whether the row index is even or odd
 			for (int c = 0; c < numVertexColumns; c++)
 			{
-				float offset = (r % 2 == 0) ? hexagonDiameter * 0.25f : 0f;
-				float x = offset + c * hexagonRadius;
-				float y = 0.0f;
-				float z = r * hexagonApothem;
-				float u = x * fractionalHexagonWidth;
-				float v = z * fractionalHexagonHeight;
-				vertices[vertIndex] = new Vector3(x, y, z);
-				uv[vertIndex] = new Vector2(u, v);
+				float offset = (r % 2 == 0) ? hexagonHalfRadius : 0f;
+				var vertex = new Vector3(
+					x: offset + c * hexagonRadius,
+					y: r * hexagonApothem,
+					z: 0.0f
+				);
+				vertices[vertIndex] = vertex + meshOffset;
+				uv[vertIndex] = Vector2.Scale((Vector2)vertex, texScale);
 				
 				//this.Log("v" + vertIndex + ": " + vertices[vertIndex]);
 
@@ -180,6 +202,7 @@ public class HexMesh : MonoBehaviour
 				//this.Log("Column " + c);
 				// Clockwise order:
 				// JS 2015-02-20: This should be correct but it comes out backwards and I'm not sure why
+				// JS 2015-03-24: It's because positive Z points toward the camera, not away from it
 				/*
 				for (int p = 1; p < 7; p++)
 				{
@@ -247,15 +270,15 @@ public class HexMesh : MonoBehaviour
 				for (int p = 0; p < 7; p++)
 				{
 					int index = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
-					neighbor = Mathf.Max(neighbor, vertices[index].y);
+					neighbor = Mathf.Max(neighbor, vertices[index].z);
 				}
 				float hexDiff = neighbor - target;
 				target += hexDiff * 0.5f;
 				for (int p = 0; p < 7; p++)
 				{
 					int index = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
-					float vertexDiff = p > 0 ? vertices[index].y - target : 0.0f;
-					vertices[index].y = target + vertexDiff * 0.5f;
+					float vertexDiff = p > 0 ? vertices[index].z - target : 0.0f;
+					vertices[index].z = target + vertexDiff * 0.5f;
 				}
 			}
 		}
