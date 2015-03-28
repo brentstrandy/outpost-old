@@ -26,15 +26,18 @@ public class EnemySpawnDataHandler
         // Determine if the file exists
         if (File.Exists(enemySpawnXMLPath))
         {
-            // FITZGERALD: To Do
-            // Make it so Justin doesn't have to restart the scene for the info to be loaded in (ask Brent about how this can work w/Photon)
+            SpawnActionList = XMLParser<EnemySpawnData>.XMLDeserializer_List(enemySpawnXMLPath);
+            // check to make sure this hasn't been loaded outside (e.g. Justin editing in !isPlaying & then presses play to test)
+            if (SpawnActionContainer_Inspector.EnemySpawnDataList.Count < 1)
+                SpawnActionContainer_Inspector.EnemySpawnDataList = SpawnActionList;
 
-            // deserialize XML and add each enemy spawn to the lists
-            foreach (EnemySpawnData enemy in XMLParser<EnemySpawnData>.XMLDeserializer_List(enemySpawnXMLPath))
-            {
-                SpawnActionContainer_Inspector.EnemySpawnDataList.Add(enemy);
-                SpawnActionList.Add(enemy);
-            }
+            //// deserialize XML and add each enemy spawn to the lists
+            //foreach (EnemySpawnData enemy in XMLParser<EnemySpawnData>.XMLDeserializer_List(enemySpawnXMLPath))
+            //{
+            //    if (SpawnActionContainer_Inspector.EnemySpawnDataList.Count < 1)
+            //        SpawnActionContainer_Inspector.EnemySpawnDataList.Add(enemy);
+            //    SpawnActionList.Add(enemy);
+            //}
 
             // Sort list by time to make sure actions are executed in order
             this.SortListsByStartTime();

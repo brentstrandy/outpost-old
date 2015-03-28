@@ -101,16 +101,8 @@
     <Compile Include="Assets\Code\Menu\VideoSettings_Menu.cs" />
     <Compile Include="Assets\Code\Player\LoadOut.cs" />
     <Compile Include="Assets\Code\Player\Player.cs" />
-    <Compile Include="Assets\Code\Procedural\FractalTexture.cs" />
-    <Compile Include="Assets\Code\Procedural\HeightmapGenerator.cs" />
-    <Compile Include="Assets\Code\Procedural\Perlin.cs" />
-    <Compile Include="Assets\Code\Procedural\RegularPolygon.cs" />
-    <Compile Include="Assets\Code\Procedural\TerrainAnimator.cs" />
     <Compile Include="Assets\Code\Serializer\XMLParser.cs" />
     <Compile Include="Assets\Code\Terrain\HexMesh.cs" />
-    <Compile Include="Assets\Code\Terrain\Map.cs" />
-    <Compile Include="Assets\Code\Terrain\Plot.cs" />
-    <Compile Include="Assets\Code\Terrain\TerrainProperties.cs" />
     <Compile Include="Assets\Code\Towers\SmallThraceium.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerData.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerDataContainer.cs" />
