@@ -4,6 +4,7 @@ using UnityEditorInternal;
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 /// <summary>
 /// Inspector button(s) to save/edit level's spawn data from XML.
@@ -11,17 +12,41 @@ using System.Linq;
 /// http://va.lent.in/unity-make-your-lists-functional-with-reorderablelist/
 /// Owner: John Fitzgerald
 /// </summary>
+[ExecuteInEditMode]
 [CustomEditor(typeof(EnemySpawnDataContainer))]
 public class EnemySpawnDataContainerEditor : Editor 
 {
     private EnemySpawnDataContainer MyScript;
     private ReorderableList ReorderList;
-
-    private void OnEnable ()
+    private string XMLPath;
+ 
+    private void OnEnable()
     {
+        XMLPath = Application.streamingAssetsPath + "/" + "Level1" + ".xml"; // FITZGERALD: can't use Application.loadedLevelName in the editor (find way to be dynamic)
         MyScript = (EnemySpawnDataContainer)target;
-        ReorderList = new ReorderableList(serializedObject, serializedObject.FindProperty("EnemySpawnDataList"), 
-                                          true, true, true, true); // dragable, header, add button, remove button
+
+        if (Application.isPlaying)
+        {
+            ReorderList = new ReorderableList(serializedObject, serializedObject.FindProperty("EnemySpawnDataList"),
+                                              true, true, true, true); // dragable, header, add button, remove button
+        }
+        // takes over for EnemySpawnDataHandler
+        else
+        {
+            if (!IsListLoaded())
+            {
+                //foreach (EnemySpawnData enemy in LoadFromXML())
+                //    MyScript.EnemySpawnDataList.Add(enemy);
+
+                MyScript.EnemySpawnDataList = LoadFromXML();
+
+                SortListByStartTime();
+            }
+
+            // load List into ReorderList for inspector
+            ReorderList = new ReorderableList(serializedObject, serializedObject.FindProperty("EnemySpawnDataList"),
+                                              true, true, true, true); // dragable,  header, add button, remove button
+        }
 
         DisplayList();
         HeaderTitle();
@@ -39,9 +64,30 @@ public class EnemySpawnDataContainerEditor : Editor
         serializedObject.ApplyModifiedProperties();
 
         // "Save Data" button at bottom of Inspector window
-        if (Application.isPlaying)
-            SaveToXML();
+        if (IsListLoaded())
+            SaveToXML_Button();
+
+        EditorGUILayout.Space();
+
+        LoadFromXML_Button();
     }
+
+    /// <summary>
+    /// !Application.isPlaying: Checks if List or ReorderableList are loaded
+    /// </summary>
+    /// <returns></returns>
+    private bool IsListLoaded()
+    {
+        if (MyScript != null)
+        {
+            if (MyScript.EnemySpawnDataList.Count > 0)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
+   }
 
     /// <summary>
     /// Displays ReorderableList in inspector
@@ -205,18 +251,52 @@ public class EnemySpawnDataContainerEditor : Editor
     }
 
     /// <summary>
+    /// !Application.isPlaying: sorts list by start time
+    /// </summary>
+    private void SortListByStartTime()
+    {
+        if (MyScript.EnemySpawnDataList != null)
+        {
+            MyScript.EnemySpawnDataList = MyScript.EnemySpawnDataList.OrderBy(o => o.StartTime).ToList();
+        }    
+    }
+
+    /// <summary>
+    /// Load XML file to List<T>
+    /// </summary>
+    /// <returns></returns>
+    private List<EnemySpawnData> LoadFromXML()
+    {
+        return XMLParser<EnemySpawnData>.XMLDeserializer_List(XMLPath);
+    }
+
+    /// <summary>
     /// Saves current Inspector List to XML
     /// </summary>
-    private void SaveToXML()
+    private void SaveToXML_Button()
     {
         if (GUILayout.Button("Save Data"))
         {
-            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to save?", "Yes", "No"))
-            {
-                // saves file based on the level name that's loaded in scene
-                string fileName = Application.streamingAssetsPath + "/" + Application.loadedLevelName + ".xml";
+            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to SAVE?", "Yes", "No"))
+                XMLParser<EnemySpawnData>.XMLSerializer_List(MyScript.EnemySpawnDataList, XMLPath);
+        }
+    }
 
-                XMLParser<EnemySpawnData>.XMLSerializer_List(MyScript.EnemySpawnDataList, fileName);
+    /// <summary>
+    /// Saves current Inspector List to XML
+    /// </summary>
+    private void LoadFromXML_Button()
+    {
+        if (GUILayout.Button("Load Data"))
+        {
+            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD?", "Yes", "No"))
+            {
+                MyScript.EnemySpawnDataList.Clear();
+
+                if (!Application.isPlaying)
+                    OnEnable();
+                else
+                    MyScript.EnemySpawnDataList = LoadFromXML();
             }
         }
     }

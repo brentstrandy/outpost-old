@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Settworks.Hexagons;
 
 public class TowerManager : MonoBehaviour
 {
@@ -26,12 +27,20 @@ public class TowerManager : MonoBehaviour
 		{
 			if(Time.time - LastPlacementTime > 1)
 			{
-				MouseClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				var terrain = GameObject.FindObjectOfType<HexMesh>();
+				if (terrain != null)
+				{
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit hit;
+					HexCoord coord;
+					if (terrain.IntersectRay(ray, out hit, out coord))
+					{
+						Log("Tower Placement: " + hit.point + " : " + coord);
+						//ObjPhotonView.RPC("PlaceTower", PhotonTargets.AllBuffered, "SmallThraceium", new Vector3(MouseClickPosition.x, 0, MouseClickPosition.z), Quaternion.identity);
 
-				//ObjPhotonView.RPC("PlaceTower", PhotonTargets.AllBuffered, "SmallThraceium", new Vector3(MouseClickPosition.x, 0, MouseClickPosition.z), Quaternion.identity);
-
-				LastPlacementTime = Time.time;
-
+						LastPlacementTime = Time.time;
+					}
+				}
 			}
 		}
 	}

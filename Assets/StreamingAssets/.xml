@@ -114,4 +114,16 @@
     <StartAngle>70</StartAngle>
     <Type>Normal</Type>
   </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Light Speeder</EnemyName>
+    <StartTime>14</StartTime>
+    <StartAngle>80</StartAngle>
+    <Type>Normal</Type>
+  </EnemySpawnData>
+  <EnemySpawnData>
+    <EnemyName>Drone</EnemyName>
+    <StartTime>60</StartTime>
+    <StartAngle>360</StartAngle>
+    <Type>Normal</Type>
+  </EnemySpawnData>
 </ArrayOfEnemySpawnData>
