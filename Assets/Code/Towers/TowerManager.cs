@@ -35,8 +35,14 @@ public class TowerManager : MonoBehaviour
 					HexCoord coord;
 					if (terrain.IntersectRay(ray, out hit, out coord))
 					{
+						// TODO: Use the HexCoord to determine the center of the hexagon
 						Log("Tower Placement: " + hit.point + " : " + coord);
-						//ObjPhotonView.RPC("PlaceTower", PhotonTargets.AllBuffered, "SmallThraceium", new Vector3(MouseClickPosition.x, 0, MouseClickPosition.z), Quaternion.identity);
+
+						// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
+						var rotation = Quaternion.LookRotation(hit.point, new Vector3(0.0f, 0.0f, -1.0f));
+
+						// Send the RPC call to place the tower
+						ObjPhotonView.RPC("PlaceTower", PhotonTargets.AllBuffered, "SmallThraceium", hit.point, rotation);
 
 						LastPlacementTime = Time.time;
 					}
