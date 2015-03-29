@@ -11,7 +11,7 @@ public class LightSpeeder : Enemy
 	// Use this for initialization
 	public override void Start ()
 	{
-		this.transform.LookAt(MiningFacilityObject.transform.position, Vector3.up);
+		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
 		// Light Speeders can fire on the mining facility
 		StartCoroutine("Fire");

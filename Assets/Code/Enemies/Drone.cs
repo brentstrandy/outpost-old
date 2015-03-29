@@ -13,7 +13,7 @@ public class Drone : Enemy
 	// Use this for initialization
 	public override void Start ()
 	{
-		this.transform.LookAt(MiningFacilityObject.transform.position, Vector3.up);
+		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 	}
 
 	public override void FixedUpdate()
@@ -21,7 +21,7 @@ public class Drone : Enemy
 		if(Target != null)
 			this.transform.LookAt(Target.transform.position, Vector3.up);
 		else
-			this.transform.LookAt(MiningFacilityObject.transform.position, Vector3.up);
+			this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
 		GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
 	}

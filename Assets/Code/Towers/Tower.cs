@@ -6,6 +6,7 @@ public class Tower : MonoBehaviour
 	public string Name;
 	public bool ShowDebugLogs = true;
 	public GameObject Pivot;
+	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
 	// Tower Details
 	public int Cost;
@@ -62,7 +63,7 @@ public class Tower : MonoBehaviour
 			{
 				// Have the tower's pivot point look at the targeted enemy
 				if(Pivot)
-					Pivot.transform.LookAt(TargetedEnemy.transform.position, Vector3.up);
+					Pivot.transform.LookAt(TargetedEnemy.transform.position, Up);
 
 				if(Time.time - TimeLastShotFired >= RateOfFire)
 				{

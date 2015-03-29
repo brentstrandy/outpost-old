@@ -92,7 +92,8 @@ public class EnemySpawnManager : MonoBehaviour
 	{
         float radians = (Mathf.PI / 180) * angle; // Mathf.Deg2Rad;
         
-		return new Vector3(Mathf.Sin(radians), 0, Mathf.Cos(radians)) * 10;
+		// Note from J.S. 2015-03-29: Shouldn't the sin and cos be reversed here? I think that would put 0 degrees to the north, which seems to be typical.
+		return new Vector3(Mathf.Sin(radians), Mathf.Cos(radians), 0) * 10;
 	}
 					
 	private IEnumerator SpawnEnemies()

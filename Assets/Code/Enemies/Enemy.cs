@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
 	public float DamageDealt;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
+	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
 	protected MiningFacility MiningFacilityObject;
 
