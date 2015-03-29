@@ -36,6 +36,8 @@ public class HexMesh : MonoBehaviour
 			gameObject.AddComponent<MeshCollider>();
 		}
 
+		gameObject.layer = LayerMask.NameToLayer("Terrain");
+
 		/*
 		if (Outlines == null)
 		{
@@ -78,7 +80,8 @@ public class HexMesh : MonoBehaviour
 
 	public bool IntersectRay(Ray ray, out RaycastHit hit, out HexCoord coord)
 	{
-		if (Physics.Raycast(ray, out hit)) {
+		int mask = 1 << gameObject.layer;
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) {
 			if (hit.collider == GetComponent<MeshCollider>()) {
 				// Convert from world space to local space
 				var xy = (Vector2)hit.transform.InverseTransformPoint(hit.point);
@@ -310,6 +313,7 @@ public class HexMesh : MonoBehaviour
 				string name = "HexOutline" + member.ToString();
 				//Log("Creating " + name);
 				var outline = new GameObject(name);
+				outline.layer = LayerMask.NameToLayer("TransparentFX");
 
 				// Prepare the line renderer
 				var lineRenderer = outline.AddComponent<LineRenderer>();
