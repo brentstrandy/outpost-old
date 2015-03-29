@@ -25,7 +25,7 @@ public class TowerDataManager
         string towerDataXMLPath = Application.streamingAssetsPath + "/TowerData.xml";
 
         TowerDataList = new List<TowerData>();
-        TowerDataContainer_Inspector = GameObject.Find("TowerManager").GetComponent<TowerDataContainer>();
+		TowerDataContainer_Inspector = GameObject.Find("TowerData").GetComponent<TowerDataContainer>();
 
         if (File.Exists(towerDataXMLPath))
         {
