@@ -16,6 +16,7 @@ public class Tower : MonoBehaviour
 	public float RateOfFire;
 	public float ThraceiumDamage;
 	public float BallisticDamaage;
+	public float TrackingSpeed; // Number of seconds it takes to lock onto a target
 
 	protected Enemy TargetedEnemy = null;
 	protected float TimeLastShotFired;
@@ -30,7 +31,12 @@ public class Tower : MonoBehaviour
 	// Update is called once per frame
 	public virtual void Update()
 	{
-		
+		if(TargetedEnemy)
+		{
+			// Have the tower's pivot point look at the targeted enemy
+			if(Pivot)
+				transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - transform.position, Up), Time.deltaTime * TrackingSpeed );
+		}
 	}
 	
 	protected virtual void OnTriggerStay(Collider other)
@@ -61,10 +67,6 @@ public class Tower : MonoBehaviour
 		{
 			if(TargetedEnemy)
 			{
-				// Have the tower's pivot point look at the targeted enemy
-				if(Pivot)
-					Pivot.transform.LookAt(TargetedEnemy.transform.position, Up);
-
 				if(Time.time - TimeLastShotFired >= RateOfFire)
 				{
 					TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);

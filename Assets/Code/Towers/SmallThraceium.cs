@@ -21,7 +21,7 @@ public class SmallThraceium : Tower
 	// Update is called once per frame
 	public override void Update()
 	{
-
+		base.Update();
 	}
 
 	#region MessageHandling

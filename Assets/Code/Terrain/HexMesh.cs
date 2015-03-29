@@ -82,6 +82,8 @@ public class HexMesh : MonoBehaviour
 	{
 		int mask = 1 << gameObject.layer;
 		if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) {
+			// Note from J.S. 2015-03-29: The intersection seems to occur with a simple plane right now. The original gameobject was a plane, perhaps the MeshCollider is
+			// working against that original mesh and not the real one that we generate?
 			if (hit.collider == GetComponent<MeshCollider>()) {
 				// Convert from world space to local space
 				var xy = (Vector2)hit.transform.InverseTransformPoint(hit.point);
