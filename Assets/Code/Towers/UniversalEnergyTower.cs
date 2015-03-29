@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SmallThraceium : Tower
+public class UniversalEnergyTower : Tower
 {
 	private SphereCollider EnemySphereCollider;
 
 	// Use this for initialization
 	public override void Start()
 	{
-		Name = "Small Thraceium";
+		Name = "Universal Energy Tower";
 		EnemySphereCollider = this.GetComponent<SphereCollider>();
 		TimeLastShotFired = Time.time;
 
-		// Small Thraceium Tower will fire at enemies, start a coroutine to check (and fire) on enemies
+		// Universal Energy Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 
 		EnemySphereCollider.radius = Range;
@@ -28,13 +28,13 @@ public class SmallThraceium : Tower
 	protected override void Log(string message)
 	{
 		if(ShowDebugLogs)
-			Debug.Log("[SmallThraceium] " + message);
+			Debug.Log("[UniversalEnergyTower] " + message);
 	}
 	
 	protected override void LogError(string message)
 	{
 		if(ShowDebugLogs)
-			Debug.LogError("[SmallThraceium] " + message);
+			Debug.LogError("[UniversalEnergyTower] " + message);
 	}
 	#endregion
 }

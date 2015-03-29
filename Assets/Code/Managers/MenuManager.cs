@@ -71,8 +71,7 @@ public class MenuManager : MonoBehaviour
 		// Show the InGame menu
 		SetCurrentMenuPanel(InGamePanel);
 
-		// Load the proper level and start the game
-
+		// TO DO: Load the SELECTED level and start the game
 		Application.LoadLevel("Level1");
 	}
 

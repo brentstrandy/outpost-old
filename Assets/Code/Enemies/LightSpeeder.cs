@@ -31,7 +31,7 @@ public class LightSpeeder : Enemy
 		}*/
 
 		if(!Firing)
-			this. transform.position += this.transform.forward * Speed * Time.deltaTime;
+			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
 			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
 	}
 	

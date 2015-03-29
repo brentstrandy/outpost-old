@@ -57,7 +57,8 @@ public class InGame_Menu : MonoBehaviour
 	#region OnClick
 	public void Tower_Click(TowerData towerData)
 	{
-
+		// Inform the player a tower has been selected for placement
+		Player.Instance.TowerSelectedForPlacement(towerData);
 	}
 	#endregion
 

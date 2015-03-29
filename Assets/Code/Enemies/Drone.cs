@@ -23,7 +23,8 @@ public class Drone : Enemy
 		else
 			this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
-		GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
+		this.transform.position += this.transform.forward * Speed * Time.deltaTime;
+		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
 	}
 
 	public override void OnTriggerEnter(Collider other)

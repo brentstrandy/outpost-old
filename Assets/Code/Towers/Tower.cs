@@ -26,6 +26,8 @@ public class Tower : MonoBehaviour
 	{
 		// Allow the first bullet to be fired immediately after the tower is instantiated
 		TimeLastShotFired = Time.time - (RateOfFire * 2);
+
+		TowerManager.Instance.AddActiveTower(this);
 	}
 	
 	// Update is called once per frame
