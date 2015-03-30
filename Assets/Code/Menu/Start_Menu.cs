@@ -19,6 +19,9 @@ public class Start_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMConnected += Connected_Event;
 		SessionManager.Instance.OnSMConnectionFail += ConnectionFailed_Event;
 
+		// Select the input field
+		InputField.GetComponent<InputField>().Select();
+
 		// TODO: Display a waiting animation to show something is happening
 	}
 	
@@ -28,6 +31,13 @@ public class Start_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMConnected -= Connected_Event;
 		SessionManager.Instance.OnSMConnectionFail -= ConnectionFailed_Event;
 	}
+
+	#region OnEndEdit
+	public void InputFinished()
+	{
+		Start_Click();
+	}
+	#endregion
 	
 	#region OnClick
 	public void Start_Click()
