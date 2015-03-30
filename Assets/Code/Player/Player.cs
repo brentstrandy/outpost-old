@@ -67,23 +67,44 @@ public class Player : MonoBehaviour
 				// Ensure towers cannot be repeatedly placed every frame
 				if(Time.time - LastTowerPlacementTime > 1)
 				{
-					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-					RaycastHit hit;
-					HexCoord coord;
+					Log ("Money: " + Money + " :: Cost: " + PlacementTowerData.InstallCost);
 
-					// Test to see if the player's click intersected with the Terrain (HexMesh)
-					if (TerrainMesh.IntersectRay(ray, out hit, out coord))
+					// Make sure the player has enough money to place the tower
+					if(this.Money >= PlacementTowerData.InstallCost)
 					{
-						// TODO: Use the HexCoord to determine the center of the hexagon
-						Log("Tower Placement: " + hit.point + " : " + coord);
-						
-						// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
-						var rotation = Quaternion.LookRotation(hit.point, new Vector3(0.0f, 0.0f, -1.0f));
-						
-						// Tell all players to instantiate a tower
-						SessionManager.Instance.InstantiateObject("Towers/" + PlacementTowerData.PrefabName, hit.point, rotation);
-						
-						LastTowerPlacementTime = Time.time;
+						Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+						RaycastHit hit;
+						HexCoord coord;
+
+						// Test to see if the player's click intersected with the Terrain (HexMesh)
+						if (TerrainMesh.IntersectRay(ray, out hit, out coord))
+						{
+							// TODO: Use the HexCoord to determine the center of the hexagon
+							Log("Tower Placement: " + hit.point + " : " + coord);
+							
+							// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
+							var rotation = Quaternion.LookRotation(hit.point, new Vector3(0.0f, 0.0f, -1.0f));
+							
+							// Tell all players to instantiate a tower
+							SessionManager.Instance.InstantiateObject("Towers/" + PlacementTowerData.PrefabName, hit.point, rotation);
+							
+							LastTowerPlacementTime = Time.time;
+
+							// Charge the player for building the tower
+							this.Money -= PlacementTowerData.InstallCost;
+						}
+					}
+					else
+					{
+						// This currently does not work. My intent is to display this message alongside the place where the player clicks
+						/*
+						var position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+						var rotation = Quaternion.LookRotation(position, new Vector3(0.0f, 0.0f, -1.0f));
+
+						// Display Insufficient Capital
+						GameObject go = Instantiate(Resources.Load("Utilities/InsufficientCapital"), position, rotation) as GameObject;
+						go.transform.SetParent(GameObject.Find("InGame Canvas").transform, false);
+						*/
 					}
 				}
 			}

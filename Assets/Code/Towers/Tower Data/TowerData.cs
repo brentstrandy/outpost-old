@@ -23,7 +23,7 @@ public class TowerData
     public float ThraceiumDamage;
     public float BallisticDamage;
     public float TransitionTime;
-    public float InstallCount;
+    public float InstallCost;
     public float MaintenanceCost;
 
     [HideInInspector] [XmlIgnore]
@@ -41,7 +41,7 @@ public class TowerData
         ThraceiumDamage = obj.ThraceiumDamage;
         BallisticDamage = obj.BallisticDamage;
         TransitionTime = obj.TransitionTime;
-        InstallCount = obj.InstallCount;
+        InstallCost = obj.InstallCost;
         MaintenanceCost = obj.MaintenanceCost;
     }
 

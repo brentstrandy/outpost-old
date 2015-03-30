@@ -10,7 +10,7 @@
     <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDamage>0</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCount>0</InstallCount>
+    <InstallCost>10</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
   </TowerData>
   <TowerData>
@@ -23,7 +23,7 @@
     <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDamage>0</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCount>0</InstallCount>
+    <InstallCost>5</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
   </TowerData>
   <TowerData>
@@ -36,7 +36,7 @@
     <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDamage>0</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCount>0</InstallCount>
+    <InstallCost>5</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
   </TowerData>
   <TowerData>
@@ -49,7 +49,7 @@
     <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDamage>0</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCount>0</InstallCount>
+    <InstallCost>5</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
   </TowerData>
 </ArrayOfTowerData>
