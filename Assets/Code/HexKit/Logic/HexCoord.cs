@@ -14,6 +14,11 @@ namespace Settworks.Hexagons {
 	[Serializable]
 	public struct HexCoord {
 
+		public enum Layout : byte {
+			Horizontal,
+			Vertical
+		}
+
 		/// <summary>
 		/// Position on the q axis.
 		/// </summary>
@@ -60,8 +65,16 @@ namespace Settworks.Hexagons {
 		/// <summary>
 		/// Unity position of this hex.
 		/// </summary>
-		public Vector2 Position() {
-			return q*Q_XY + r*R_XY;
+		public Vector2 Position(Layout layout = default(Layout)) {
+			switch(layout)
+			{
+			case Layout.Horizontal:
+				return q*HQ_XY + r*HR_XY;
+			case Layout.Vertical:
+				return q*VQ_XY + r*VR_XY;
+			default:
+				throw new ArgumentException("Unknown layout value supplied", "layout");
+			}
 		}
 
 		/// <summary>
@@ -548,8 +561,8 @@ namespace Settworks.Hexagons {
 		/// <summary>
 		/// <see cref="Settworks.Hexagons.HexCoord"/> containing a Unity position.
 		/// </summary>
-		public static HexCoord AtPosition(Vector2 position)
-		{ return FromQRVector(VectorXYtoQR(position)); }
+		public static HexCoord AtPosition(Vector2 position, Layout layout = default(Layout))
+		{ return FromQRVector(VectorXYtoQR(position, layout)); }
 		
 		/// <summary>
 		/// <see cref="Settworks.Hexagons.HexCoord"/> from hexagonal polar coordinates.
@@ -624,26 +637,42 @@ namespace Settworks.Hexagons {
 		/// <summary>
 		/// Convert an x,y vector to a q,r vector.
 		/// </summary>
-		public static Vector2 VectorXYtoQR(Vector2 XYvector) {
-			return XYvector.x*X_QR + XYvector.y*Y_QR;
+		public static Vector2 VectorXYtoQR(Vector2 XYvector, Layout layout = default(Layout)) {
+			switch (layout)
+			{
+			case Layout.Horizontal:
+				return XYvector.x*HX_QR + XYvector.y*HY_QR;
+			case Layout.Vertical:
+				return XYvector.x*VX_QR + XYvector.y*VY_QR;
+			default:
+				throw new ArgumentException("Unknown layout value supplied", "layout");
+			}
 		}
 		
 		/// <summary>
 		/// Convert a q,r vector to an x,y vector.
 		/// </summary>
-		public static Vector2 VectorQRtoXY(Vector2 QRvector) {
-			return QRvector.x*Q_XY + QRvector.y*R_XY;
+		public static Vector2 VectorQRtoXY(Vector2 QRvector, Layout layout = default(Layout)) {
+			switch (layout)
+			{
+			case Layout.Horizontal:
+				return QRvector.x*HQ_XY + QRvector.y*HR_XY;
+			case Layout.Vertical:
+				return QRvector.x*VQ_XY + QRvector.y*VR_XY;
+			default:
+				throw new ArgumentException("Unknown layout value supplied", "layout");
+			}
 		}
 
 		/// <summary>
 		/// Get the corners of a QR-space rectangle containing every cell touching an XY-space rectangle.
 		/// </summary>
-		public static HexCoord[] CartesianRectangleBounds(Vector2 cornerA, Vector2 cornerB) {
+		public static HexCoord[] CartesianRectangleBounds(Vector2 cornerA, Vector2 cornerB, Layout layout = default(Layout)) {
 			Vector2 min = new Vector2(Math.Min(cornerA.x, cornerB.x), Math.Min(cornerA.y, cornerB.y));
 			Vector2 max = new Vector2(Math.Max(cornerA.x, cornerB.x), Math.Max(cornerA.y, cornerB.y));
 			HexCoord[] results = {
-				HexCoord.AtPosition(min),
-				HexCoord.AtPosition(max)
+				HexCoord.AtPosition(min, layout),
+				HexCoord.AtPosition(max, layout)
 			};
 			Vector2 pos = results[0].Position();
 			if (pos.y - 0.5f >= min.y)
@@ -717,10 +746,15 @@ namespace Settworks.Hexagons {
 
 		// Vector transformations between QR and XY space.
 		// Private to keep IntelliSense tidy. Safe to make public, but sensible uses are covered above.
-		static readonly Vector2 Q_XY = new Vector2(SQRT3, 0);
-		static readonly Vector2 R_XY = new Vector2(SQRT3/2, 1.5f);
-		static readonly Vector2 X_QR = new Vector2(SQRT3/3, 0);
-		static readonly Vector2 Y_QR = new Vector2(-1/3f, 2/3f);
+		static readonly Vector2 HQ_XY = new Vector2(SQRT3, 0);
+		static readonly Vector2 HR_XY = new Vector2(SQRT3/2, 1.5f);
+		static readonly Vector2 HX_QR = new Vector2(SQRT3/3, 0);
+		static readonly Vector2 HY_QR = new Vector2(-1/3f, 2/3f);
+
+		static readonly Vector2 VQ_XY = new Vector2(1.5f, SQRT3/2);
+		static readonly Vector2 VR_XY = new Vector2(0, SQRT3);
+		static readonly Vector2 VX_QR = new Vector2(2/3f, -1/3f);
+		static readonly Vector2 VY_QR = new Vector2(0, SQRT3/3);
 
 	}
 }

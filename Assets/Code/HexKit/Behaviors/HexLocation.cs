@@ -9,6 +9,7 @@ public class HexLocation : MonoBehaviour {
 	public HexCoord location;
 	public float gridScale = 1;
 	public bool autoSnap;
+	public HexCoord.Layout layout;
 
 	HexCoord _hex;
 	Vector3 _pos;
@@ -21,7 +22,7 @@ public class HexLocation : MonoBehaviour {
 	}
 	
 	public void SetPosition(Vector3 position) {
-		SetLocation(HexCoord.AtPosition(position));
+		SetLocation(HexCoord.AtPosition(position, layout));
 		OnChangedPosition();
 	}
 
@@ -82,7 +83,7 @@ public class HexLocation : MonoBehaviour {
 
 	void UpdateLocation() {
 		if (gridScale > 0) {
-			_hex = location = HexCoord.AtPosition(transform.localPosition / gridScale);
+			_hex = location = HexCoord.AtPosition(transform.localPosition / gridScale, layout);
 		}
 	}
 	
@@ -93,7 +94,7 @@ public class HexLocation : MonoBehaviour {
 
 	void ApplyLocation() {
 		if (gridScale > 0) {
-			Vector2 position = location.Position() * gridScale;
+			Vector2 position = location.Position(layout) * gridScale;
 			_pos = transform.localPosition = new Vector3(position.x, position.y, transform.localPosition.z);
 			_hex = location;
 		}
