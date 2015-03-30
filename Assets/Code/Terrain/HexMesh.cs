@@ -12,7 +12,7 @@ public class HexMesh : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
-	public float HexagonDiameter = 1.0f;
+	public float HexagonRadius = 1.0f;
 	public Color OutlineColor = Color.yellow;
 	public Color HighlightColor = Color.red;
 
@@ -115,10 +115,10 @@ public class HexMesh : MonoBehaviour
 			GridHeight += 1;
 		}
 
-		BuildMesh(GridWidth, GridHeight, HexagonDiameter);
+		BuildMesh(GridWidth, GridHeight, HexagonRadius);
 	}
 
-	private void BuildMesh(int gridWidth, int gridHeight, float hexagonDiameter)
+	private void BuildMesh(int gridWidth, int gridHeight, float hexagonRadius)
 	{
 		if (gridWidth % 2 == 0)
 		{
@@ -147,7 +147,7 @@ public class HexMesh : MonoBehaviour
 		int numVertexColumnsA = (gridWidth + 1) + (gridHeight - 1) / 2;
 		int numVertexColumnsB = 3 * (gridWidth + 1) / 2;
 
-		float hexagonRadius = hexagonDiameter * 0.5f;
+		float hexagonDiameter = hexagonRadius * 2.0f;
 		float hexagonHalfRadius = hexagonRadius * 0.5f;
 		float hexagonApothem = hexagonRadius * apothemRatio;
 		float hexagonWidth = hexagonDiameter;
