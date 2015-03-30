@@ -24,7 +24,7 @@ public class TowerData
     public float ThraceiumDamage;
     public float BallisticDamage;
     public float TransitionTime;
-    public float InstallCost;
+    public int InstallCost;
     public float MaintenanceCost;
 	public float StartupTime;
 	public float TrackingSpeed;

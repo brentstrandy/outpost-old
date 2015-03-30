@@ -4,52 +4,56 @@
     <DisplayName>Small Thraceium Tower</DisplayName>
     <PrefabName>SmallThraceiumTower</PrefabName>
     <Health>100</Health>
-    <PlayerCount>0</PlayerCount>
-    <RateOfFire>0</RateOfFire>
-    <Cooldown>0</Cooldown>
-    <ThraceiumDamage>0</ThraceiumDamage>
-    <BallisticDamage>0</BallisticDamage>
+    <Range>4</Range>
+    <RateOfFire>1</RateOfFire>
+    <Cooldown>1</Cooldown>
+    <ThraceiumDamage>5</ThraceiumDamage>
+    <BallisticDamage>5</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCost>10</InstallCost>
+    <InstallCost>1</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
+    <TrackingSpeed>4</TrackingSpeed>
   </TowerData>
   <TowerData>
     <DisplayName>Thraceium Rain Tower</DisplayName>
     <PrefabName>ThraceiumRainTower</PrefabName>
     <Health>100</Health>
-    <PlayerCount>0</PlayerCount>
-    <RateOfFire>0</RateOfFire>
-    <Cooldown>0</Cooldown>
-    <ThraceiumDamage>0</ThraceiumDamage>
-    <BallisticDamage>0</BallisticDamage>
+    <Range>4</Range>
+    <RateOfFire>1</RateOfFire>
+    <Cooldown>1</Cooldown>
+    <ThraceiumDamage>5</ThraceiumDamage>
+    <BallisticDamage>5</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCost>5</InstallCost>
+    <InstallCost>1</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
+    <TrackingSpeed>4</TrackingSpeed>
   </TowerData>
   <TowerData>
     <DisplayName>EMP Tower</DisplayName>
     <PrefabName>EMPTower</PrefabName>
     <Health>100</Health>
-    <PlayerCount>0</PlayerCount>
-    <RateOfFire>0</RateOfFire>
-    <Cooldown>0</Cooldown>
-    <ThraceiumDamage>0</ThraceiumDamage>
-    <BallisticDamage>0</BallisticDamage>
+    <Range>4</Range>
+    <RateOfFire>1</RateOfFire>
+    <Cooldown>1</Cooldown>
+    <ThraceiumDamage>5</ThraceiumDamage>
+    <BallisticDamage>5</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCost>5</InstallCost>
+    <InstallCost>1</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
+    <TrackingSpeed>4</TrackingSpeed>
   </TowerData>
   <TowerData>
     <DisplayName>Universal Energy Tower</DisplayName>
     <PrefabName>UniversalEnergyTower</PrefabName>
     <Health>100</Health>
-    <PlayerCount>0</PlayerCount>
-    <RateOfFire>0</RateOfFire>
-    <Cooldown>0</Cooldown>
-    <ThraceiumDamage>0</ThraceiumDamage>
-    <BallisticDamage>0</BallisticDamage>
+    <Range>4</Range>
+    <RateOfFire>1</RateOfFire>
+    <Cooldown>1</Cooldown>
+    <ThraceiumDamage>5</ThraceiumDamage>
+    <BallisticDamage>5</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCost>5</InstallCost>
+    <InstallCost>1</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
+    <TrackingSpeed>4</TrackingSpeed>
   </TowerData>
 </ArrayOfTowerData>
