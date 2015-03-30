@@ -16,14 +16,22 @@ public class Drone : Enemy
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 	}
 
-	public override void FixedUpdate()
+	public override void Update()
 	{
 		if(Target != null)
-			this.transform.LookAt(Target.transform.position, Vector3.up);
+			this.transform.LookAt(Target.transform.position, Up);
 		else
 			this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
-		this.transform.position += this.transform.forward * Speed * Time.deltaTime;
+		// Determine Acceleration
+		CurAcceleration = this.transform.forward * Acceleration;
+
+		// Determine Velocity
+		CurVelocity += CurAcceleration * Time.deltaTime * Time.deltaTime * Speed;
+		CurVelocity = Vector3.ClampMagnitude(CurVelocity, Speed);
+
+		// Determine Position
+		this.transform.position += CurVelocity * Time.deltaTime;
 		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
 	}
 

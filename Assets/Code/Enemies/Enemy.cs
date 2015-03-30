@@ -13,10 +13,13 @@ public class Enemy : MonoBehaviour
 	protected float TimeLastShotFired;
 	protected bool Firing;
 	public float DamageDealt;
+	public float Acceleration;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
 	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
-
+	
+	protected Vector3 CurAcceleration;
+	protected Vector3 CurVelocity;
 	protected MiningFacility MiningFacilityObject;
 
 	public virtual void Awake()
