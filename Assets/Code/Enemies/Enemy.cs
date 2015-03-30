@@ -7,17 +7,17 @@ public class Enemy : MonoBehaviour
 	
     public string Name;
 	public float Health;
-    public float Speed = 0.0f;
+    public float Speed;
 	public float Range;
 	public float RateOfFire;
-	protected float TimeLastShotFired;
-	protected bool Firing;
 	public float DamageDealt;
 	public float Acceleration;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
 	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
-	
+
+	protected float TimeLastShotFired;
+	protected bool Firing;
 	protected Vector3 CurAcceleration;
 	protected Vector3 CurVelocity;
 	protected MiningFacility MiningFacilityObject;
@@ -48,6 +48,19 @@ public class Enemy : MonoBehaviour
     {
 
     }
+
+	protected void SetEnemyData(EnemyData enemyData)
+	{
+		Name = enemyData.DisplayName;
+		Health = enemyData.Health;
+		Speed = enemyData.Speed;
+		Range = enemyData.Range;
+		RateOfFire = enemyData.RateOfFire;
+		DamageDealt = enemyData.DamageDealt;
+		Acceleration = enemyData.Acceleration;
+		BallisticDefense = enemyData.BallisticDefense;
+		ThraceiumDefense = enemyData.ThraceiumDefense;
+	}
 
 	public virtual void TakeDamage(float ballisticsDamage, float thraceiumDamage)
 	{

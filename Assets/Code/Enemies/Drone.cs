@@ -14,6 +14,11 @@ public class Drone : Enemy
 	public override void Start ()
 	{
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
+
+		// TO DO: Implement the loading of EnemyData via XML before uncommenting
+		// Load default attributes from EnemyData
+		//EnemyData enemyData = GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByPrefabName("Drone");
+		//SetEnemyData(enemyData);
 	}
 
 	public override void Update()

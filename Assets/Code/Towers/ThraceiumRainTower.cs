@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ThraceiumRainTower : Tower
@@ -8,7 +8,10 @@ public class ThraceiumRainTower : Tower
 	// Use this for initialization
 	public override void Start()
 	{
-		Name = "Thraceium Rain Tower";
+		// Load default attributes from TowerData
+		TowerData towerData = GameDataManager.Instance.TowerDataMngr.FindTowerDataByPrefabName("ThraceiumRainTower");
+		SetTowerData(towerData);
+
 		EnemySphereCollider = this.GetComponent<SphereCollider>();
 		TimeLastShotFired = Time.time;
 

@@ -20,11 +20,14 @@ public class TowerData
     public int PlayerCount; // how many players required to spawn this enemy
     public float RateOfFire;
     public float Cooldown;
+	public float Range;
     public float ThraceiumDamage;
     public float BallisticDamage;
     public float TransitionTime;
     public float InstallCost;
     public float MaintenanceCost;
+	public float StartupTime;
+	public float TrackingSpeed;
 
     [HideInInspector] [XmlIgnore]
     public bool ShowDebugLogs = true;
@@ -38,11 +41,14 @@ public class TowerData
         Health = obj.Health;
         RateOfFire = obj.RateOfFire;
         Cooldown = obj.Cooldown;
+		Range = obj.Range;
         ThraceiumDamage = obj.ThraceiumDamage;
         BallisticDamage = obj.BallisticDamage;
         TransitionTime = obj.TransitionTime;
         InstallCost = obj.InstallCost;
         MaintenanceCost = obj.MaintenanceCost;
+		StartupTime = obj.StartupTime;
+		TrackingSpeed = obj.TrackingSpeed;
     }
 
 	#region MessageHandling

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class UniversalEnergyTower : Tower
@@ -8,7 +8,10 @@ public class UniversalEnergyTower : Tower
 	// Use this for initialization
 	public override void Start()
 	{
-		Name = "Universal Energy Tower";
+		// Load default attributes from TowerData
+		TowerData towerData = GameDataManager.Instance.TowerDataMngr.FindTowerDataByPrefabName("UniversalEnergyTower");
+		SetTowerData(towerData);
+
 		EnemySphereCollider = this.GetComponent<SphereCollider>();
 		TimeLastShotFired = Time.time;
 

@@ -9,8 +9,7 @@ public class Tower : MonoBehaviour
 	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
 	// Tower Details
-	public int Cost;
-	public int ShutdownCost;
+	public int InstallCost;
 	public float Range;
 	public float StartupTime;
 	public float RateOfFire;
@@ -40,7 +39,19 @@ public class Tower : MonoBehaviour
 				transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - transform.position, Up), Time.deltaTime * TrackingSpeed );
 		}
 	}
-	
+
+	protected void SetTowerData(TowerData towerData)
+	{
+		Name = towerData.DisplayName;
+		InstallCost = towerData.InstallCost;
+		Range = towerData.Range;
+		StartupTime = towerData.StartupTime;
+		RateOfFire = towerData.RateOfFire;
+		ThraceiumDamage = towerData.ThraceiumDamage;
+		BallisticDamaage = towerData.BallisticDamage;
+		TrackingSpeed = towerData.TrackingSpeed;
+	}
+
 	protected virtual void OnTriggerStay(Collider other)
 	{
 		if(other.tag == "Enemy")

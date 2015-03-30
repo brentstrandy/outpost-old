@@ -10,14 +10,19 @@ public class EnemyData
 	public bool ShowDebugLogs = true;
 	
 	// Enemy Details
-	public string DisplayName { get; private set; }
-	public string PrefabName { get; private set; }
+	public string DisplayName;
+	public string PrefabName;
 	
 	// Enemy Stats
-	public int Health { get; private set; }
-	public float RateOfFire { get; private set; }
-	public float Cooldown { get; private set; }
-	public float DamageDealt { get; private set; }
+	public int Health;
+	public float RateOfFire;
+	public float Cooldown;
+	public float DamageDealt;
+	public float Acceleration;
+	public float Speed;
+	public float Range;
+	public float BallisticDefense;
+	public float ThraceiumDefense;
 	
 	public EnemyData()
 	{
