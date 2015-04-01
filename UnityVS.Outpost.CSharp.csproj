@@ -60,6 +60,7 @@
     <Compile Include="Assets\Code\Camera\CameraMovement.cs" />
     <Compile Include="Assets\Code\Enemies\Drone.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\EnemyData.cs" />
+    <Compile Include="Assets\Code\Enemies\Enemy Data\EnemyDataContainer.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\EnemyDataManager.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\Spawn Data\EnemySpawnData.cs" />
     <Compile Include="Assets\Code\Enemies\Enemy Data\Spawn Data\EnemySpawnDataContainer.cs" />
@@ -103,13 +104,17 @@
     <Compile Include="Assets\Code\Player\Player.cs" />
     <Compile Include="Assets\Code\Serializer\XMLParser.cs" />
     <Compile Include="Assets\Code\Terrain\HexMesh.cs" />
-    <Compile Include="Assets\Code\Towers\SmallThraceium.cs" />
+    <Compile Include="Assets\Code\Towers\EMPTower.cs" />
+    <Compile Include="Assets\Code\Towers\SmallThraceiumTower.cs" />
+    <Compile Include="Assets\Code\Towers\ThraceiumRainTower.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerData.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerDataContainer.cs" />
     <Compile Include="Assets\Code\Towers\Tower Data\TowerDataManager.cs" />
     <Compile Include="Assets\Code\Towers\Tower.cs" />
     <Compile Include="Assets\Code\Towers\TowerButtonHighlight.cs" />
     <Compile Include="Assets\Code\Towers\TowerManager.cs" />
+    <Compile Include="Assets\Code\Towers\UniversalEnergyTower.cs" />
+    <Compile Include="Assets\Code\Utilities\DestroyAfterTime.cs" />
     <Compile Include="Assets\Code\Utilities\DontDestroyOnLoad.cs" />
     <Compile Include="Assets\Code\Utilities\Utilities.cs" />
     <Compile Include="Assets\Code\Utilities\iTween.cs" />

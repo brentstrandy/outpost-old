@@ -31,14 +31,6 @@ public class EnemySpawnDataHandler
             if (SpawnActionContainer_Inspector.EnemySpawnDataList.Count < 1)
                 SpawnActionContainer_Inspector.EnemySpawnDataList = SpawnActionList;
 
-            //// deserialize XML and add each enemy spawn to the lists
-            //foreach (EnemySpawnData enemy in XMLParser<EnemySpawnData>.XMLDeserializer_List(enemySpawnXMLPath))
-            //{
-            //    if (SpawnActionContainer_Inspector.EnemySpawnDataList.Count < 1)
-            //        SpawnActionContainer_Inspector.EnemySpawnDataList.Add(enemy);
-            //    SpawnActionList.Add(enemy);
-            //}
-
             // Sort list by time to make sure actions are executed in order
             this.SortListsByStartTime();
 
