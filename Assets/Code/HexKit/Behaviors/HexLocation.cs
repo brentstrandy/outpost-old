@@ -92,7 +92,11 @@ public class HexLocation : MonoBehaviour {
 		UpdateLocation();
 	}
 
-	void ApplyLocation() {
+	public void ApplyPosition() {
+		UpdatePosition();
+	}
+
+	public void ApplyLocation() {
 		if (gridScale > 0) {
 			Vector2 position = location.Position(layout) * gridScale;
 			_pos = transform.localPosition = new Vector3(position.x, position.y, transform.localPosition.z);
