@@ -75,7 +75,11 @@ public class EnemySpawnManager : MonoBehaviour
         {
 			// Only spawn an enemy if you are the Master Client. Otherwise, the Master client will tell all clients to spawn an enemy
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-				SessionManager.Instance.InstantiateObject("Enemies/" + spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
+			{
+				// Only spawn the enemy if there are the appropriate number of co-op players
+				if(SessionManager.Instance.GetRoomPlayerCount() >= spawnDetails.PlayerCount)
+					SessionManager.Instance.InstantiateObject("Enemies/" + spawnDetails.EnemyName, AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
+			}
         }
         catch (Exception e)
         {

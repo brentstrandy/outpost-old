@@ -13,6 +13,7 @@ public class EnemySpawnData
     public string EnemyName;
     public float StartTime;
     public int StartAngle;
+	public int PlayerCount;
     public EnemyType Type;
 
     // used for Inspector (Reorderable List)
@@ -33,14 +34,16 @@ public class EnemySpawnData
         EnemyName = obj.EnemyName;
         StartTime = obj.StartTime;
         StartAngle = obj.StartAngle;
+		PlayerCount = obj.PlayerCount;
         Type = obj.Type;
     }
 
-	public EnemySpawnData(string enemyName, float startTime, int startAngle, EnemyType type)
+	public EnemySpawnData(string enemyName, float startTime, int startAngle, int playerCount, EnemyType type)
     {
         EnemyName = enemyName;
         StartTime = startTime;
         StartAngle = startAngle;
+		PlayerCount = playerCount;
         Type = type;
     }
 
@@ -48,13 +51,13 @@ public class EnemySpawnData
     protected void Log(string message)
     {
         if (ShowDebugLogs)
-            Debug.Log("[TowerData] " + message);
+            Debug.Log("[EnemySpawnData] " + message);
     }
 
     protected void LogError(string message)
     {
         if (ShowDebugLogs)
-            Debug.LogError("[TowerData] " + message);
+            Debug.LogError("[EnemySpawnData] " + message);
     }
     #endregion
 }

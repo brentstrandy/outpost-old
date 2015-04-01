@@ -109,6 +109,9 @@ public class EnemySpawnDataContainerEditor : Editor
 
             EditorGUI.PropertyField(new Rect(rect.x + 190, rect.y, 30, EditorGUIUtility.singleLineHeight),
                                              element.FindPropertyRelative("StartAngle"), GUIContent.none);
+
+			EditorGUI.PropertyField(new Rect(rect.x + 230, rect.y, 30, EditorGUIUtility.singleLineHeight),
+			                        element.FindPropertyRelative("PlayerCount"), GUIContent.none);
         };
     }
 
@@ -157,6 +160,7 @@ public class EnemySpawnDataContainerEditor : Editor
             element.FindPropertyRelative("EnemyName").stringValue = "LightSpeeder";
             element.FindPropertyRelative("StartTime").floatValue = 0;
             element.FindPropertyRelative("StartAngle").floatValue = 0;
+			element.FindPropertyRelative("PlayerCount").floatValue = 1;
         };
     }
 
@@ -222,6 +226,9 @@ public class EnemySpawnDataContainerEditor : Editor
        
         // StartAngle (increment from last angle in ReorderableList?)
         element.FindPropertyRelative("StartAngle").intValue = 360;
+
+		// Player Count
+		element.FindPropertyRelative("PlayerCount").intValue = 1;
 
         // EnemyType
         element.FindPropertyRelative("Type").enumValueIndex = (int)data.Type;
