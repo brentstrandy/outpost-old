@@ -13,6 +13,8 @@ public class Drone : Enemy
 	// Use this for initialization
 	public override void Start ()
 	{
+		base.Start();
+
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
 		// TO DO: Implement the loading of EnemyData via XML before uncommenting

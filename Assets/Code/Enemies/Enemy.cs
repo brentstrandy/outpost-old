@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Settworks.Hexagons;
 
 public class Enemy : MonoBehaviour 
 {	
@@ -14,6 +15,7 @@ public class Enemy : MonoBehaviour
 	public float Acceleration;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
+	public float TurningSpeed; // Number of seconds it takes to lock onto a target
 	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
 	protected float TimeLastShotFired;
@@ -33,9 +35,13 @@ public class Enemy : MonoBehaviour
 	}
 
 	// Use this for initialization
-	public virtual void Start () 
+	public virtual void Start()
 	{
-
+		var hexLocation = GetComponent<HexLocation>();
+		if (hexLocation != null)
+		{
+			hexLocation.ApplyPosition();
+		}
 	}
 
     // Update is called once per frame
@@ -47,7 +53,7 @@ public class Enemy : MonoBehaviour
     public virtual void FixedUpdate()
     {
 
-    }
+	}
 
 	protected void SetEnemyData(EnemyData enemyData)
 	{

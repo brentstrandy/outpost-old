@@ -11,6 +11,8 @@ public class HeavySpeeder : Enemy
 	// Use this for initialization
 	public override void Start ()
 	{
+		base.Start();
+
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
 		// Heavy Speeders can fire on the mining facility

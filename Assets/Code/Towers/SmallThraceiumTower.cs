@@ -8,6 +8,8 @@ public class SmallThraceiumTower : Tower
 	// Use this for initialization
 	public override void Start()
 	{
+		base.Start();
+
 		// Load default attributes from TowerData
 		TowerData towerData = GameDataManager.Instance.TowerDataMngr.FindTowerDataByPrefabName("SmallThraceiumTower");
 		SetTowerData(towerData);

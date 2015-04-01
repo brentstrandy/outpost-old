@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Settworks.Hexagons;
 
 public class TowerManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class TowerManager : MonoBehaviour
 	private static TowerManager instance;
 
 	private List<Tower> ActiveTowerList;
+	private HashSet<HexCoord> TowerLocations = new HashSet<HexCoord>();
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -53,11 +55,17 @@ public class TowerManager : MonoBehaviour
 	public void AddActiveTower(Tower tower)
 	{
 		ActiveTowerList.Add(tower);
+		TowerLocations.Add(tower.gameObject.GetComponent<HexLocation>().location);
 	}
 
 	public void RemoveActiveTower(Tower tower)
 	{
-		ActiveTowerList.Remove (tower);
+		ActiveTowerList.Remove(tower);
+		TowerLocations.Remove(tower.gameObject.GetComponent<HexLocation>().location);
+	}
+
+	public bool HasTower(HexCoord coord) {
+		return TowerLocations.Contains(coord);
 	}
 
 	#region MessageHandling
