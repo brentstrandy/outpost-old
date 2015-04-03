@@ -10,6 +10,16 @@ public class CameraMovement : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
 
+	// Objects MUST be ordered clockwise
+	public Transform[] DirectionList;
+	public Vector3[] PositionList;
+	public float TurningSpeed;
+
+	private int DirectionIndex;
+	private Vector3 TargetDirection;
+	private Vector3 TargetPosition;
+	private readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
+
     /// <summary>
     /// Different systems to move & rotate the camera.
     /// </summary>
@@ -72,13 +82,32 @@ public class CameraMovement : MonoBehaviour
 
     void Start()
     {
+		DirectionIndex = 0;
+		TargetDirection = DirectionList[DirectionIndex].position;
+
+		// Create an equal number of positions as directional points
+		PositionList = new Vector3[DirectionList.Length];
+
+		// North
+		PositionList[0] = new Vector3(DirectionList[0].position.x, 0.0f, this.transform.position.z);
+		// East
+		PositionList[1] = new Vector3(0.0f, DirectionList[1].position.y, this.transform.position.z);
+		// South
+		PositionList[2] = new Vector3(DirectionList[2].position.x, 0.0f, this.transform.position.z);
+		// West
+		PositionList[3] = new Vector3(0.0f, DirectionList[3].position.y, this.transform.position.z);
+
+		TargetPosition = PositionList[DirectionIndex];
+		//TargetDirection = DirectionNorth.position;
+
         /// <SUMMARY>
         /// [FourPointsView] Set initial camera view
         /// </SUMMARY>
         #region
-        Smooth = Time.deltaTime * 1.5f;
-        StartPosition = new Vector3(10.8f, 9.4f, -23f);
-        StartRotation = 0;
+        /*
+		Smooth = Time.deltaTime * 1.5f;
+		StartPosition = new Vector3(10.8f, 9.4f, -23f);
+		StartRotation = 0;
         NewRotation = NewPosition = new Vector3(0, 0, 0);
         StartCameraFieldOfView = Camera.main.fieldOfView = 54;
 
@@ -89,7 +118,8 @@ public class CameraMovement : MonoBehaviour
 
         LastPosition = StartPosition;
         LastRotation = StartRotation;
-        #endregion
+		*/
+		#endregion
 
         /// <summary>
         /// [RightAngleView]
@@ -137,8 +167,34 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
+		transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetDirection - transform.position, Up), Time.deltaTime * TurningSpeed );
+		transform.position = Vector3.Slerp( transform.position, TargetPosition, Time.deltaTime * TurningSpeed );
+
+		if (Input.GetKeyDown("left"))
+		{
+			if(DirectionIndex == 0)
+				DirectionIndex = DirectionList.Length - 1;
+			else
+				DirectionIndex--;
+
+			TargetDirection = DirectionList[DirectionIndex].position;
+			TargetPosition = PositionList[DirectionIndex];
+		}
+		else if (Input.GetKeyDown("right"))
+		{
+			if(DirectionIndex == DirectionList.Length - 1)
+				DirectionIndex = 0;
+			else
+				DirectionIndex++;
+
+			TargetDirection = DirectionList[DirectionIndex].position;
+			TargetPosition = PositionList[DirectionIndex];
+		}
+		
+
         #region FOUR POINTS VIEW
-        if (FourPointsView)
+        /*
+		if (FourPointsView)
         {
             if (Input.GetKeyDown("left")) // +90deg (left isn't negative because the XY-plane is our ground plane instead of XZ-plane)
                 RotationAmount += 90; 
@@ -148,6 +204,7 @@ public class CameraMovement : MonoBehaviour
             if(RotationAmount != 0)
                 Rotate_FourPointsView();
         }
+        */
         #endregion
 
         #region RIGHT ANGLE VIEW
