@@ -16,6 +16,6 @@ public class DestroyAfterTime : MonoBehaviour
 	void Update ()
 	{
 		if(Time.time - StartTime > TimeToDestroy)
-			Destroy (this);
+			Destroy (this.gameObject);
 	}
 }

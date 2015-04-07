@@ -17,14 +17,21 @@ public class Tower : MonoBehaviour
 	public float BallisticDamaage;
 	public float TrackingSpeed; // Number of seconds it takes to lock onto a target
 
+	private GameObject Shot;
+
 	protected Enemy TargetedEnemy = null;
 	protected float TimeLastShotFired;
+
+	public void Awake()
+	{
+		Shot = Resources.Load("Towers/SmallThraceiumLaserShot") as GameObject;
+	}
 
 	// Use this for initialization
 	public virtual void Start () 
 	{
 		// Allow the first bullet to be fired immediately after the tower is instantiated
-		TimeLastShotFired = Time.time - (RateOfFire * 2);
+		TimeLastShotFired = Time.time - (RateOfFire * 5);
 
 		GetComponent<HexLocation>().ApplyPosition(); // Update the hex coordinate to reflect the spawned position
 		TowerManager.Instance.AddActiveTower(this);
@@ -83,8 +90,14 @@ public class Tower : MonoBehaviour
 			{
 				if(Time.time - TimeLastShotFired >= RateOfFire)
 				{
-					TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);
-					TimeLastShotFired = Time.time;
+					// Only fire if the tower is facing the enemy
+					//if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position) <= 10)
+					//{
+						TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);
+						TimeLastShotFired = Time.time;
+						//Instantiate(Resources.Load("Towers/SmallThraceiumLaserShot"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+						Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+					//}
 				}
 			}
 
