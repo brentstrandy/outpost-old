@@ -13,6 +13,7 @@ public class HexMesh : MonoBehaviour
 	public int GridWidth = 5;
 	public int GridHeight = 5;
 	public float HexagonRadius = 1.0f;
+	public float LineSize = 0.02f;
 	public Color OutlineColor = Color.yellow;
 	public Color HighlightColor = Color.red;
 
@@ -319,9 +320,9 @@ public class HexMesh : MonoBehaviour
 
 				// Prepare the line renderer
 				var lineRenderer = outline.AddComponent<LineRenderer>();
-				lineRenderer.material = new Material (Shader.Find("Particles/Additive"));
+				lineRenderer.material = new Material (Shader.	Find("Particles/Additive"));
 				lineRenderer.SetColors(OutlineColor, OutlineColor);
-				lineRenderer.SetWidth(0.02f, 0.02f);
+				lineRenderer.SetWidth(LineSize, LineSize);
 				lineRenderer.SetVertexCount(7);
 				lineRenderer.useWorldSpace = false;
 
