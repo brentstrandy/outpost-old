@@ -274,7 +274,8 @@ public class EnemySpawnDataContainerEditor : Editor
     /// <returns></returns>
     private List<EnemySpawnData> LoadFromXML()
     {
-        return XMLParser<EnemySpawnData>.XMLDeserializer_List(XMLPath);
+		// Sort by StartTime and PlayerCount before loading
+		return XMLParser<EnemySpawnData>.XMLDeserializer_List(XMLPath).OrderBy(o => o.StartTime).ThenBy(o => o.PlayerCount).ToList();
     }
 
     /// <summary>
