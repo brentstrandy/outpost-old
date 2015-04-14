@@ -15,7 +15,6 @@ public class SmallThraceiumTower : Tower
 		SetTowerData(towerData);
 
 		EnemySphereCollider = this.GetComponent<SphereCollider>();
-		TimeLastShotFired = Time.time;
 
 		// Small Thraceium Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");

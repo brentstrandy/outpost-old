@@ -17,6 +17,9 @@ public class LightSpeeder : Enemy
 
 		// Light Speeders can fire on the mining facility
 		StartCoroutine("Fire");
+
+		// Start the Light Speeder off the ground
+		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1.0f);
 	}
 	
 	public override void FixedUpdate()
@@ -49,6 +52,8 @@ public class LightSpeeder : Enemy
 		if (next != location)
 		{
 			Vector3 target = next.Position(HexCoord.Layout.Vertical);
+			// Do not allow the Z position to change or else the speeder will slowly move downward over time
+			target.z = this.transform.position.z;
 			transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(target - transform.position, Up), Time.deltaTime * TurningSpeed );
 		}
 		else

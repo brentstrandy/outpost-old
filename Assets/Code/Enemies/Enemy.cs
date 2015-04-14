@@ -5,9 +5,10 @@ using Settworks.Hexagons;
 public class Enemy : MonoBehaviour 
 {	
     public bool ShowDebugLogs = true;
-	
+
     public string Name;
 	public float Health;
+	private float MaxHealth;
     public float Speed;
 	public float Range;
 	public float RateOfFire;
@@ -24,12 +25,17 @@ public class Enemy : MonoBehaviour
 	protected Vector3 CurVelocity;
 	protected MiningFacility MiningFacilityObject;
 
+	public GameObject HealthBar;
+
 	public virtual void Awake()
 	{
 		MiningFacilityObject = GameManager.Instance.MiningFacilityObject;
 
 		// Allow the first bullet to be fired when the enemy is instantiated
 		TimeLastShotFired = Time.time - (RateOfFire * 2);
+		MaxHealth = Health;
+
+		//EnemyHealthBar = new HealthBar();
 
 		EnemyManager.Instance.AddActiveEnemy(this);
 	}
@@ -73,6 +79,10 @@ public class Enemy : MonoBehaviour
 		// Take damage from Ballistics and Thraceium
 		Health -= (ballisticsDamage * BallisticDefense);
 		Health -= (thraceiumDamage * ThraceiumDefense);
+
+		// Only update the Health Bar if there is one to update
+		if(HealthBar)
+			HealthBar.transform.localScale = new Vector3(Health / MaxHealth, HealthBar.transform.localScale.y, HealthBar.transform.localScale.z);
 
 		// Check to see if enemy is dead
 		if(Health <= 0)

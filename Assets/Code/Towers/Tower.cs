@@ -31,7 +31,7 @@ public class Tower : MonoBehaviour
 	public virtual void Start () 
 	{
 		// Allow the first bullet to be fired immediately after the tower is instantiated
-		TimeLastShotFired = Time.time - (RateOfFire * 5);
+		TimeLastShotFired = 0;
 
 		GetComponent<HexLocation>().ApplyPosition(); // Update the hex coordinate to reflect the spawned position
 		TowerManager.Instance.AddActiveTower(this);

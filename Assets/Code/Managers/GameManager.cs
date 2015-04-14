@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour
 	
 	public MiningFacility MiningFacilityObject;
 
-	public Canvas InGameCanvas;
-
 	#region INSTANCE (SINGLETON)
 	/// <summary>
 	/// Singleton - There can only be one
