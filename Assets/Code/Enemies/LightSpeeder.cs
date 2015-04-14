@@ -51,7 +51,7 @@ public class LightSpeeder : Enemy
 		var next = pathfinder.Next();
 		if (next != location)
 		{
-			Vector3 target = next.Position(HexCoord.Layout.Vertical);
+			Vector3 target = next.Position();
 			// Do not allow the Z position to change or else the speeder will slowly move downward over time
 			target.z = this.transform.position.z;
 			transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(target - transform.position, Up), Time.deltaTime * TurningSpeed );
