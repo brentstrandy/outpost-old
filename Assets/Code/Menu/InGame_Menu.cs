@@ -10,6 +10,7 @@ public class InGame_Menu : MonoBehaviour
 	public List<GameObject> TowerButtons;
 	public GameObject MoneyText;
 	public GameObject OutpostHealthText;
+	public GameObject DirectionText;
 	
 	private void OnEnable()
 	{
@@ -29,7 +30,7 @@ public class InGame_Menu : MonoBehaviour
 				// use the last referenced TowerData variable for each of the buttons
 				TowerData td = towerData[index];
 				towerButton.SetActive(true);
-				towerButton.GetComponentInChildren<Text>().text = towerData[index].DisplayName;
+				towerButton.GetComponentInChildren<Text>().text = towerData[index].DisplayName + " ($" + towerData[index].InstallCost.ToString() + ")";
 				towerButton.GetComponent<Button>().onClick.AddListener(() => Tower_Click(td));
 			}
 			else
@@ -51,6 +52,7 @@ public class InGame_Menu : MonoBehaviour
 			// Display how much money the player current has
 			MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
 			OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.MiningFacilityObject.Health.ToString();
+			DirectionText.GetComponent<Text>().text = GameManager.Instance.CurrentDirection;
 		}
 	}
 
