@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Settworks.Hexagons;
 
 public class HeavySpeeder : Enemy
 {
@@ -17,6 +18,9 @@ public class HeavySpeeder : Enemy
 
 		// Heavy Speeders can fire on the mining facility
 		StartCoroutine("Fire");
+
+		// Start the Heavy Speeder off the ground
+		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1.0f);
 	}
 
 	public override void FixedUpdate()
@@ -36,7 +40,45 @@ public class HeavySpeeder : Enemy
 			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
 			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
 	}
-	
+
+	public override void Update()
+	{
+		/*RaycastHit hit;
+
+		foreach(GameObject obj in HoverLocation)
+		{
+			if (Physics.Raycast (obj.transform.position, Vector3.down, out hit, 1.0f))
+			{
+				Log("HIT: " + Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime);
+				rigidbody.AddForceAtPosition(Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime, obj.transform.position, ForceMode.Force);
+			}
+		}*/
+		
+		if (Firing)
+		{
+			// Land speeders don't move while they are firing
+			return;
+		}
+		
+		var pathfinder = GetComponent<Pathfinder>();
+		var location = GetComponent<HexLocation>().location;
+		var next = pathfinder.Next();
+		if (next != location)
+		{
+			Vector3 target = next.Position(HexCoord.Layout.Vertical);
+			// Do not allow the Z position to change or else the speeder will slowly move downward over time
+			target.z = this.transform.position.z;
+			transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(target - transform.position, Up), Time.deltaTime * TurningSpeed );
+		}
+		else
+		{
+			Log("Arrived... Target: " + pathfinder.Target + " Next: " + pathfinder.Next() + " Location: " + location + " Path: " + pathfinder.PathToString());
+		}
+		
+		this.transform.position += this.transform.forward * Speed * Time.deltaTime;
+		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
+	}
+
 	#region MessageHandling
 	protected override void Log(string message)
 	{
