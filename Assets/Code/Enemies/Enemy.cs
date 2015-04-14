@@ -82,7 +82,13 @@ public class Enemy : MonoBehaviour
 
 		// Only update the Health Bar if there is one to update
 		if(HealthBar)
+		{
+			// Save previous size in order to reposition the health bar to the left
+			//float previousSize = HealthBar.transform.position.;
 			HealthBar.transform.localScale = new Vector3(Health / MaxHealth, HealthBar.transform.localScale.y, HealthBar.transform.localScale.z);
+			// Move health bar in order to give the illusion that the health bar is losing width from right-to-left (not outside-to-inside)
+			//HealthBar.transform.localPosition = new Vector3(HealthBar.transform.localPosition.x - (previousSize - HealthBar.transform.localScale.x), HealthBar.transform.localPosition.y, HealthBar.transform.localPosition.z);
+		}
 
 		// Check to see if enemy is dead
 		if(Health <= 0)

@@ -19,7 +19,7 @@ public class LightSpeeder : Enemy
 		StartCoroutine("Fire");
 
 		// Start the Light Speeder off the ground
-		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1.0f);
+		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f);
 	}
 	
 	public override void FixedUpdate()

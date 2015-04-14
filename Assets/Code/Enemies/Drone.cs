@@ -17,6 +17,9 @@ public class Drone : Enemy
 
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
+		// Start the Drone off the ground
+		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.7f);
+
 		// TO DO: Implement the loading of EnemyData via XML before uncommenting
 		// Load default attributes from EnemyData
 		//EnemyData enemyData = GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByPrefabName("Drone");

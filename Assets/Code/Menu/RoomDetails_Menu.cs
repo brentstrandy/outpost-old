@@ -237,7 +237,9 @@ public class RoomDetails_Menu : MonoBehaviour
 			obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate{TowerButton_Click(obj, td);});
 			obj.transform.SetParent(this.transform);
 			obj.transform.localScale = new Vector3(1, 1, 1);
-			obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-160 + (60 * index), -120);
+			obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-160 + (60 * index), 50);
+			obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
+			obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
 			obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
 			obj.transform.rotation = new Quaternion(0, 0, 0, 0);
 			// Select the first two towers by default
