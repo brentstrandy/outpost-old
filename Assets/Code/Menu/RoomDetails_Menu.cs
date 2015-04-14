@@ -233,7 +233,7 @@ public class RoomDetails_Menu : MonoBehaviour
 			TowerData td = towerData;
 			// Instantiate a button for each tower
 			GameObject obj = Instantiate(Resources.Load("GUI_TowerDetails")) as GameObject;
-			obj.GetComponentInChildren<Text>().text = towerData.DisplayName;
+			obj.GetComponentInChildren<Text>().text = towerData.DisplayName + "($" + towerData.InstallCost.ToString() + ")";
 			obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate{TowerButton_Click(obj, td);});
 			obj.transform.SetParent(this.transform);
 			obj.transform.localScale = new Vector3(1, 1, 1);
