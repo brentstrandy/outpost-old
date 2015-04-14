@@ -90,14 +90,14 @@ public class Tower : MonoBehaviour
 			{
 				if(Time.time - TimeLastShotFired >= RateOfFire)
 				{
-					// Only fire if the tower is facing the enemy
-					//if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position) <= 10)
-					//{
+					// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
+					if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position - this.transform.position) <= 8 || Pivot == null)
+					{
 						TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);
 						TimeLastShotFired = Time.time;
 						//Instantiate(Resources.Load("Towers/SmallThraceiumLaserShot"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 						Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
-					//}
+					}
 				}
 			}
 
