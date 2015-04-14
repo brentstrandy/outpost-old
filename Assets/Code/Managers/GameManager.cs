@@ -11,9 +11,12 @@ public class GameManager : MonoBehaviour
 	private static GameManager instance;
 	public bool ShowDebugLogs = true;
 	public bool Victory { get; private set; }
+	public string CurrentDirection = "NORTH";
 	private bool GameRunning;
 	
 	public MiningFacility MiningFacilityObject;
+
+	public Canvas InGameCanvas;
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -45,6 +48,8 @@ public class GameManager : MonoBehaviour
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
+
+		//InGameCanvas = GameObject.Find ("InGame Canvas") as Canvas;
 
 		GameRunning = true;
 		Victory = false;

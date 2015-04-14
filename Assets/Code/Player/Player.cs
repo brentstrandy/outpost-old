@@ -67,8 +67,6 @@ public class Player : MonoBehaviour
 				// Ensure towers cannot be repeatedly placed every frame
 				if(Time.time - LastTowerPlacementTime > 1)
 				{
-					Log ("Money: " + Money + " :: Cost: " + PlacementTowerData.InstallCost);
-
 					// Make sure the player has enough money to place the tower
 					if(this.Money >= PlacementTowerData.InstallCost)
 					{

@@ -11,7 +11,7 @@ public class MiningFacility : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		IncomeAmountPerSecond = 0.5f;
+		IncomeAmountPerSecond = 1.0f;
 		LastIncomeTime = Time.time;
 		Health = 100.0f;
 	}

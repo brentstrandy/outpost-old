@@ -179,6 +179,7 @@ public class CameraMovement : MonoBehaviour
 
 			TargetDirection = DirectionList[DirectionIndex].position;
 			TargetPosition = PositionList[DirectionIndex];
+			GameManager.Instance.CurrentDirection = DirectionList[DirectionIndex].name.ToString();
 		}
 		else if (Input.GetKeyDown("right"))
 		{
@@ -189,6 +190,7 @@ public class CameraMovement : MonoBehaviour
 
 			TargetDirection = DirectionList[DirectionIndex].position;
 			TargetPosition = PositionList[DirectionIndex];
+			GameManager.Instance.CurrentDirection = DirectionList[DirectionIndex].name.ToString();
 		}
 		
 
