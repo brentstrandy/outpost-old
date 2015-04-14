@@ -1,6 +1,4 @@
-Library/metadata
-Library/ScriptAssemblies
-Library/UnityAssemblies
+Library
 Temp
 TestBuild_OSX.app
 *.csproj
@@ -12,4 +10,3 @@ TestBuild_OSX copy.app
 TestBuild_Win.exe
 TestBuild_Win.zip
 TestBuild_Win_Data
-Library/ShaderCache
