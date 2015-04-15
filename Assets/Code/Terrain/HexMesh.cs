@@ -8,7 +8,9 @@ using Settworks.Hexagons;
 public class HexMesh : MonoBehaviour
 {
 	// Properties adjustable in the inspector
-	public bool GenerateNoise = true;
+	//public bool GenerateNoise = true;
+	public Texture2D HeightMap;
+	public float HeightScale = 5.0f;
 	public bool ShowDebugLogs = true;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
@@ -120,7 +122,7 @@ public class HexMesh : MonoBehaviour
 		BuildMesh();
 	}
 	
-	public HexCoord[] GetGridBounds()
+	public HexCoord[] GetHexBounds()
 	{
 		var corner = new Vector2(GridWidth / 2, GridHeight / 2);
 		return HexCoord.CartesianRectangleBounds(corner, -corner);
@@ -135,26 +137,55 @@ public class HexMesh : MonoBehaviour
 		DestroyOutlines();
 		CreateOutlines();
 	}
+
+	private Func<Vector2, float> GetHeightPredicate()
+	{
+		if (HeightMap == null)
+		{
+			Log("No HeightMap Specified");
+			return (Vector2 uv) => 0.0f;
+		}
+
+		Log("Using HeightMap");
+		return (Vector2 uv) => HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale * -HeightScale;
+	}
+	
+	private Func<Vector2, Vector2> GetUVPredicate()
+	{
+		Vector2 scale = new Vector2(1.0f / (float)GridWidth, 1.0f / (float)GridHeight);
+		Vector2 offset = new Vector2(0.5f, 0.5f);
+		return (Vector2 uv) => Vector2.Scale(uv, scale) + offset;
+	}
 	
 	private Mesh BuildBaseMesh()
 	{
 		float outer = 1.0f;
 		float inner = 1.0f - DetailWidth;
-		
+
+		var height = GetHeightPredicate();
+		var tex = GetUVPredicate();
+
 		HexMeshBuilder.NodeDelegate predicate = (HexCoord coord, int i) => {
-			Vector2 pos = HexCoord.CornerVector(i) * (i > 5 ? outer : inner) + coord.Position();
-			Vector2 uv = new Vector2(pos.x * 0.001f, pos.y * 0.02f); // FIXME: This scaling is a total hack!
-			return new HexMeshBuilder.Node(pos, uv);
+			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + coord.Position();
+			Vector2 uv = tex(pos);
+			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, height(uv)), uv);
 		};
 		
-		var bounds = GetGridBounds();
+		var bounds = GetHexBounds();
 		var builder = new HexMeshBuilder();
+
+		// Note: Corner 0 is at the upper right, others proceed counterclockwise.
+
 		builder.SetPredicate(predicate);
 		builder.SetTriangles(new int[] {
+			0,6,7,		7,1,0,		1,7,8,		8,2,1,		2,8,9,		9,3,2,
+			3,9,10,		10,4,3,		4,10,11,	11,5,4,		5,11,6,		6,0,5,
+			6,11,7,		7,11,8,		8,11,10,	10,9,8
+			/*
 			0,1,6,		6,1,7,		1,2,7,		7,2,8,		2,3,8,		8,3,9,
 			3,4,9,		9,4,10,		4,5,10,		10,5,11,	5,0,11,		11,0,6,
-			//6,7,9,		9,7,8,		11,6,10,	10,6,9
-			6,9,7,		7,9,8,		6,11,10,	10,9,6 // FIXME: I think this still isn't right...
+			6,7,9,		9,7,8,		11,6,10,	10,6,9
+			*/
 		});
 		
 		foreach (HexCoord coord in HexKit.WithinRect(bounds[0], bounds[1]))
@@ -171,18 +202,22 @@ public class HexMesh : MonoBehaviour
 		float offset = OutlineWidth * 0.5f;
 		float outer = 1.0f + offset;
 		float inner = 1.0f - offset;
-		
+
+		var height = GetHeightPredicate();
+		var tex = GetUVPredicate();
+
 		HexMeshBuilder.NodeDelegate predicate = (HexCoord coord, int i) => {
-			Vector2 pos = HexCoord.CornerVector(i) * (i > 5 ? outer : inner) + coord.Position();
-			return new HexMeshBuilder.Node(pos, pos * 0.01f);
+			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + coord.Position();
+			Vector2 uv = tex(pos);
+			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, height(uv)), uv);
 		};
 		
-		var bounds = GetGridBounds();
+		var bounds = GetHexBounds();
 		var builder = new HexMeshBuilder();
 		builder.SetPredicate(predicate);
 		builder.SetTriangles(new int[] {
-			0,1,6,		6,1,7,		1,2,7,		7,2,8,		2,3,8,		8,3,9,
-			3,4,9,		9,4,10,		4,5,10,		10,5,11,	5,0,11,		11,0,6
+			0,6,7,		7,1,0,		1,7,8,		8,2,1,		2,8,9,		9,3,2,
+			3,9,10,		10,4,3,		4,10,11,	11,5,4,		5,11,6,		6,0,5,
 		});
 		
 		foreach (HexCoord coord in HexKit.WithinRect(bounds[0], bounds[1]))
