@@ -65,6 +65,7 @@ public class MeshBuilder
 		}
 		mesh.RecalculateNormals();
 		mesh.RecalculateBounds();
+		TangentSolver.Solve2(mesh);
 		return mesh;
 	}
 
