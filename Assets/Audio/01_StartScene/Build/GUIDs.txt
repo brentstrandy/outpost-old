@@ -1,0 +1,7 @@
+{08eb7176-b6b1-4b6c-914e-fa42ec86f272} event:/SmallThraciumFire
+{4b824090-dda9-4fdb-816c-3c205571a969} event:/WindDustAmbience
+{e7a4712b-707a-47f6-9b9c-9f26ad9af425} bus:/
+{3d69b9e0-5ab0-495c-8514-30d04341e1b1} bus:/Reverb
+{c430db1f-5e91-45af-a232-4bb3e734836c} bank:/Master Bank
+{f12a6c9e-4338-4728-8159-f044029e8819} bank:/Towers
+{ccc759a1-9146-47bd-9a08-43ef8526370c} bank:/Ambience

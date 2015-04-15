@@ -16,7 +16,7 @@ using System.Linq;
 /// <typeparam name="T"></typeparam>
 public static class XMLParser<T>
 {
-    static bool ShowDebugLogs = true;
+    static bool ShowDebugLogs = false;
     static string[] AvailableClasses = { "enemyspawndata", "towerdata" };
 
 
