@@ -165,7 +165,7 @@ public class CameraMovement : MonoBehaviour
         #endregion
     }
 
-    void Update()
+    void Update() // FixedUpdate() doesn't call enough for smooth Input.GetKeyDown() calls
     {
 		transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetDirection - transform.position, Up), Time.deltaTime * TurningSpeed );
 		transform.position = Vector3.Slerp( transform.position, TargetPosition, Time.deltaTime * TurningSpeed );
