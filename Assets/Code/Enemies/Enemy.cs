@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
 	protected Vector3 CurVelocity;
 	protected MiningFacility MiningFacilityObject;
 
-	public GameObject HealthBar;
+	public HealthBarController HealthBar;
 
 	public virtual void Awake()
 	{
@@ -35,7 +35,9 @@ public class Enemy : MonoBehaviour
 		TimeLastShotFired = Time.time - (RateOfFire * 2);
 		MaxHealth = Health;
 
-		//EnemyHealthBar = new HealthBar();
+		// Only initialize the health bar if it is used for this enemy
+		if(HealthBar)
+			HealthBar.InitializeBars(MaxHealth);
 
 		EnemyManager.Instance.AddActiveEnemy(this);
 	}
@@ -79,13 +81,16 @@ public class Enemy : MonoBehaviour
 		// Take damage from Ballistics and Thraceium
 		Health -= (ballisticsDamage * BallisticDefense);
 		Health -= (thraceiumDamage * ThraceiumDefense);
+		Health = Mathf.Max(Health, 0);
 
 		// Only update the Health Bar if there is one to update
 		if(HealthBar)
 		{
+			HealthBar.UpdateHealthBar(Health);
+
 			// Save previous size in order to reposition the health bar to the left
 			//float previousSize = HealthBar.transform.position.;
-			HealthBar.transform.localScale = new Vector3(Health / MaxHealth, HealthBar.transform.localScale.y, HealthBar.transform.localScale.z);
+			//HealthBar.transform.localScale = new Vector3(Health / MaxHealth, HealthBar.transform.localScale.y, HealthBar.transform.localScale.z);
 			// Move health bar in order to give the illusion that the health bar is losing width from right-to-left (not outside-to-inside)
 			//HealthBar.transform.localPosition = new Vector3(HealthBar.transform.localPosition.x - (previousSize - HealthBar.transform.localScale.x), HealthBar.transform.localPosition.y, HealthBar.transform.localPosition.z);
 		}
