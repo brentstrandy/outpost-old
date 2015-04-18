@@ -116,7 +116,7 @@ public class Enemy : MonoBehaviour
 		EnemyManager.Instance.RemoveActiveEnemy(this);
 	}
 
-	public virtual void OnTriggerEnter(Collider other)
+	public virtual void OnTriggerEnter2D(Collider2D other)
 	{
 
 	}

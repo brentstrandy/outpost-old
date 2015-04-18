@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SmallThraceiumTower : Tower
 {
-	private SphereCollider EnemySphereCollider;
+	private CircleCollider2D EnemyCircleCollider;
 
 	// Use this for initialization
 	public override void Start()
@@ -14,12 +14,12 @@ public class SmallThraceiumTower : Tower
 		TowerData towerData = GameDataManager.Instance.TowerDataMngr.FindTowerDataByPrefabName("SmallThraceiumTower");
 		SetTowerData(towerData);
 
-		EnemySphereCollider = this.GetComponent<SphereCollider>();
+		EnemyCircleCollider = this.GetComponent<CircleCollider2D>();
 
 		// Small Thraceium Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 
-		EnemySphereCollider.radius = Range;
+		EnemyCircleCollider.radius = Range;
 	}
 	
 	// Update is called once per frame

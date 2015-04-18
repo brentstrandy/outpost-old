@@ -45,7 +45,7 @@ public class Drone : Enemy
 		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
 	}
 
-	public override void OnTriggerEnter(Collider other)
+	public override void OnTriggerEnter2D(Collider2D other)
 	{
 		// Only take action if the droid finds an enemy to follow
 		if(other.tag == "Enemy")

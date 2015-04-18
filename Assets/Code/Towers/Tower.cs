@@ -60,7 +60,7 @@ public class Tower : MonoBehaviour
 		TrackingSpeed = towerData.TrackingSpeed;
 	}
 
-	protected virtual void OnTriggerStay(Collider other)
+	protected virtual void OnTriggerStay2D(Collider2D other)
 	{
 		if(other.tag == "Enemy")
 		{
@@ -69,7 +69,7 @@ public class Tower : MonoBehaviour
 		}
 	}
 
-	protected virtual void OnTriggerExit(Collider other)
+	protected virtual void OnTriggerExit2D(Collider2D other)
 	{
 		if(TargetedEnemy != null)
 		{
