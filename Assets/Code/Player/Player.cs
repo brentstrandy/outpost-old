@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
 
 	public bool ShowDebugLogs = true;
 	public float Money { get; private set; }
+	public Quadrant CurrentQuadrant;
 
 	private LoadOut GameLoadOut;
 	private double LastTowerPlacementTime;
@@ -76,10 +77,7 @@ public class Player : MonoBehaviour
 
 						// Test to see if the player's click intersected with the Terrain (HexMesh)
 						if (TerrainMesh.IntersectRay(ray, out hit, out coord))
-						{
-							// TODO: Use the HexCoord to determine the center of the hexagon
-							Log("Tower Placement: " + hit.point + " : " + coord);
-							
+						{	
 							// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
 							var rotation = Quaternion.LookRotation(hit.point, new Vector3(0.0f, 0.0f, -1.0f));
 							

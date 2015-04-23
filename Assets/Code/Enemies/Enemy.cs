@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
 	protected Vector3 CurAcceleration;
 	protected Vector3 CurVelocity;
 	protected MiningFacility MiningFacilityObject;
+	protected Quadrant CurrentQuadrant;
 
 	public HealthBarController HealthBar;
 

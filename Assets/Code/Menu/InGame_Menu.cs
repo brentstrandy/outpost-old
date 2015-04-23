@@ -52,7 +52,6 @@ public class InGame_Menu : MonoBehaviour
 			// Display how much money the player current has
 			MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
 			OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.MiningFacilityObject.Health.ToString();
-			DirectionText.GetComponent<Text>().text = GameManager.Instance.CurrentDirection;
 		}
 	}
 

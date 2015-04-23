@@ -11,8 +11,7 @@ public class GameManager : MonoBehaviour
 	private static GameManager instance;
 	public bool ShowDebugLogs = true;
 	public bool Victory { get; private set; }
-	public string CurrentDirection = "NORTH";
-	private bool GameRunning;
+	public bool GameRunning { get; private set; }
 	
 	public MiningFacility MiningFacilityObject;
 
@@ -46,11 +45,14 @@ public class GameManager : MonoBehaviour
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
-
+		InputManager.Instance.OnQuadrantRotate += OnCameraQuadrantChanged;
 		//InGameCanvas = GameObject.Find ("InGame Canvas") as Canvas;
 
 		GameRunning = true;
 		Victory = false;
+
+		Player.Instance.CurrentQuadrant = Quadrant.North;
+		RadarManager.Instance.UpdatePlayerQuadrant(Quadrant.North);
 	}
 	
 	// Update is called once per frame
@@ -95,6 +97,54 @@ public class GameManager : MonoBehaviour
 	private void OnPlayerLeft(PhotonPlayer player)
 	{
 
+	}
+
+	private void OnCameraQuadrantChanged(string direction)
+	{
+		Quadrant newQuadrant = Quadrant.North;
+
+		if(direction == "left")
+			newQuadrant = GetNextCounterClockwiseQuadrant();
+		else if(direction == "right")
+			newQuadrant = GetNextClockwiseQuadrant();
+
+		Log ("new: " + newQuadrant.ToString());
+		// Inform the Player of the new quadrant
+		Player.Instance.CurrentQuadrant = newQuadrant;
+		// Inform the Camera of the new quadrant
+		CameraManager.Instance.UpdateCameraQuadrant(newQuadrant);
+	}
+
+	private Quadrant GetNextClockwiseQuadrant()
+	{
+		Quadrant quadrant = Quadrant.North;
+
+		if(Player.Instance.CurrentQuadrant == Quadrant.North)
+			quadrant = Quadrant.East;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.East)
+			quadrant = Quadrant.South;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.South)
+			quadrant = Quadrant.West;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.West)
+			quadrant = Quadrant.North;
+
+		return quadrant;
+	}
+
+	private Quadrant GetNextCounterClockwiseQuadrant()
+	{
+		Quadrant quadrant = Quadrant.North;
+		
+		if(Player.Instance.CurrentQuadrant == Quadrant.North)
+			quadrant = Quadrant.West;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.East)
+			quadrant = Quadrant.North;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.South)
+			quadrant = Quadrant.East;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.West)
+			quadrant = Quadrant.South;
+		
+		return quadrant;
 	}
 
 	#region MessageHandling
