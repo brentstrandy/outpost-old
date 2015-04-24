@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour
 		Victory = false;
 
 		Player.Instance.CurrentQuadrant = Quadrant.North;
-		RadarManager.Instance.UpdatePlayerQuadrant(Quadrant.North);
 	}
 	
 	// Update is called once per frame
@@ -108,7 +107,6 @@ public class GameManager : MonoBehaviour
 		else if(direction == "right")
 			newQuadrant = GetNextClockwiseQuadrant();
 
-		Log ("new: " + newQuadrant.ToString());
 		// Inform the Player of the new quadrant
 		Player.Instance.CurrentQuadrant = newQuadrant;
 		// Inform the Camera of the new quadrant

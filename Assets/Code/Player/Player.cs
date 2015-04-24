@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 	public float Money { get; private set; }
 	public Quadrant CurrentQuadrant;
 
+	private GameObject PlayerLocator;
+	private string Name;
 	private LoadOut GameLoadOut;
 	private double LastTowerPlacementTime;
 	private TowerData PlacementTowerData;
@@ -105,6 +107,14 @@ public class Player : MonoBehaviour
 				}
 			}
 		}
+
+		// Always keep the player locator GameObject in front of the camera. The GameObject has a PhotonView attached to it for the RadarManager
+		// to know which quadrant all players are located in.
+		if(PlayerLocator)
+		{
+			PlayerLocator.transform.position = Camera.main.transform.position + (Camera.main.transform.forward * 10);
+			PlayerLocator.transform.position = new Vector3(PlayerLocator.transform.position.x, PlayerLocator.transform.position.y, 0);
+		}
 	}
 
 	public void TowerSelectedForPlacement(TowerData towerData)
@@ -133,12 +143,22 @@ public class Player : MonoBehaviour
 		Money = 0.0f;
 	}
 
+	public void SetPlayerName(string name)
+	{
+		Name = name;
+	}
+
 	public void OnLevelWasLoaded(int level)
 	{
 		// TerrainMesh must be set when the level is started because the HexMesh object is not created
 		// until the level loads. All levels MUST begin with a defined prefix for this to work properly
 		if(Application.loadedLevelName.StartsWith("Level"))
+		{
 			TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexMesh>() as HexMesh;
+			// Instantiate a player locator point that is used for the allies' Radar
+			PlayerLocator = SessionManager.Instance.InstantiateObject("PlayerLocator",  new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+			PlayerLocator.name = Name;
+		}
 	}
 
 	#region MessageHandling

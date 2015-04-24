@@ -138,6 +138,7 @@ public class SessionManager : MonoBehaviour
 	{
 		// TO DO: Actually authenticate the player
 		PhotonNetwork.player.name = name;
+		Player.Instance.SetPlayerName(name);
 	}
 
 	/// <summary>
