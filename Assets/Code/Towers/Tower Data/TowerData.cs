@@ -34,21 +34,32 @@ public class TowerData
 
 	public TowerData() { }
 
-    public TowerData(TowerData obj)
+    //public TowerData(TowerData obj)
+    //{
+    //    DisplayName = obj.DisplayName;
+    //    PrefabName = obj.PrefabName;
+    //    Health = obj.Health;
+    //    PlayerCount = obj.PlayerCount;
+    //    RateOfFire = obj.RateOfFire;
+    //    Cooldown = obj.Cooldown;
+    //    Range = obj.Range;
+    //    ThraceiumDamage = obj.ThraceiumDamage;
+    //    BallisticDamage = obj.BallisticDamage;
+    //    TransitionTime = obj.TransitionTime;
+    //    InstallCost = obj.InstallCost;
+    //    MaintenanceCost = obj.MaintenanceCost;
+    //    StartupTime = obj.StartupTime;
+    //    TrackingSpeed = obj.TrackingSpeed;
+    //}
+
+    public TowerData(string blank)
     {
-        DisplayName = obj.DisplayName;
-        PrefabName = obj.PrefabName;
-        Health = obj.Health;
-        RateOfFire = obj.RateOfFire;
-        Cooldown = obj.Cooldown;
-		Range = obj.Range;
-        ThraceiumDamage = obj.ThraceiumDamage;
-        BallisticDamage = obj.BallisticDamage;
-        TransitionTime = obj.TransitionTime;
-        InstallCost = obj.InstallCost;
-        MaintenanceCost = obj.MaintenanceCost;
-		StartupTime = obj.StartupTime;
-		TrackingSpeed = obj.TrackingSpeed;
+        DisplayName = PrefabName = "";
+
+        Health = PlayerCount = 0;
+        RateOfFire = Cooldown = Range = ThraceiumDamage = BallisticDamage = TransitionTime = 0;
+        InstallCost = 0;
+        MaintenanceCost = StartupTime = TrackingSpeed = 0;
     }
 
 	#region MessageHandling

@@ -16,6 +16,8 @@ using System.Collections.Generic;
 [CustomEditor(typeof(EnemySpawnDataContainer))]
 public class EnemySpawnDataContainerEditor : Editor 
 {
+    public bool ShowDebugLogs = true;
+
     private EnemySpawnDataContainer MyScript;
     private ReorderableList ReorderList;
     private string XMLPath;
@@ -308,4 +310,18 @@ public class EnemySpawnDataContainerEditor : Editor
             }
         }
     }
+
+    #region MessageHandling
+    protected void Log(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.Log("[EnemySpawnDataContainerEditor] " + message);
+    }
+
+    protected void LogError(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.LogError("[EnemySpawnDataContainerEditor] " + message);
+    }
+    #endregion
 }

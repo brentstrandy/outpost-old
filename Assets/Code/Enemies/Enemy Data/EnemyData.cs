@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
+using System.Xml.Serialization;
 
 /// <summary>
 /// All details and stats for a single Enemy
 /// Owner: Brent Strandy
 /// </summary>
+[Serializable]
 public class EnemyData 
 {
-	public bool ShowDebugLogs = true;
-	
 	// Enemy Details
 	public string DisplayName;
 	public string PrefabName;
@@ -23,19 +23,58 @@ public class EnemyData
 	public float Range;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
+
+    [HideInInspector] [XmlIgnore]
+    public bool ShowDebugLogs = true;
+
+	public EnemyData() { }
 	
-	public EnemyData()
-	{
-		
-	}
+    public EnemyData(EnemyData obj)
+    {
+        DisplayName = obj.DisplayName;
+	    PrefabName = obj.PrefabName;
 	
-	// DELETE THIS CONSTRUCTOR - IT IS ONLY USED TO TEMPORARY LOAD TOWER NAMES
-	public EnemyData(string displayName, string prefabName)
-	{
-		DisplayName = displayName;
-		PrefabName = prefabName;
-	}
+	    // Enemy Stats
+	    Health = obj.Health;
+	    RateOfFire = obj.RateOfFire;
+	    Cooldown = obj.Cooldown;
+	    DamageDealt = obj.DamageDealt;
+	    Acceleration = obj.Acceleration;
+	    Speed = obj.Speed;
+	    Range = obj.Range;
+	    BallisticDefense = obj.BallisticDefense;
+        ThraceiumDefense = obj.ThraceiumDefense;
+    }
+
+	//public EnemyData(string displayName, string prefabName, int health, float rateOfFire, 
+    //                 float coolDown, float damageDealt, float acceleration, float speed, 
+    //                 float range, float ballisticDefense, float thraceiumDefense)
+    //{
+    //    DisplayName = displayName;
+    //    PrefabName = prefabName;
+
+    //    Health = health;
+    //    RateOfFire = rateOfFire;
+    //    Cooldown = coolDown;
+    //    DamageDealt = damageDealt;
+    //    Acceleration = acceleration;
+    //    Speed = speed;
+    //    Range = range;
+    //    BallisticDefense = ballisticDefense;
+    //    ThraceiumDefense = thraceiumDefense;
+    //}
 	
+    /// <summary>
+    /// Used for creating a new Enemy in the Unity Inspector
+    /// </summary>
+    public EnemyData(string empty)
+    {
+        DisplayName = PrefabName = "";
+	
+	    Health = 0;
+	    RateOfFire = Cooldown = DamageDealt = Acceleration = Speed = Range = BallisticDefense = 0;
+    }
+
 	#region MessageHandling
 	protected void Log(string message)
 	{

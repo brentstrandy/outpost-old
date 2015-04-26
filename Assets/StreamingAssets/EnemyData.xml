@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<ArrayOfEnemyData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <EnemyData>
+    <DisplayName>Drone</DisplayName>
+    <PrefabName>Drone</PrefabName>
+    <Health>100</Health>
+    <RateOfFire>0</RateOfFire>
+    <Cooldown>0</Cooldown>
+    <DamageDealt>0</DamageDealt>
+    <Acceleration>0</Acceleration>
+    <Speed>0</Speed>
+    <Range>0</Range>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Heavy Speeder</DisplayName>
+    <PrefabName>Heavy Speeder</PrefabName>
+    <Health>100</Health>
+    <RateOfFire>0</RateOfFire>
+    <Cooldown>0</Cooldown>
+    <DamageDealt>0</DamageDealt>
+    <Acceleration>0</Acceleration>
+    <Speed>0</Speed>
+    <Range>0</Range>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Light Speeder</DisplayName>
+    <PrefabName>Light Speeder</PrefabName>
+    <Health>100</Health>
+    <RateOfFire>0</RateOfFire>
+    <Cooldown>0</Cooldown>
+    <DamageDealt>0</DamageDealt>
+    <Acceleration>0</Acceleration>
+    <Speed>0</Speed>
+    <Range>0</Range>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
+  </EnemyData>
+</ArrayOfEnemyData>

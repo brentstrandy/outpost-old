@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,17 +11,31 @@ public class EnemyDataManager
 	/// </summary>
 	/// <value>The tower data list.</value>
 	public List<EnemyData> EnemyDataList { get; private set; }
-	
+    public EnemyDataContainer EnemyDataContainer_Inspector;
+
 	public EnemyDataManager()
 	{
-		// TO DO: Load EnemyDataList from serialized XML
-		
-		// DELETE ALL CODE FROM HERE ... ->
-		EnemyDataList = new List<EnemyData>();
-		EnemyDataList.Add(new EnemyData("Light Speeder", "Light Speeder"));
-		EnemyDataList.Add(new EnemyData("Heavy Speeder", "Heavy Speeder"));
-		EnemyDataList.Add(new EnemyData("Drone", "Drone"));
-		// -> TO HERE
+        // location of level specific XML spawn data
+        string enemyDataXMLPath = Application.streamingAssetsPath + "/EnemyData.xml";
+
+        EnemyDataList = new List<EnemyData>();
+        EnemyDataContainer_Inspector = GameObject.Find("EnemyData").GetComponent<EnemyDataContainer>();
+
+        if (File.Exists(enemyDataXMLPath))
+        {
+            // deserialize XML and add each enemy spawn to the lists
+            //foreach (EnemyData enemy in XMLParser<EnemyData>.XMLDeserializer_List(enemyDataXMLPath))
+            //{
+            //    EnemyDataContainer_Inspector.EnemyDataList.Add(enemy);
+            //    EnemyDataList.Add(enemy);
+            //}
+            foreach (EnemyData enemy in EnemyDataContainer_Inspector.EnemyDataList)
+            {
+                EnemyDataList.Add(enemy);
+            }
+        }
+        else
+            LogError("Cannot find Enemy Data XML file");
 	}
 	
 	/// <summary>

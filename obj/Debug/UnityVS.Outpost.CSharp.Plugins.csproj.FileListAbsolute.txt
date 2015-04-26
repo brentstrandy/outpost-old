@@ -1,0 +1,15 @@
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Photon3Unity3D.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEditor.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEditor.iOS.Extensions.Xcode.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEngine.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEngine.UI.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEngine.xml
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEditor.xml
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEngine.UI.xml
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEditor.iOS.Extensions.Xcode.xml
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Photon3Unity3D.xml
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\UnityVS.Outpost.CSharp.Plugins.csprojResolveAssemblyReference.cache
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\Assembly-CSharp-firstpass.pdb

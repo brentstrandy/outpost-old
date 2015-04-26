@@ -12,3 +12,6 @@ C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Pho
 C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\UnityVS.Outpost.CSharp.csprojResolveAssemblyReference.cache
 C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\Assembly-CSharp.dll
 C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\Assembly-CSharp.pdb
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEditor.iOS.Extensions.Xcode.dll
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\UnityEditor.iOS.Extensions.Xcode.xml

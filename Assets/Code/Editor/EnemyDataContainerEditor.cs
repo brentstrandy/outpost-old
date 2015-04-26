@@ -5,27 +5,25 @@ using System.Linq;
 using System.Collections.Generic;
 
 /// <summary>
-/// Inspector button(s) to save/load/create tower data from XML.
+/// Inspector button(s) to save/load/create enemy data from XML.
 /// Owner: John Fitzgerald
 /// </summary>
 [ExecuteInEditMode]
-[CustomEditor(typeof(TowerDataContainer))]
-public class TowerDataContainerEditor : Editor
+[CustomEditor(typeof(EnemyDataContainer))]
+public class EnemyDataContainerEditor : Editor
 {
     public bool ShowDebugLogs = true;
 
-    private TowerDataContainer MyScript;
+    private EnemyDataContainer MyScript;
     private string XMLPath;
 
     private void OnEnable()
     {
-        XMLPath = Application.streamingAssetsPath + "/TowerData.xml";
-        MyScript = (TowerDataContainer)target;
+        XMLPath = Application.streamingAssetsPath + "/EnemyData.xml";
+        MyScript = (EnemyDataContainer)target;
 
         if (!IsListLoaded())
-        {
-            MyScript.TowerDataList = LoadFromXML();
-        }
+            MyScript.EnemyDataList = LoadFromXML();
     }
 
     public override void OnInspectorGUI()
@@ -38,6 +36,7 @@ public class TowerDataContainerEditor : Editor
             EditorGUILayout.Space();
             SaveToXML_Button();
         }
+
         EditorGUILayout.Space();
 
         LoadFromXML_Button();
@@ -47,7 +46,7 @@ public class TowerDataContainerEditor : Editor
     {
         if (MyScript != null)
         {
-            if (MyScript.TowerDataList.Count > 0)
+            if (MyScript.EnemyDataList.Count > 0)
                 return true;
             else
                 return false;
@@ -57,31 +56,31 @@ public class TowerDataContainerEditor : Editor
     }
 
     /// <summary>
-    /// Load XML file to List<T>.
-    /// </summary>
-    /// <returns></returns>
-    private List<TowerData> LoadFromXML()
-    {
-        if (File.Exists(XMLPath))
-        {
-            // Sort by DisplayName before loading
-            return XMLParser<TowerData>.XMLDeserializer_List(XMLPath).OrderBy(o => o.DisplayName).ToList();//ThenBy(o => o.PlayerCount).ToList();
-        }
-        else
-        {
-            LogError("Cannot find Tower Data XML file");
-            return null;
-        }
-    }
-
-    /// <summary>
     /// Creates a new item in the Inspector List.
     /// </summary>
     private void NewItem_Button()
     {
-        if (GUILayout.Button("Create Tower"))
+        if (GUILayout.Button("Create Enemy"))
         {
-            MyScript.TowerDataList.Add(new TowerData("blank"));
+            MyScript.EnemyDataList.Add(new EnemyData("blank"));
+        }
+    }
+
+    /// <summary>
+    /// Load XML file to List<T>.
+    /// </summary>
+    /// <returns></returns>
+    private List<EnemyData> LoadFromXML()
+    {
+        if (File.Exists(XMLPath))
+        {
+            // Sort by DisplayName before loading
+            return XMLParser<EnemyData>.XMLDeserializer_List(XMLPath).OrderBy(o => o.DisplayName).ToList();//ThenBy(o => o.PlayerCount).ToList();
+        }
+        else
+        {
+            LogError("Cannot find Enemy Data XML file");
+            return null;
         }
     }
 
@@ -93,12 +92,12 @@ public class TowerDataContainerEditor : Editor
         if (GUILayout.Button("Save Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to SAVE?", "Yes", "No"))
-                XMLParser<TowerData>.XMLSerializer_List(MyScript.TowerDataList, XMLPath);
+                XMLParser<EnemyData>.XMLSerializer_List(MyScript.EnemyDataList, XMLPath);
         }
     }
 
     /// <summary>
-    /// Load from Tower Data XML.
+    /// Load from Enemy Data XML.
     /// </summary>
     private void LoadFromXML_Button()
     {
@@ -106,26 +105,12 @@ public class TowerDataContainerEditor : Editor
         {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD?", "Yes", "No"))
             {
-                MyScript.TowerDataList.Clear();
+                MyScript.EnemyDataList.Clear();
                 if (!Application.isPlaying)
                     OnEnable();
                 else
-                    MyScript.TowerDataList = LoadFromXML();
+                    MyScript.EnemyDataList = LoadFromXML();
             }
-        }
-    }
-
-    /// <summary>
-    /// Saves current Inspector List to XML.
-    /// </summary>
-    private void SaveToXML()
-    {
-        if (GUILayout.Button("Save Data"))
-        {
-            // saves file based on the level name that's loaded in scene
-            string fileName = Application.streamingAssetsPath + "/TowerData.xml";
-
-            XMLParser<TowerData>.XMLSerializer_List(MyScript.TowerDataList, fileName);
         }
     }
 
@@ -133,13 +118,13 @@ public class TowerDataContainerEditor : Editor
     protected void Log(string message)
     {
         if (ShowDebugLogs)
-            Debug.Log("[TowerDataContainerEditor] " + message);
+            Debug.Log("[EnemyDataContainerEditor] " + message);
     }
 
     protected void LogError(string message)
     {
         if (ShowDebugLogs)
-            Debug.LogError("[TowerDataContainerEditor] " + message);
+            Debug.LogError("[EnemyDataContainerEditor] " + message);
     }
     #endregion
 }
