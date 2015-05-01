@@ -14,13 +14,23 @@ public class HexMesh : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
+	public int FacilityRadius = 5;
+	public int PeripheralRadius = 12;
 	public float HexagonRadius = 1.0f;
 	public float DetailWidth = 0.1f;
 	public float OutlineWidth = 0.02f;
 	public Color OutlineColor = Color.yellow;
+	public float HighlightWidth = 0.1f;
 	public Color HighlightColor = Color.red;
 
-	//private GameObject Outlines;
+	[SerializeField]
+	private HexCoord HighlightCoord;
+
+	private GameObject Outlines;
+	private GameObject Highlight;
+
+	private const string OutlineName = "HexOutlines";
+	private const string HighlightName = "HexHighlight";
 
 	// Use this for initialization
 	void Start ()
@@ -42,44 +52,38 @@ public class HexMesh : MonoBehaviour
 
 		gameObject.layer = LayerMask.NameToLayer("Terrain");
 
-		/*
-		if (Outlines == null)
-		{
-			Outlines = new GameObject("HexOutlines");
-			Outlines.transform.parent = gameObject.transform;
-			Outlines.transform.localRotation = Quaternion.identity;
-			Outlines.transform.localPosition = Vector3.zero;
-			Outlines.transform.localScale = Vector3.one;
-
-			if (Outlines.GetComponent<LineRenderer> == null)
-			{
-				Outlines.AddComponent<LineRenderer>();
-			}
-		}
-		*/
-
-		/*
-		if (Collide && GetComponent<MeshCollider>() == null)
-		{
-			gameObject.AddComponent("MeshCollider");
-		}
-		*/
-		
-		BuildMesh();
+		PrepareOverlays();
+		UpdateMesh();
+		UpdateOutlines();
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void Update()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		HexCoord coord;
+		
+		if (IntersectRay(ray, out hit, out coord) && InPlacementRange(coord))
+		{
+			ShowHighlight(coord);
 
-		if (Input.GetMouseButtonDown(0)) {
-			if (IntersectRay(ray, out hit, out coord)) {
+			if (Input.GetMouseButtonDown(0))
+			{
 				Log("HexMesh Collision: " + hit.point + " - " + coord);
 			}
 		}
+		else
+		{
+			HideHighlight();
+		}
+	}
+
+	public bool InPlacementRange(HexCoord coord)
+	{
+		// TODO: Consider moving this to the facility object
+		int distance = HexCoord.Distance(HexCoord.origin, coord);
+		return distance >= FacilityRadius && distance <= PeripheralRadius;
 	}
 
 	public bool IntersectRay(Ray ray, out RaycastHit hit, out HexCoord coord)
@@ -119,7 +123,9 @@ public class HexMesh : MonoBehaviour
 			GridHeight += 1;
 		}
 
-		BuildMesh();
+		PrepareOverlays();
+		UpdateMesh();
+		UpdateOutlines();
 	}
 	
 	public HexCoord[] GetHexBounds()
@@ -127,61 +133,56 @@ public class HexMesh : MonoBehaviour
 		var corner = new Vector2(GridWidth / 2, GridHeight / 2);
 		return HexCoord.CartesianRectangleBounds(corner, -corner);
 	}
-
-	private void BuildMesh()
+	
+	private void PrepareOverlays()
+	{
+		DestroyOverlay(OutlineName);
+		DestroyOverlay(HighlightName);
+		
+		Outlines = CreateOverlay(OutlineName, OutlineColor, "Particles/Additive", 0);
+		Highlight = CreateOverlay(HighlightName, HighlightColor, "Standard", 1);
+	}
+	
+	private void UpdateMesh()
 	{
 		var mesh = BuildBaseMesh();
 		GetComponent<MeshFilter>().sharedMesh = mesh;
 		GetComponent<MeshCollider>().sharedMesh = mesh;
-		
-		DestroyOutlines();
-		CreateOutlines();
-	}
-
-	private Func<Vector2, float> GetHeightPredicate()
-	{
-		if (HeightMap == null)
-		{
-			Log("No HeightMap Specified");
-			return (Vector2 uv) => 0.0f;
-		}
-
-		Log("Using HeightMap");
-		return (Vector2 uv) => HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale * -HeightScale;
 	}
 	
-	private Func<Vector2, Vector2> GetUVPredicate()
+	private void UpdateOutlines()
 	{
-		Vector2 scale = new Vector2(1.0f / (float)GridWidth, 1.0f / (float)GridHeight);
-		Vector2 offset = new Vector2(0.5f, 0.5f);
-		return (Vector2 uv) => Vector2.Scale(uv, scale) + offset;
+		if (Outlines != null)
+		{
+			Outlines.GetComponent<MeshFilter>().mesh = BuildOutlineMesh();
+		}
 	}
 	
 	private Mesh BuildBaseMesh()
 	{
 		float outer = 1.0f;
 		float inner = 1.0f - DetailWidth;
-
+		
 		var height = GetHeightPredicate();
 		var tex = GetUVPredicate();
-
-		HexMeshBuilder.NodeDelegate predicate = (HexCoord coord, int i) => {
-			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + coord.Position();
+		
+		HexMeshBuilder.NodeDelegate predicate = (HexCoord c, int i) => {
+			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + c.Position();
 			Vector2 uv = tex(pos);
 			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, height(uv)), uv);
 		};
 		
 		var bounds = GetHexBounds();
 		var builder = new HexMeshBuilder();
-
+		
 		// Note: Corner 0 is at the upper right, others proceed counterclockwise.
-
+		
 		builder.SetPredicate(predicate);
 		builder.SetTriangles(new int[] {
 			0,6,7,		7,1,0,		1,7,8,		8,2,1,		2,8,9,		9,3,2,
 			3,9,10,		10,4,3,		4,10,11,	11,5,4,		5,11,6,		6,0,5,
 			6,11,7,		7,11,8,		8,11,10,	10,9,8
-			/*
+				/*
 			0,1,6,		6,1,7,		1,2,7,		7,2,8,		2,3,8,		8,3,9,
 			3,4,9,		9,4,10,		4,5,10,		10,5,11,	5,0,11,		11,0,6,
 			6,7,9,		9,7,8,		11,6,10,	10,6,9
@@ -199,20 +200,122 @@ public class HexMesh : MonoBehaviour
 	
 	private Mesh BuildOutlineMesh()
 	{
-		float offset = OutlineWidth * 0.5f;
+		var builder = CreateOverlayBuilder(OutlineWidth);
+		var bounds = GetHexBounds();
+		
+		foreach (HexCoord coord in HexKit.WithinRect(bounds[0], bounds[1]))
+		{
+			if (InPlacementRange(coord))
+			{
+				builder.AddHexagon(coord);
+			}
+		}
+		
+		Log("Outline Mesh Summary: " + builder.Summary());
+		return builder.Build();
+	}
+	
+	private Mesh BuildHighlightMesh(HexCoord coord)
+	{
+		var builder = CreateOverlayBuilder(HighlightWidth);
+		
+		builder.AddHexagon(coord);
+		
+		Log("Highlight Mesh Summary: " + builder.Summary());
+		return builder.Build();
+	}
+	
+	public void ShowHighlight(HexCoord coord)
+	{
+		if (Highlight != null)
+		{
+			if (HighlightCoord != coord)
+			{
+				HighlightCoord = coord;
+				Highlight.GetComponent<MeshFilter>().mesh = BuildHighlightMesh(coord);
+			}
+			Highlight.GetComponent<MeshRenderer>().enabled = true;
+		}
+	}
+	
+	public void HideHighlight()
+	{
+		if (Highlight != null)
+		{
+			Highlight.GetComponent<MeshRenderer>().enabled = false;
+		}
+	}
+	
+	private GameObject GetOverlay(string name)
+	{
+		foreach (Transform child in transform)
+		{
+			if (child.gameObject.name.Equals(name))
+			{
+				return child.gameObject;
+			}
+		}
+
+		return null;
+	}
+	
+	private GameObject CreateOverlay(string name, Color color, string shader, int layer)
+	{
+		GameObject overlay = new GameObject(name);
+
+		float offset = -0.01f * (float)(layer + 1);
+
+		overlay.layer = LayerMask.NameToLayer("TransparentFX");
+		overlay.transform.parent = gameObject.transform;
+		overlay.transform.localRotation = Quaternion.identity;
+		overlay.transform.localPosition = new Vector3(0.0f, 0.0f, offset);
+		overlay.transform.localScale = Vector3.one;
+		
+		overlay.AddComponent<MeshFilter>();
+		var renderer = overlay.AddComponent<MeshRenderer>();
+		
+		renderer.sharedMaterial = new Material(Shader.Find(shader));
+		renderer.sharedMaterial.SetColor("_Color", color);
+		renderer.sharedMaterial.SetColor("_TintColor", color);
+
+		return overlay;
+	}
+	
+	private GameObject PrepareOverlay(string name, Color color, string shader, int layer)
+	{
+		GameObject overlay = GetOverlay(OutlineName);
+		if (overlay == null)
+		{
+			overlay = CreateOverlay(name, color, shader, layer);
+		}
+		return overlay;
+	}
+	
+	private void DestroyOverlay(string name)
+	{
+		GameObject overlay = GetOverlay(name);
+		if (overlay != null)
+		{
+			//Log("Destroying " + overlay.name);
+			DestroyImmediate(overlay);
+		}
+	}
+	
+	private HexMeshBuilder CreateOverlayBuilder(float lineWidth)
+	{
+		float offset = lineWidth * 0.5f;
 		float outer = 1.0f + offset;
 		float inner = 1.0f - offset;
-
+		
 		var height = GetHeightPredicate();
 		var tex = GetUVPredicate();
-
-		HexMeshBuilder.NodeDelegate predicate = (HexCoord coord, int i) => {
-			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + coord.Position();
+		
+		HexMeshBuilder.NodeDelegate predicate = (HexCoord c, int i) => {
+			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + c.Position();
 			Vector2 uv = tex(pos);
 			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, height(uv)), uv);
 		};
 		
-		var bounds = GetHexBounds();
 		var builder = new HexMeshBuilder();
 		builder.SetPredicate(predicate);
 		builder.SetTriangles(new int[] {
@@ -220,51 +323,26 @@ public class HexMesh : MonoBehaviour
 			3,9,10,		10,4,3,		4,10,11,	11,5,4,		5,11,6,		6,0,5,
 		});
 		
-		foreach (HexCoord coord in HexKit.WithinRect(bounds[0], bounds[1]))
-		{
-			builder.AddHexagon(coord);
-		}
-		
-		Log("Outline Mesh Summary: " + builder.Summary());
-		return builder.Build();
+		return builder;
 	}
 	
-	private void CreateOutlines()
+	private Func<Vector2, float> GetHeightPredicate()
 	{
-		// Prepare the outline game object
-		string name = "HexOutlines";
-		var outlines = new GameObject(name);
-		outlines.layer = LayerMask.NameToLayer("TransparentFX");
-		outlines.transform.parent = gameObject.transform;
-		outlines.transform.localRotation = Quaternion.identity;
-		outlines.transform.localPosition = new Vector3(0.0f, 0.0f, -0.01f);
-		outlines.transform.localScale = Vector3.one;
+		if (HeightMap == null)
+		{
+			Log("No HeightMap Specified");
+			return (Vector2 uv) => 0.0f;
+		}
 		
-		var filter = outlines.AddComponent<MeshFilter>();
-		var renderer = outlines.AddComponent<MeshRenderer>();
-		
-		filter.mesh = BuildOutlineMesh();
-
-		renderer.sharedMaterial = new Material(Shader.Find("Particles/Additive"));
-		renderer.sharedMaterial.SetColor("_TintColor", OutlineColor);
+		Log("Using HeightMap");
+		return (Vector2 uv) => HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale * -HeightScale;
 	}
 	
-	private void DestroyOutlines()
+	private Func<Vector2, Vector2> GetUVPredicate()
 	{
-		var outlines = new List<GameObject>();
-		foreach (Transform child in transform)
-		{
-			if (child.gameObject.name.StartsWith("HexOutline"))
-			{
-				outlines.Add(child.gameObject);
-			}
-		}
-		
-		foreach (var child in outlines)
-		{
-			//Log("Destroying " + child.name);
-			DestroyImmediate(child);
-		}
+		Vector2 scale = new Vector2(1.0f / (float)GridWidth, 1.0f / (float)GridHeight);
+		Vector2 offset = new Vector2(0.5f, 0.5f);
+		return (Vector2 uv) => Vector2.Scale(uv, scale) + offset;
 	}
 
 	/*

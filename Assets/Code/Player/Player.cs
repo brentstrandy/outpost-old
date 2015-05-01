@@ -78,8 +78,8 @@ public class Player : MonoBehaviour
 						HexCoord coord;
 
 						// Test to see if the player's click intersected with the Terrain (HexMesh)
-						if (TerrainMesh.IntersectRay(ray, out hit, out coord))
-						{	
+						if (TerrainMesh.IntersectRay(ray, out hit, out coord) && TerrainMesh.InPlacementRange(coord))
+						{
 							// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
 							var rotation = Quaternion.LookRotation(hit.point, new Vector3(0.0f, 0.0f, -1.0f));
 							
