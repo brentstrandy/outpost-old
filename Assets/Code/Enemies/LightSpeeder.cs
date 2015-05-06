@@ -40,29 +40,28 @@ public class LightSpeeder : Enemy
 			}
 		}*/
 
-		if (Firing)
+		// Land speeders don't move while they are firing
+		if (!Firing)
 		{
-			// Land speeders don't move while they are firing
-			return;
-		}
-		
-		var pathfinder = GetComponent<Pathfinder>();
-		var location = GetComponent<HexLocation>().location;
-		var next = pathfinder.Next();
-		if (next != location)
-		{
-			Vector3 target = next.Position();
-			// Do not allow the Z position to change or else the speeder will slowly move downward over time
-			target.z = this.transform.position.z;
-			transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(target - transform.position, Up), Time.deltaTime * TurningSpeed );
-		}
-		else
-		{
-			Log("Arrived... Target: " + pathfinder.Target + " Next: " + pathfinder.Next() + " Location: " + location + " Path: " + pathfinder.PathToString());
-		}
+			var pathfinder = GetComponent<Pathfinder>();
+			var location = GetComponent<HexLocation>().location;
+			var next = pathfinder.Next();
 
-		this.transform.position += this.transform.forward * Speed * Time.deltaTime;
-		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
+			if (next != location)
+			{
+				Vector3 target = next.Position();
+				// Do not allow the Z position to change or else the speeder will slowly move downward over time
+				target.z = this.transform.position.z;
+				transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(target - transform.position, Up), Time.deltaTime * TurningSpeed );
+			}
+			else
+			{
+				Log("Arrived... Target: " + pathfinder.Target + " Next: " + pathfinder.Next() + " Location: " + location + " Path: " + pathfinder.PathToString());
+			}
+
+			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
+			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
+		}
 	}
 	
 	#region MessageHandling

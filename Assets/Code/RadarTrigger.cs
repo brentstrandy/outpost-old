@@ -40,7 +40,7 @@ public class RadarTrigger : MonoBehaviour
 			PlayerRadarBar.GetComponent<Image>().color = Color.white;
 	}
 
-	void OnTriggerStay2D(Collider2D other)
+	void OnTriggerStay(Collider other)
 	{
 		if(other.tag == "Enemy")
 		{
