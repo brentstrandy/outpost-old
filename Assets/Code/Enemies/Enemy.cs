@@ -98,17 +98,22 @@ public class Enemy : MonoBehaviour
 
 		// Check to see if enemy is dead
 		if(Health <= 0)
-			KillEnemy();
+			Die();
 	}
 
 	/// <summary>
 	/// Destroy the enemy (only if the player is the master client)
 	/// </summary>
-	protected virtual void KillEnemy()
+	protected virtual void Die()
 	{
+		Rigidbody rb = this.GetComponent<Rigidbody>();
+
+		rb.constraints = RigidbodyConstraints.None;
+		rb.AddForce(new Vector3(100, 100, -100), ForceMode.Force);
+
 		// Only kill the enemy if this is the master client
-		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-			SessionManager.Instance.DestroyObject(this.gameObject);
+		//if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		//	SessionManager.Instance.DestroyObject(this.gameObject);
 	}
 
 	public void OnDestroy()
@@ -119,7 +124,12 @@ public class Enemy : MonoBehaviour
 
 	public virtual void OnTriggerEnter(Collider other)
 	{
-
+		if(other.tag == "Terrain")
+		{
+			// Only kill the enemy if this is the master client
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+				SessionManager.Instance.DestroyObject(this.gameObject);
+		}
 	}
 
 	/// <summary>
