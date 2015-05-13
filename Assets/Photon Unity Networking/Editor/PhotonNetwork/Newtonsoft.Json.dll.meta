@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: ada097df1b8654ef98d455a71b073073
+labels:
+- ExitGames
+- PUN
+- Photon
+- Networking
+PluginImporter:
+  serializedVersion: 1
+  iconMap: {}
+  executionOrder: {}
+  isPreloaded: 0
+  platformData:
+    Any:
+      enabled: 0
+      settings: {}
+    Editor:
+      enabled: 1
+      settings:
+        DefaultValueInitialized: true
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
