@@ -39,7 +39,7 @@ public class GameDataManager : MonoBehaviour
 		TowerDataMngr = new TowerDataManager();
 
 		// At this time Enemy data is not needed. This data will be stored in the prefabs
-		//EnemyDataMngr = new EnemyDataManager();
+		EnemyDataMngr = new EnemyDataManager();
 	}
 	
 	// Update is called once per frame

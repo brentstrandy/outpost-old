@@ -14,6 +14,9 @@ public class HeavySpeeder : Enemy
 	{
 		base.Start();
 
+		// Load default attributes from EnemyData for this enemy
+		SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Heavy Speeder"));
+
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
 		// Heavy Speeders can fire on the mining facility
@@ -22,25 +25,14 @@ public class HeavySpeeder : Enemy
 		// Start the Heavy Speeder off the ground
 		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f);
 	}
-
+	/*
 	public override void FixedUpdate()
 	{
-		/*RaycastHit hit;
-
-		foreach(GameObject obj in HoverLocation)
-		{
-			if (Physics.Raycast (obj.transform.position, Vector3.down, out hit, 1.0f))
-			{
-				Log("HIT: " + Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime);
-				rigidbody.AddForceAtPosition(Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime, obj.transform.position, ForceMode.Force);
-			}
-		}*/
-
 		if(!Firing)
 			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
 			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
 	}
-
+	
 	public override void Update()
 	{
 		/*RaycastHit hit;
@@ -52,7 +44,7 @@ public class HeavySpeeder : Enemy
 				Log("HIT: " + Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime);
 				rigidbody.AddForceAtPosition(Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime, obj.transform.position, ForceMode.Force);
 			}
-		}*/
+		}
 		
 		if (Firing)
 		{
@@ -77,7 +69,7 @@ public class HeavySpeeder : Enemy
 		
 		this.transform.position += this.transform.forward * Speed * Time.deltaTime;
 		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
-	}
+	}*/
 
 	#region MessageHandling
 	protected override void Log(string message)

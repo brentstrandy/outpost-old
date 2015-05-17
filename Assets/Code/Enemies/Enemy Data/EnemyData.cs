@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Xml.Serialization;
 
@@ -11,8 +11,8 @@ public class EnemyData
 {
 	// Enemy Details
 	public string DisplayName;
-	public string PrefabName;
-	
+	public bool UsePathfinding;
+
 	// Enemy Stats
 	public int Health;
 	public float RateOfFire;
@@ -23,6 +23,7 @@ public class EnemyData
 	public float Range;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
+	public float TurningSpeed;
 
     [HideInInspector] [XmlIgnore]
     public bool ShowDebugLogs = true;
@@ -32,7 +33,7 @@ public class EnemyData
     public EnemyData(EnemyData obj)
     {
         DisplayName = obj.DisplayName;
-	    PrefabName = obj.PrefabName;
+		UsePathfinding = obj.UsePathfinding;
 	
 	    // Enemy Stats
 	    Health = obj.Health;
@@ -44,6 +45,7 @@ public class EnemyData
 	    Range = obj.Range;
 	    BallisticDefense = obj.BallisticDefense;
         ThraceiumDefense = obj.ThraceiumDefense;
+		TurningSpeed = obj.TurningSpeed;
     }
 
 	//public EnemyData(string displayName, string prefabName, int health, float rateOfFire, 
@@ -69,7 +71,7 @@ public class EnemyData
     /// </summary>
     public EnemyData(string empty)
     {
-        DisplayName = PrefabName = "";
+        DisplayName = "";
 	
 	    Health = 0;
 	    RateOfFire = Cooldown = DamageDealt = Acceleration = Speed = Range = BallisticDefense = 0;

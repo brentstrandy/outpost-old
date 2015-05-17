@@ -62,17 +62,7 @@ public class EnemyDataManager
 		
 		return towerNames;
 	}
-	
-	/// <summary>
-	/// Finds the EnemyData based on a prefab name
-	/// </summary>
-	/// <returns>The EnemyData by prefab name.</returns>
-	/// <param name="prefabName">Prefab name.</param>
-	public EnemyData FindEnemyDataByPrefabName(string prefabName)
-	{
-		return EnemyDataList.Find(x => x.PrefabName.Equals(prefabName));
-	}
-	
+
 	/// <summary>
 	/// Finds the EnemyData based on a display name
 	/// </summary>
@@ -80,7 +70,7 @@ public class EnemyDataManager
 	/// <param name="displayName">Display name.</param>
 	public EnemyData FindEnemyDataByDisplayName(string displayName)
 	{
-		return EnemyDataList.Find(x => x.PrefabName.Equals(displayName));
+		return EnemyDataList.Find(x => x.DisplayName.Equals(displayName));
 	}
 	
 	#region MessageHandling

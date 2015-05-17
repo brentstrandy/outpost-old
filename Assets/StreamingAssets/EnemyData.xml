@@ -1,42 +1,45 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfEnemyData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EnemyData>
     <DisplayName>Drone</DisplayName>
-    <PrefabName>Drone</PrefabName>
-    <Health>100</Health>
+    <UsePathfinding>false</UsePathfinding>
+    <Health>1</Health>
     <RateOfFire>0</RateOfFire>
     <Cooldown>0</Cooldown>
-    <DamageDealt>0</DamageDealt>
-    <Acceleration>0</Acceleration>
-    <Speed>0</Speed>
+    <DamageDealt>0.5</DamageDealt>
+    <Acceleration>30</Acceleration>
+    <Speed>6</Speed>
     <Range>0</Range>
-    <BallisticDefense>0</BallisticDefense>
-    <ThraceiumDefense>0</ThraceiumDefense>
+    <BallisticDefense>1</BallisticDefense>
+    <ThraceiumDefense>1</ThraceiumDefense>
+    <TurningSpeed>2</TurningSpeed>
   </EnemyData>
   <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
-    <PrefabName>Heavy Speeder</PrefabName>
-    <Health>100</Health>
-    <RateOfFire>0</RateOfFire>
+    <UsePathfinding>true</UsePathfinding>
+    <Health>12</Health>
+    <RateOfFire>3</RateOfFire>
     <Cooldown>0</Cooldown>
-    <DamageDealt>0</DamageDealt>
+    <DamageDealt>3</DamageDealt>
     <Acceleration>0</Acceleration>
-    <Speed>0</Speed>
-    <Range>0</Range>
-    <BallisticDefense>0</BallisticDefense>
-    <ThraceiumDefense>0</ThraceiumDefense>
+    <Speed>0.7</Speed>
+    <Range>8</Range>
+    <BallisticDefense>0.3</BallisticDefense>
+    <ThraceiumDefense>0.3</ThraceiumDefense>
+    <TurningSpeed>0.5</TurningSpeed>
   </EnemyData>
   <EnemyData>
     <DisplayName>Light Speeder</DisplayName>
-    <PrefabName>Light Speeder</PrefabName>
-    <Health>100</Health>
-    <RateOfFire>0</RateOfFire>
+    <UsePathfinding>true</UsePathfinding>
+    <Health>10</Health>
+    <RateOfFire>2</RateOfFire>
     <Cooldown>0</Cooldown>
-    <DamageDealt>0</DamageDealt>
+    <DamageDealt>1</DamageDealt>
     <Acceleration>0</Acceleration>
-    <Speed>0</Speed>
-    <Range>0</Range>
-    <BallisticDefense>0</BallisticDefense>
-    <ThraceiumDefense>0</ThraceiumDefense>
+    <Speed>1</Speed>
+    <Range>8</Range>
+    <BallisticDefense>0.8</BallisticDefense>
+    <ThraceiumDefense>0.8</ThraceiumDefense>
+    <TurningSpeed>3</TurningSpeed>
   </EnemyData>
 </ArrayOfEnemyData>

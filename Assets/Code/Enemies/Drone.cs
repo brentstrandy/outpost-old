@@ -15,6 +15,9 @@ public class Drone : Enemy
 	{
 		base.Start();
 
+		// Load default attributes from EnemyData for this enemy
+		SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Drone"));
+
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
 		// Start the Drone off the ground
@@ -28,21 +31,25 @@ public class Drone : Enemy
 
 	public override void Update()
 	{
-		if(Target != null)
-			this.transform.LookAt(Target.transform.position, Up);
-		else
-			this.transform.LookAt(MiningFacilityObject.transform.position, Up);
+		// MASTER CLIENT movement
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			if(Target != null)
+				this.transform.LookAt(Target.transform.position, Up);
+			else
+				this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
-		// Determine Acceleration
-		CurAcceleration = this.transform.forward * Acceleration;
+			// Determine Acceleration
+			CurAcceleration = this.transform.forward * Acceleration;
 
-		// Determine Velocity
-		CurVelocity += CurAcceleration * Time.deltaTime * Time.deltaTime * Speed;
-		CurVelocity = Vector3.ClampMagnitude(CurVelocity, Speed);
+			// Determine Velocity
+			CurVelocity += CurAcceleration * Time.deltaTime * Time.deltaTime * Speed;
+			CurVelocity = Vector3.ClampMagnitude(CurVelocity, Speed);
 
-		// Determine Position
-		this.transform.position += CurVelocity * Time.deltaTime;
-		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
+			// Determine Position
+			this.transform.position += CurVelocity * Time.deltaTime;
+			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
+		}
 	}
 
 	public override void OnTriggerEnter(Collider other)
