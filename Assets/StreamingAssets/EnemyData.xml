@@ -2,7 +2,14 @@
 <ArrayOfEnemyData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EnemyData>
     <DisplayName>Drone</DisplayName>
+    <PrefabName>Drone</PrefabName>
     <UsePathfinding>false</UsePathfinding>
+    <HighlightColor>
+      <r>1</r>
+      <g>0</g>
+      <b>0</b>
+      <a>0</a>
+    </HighlightColor>
     <Health>1</Health>
     <RateOfFire>0</RateOfFire>
     <Cooldown>0</Cooldown>
@@ -16,7 +23,14 @@
   </EnemyData>
   <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
+    <PrefabName>Heavy Speeder</PrefabName>
     <UsePathfinding>true</UsePathfinding>
+    <HighlightColor>
+      <r>0.183931679</r>
+      <g>0.463235319</g>
+      <b>0.463235319</b>
+      <a>0</a>
+    </HighlightColor>
     <Health>12</Health>
     <RateOfFire>3</RateOfFire>
     <Cooldown>0</Cooldown>
@@ -29,8 +43,36 @@
     <TurningSpeed>0.5</TurningSpeed>
   </EnemyData>
   <EnemyData>
-    <DisplayName>Light Speeder</DisplayName>
+    <DisplayName>Intense Light Speeder</DisplayName>
+    <PrefabName>Light Speeder</PrefabName>
     <UsePathfinding>true</UsePathfinding>
+    <HighlightColor>
+      <r>0.8206897</r>
+      <g>1</g>
+      <b>0</b>
+      <a>0</a>
+    </HighlightColor>
+    <Health>30</Health>
+    <RateOfFire>2</RateOfFire>
+    <Cooldown>0</Cooldown>
+    <DamageDealt>1</DamageDealt>
+    <Acceleration>0</Acceleration>
+    <Speed>1</Speed>
+    <Range>8</Range>
+    <BallisticDefense>0.8</BallisticDefense>
+    <ThraceiumDefense>0.8</ThraceiumDefense>
+    <TurningSpeed>3</TurningSpeed>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Light Speeder</DisplayName>
+    <PrefabName>Light Speeder</PrefabName>
+    <UsePathfinding>true</UsePathfinding>
+    <HighlightColor>
+      <r>0.3897059</r>
+      <g>0.52018255</g>
+      <b>1</b>
+      <a>0</a>
+    </HighlightColor>
     <Health>10</Health>
     <RateOfFire>2</RateOfFire>
     <Cooldown>0</Cooldown>

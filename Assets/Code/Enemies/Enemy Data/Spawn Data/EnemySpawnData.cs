@@ -14,15 +14,6 @@ public class EnemySpawnData
     public float StartTime;
     public int StartAngle;
 	public int PlayerCount;
-    public EnemyType Type;
-
-    // used for Inspector (Reorderable List)
-    [HideInInspector]
-    public enum EnemyType 
-    {
-        Normal,
-        Boss
-    }
 
     [HideInInspector] [XmlIgnore]
     public bool ShowDebugLogs = true;
@@ -35,16 +26,14 @@ public class EnemySpawnData
         StartTime = obj.StartTime;
         StartAngle = obj.StartAngle;
 		PlayerCount = obj.PlayerCount;
-        Type = obj.Type;
     }
 
-	public EnemySpawnData(string enemyName, float startTime, int startAngle, int playerCount, EnemyType type)
+	public EnemySpawnData(string enemyName, float startTime, int startAngle, int playerCount)
     {
         EnemyName = enemyName;
         StartTime = startTime;
         StartAngle = startAngle;
 		PlayerCount = playerCount;
-        Type = type;
     }
 
     #region MessageHandling

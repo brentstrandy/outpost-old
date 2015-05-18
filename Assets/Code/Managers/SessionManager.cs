@@ -583,6 +583,11 @@ public class SessionManager : MonoBehaviour
 			OnSMInstantiate(info.photonView.gameObject);
 	}*/
 
+	public int AllocateNewViewID()
+	{
+		return PhotonNetwork.AllocateViewID();
+	}
+
 	#region MessageHandling
 	protected void Log(string message)
 	{

@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour
 	/// Instantiates the Enemy based on EnemyData. The Enemy will create Components where needed
 	/// </summary>
 	/// <param name="enemyData">EnemyData to be used when instantiating Enemy</param>
-	protected void SetEnemyData(EnemyData enemyData)
+	public void SetEnemyData(EnemyData enemyData)
 	{
 		// Establish Pathfinding (if needed)
 		if(enemyData.UsePathfinding)
@@ -101,6 +101,8 @@ public class Enemy : MonoBehaviour
 		BallisticDefense = enemyData.BallisticDefense;
 		ThraceiumDefense = enemyData.ThraceiumDefense;
 		TurningSpeed = enemyData.TurningSpeed;
+
+		gameObject.GetComponent<Renderer>().material.color = enemyData.HighlightColor;
 
 		// Only initialize the health bar if it is used for this enemy
 		if(HealthBar)

@@ -14,7 +14,7 @@ public class LightSpeeder : Enemy
 		base.Start();
 
 		// Load default attributes from EnemyData for this enemy
-		SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Light Speeder"));
+		//SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Light Speeder"));
 
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 

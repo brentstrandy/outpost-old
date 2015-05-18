@@ -72,6 +72,11 @@ public class EnemyDataManager
 	{
 		return EnemyDataList.Find(x => x.DisplayName.Equals(displayName));
 	}
+
+	public string FindEnemyPrefabNameByDisplayName(string displayName)
+	{
+		return EnemyDataList.Find(x => x.DisplayName.Equals(displayName)).PrefabName;
+	}
 	
 	#region MessageHandling
 	protected void Log(string message)

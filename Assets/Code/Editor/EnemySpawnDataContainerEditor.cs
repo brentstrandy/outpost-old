@@ -185,7 +185,7 @@ public class EnemySpawnDataContainerEditor : Editor
                 string path = AssetDatabase.GUIDToAssetPath(enemy);
                 // add enemy to menu choices
                 menu.AddItem(new GUIContent("Enemy Type/" + Path.GetFileNameWithoutExtension(path)), false, ClickHandler,
-                             new EnemyCreationParams() { Type = EnemySpawnData.EnemyType.Normal, AssetPath = path, EnemyName = path });
+                             new EnemyCreationParams() { AssetPath = path, EnemyName = path, HighlightColor = new Color(10, 10,10) });
             }
 
             #region for other menus (Boss enemy vs Normal enemy)
@@ -222,18 +222,16 @@ public class EnemySpawnDataContainerEditor : Editor
         // EnemyName
         element.FindPropertyRelative("EnemyName").stringValue = data.EnemyName;
 
-        // StartTime (add default value greater than last Enemy in ReordableList if EnemyType == Boss)
-        element.FindPropertyRelative("StartTime").floatValue =
-            data.Type == EnemySpawnData.EnemyType.Normal ? 60f : 60f;
+		element.FindPropertyRelative("PrefabName").stringValue = data.PrefabName;
+
+        // StartTime
+        element.FindPropertyRelative("StartTime").floatValue = 60f;
        
         // StartAngle (increment from last angle in ReorderableList?)
         element.FindPropertyRelative("StartAngle").intValue = 360;
 
-		// Player Count
-		element.FindPropertyRelative("PlayerCount").intValue = 1;
-
-        // EnemyType
-        element.FindPropertyRelative("Type").enumValueIndex = (int)data.Type;
+		// Color
+		element.FindPropertyRelative("HighlightColor").colorValue = new Color(10, 10, 10);
         
         serializedObject.ApplyModifiedProperties();
     }
@@ -243,7 +241,6 @@ public class EnemySpawnDataContainerEditor : Editor
     /// </summary>
     private struct EnemyCreationParams
     {
-        public EnemySpawnData.EnemyType Type;
         public string AssetPath; // if we want to load from Assets folder
         private string _EnemyName;
         public string EnemyName 
@@ -257,6 +254,8 @@ public class EnemySpawnDataContainerEditor : Editor
                     _EnemyName = "*unkown*";
             }
         }
+		public string PrefabName;
+		public Color HighlightColor;
     }
 
     /// <summary>

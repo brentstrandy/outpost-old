@@ -16,7 +16,7 @@ public class Drone : Enemy
 		base.Start();
 
 		// Load default attributes from EnemyData for this enemy
-		SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Drone"));
+		//SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Drone"));
 
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 

@@ -11,7 +11,9 @@ public class EnemyData
 {
 	// Enemy Details
 	public string DisplayName;
+	public string PrefabName;
 	public bool UsePathfinding;
+	public Color HighlightColor;
 
 	// Enemy Stats
 	public int Health;
@@ -33,7 +35,9 @@ public class EnemyData
     public EnemyData(EnemyData obj)
     {
         DisplayName = obj.DisplayName;
+		PrefabName = obj.PrefabName;
 		UsePathfinding = obj.UsePathfinding;
+		HighlightColor = obj.HighlightColor;
 	
 	    // Enemy Stats
 	    Health = obj.Health;
