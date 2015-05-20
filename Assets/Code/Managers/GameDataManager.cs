@@ -7,6 +7,7 @@ public class GameDataManager : MonoBehaviour
 
 	public TowerDataManager TowerDataMngr { get; private set; }
 	public EnemyDataManager EnemyDataMngr { get; private set; }
+	public LevelDataManager LevelDataMngr { get; private set; }
 
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -35,11 +36,14 @@ public class GameDataManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		// Load all Enemy and Tower data for the game
+		// Load all Enemy data for the game
 		TowerDataMngr = new TowerDataManager();
 
 		// At this time Enemy data is not needed. This data will be stored in the prefabs
 		EnemyDataMngr = new EnemyDataManager();
+
+		// Load all Level data for the game
+		LevelDataMngr = new LevelDataManager();
 	}
 	
 	// Update is called once per frame
