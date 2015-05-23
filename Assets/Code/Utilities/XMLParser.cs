@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-//using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -16,8 +15,8 @@ using System.Linq;
 /// <typeparam name="T"></typeparam>
 public static class XMLParser<T>
 {
-    static bool ShowDebugLogs = false;
-    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata" };
+    static bool ShowDebugLogs = true;
+    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata"};
 
 
     #region LIST DE/SERIALIZERS

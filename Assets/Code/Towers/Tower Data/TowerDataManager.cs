@@ -28,12 +28,6 @@ public class TowerDataManager
 
         if (File.Exists(towerDataXMLPath))
         {
-            // deserialize XML and add each enemy spawn to the lists
-            //foreach (TowerData tower in XMLParser<TowerData>.XMLDeserializer_List(towerDataXMLPath))
-            //{
-            //    TowerDataContainer_Inspector.TowerDataList.Add(tower);
-            //    TowerDataList.Add(tower);
-            //}
             foreach (TowerData tower in TowerDataContainer_Inspector.TowerDataList)
             {
                 TowerDataList.Add(tower);

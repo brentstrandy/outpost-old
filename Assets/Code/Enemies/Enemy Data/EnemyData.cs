@@ -51,24 +51,6 @@ public class EnemyData
         ThraceiumDefense = obj.ThraceiumDefense;
 		TurningSpeed = obj.TurningSpeed;
     }
-
-	//public EnemyData(string displayName, string prefabName, int health, float rateOfFire, 
-    //                 float coolDown, float damageDealt, float acceleration, float speed, 
-    //                 float range, float ballisticDefense, float thraceiumDefense)
-    //{
-    //    DisplayName = displayName;
-    //    PrefabName = prefabName;
-
-    //    Health = health;
-    //    RateOfFire = rateOfFire;
-    //    Cooldown = coolDown;
-    //    DamageDealt = damageDealt;
-    //    Acceleration = acceleration;
-    //    Speed = speed;
-    //    Range = range;
-    //    BallisticDefense = ballisticDefense;
-    //    ThraceiumDefense = thraceiumDefense;
-    //}
 	
     /// <summary>
     /// Used for creating a new Enemy in the Unity Inspector

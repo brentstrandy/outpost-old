@@ -11,38 +11,25 @@ public class LevelDataManager
 	/// </summary>
 	/// <value>The level data list.</value>
 	public List<LevelData> LevelDataList { get; private set; }
-	//public LevelDataContainer LevelDataContainer_Inspector;
+	public LevelDataContainer LevelDataContainer_Inspector;
 	
 	public LevelDataManager()
 	{
-		/* location of level specific XML spawn data
-		string enemyDataXMLPath = Application.streamingAssetsPath + "/EnemyData.xml";
+		//location of level specific XML spawn data
+		string levelDataXMLPath = Application.streamingAssetsPath + "/LevelData.xml";
 		
-		EnemyDataList = new List<EnemyData>();
-		EnemyDataContainer_Inspector = GameObject.Find("EnemyData").GetComponent<EnemyDataContainer>();
-		
-		if (File.Exists(enemyDataXMLPath))
+		LevelDataList = new List<LevelData>();
+		LevelDataContainer_Inspector = GameObject.Find("LevelData").GetComponent<LevelDataContainer>();
+
+        if (File.Exists(levelDataXMLPath))
 		{
-			// deserialize XML and add each enemy spawn to the lists
-			//foreach (EnemyData enemy in XMLParser<EnemyData>.XMLDeserializer_List(enemyDataXMLPath))
-			//{
-			//    EnemyDataContainer_Inspector.EnemyDataList.Add(enemy);
-			//    EnemyDataList.Add(enemy);
-			//}
-			foreach (EnemyData enemy in EnemyDataContainer_Inspector.EnemyDataList)
+			foreach (LevelData Level in LevelDataContainer_Inspector.LevelDataList)
 			{
-				EnemyDataList.Add(enemy);
+				LevelDataList.Add(Level);
 			}
 		}
 		else
-			LogError("Cannot find Enemy Data XML file");
-		*/
-
-		// Manually add 3 levels to the list of possible levels in the game
-		// These lines will be replaced with code that loads data from XML
-		LevelDataList.Add(new LevelData("Awesome Level", "Level1"));
-		LevelDataList.Add(new LevelData("Sad Level", "Level2"));
-		LevelDataList.Add(new LevelData("Dumb Level", "Level3"));
+			LogError("Cannot find Level Data XML file");
 	}
 	
 	/// <summary>

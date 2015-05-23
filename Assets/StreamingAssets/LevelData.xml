@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LevelData>
+    <DisplayName>Awesome Level</DisplayName>
+    <SceneName>Level1</SceneName>
+  </LevelData>
+  <LevelData>
+    <DisplayName>Sad Level</DisplayName>
+    <SceneName>Level2</SceneName>
+  </LevelData>
+  <LevelData>
+    <DisplayName>Dumb Level</DisplayName>
+    <SceneName>Level3</SceneName>
+  </LevelData>
+  <LevelData>
+    <DisplayName>John's Test</DisplayName>
+    <SceneName>Dat scene tho</SceneName>
+  </LevelData>
+</ArrayOfLevelData>

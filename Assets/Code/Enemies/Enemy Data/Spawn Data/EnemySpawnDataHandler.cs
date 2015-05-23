@@ -6,7 +6,7 @@ using System.Linq;
 
 public class EnemySpawnDataHandler
 {
-	public bool ShowDebugLogs = true;
+	public bool ShowDebugLogs = false;
 
 	private List<EnemySpawnData> SpawnActionList;
     public EnemySpawnDataContainer SpawnActionContainer_Inspector;
