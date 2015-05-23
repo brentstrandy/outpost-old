@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 36f717655f4546d49be99d6500b37235
+guid: 684d4d47a018ed14080e15f4c99b8e86
 PluginImporter:
   serializedVersion: 1
   iconMap: {}
@@ -14,23 +14,23 @@ PluginImporter:
       enabled: 0
       settings: {}
     Editor:
-      enabled: 0
+      enabled: 1
       settings:
-        CPU: x86
+        CPU: x86_64
         DefaultValueInitialized: true
-        OS: AnyOS
+        OS: Windows
     Linux:
       enabled: 1
       settings:
-        CPU: x86
+        CPU: None
     Linux64:
       enabled: 1
       settings:
-        CPU: None
+        CPU: x86_64
     LinuxUniversal:
       enabled: 1
       settings:
-        CPU: x86
+        CPU: x86_64
     OSXIntel:
       enabled: 1
       settings:
@@ -38,11 +38,11 @@ PluginImporter:
     OSXIntel64:
       enabled: 1
       settings:
-        CPU: None
+        CPU: AnyCPU
     OSXUniversal:
       enabled: 1
       settings:
-        CPU: None
+        CPU: x86_64
     WP8:
       enabled: 0
       settings:
@@ -52,11 +52,11 @@ PluginImporter:
     Win:
       enabled: 1
       settings:
-        CPU: AnyCPU
+        CPU: None
     Win64:
       enabled: 1
       settings:
-        CPU: None
+        CPU: AnyCPU
     WindowsStoreApps:
       enabled: 0
       settings:

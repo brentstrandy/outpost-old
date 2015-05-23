@@ -11,58 +11,59 @@ PluginImporter:
       settings:
         CPU: AnyCPU
     Any:
-      enabled: 1
-      settings: {}
-    BlackBerry:
       enabled: 0
       settings: {}
     Editor:
       enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: x86
         DefaultValueInitialized: true
         OS: AnyOS
     Linux:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: x86
     Linux64:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
     LinuxUniversal:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: x86
     OSXIntel:
-      enabled: 0
+      enabled: 1
       settings:
-        CPU: AnyCPU
+        CPU: None
     OSXIntel64:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
     OSXUniversal:
-      enabled: 0
+      enabled: 1
       settings:
-        CPU: x86
-    Web:
-      enabled: 0
-      settings: {}
-    WebGL:
-      enabled: 0
-      settings: {}
-    WebStreamed:
-      enabled: 0
-      settings: {}
-    Win:
+        CPU: None
+    WP8:
       enabled: 0
       settings:
         CPU: AnyCPU
+        DontProcess: False
+        PlaceholderPath: 
+    Win:
+      enabled: 1
+      settings:
+        CPU: AnyCPU
     Win64:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
+    WindowsStoreApps:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+        DontProcess: False
+        PlaceholderPath: 
+        SDK: AnySDK
     iOS:
       enabled: 0
       settings:
