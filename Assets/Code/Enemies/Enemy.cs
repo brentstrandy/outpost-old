@@ -106,6 +106,14 @@ public class Enemy : MonoBehaviour
 			ObjPhotonView.onSerializeTransformOption = OnSerializeTransform.PositionAndRotation;
 		}
 
+		// Check to see if the enemy can shoot the mining facility
+		if(enemyData.AttackMiningFacility)
+			StartCoroutine("Fire");
+
+		// Check to see if the enemy can shoot towers
+		if(enemyData.AttackTowers)
+		{};
+
 		// Set Enemy Data
 		Name = enemyData.DisplayName;
 		Health = enemyData.Health;

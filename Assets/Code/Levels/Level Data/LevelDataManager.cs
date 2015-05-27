@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class LevelDataManager
 {
 	public bool ShowDebugLogs = true;
+
+	public bool FinishedLoadingData { get; private set; }
 	/// <summary>
 	/// Gets the LevelData list.
 	/// </summary>
@@ -15,23 +17,36 @@ public class LevelDataManager
 	
 	public LevelDataManager()
 	{
-		//location of level specific XML spawn data
-		string levelDataXMLPath = Application.streamingAssetsPath + "/LevelData.xml";
-		
+		FinishedLoadingData = false;
+
+		// Instantiate lists to save the data
 		LevelDataList = new List<LevelData>();
 		LevelDataContainer_Inspector = GameObject.Find("LevelData").GetComponent<LevelDataContainer>();
-
-        if (File.Exists(levelDataXMLPath))
-		{
-			foreach (LevelData Level in LevelDataContainer_Inspector.LevelDataList)
-			{
-				LevelDataList.Add(Level);
-			}
-		}
-		else
-			LogError("Cannot find Level Data XML file");
 	}
 	
+	/// <summary>
+	/// Coroutine method used to load XML data from a server location
+	/// </summary>
+	public IEnumerator LoadDataFromServer()
+	{
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData.xml");
+		string myXML;
+		
+		while(!www.isDone)
+		{
+			yield return 0;
+		}
+
+		myXML = www.text;
+		
+		// Deserialize XML and add each enemy spawn to the lists
+		foreach (LevelData level in XMLParser<LevelData>.XMLDeserializer_Data(myXML))
+		{
+			LevelDataContainer_Inspector.LevelDataList.Add(level);
+			LevelDataList.Add(level);
+		}
+	}
+
 	/// <summary>
 	/// Total number of Levels
 	/// </summary>
@@ -56,7 +71,7 @@ public class LevelDataManager
 		
 		return levelNames;
 	}
-	
+
 	/// <summary>
 	/// Finds the LevelData based on a display name
 	/// </summary>

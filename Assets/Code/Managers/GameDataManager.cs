@@ -36,14 +36,23 @@ public class GameDataManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		// Load all Enemy data for the game
+		// Instantiate data class for storing all tower data
 		TowerDataMngr = new TowerDataManager();
+		// Run coroutine to download TowerData from server (This coroutine cannot be called from the DataManager because
+		// it must be called from a MonoBehavior class)
+		StartCoroutine(TowerDataMngr.LoadDataFromServer());
 
-		// At this time Enemy data is not needed. This data will be stored in the prefabs
+		// Instantiate data class for storing all enemy data
 		EnemyDataMngr = new EnemyDataManager();
+		// Run coroutine to download EnemyData from server (This coroutine cannot be called from the DataManager because
+		// it must be called from a MonoBehavior class)
+		StartCoroutine(EnemyDataMngr.LoadDataFromServer());
 
-		// Load all Level data for the game
+		// Instantiate data class for storing all level data
 		LevelDataMngr = new LevelDataManager();
+		// Run coroutine to download LevelData from server (This coroutine cannot be called from the DataManager because
+		// it must be called from a MonoBehavior class)
+		StartCoroutine(LevelDataMngr.LoadDataFromServer());
 	}
 	
 	// Update is called once per frame

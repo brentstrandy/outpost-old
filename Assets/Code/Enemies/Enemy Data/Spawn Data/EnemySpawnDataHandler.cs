@@ -2,72 +2,57 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 public class EnemySpawnDataHandler
 {
 	public bool ShowDebugLogs = false;
 
-	private List<EnemySpawnData> SpawnActionList;
-    public EnemySpawnDataContainer SpawnActionContainer_Inspector;
+	private List<EnemySpawnData> SpawnDataList;
+    public EnemySpawnDataContainer SpawnDataContainer_Inspector;
 
 
 	public EnemySpawnDataHandler() 
     {
-		SpawnActionList = new List<EnemySpawnData>();
-        SpawnActionContainer_Inspector = GameObject.Find("Enemy Spawn Manager").GetComponent<EnemySpawnDataContainer>();
+		SpawnDataList = new List<EnemySpawnData>();
+        SpawnDataContainer_Inspector = GameObject.Find("Enemy Spawn Manager").GetComponent<EnemySpawnDataContainer>();
     }
 
-    public void LoadActions(string fileName)
-    {
-        // location of level specific XML spawn data
-		string enemySpawnXMLPath = Application.streamingAssetsPath + "/" + fileName + ".xml";
-
-        // Determine if the file exists
-        if (File.Exists(enemySpawnXMLPath))
-        {
-            SpawnActionList = XMLParser<EnemySpawnData>.XMLDeserializer_List(enemySpawnXMLPath);
-            // check to make sure this hasn't been loaded outside (e.g. Justin editing in !isPlaying & then presses play to test)
-            if (SpawnActionContainer_Inspector.EnemySpawnDataList.Count < 1)
-                SpawnActionContainer_Inspector.EnemySpawnDataList = SpawnActionList;
-
-            // Sort list by time to make sure actions are executed in order
-            this.SortListsByStartTime();
-
-            Log("Loaded Enemy Spawn XML data");
-        }
-        else
-            LogError("Cannot find Enemy Spawn XML file for " + fileName);
-    }
+	public void AddSpawnData(EnemySpawnData spawnData)
+	{
+		SpawnDataContainer_Inspector.EnemySpawnDataList.Add(spawnData);
+		SpawnDataList.Add(spawnData);
+	}
 
 	public float GetNextStartTime()
 	{
 		float startTime = -1;
 
-		if(SpawnActionList.Count() > 0)
-			startTime = SpawnActionList[0].StartTime;
+		if(SpawnDataList.Count() > 0)
+			startTime = SpawnDataList[0].StartTime;
 
 		return startTime;
 	}
 
 	public bool SpawnListEmpty()
 	{
-		return SpawnActionList.Count == 0;
+		return SpawnDataList.Count == 0;
 	}
 
     public int SpawnListSize()
     {
-        return SpawnActionList.Count;
+        return SpawnDataList.Count;
     }
 
 	public EnemySpawnData SpawnNext()
 	{
 		EnemySpawnData action = null;
 
-		if(SpawnActionList.Count() > 0)
+		if(SpawnDataList.Count() > 0)
 		{
-			action = SpawnActionList[0];
-			SpawnActionList.RemoveAt(0);
+			action = SpawnDataList[0];
+			SpawnDataList.RemoveAt(0);
 		}
 
 		return action;
@@ -75,10 +60,10 @@ public class EnemySpawnDataHandler
 
 	public void SortListsByStartTime()
 	{
-        if (SpawnActionList != null)
+        if (SpawnDataList != null)
         {
-            SpawnActionList = SpawnActionList.OrderBy(o => o.StartTime).ToList();
-            SpawnActionContainer_Inspector.EnemySpawnDataList = SpawnActionContainer_Inspector.EnemySpawnDataList.OrderBy(o => o.StartTime).ToList();
+            SpawnDataList = SpawnDataList.OrderBy(o => o.StartTime).ToList();
+            SpawnDataContainer_Inspector.EnemySpawnDataList = SpawnDataContainer_Inspector.EnemySpawnDataList.OrderBy(o => o.StartTime).ToList();
         }    
     }
   

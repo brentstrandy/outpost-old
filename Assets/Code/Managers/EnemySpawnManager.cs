@@ -6,10 +6,11 @@ public class EnemySpawnManager : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
 
+	public bool FinishedLoadingData { get; private set; }
 	public bool FinishedSpawning { get; private set; }
 
 	private static EnemySpawnManager instance;
-	private EnemySpawnDataHandler SpawnActionHandler;
+	private EnemySpawnDataHandler SpawnDataHandler;
 	private string LevelName;
 	private float StartTime;
 	private PhotonView ObjPhotonView;
@@ -40,20 +41,47 @@ public class EnemySpawnManager : MonoBehaviour
 
 	public void Start()
 	{
-		SpawnActionHandler = new EnemySpawnDataHandler();
         LevelName = Application.loadedLevelName;
 		FinishedSpawning = false;
+		FinishedLoadingData = false;
 
 		if(ObjPhotonView == null)
+		{
 			ObjPhotonView = gameObject.AddComponent<PhotonView>();
+			ObjPhotonView.viewID = SessionManager.Instance.AllocateNewViewID();
+		}
 		else
 			ObjPhotonView = gameObject.GetComponent<PhotonView>();
-		ObjPhotonView.viewID = SessionManager.Instance.AllocateNewViewID();
 
-		LoadSpawnData();
+		// Instantiate data class for storing all Enemy Spawn Data
+		SpawnDataHandler = new EnemySpawnDataHandler();
+		// Run coroutine to download EnemySpawnData from server
+		StartCoroutine(LoadDataFromServer(LevelName));
+	}
 
-		StartTime = Time.time;
-		StartCoroutine("SpawnEnemies");
+	/// <summary>
+	/// Coroutine method used to load XML data from a server location
+	/// </summary>
+	public IEnumerator LoadDataFromServer(string levelName)
+	{
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/" + levelName + ".xml");
+		string myXML;
+		
+		while(!www.isDone)
+		{
+			yield return 0;
+		}
+		
+		myXML = www.text;
+		
+		// Deserialize XML and add each enemy spawn to the lists
+		foreach (EnemySpawnData spawnData in XMLParser<EnemySpawnData>.XMLDeserializer_Data(myXML))
+		{
+			SpawnDataHandler.AddSpawnData(spawnData);
+		}
+
+		// Spawning can now begin
+		StartSpawning();
 	}
 
 	// Update is called once per frame
@@ -62,15 +90,14 @@ public class EnemySpawnManager : MonoBehaviour
 
 	}
 
-	/// <summary>
-	/// Loads the spawn data from an XML file
-	/// </summary>
-	private void LoadSpawnData()
-    {
-		SpawnActionHandler.LoadActions(LevelName);
-    }
+	public void StartSpawning()
+	{
+		StartTime = Time.time;
+		// Start a coroutine that spawns enemies whenever necessary (according to data loaded from XML
+		StartCoroutine("SpawnEnemies");
+	}
 
-	public void Stop()
+	public void StopSpawning()
 	{
 		StartTime = -1;
 		StopCoroutine("SpawnEnemies");
@@ -86,7 +113,6 @@ public class EnemySpawnManager : MonoBehaviour
 				// Only spawn the enemy if there are the appropriate number of co-op players
 				if(SessionManager.Instance.GetRoomPlayerCount() >= spawnDetails.PlayerCount)
 				{
-					Log ("About to call RPC");
 					// Tell all other players that an Enemy has spawned.
 					ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, spawnDetails.EnemyName, spawnDetails.StartAngle, SessionManager.Instance.AllocateNewViewID());
 					//SessionManager.Instance.InstantiateObject("Enemies/" + GameDataManager.Instance.EnemyDataMngr.FindEnemyPrefabNameByDisplayName(spawnDetails.EnemyName), AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
@@ -135,11 +161,11 @@ public class EnemySpawnManager : MonoBehaviour
 	private IEnumerator SpawnEnemies()
 	{
 		// Loop until there are no enemies left to spawn
-		while(!SpawnActionHandler.SpawnListEmpty())
+		while(!SpawnDataHandler.SpawnListEmpty())
 		{
 			// Check to see if the next enemy's spawn time has passed. If so, spawn the enemy
-			if(SpawnActionHandler.GetNextStartTime() <= (Time.time - this.StartTime))
-				SpawnEnemy(SpawnActionHandler.SpawnNext());
+			if(SpawnDataHandler.GetNextStartTime() <= (Time.time - this.StartTime))
+				SpawnEnemy(SpawnDataHandler.SpawnNext());
 
 			// TO DO: Tell the coroutine to run when the next available enemy is ready
 			// SpawnActionHandler.GetNextStartTime() - Time.time

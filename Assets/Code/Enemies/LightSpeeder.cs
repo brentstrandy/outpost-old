@@ -18,9 +18,6 @@ public class LightSpeeder : Enemy
 
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
-		// Light Speeders can fire on the mining facility
-		StartCoroutine("Fire");
-
 		// Start the Light Speeder off the ground
 		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f);
 	}

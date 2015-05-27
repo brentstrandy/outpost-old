@@ -14,6 +14,8 @@ public class EnemyData
 	public string PrefabName;
 	public PathFindingType PathFinding;
 	public Color HighlightColor;
+	public bool AttackTowers;
+	public bool AttackMiningFacility;
 
 	// Enemy Stats
 	public int Health;
@@ -38,6 +40,8 @@ public class EnemyData
 		PrefabName = obj.PrefabName;
 		PathFinding = obj.PathFinding;
 		HighlightColor = obj.HighlightColor;
+		AttackTowers = obj.AttackTowers;
+		AttackMiningFacility = obj.AttackMiningFacility;
 	
 	    // Enemy Stats
 	    Health = obj.Health;

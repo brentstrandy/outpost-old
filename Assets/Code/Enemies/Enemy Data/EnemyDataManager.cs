@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class EnemyDataManager
 {
 	public bool ShowDebugLogs = true;
+
+	public bool FinishedLoadingData { get; private set; }
 	/// <summary>
 	/// Gets the EnemyData list.
 	/// </summary>
@@ -15,27 +17,34 @@ public class EnemyDataManager
 
 	public EnemyDataManager()
 	{
-        // location of level specific XML spawn data
-        string enemyDataXMLPath = Application.streamingAssetsPath + "/EnemyData.xml";
+		FinishedLoadingData = false;
 
+		// Instantiate lists to save the data
         EnemyDataList = new List<EnemyData>();
         EnemyDataContainer_Inspector = GameObject.Find("EnemyData").GetComponent<EnemyDataContainer>();
+	}
 
-        if (File.Exists(enemyDataXMLPath))
-        {
-            // deserialize XML and add each enemy spawn to the lists
-            //foreach (EnemyData enemy in XMLParser<EnemyData>.XMLDeserializer_List(enemyDataXMLPath))
-            //{
-            //    EnemyDataContainer_Inspector.EnemyDataList.Add(enemy);
-            //    EnemyDataList.Add(enemy);
-            //}
-            foreach (EnemyData enemy in EnemyDataContainer_Inspector.EnemyDataList)
-            {
-                EnemyDataList.Add(enemy);
-            }
-        }
-        else
-            LogError("Cannot find Enemy Data XML file");
+	/// <summary>
+	/// Coroutine method used to load XML data from a server location
+	/// </summary>
+	public IEnumerator LoadDataFromServer()
+	{
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData.xml");
+		string myXML;
+		
+		while(!www.isDone)
+		{
+			yield return 0;
+		}
+
+		myXML = www.text;
+		
+		// Deserialize XML and add each enemy spawn to the lists
+		foreach (EnemyData enemy in XMLParser<EnemyData>.XMLDeserializer_Data(myXML))
+		{
+			EnemyDataContainer_Inspector.EnemyDataList.Add(enemy);
+			EnemyDataList.Add(enemy);
+		}
 	}
 	
 	/// <summary>

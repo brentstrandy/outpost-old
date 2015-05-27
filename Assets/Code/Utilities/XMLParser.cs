@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -51,6 +52,19 @@ public static class XMLParser<T>
         }
     }
 
+	public static List<T> XMLDeserializer_Data(string xmlData)
+	{
+		string currentClasss = typeof(T).ToString().ToLower();
+
+		if (AvailableClasses.Contains(currentClasss))
+			return (List<T>)DeserializeFromXML_Data(xmlData);
+		else
+		{
+			LogError("Unknown class deserialized: " + typeof(T));
+			return default(List<T>);
+		}
+	}
+
     private static void SerializeToXML_List<U>(List<U> obj, string fileName)
     {
         XmlSerializer serializer = null;
@@ -75,7 +89,11 @@ public static class XMLParser<T>
         TextReader reader = null;
         List<T> classList = new List<T>();
 
-        reader = new StreamReader(fileName);
+        //reader = new StreamReader(fileName);
+
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData.xml");
+		string myXML = www.text;
+		reader = new StringReader(myXML);
 
         classList = (List<T>)deserializer.Deserialize(reader);
         reader.Close();
@@ -84,6 +102,20 @@ public static class XMLParser<T>
 
         return classList;
     }
+
+	private static List<T> DeserializeFromXML_Data(string xmlData)
+	{
+		XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
+		TextReader reader =  new StringReader(xmlData);
+		List<T> classList = new List<T>();
+
+		classList = (List<T>)deserializer.Deserialize(reader);
+		reader.Close();
+		
+		Log("Deserialized: " + typeof(T));
+		
+		return classList;
+	}
     #endregion
 
     #region NON-LIST DE/SERIALIZERS

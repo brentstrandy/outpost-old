@@ -11,6 +11,8 @@ using System.Collections.Generic;
 public class TowerDataManager
 {
 	public bool ShowDebugLogs = true;
+
+	public bool FinishedLoadingData { get; private set; }
 	/// <summary>
 	/// Gets the TowerData list.
 	/// </summary>
@@ -20,21 +22,34 @@ public class TowerDataManager
 
 	public TowerDataManager()
 	{
-        // location of level specific XML spawn data
-        string towerDataXMLPath = Application.streamingAssetsPath + "/TowerData.xml";
+		FinishedLoadingData = false;
 
-        TowerDataList = new List<TowerData>();
+		// Instantiate lists to save the data
+		TowerDataList = new List<TowerData>();
 		TowerDataContainer_Inspector = GameObject.Find("TowerData").GetComponent<TowerDataContainer>();
+	}
 
-        if (File.Exists(towerDataXMLPath))
-        {
-            foreach (TowerData tower in TowerDataContainer_Inspector.TowerDataList)
-            {
-                TowerDataList.Add(tower);
-            }
-        }
-        else
-            LogError("Cannot find Tower Data XML file");
+	/// <summary>
+	/// Coroutine method used to load XML data from a server location
+	/// </summary>
+	public IEnumerator LoadDataFromServer()
+	{
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/TowerData.xml");
+		string myXML;
+		
+		while(!www.isDone)
+		{
+			yield return 0;
+		}
+		
+		myXML = www.text;
+		
+		// Deserialize XML and add each enemy spawn to the lists
+		foreach (TowerData tower in XMLParser<TowerData>.XMLDeserializer_Data(myXML))
+		{
+			TowerDataContainer_Inspector.TowerDataList.Add(tower);
+			TowerDataList.Add(tower);
+		}
 	}
 
 	/// <summary>

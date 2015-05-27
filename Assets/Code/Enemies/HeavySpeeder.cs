@@ -19,9 +19,6 @@ public class HeavySpeeder : Enemy
 
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
-		// Heavy Speeders can fire on the mining facility
-		StartCoroutine("Fire");
-
 		// Start the Heavy Speeder off the ground
 		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f);
 	}
