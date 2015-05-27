@@ -12,13 +12,13 @@ public class CameraManager : MonoBehaviour
     public bool ShowDebugLogs = true;
 	
 	public Transform DirectionNorth;
-	public Vector3 PositionNorth { get; private set; }
+	public Vector3 PositionNorth;
 	public Transform DirectionEast;
-	public Vector3 PositionEast { get; private set; }
+	public Vector3 PositionEast;
 	public Transform DirectionSouth;
-	public Vector3 PositionSouth { get; private set; }
+	public Vector3 PositionSouth;
 	public Transform DirectionWest;
-	public Vector3 PositionWest { get; private set; }
+	public Vector3 PositionWest;
 	public float TurningSpeed;
 
 	private int DirectionIndex;
@@ -55,13 +55,13 @@ public class CameraManager : MonoBehaviour
     void Start()
     {
 		// North
-		PositionNorth = new Vector3(DirectionNorth.position.x, 0.0f, this.transform.position.z);
+		PositionNorth = new Vector3(DirectionNorth.position.x, 1.0f, this.transform.position.z - 5);
 		// East
-		PositionEast = new Vector3(0.0f, DirectionEast.position.y, this.transform.position.z);
+		PositionEast = new Vector3(1.0f, DirectionEast.position.y, this.transform.position.z - 5);
 		// South
-		PositionSouth = new Vector3(DirectionSouth.position.x, 0.0f, this.transform.position.z);
+		PositionSouth = new Vector3(DirectionSouth.position.x, -1.0f, this.transform.position.z - 5);
 		// West
-		PositionWest = new Vector3(0.0f, DirectionWest.position.y, this.transform.position.z);
+		PositionWest = new Vector3(-1.0f, DirectionWest.position.y, this.transform.position.z - 5);
 
 		// Default to starting North
 		TargetDirection = DirectionNorth.position;

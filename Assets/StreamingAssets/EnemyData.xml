@@ -3,7 +3,7 @@
   <EnemyData>
     <DisplayName>Drone</DisplayName>
     <PrefabName>Drone</PrefabName>
-    <UsePathfinding>false</UsePathfinding>
+    <PathFinding>TrackFriendly_IgnorePath</PathFinding>
     <HighlightColor>
       <r>1</r>
       <g>0</g>
@@ -14,17 +14,17 @@
     <RateOfFire>0</RateOfFire>
     <Cooldown>0</Cooldown>
     <DamageDealt>0.5</DamageDealt>
-    <Acceleration>30</Acceleration>
-    <Speed>6</Speed>
+    <Acceleration>15</Acceleration>
+    <Speed>5</Speed>
     <Range>0</Range>
     <BallisticDefense>1</BallisticDefense>
     <ThraceiumDefense>1</ThraceiumDefense>
-    <TurningSpeed>2</TurningSpeed>
+    <TurningSpeed>3</TurningSpeed>
   </EnemyData>
   <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
     <PrefabName>Heavy Speeder</PrefabName>
-    <UsePathfinding>true</UsePathfinding>
+    <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0.183931679</r>
       <g>0.463235319</g>
@@ -43,13 +43,13 @@
     <TurningSpeed>0.5</TurningSpeed>
   </EnemyData>
   <EnemyData>
-    <DisplayName>Intense Light Speeder</DisplayName>
+    <DisplayName>Light Speeder</DisplayName>
     <PrefabName>Light Speeder</PrefabName>
-    <UsePathfinding>true</UsePathfinding>
+    <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
-      <r>0.8206897</r>
-      <g>1</g>
-      <b>0</b>
+      <r>0</r>
+      <g>0.379310369</g>
+      <b>1</b>
       <a>0</a>
     </HighlightColor>
     <Health>30</Health>
@@ -64,21 +64,21 @@
     <TurningSpeed>3</TurningSpeed>
   </EnemyData>
   <EnemyData>
-    <DisplayName>Light Speeder</DisplayName>
+    <DisplayName>Supreme Light Speeder</DisplayName>
     <PrefabName>Light Speeder</PrefabName>
-    <UsePathfinding>true</UsePathfinding>
+    <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
-      <r>0.3897059</r>
-      <g>0.52018255</g>
-      <b>1</b>
+      <r>0.8620689</r>
+      <g>1</g>
+      <b>0</b>
       <a>0</a>
     </HighlightColor>
-    <Health>10</Health>
+    <Health>90</Health>
     <RateOfFire>2</RateOfFire>
     <Cooldown>0</Cooldown>
     <DamageDealt>1</DamageDealt>
     <Acceleration>0</Acceleration>
-    <Speed>1</Speed>
+    <Speed>2</Speed>
     <Range>8</Range>
     <BallisticDefense>0.8</BallisticDefense>
     <ThraceiumDefense>0.8</ThraceiumDefense>

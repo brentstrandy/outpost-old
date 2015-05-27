@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Settworks.Hexagons;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour 
 {	
@@ -26,22 +27,23 @@ public class Enemy : MonoBehaviour
 	protected Vector3 CurVelocity;
 	protected Vector2 TargetHex;
 
+	// Pathfinding
+	protected PathFindingType PathFinding;
+	protected GameObject TargetObject;
+
 	protected MiningFacility MiningFacilityObject;
 	protected Quadrant CurrentQuadrant;
 
 	// Components
 	public HealthBarController HealthBar;
-	private PhotonView ObjPhotonView;
-	private Pathfinder ObjPathfinder = null;
-	private HexLocation ObjHexLocation = null;
+	protected PhotonView ObjPhotonView;
+	protected Pathfinder ObjPathfinder = null;
+	protected HexLocation ObjHexLocation = null;
 
 	public virtual void Awake()
 	{
 		// Save a reference to the center mining facility
 		MiningFacilityObject = GameManager.Instance.MiningFacilityObject;
-
-		// Save reference to PhotonView
-		ObjPhotonView = gameObject.GetComponent<PhotonView>();
 
 		// Allow the first bullet to be fired when the enemy is instantiated
 		TimeLastShotFired = Time.time - (RateOfFire * 2);
@@ -66,8 +68,17 @@ public class Enemy : MonoBehaviour
 	/// <param name="enemyData">EnemyData to be used when instantiating Enemy</param>
 	public void SetEnemyData(EnemyData enemyData)
 	{
-		// Establish Pathfinding (if needed)
-		if(enemyData.UsePathfinding)
+		// Save reference to PhotonView
+		ObjPhotonView = PhotonView.Get (this);
+		// PhotonView does not instantiate the ObservedComponents list - you must instantiate this list before attempting
+		// to add any items into it.
+		ObjPhotonView.ObservedComponents = new List<Component>();
+		ObjPhotonView.synchronization = ViewSynchronization.Off;
+
+		PathFinding = enemyData.PathFinding;
+
+		// Initialize the proper pathfinding
+		if(PathFinding == PathFindingType.ShortestPath)
 		{
 			if(gameObject.GetComponent<Pathfinder>() == null)
 				ObjPathfinder = gameObject.AddComponent<Pathfinder>();
@@ -87,6 +98,12 @@ public class Enemy : MonoBehaviour
 			ObjHexLocation.gridScale = 1;
 
 			TargetHex = ObjPathfinder.Next().Position();
+		}
+		else
+		{
+			ObjPhotonView.synchronization = ViewSynchronization.ReliableDeltaCompressed;
+			ObjPhotonView.ObservedComponents.Add(this.transform);
+			ObjPhotonView.onSerializeTransformOption = OnSerializeTransform.PositionAndRotation;
 		}
 
 		// Set Enemy Data
@@ -118,7 +135,7 @@ public class Enemy : MonoBehaviour
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			{
 				// Use Pathfinding for movement
-				if(ObjPathfinder != null)
+				if(PathFinding == PathFindingType.ShortestPath)
 				{
 					// SJODING: What does this check accomplish?
 					if(ObjPathfinder.Next() != ObjHexLocation.location)
@@ -134,6 +151,24 @@ public class Enemy : MonoBehaviour
 						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation((Vector3)TargetHex - transform.position, Up), Time.deltaTime * TurningSpeed );
 					}
 				}
+				else if(PathFinding == PathFindingType.TrackFriendly_IgnorePath)
+				{
+					if(TargetObject != null)
+						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetObject.transform.position - transform.position, Up), Time.deltaTime * TurningSpeed );
+					else
+						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(MiningFacilityObject.transform.position - transform.position, Up), Time.deltaTime * TurningSpeed );
+					
+					// Determine Acceleration
+					CurAcceleration = this.transform.forward * Acceleration;
+					
+					// Determine Velocity
+					CurVelocity += CurAcceleration * Time.deltaTime * Time.deltaTime * Speed;
+					CurVelocity = Vector3.ClampMagnitude(CurVelocity, Speed);
+					
+					// Determine Position
+					this.transform.position += CurVelocity * Time.deltaTime;
+					//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
+				}
 			}
 			// CLIENT movement
 			else
@@ -148,11 +183,6 @@ public class Enemy : MonoBehaviour
 			// Manually change the Enemy's position
 			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
 		}
-	}
-
-	public virtual void FixedUpdate()
-	{
-
 	}
 
 	public virtual void TakeDamage(float ballisticsDamage, float thraceiumDamage)
@@ -199,17 +229,24 @@ public class Enemy : MonoBehaviour
 
 	public void OnDestroy()
 	{
+
+	}
+
+	[RPC]
+	protected void DestroyAcrossNetwork()
+	{
 		// Tell the enemy manager this enemy is being destroyed
 		EnemyManager.Instance.RemoveActiveEnemy(this);
+		Destroy (this);
 	}
 
 	public virtual void OnTriggerEnter(Collider other)
 	{
 		if(other.tag == "Terrain")
 		{
-			// Only kill the enemy if this is the master client
+			// If player is the MASTER CLIENT then have the player tell all other players to destroy this Enemy
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-				SessionManager.Instance.DestroyObject(this.gameObject);
+				ObjPhotonView.RPC("DestroyAcrossNetwork", PhotonTargets.All, null);
 		}
 	}
 
@@ -240,7 +277,6 @@ public class Enemy : MonoBehaviour
 	[RPC]
 	protected void UpdateEnemyTargetHex(Vector2 newTargetHex)
 	{
-		Debug.Log("New Target: " + newTargetHex);
 		TargetHex = newTargetHex;
 	}
 	

@@ -25,11 +25,6 @@ public class LightSpeeder : Enemy
 		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f);
 	}
 	
-	public override void FixedUpdate()
-	{
-		//GetComponent<Pathfinder>().Solve();
-	}
-	
 	#region MessageHandling
 	protected override void Log(string message)
 	{

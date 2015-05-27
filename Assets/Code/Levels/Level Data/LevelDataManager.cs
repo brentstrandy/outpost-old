@@ -67,7 +67,7 @@ public class LevelDataManager
 		return LevelDataList.Find(x => x.DisplayName.Equals(displayName));
 	}
 	
-	public string FindLevelSceneNameByDisplayName(string sceneName)
+	public string FindLevelSceneByDisplayName(string sceneName)
 	{
 		return LevelDataList.Find(x => x.DisplayName.Equals(sceneName)).SceneName;
 	}

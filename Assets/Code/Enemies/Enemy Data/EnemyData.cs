@@ -12,7 +12,7 @@ public class EnemyData
 	// Enemy Details
 	public string DisplayName;
 	public string PrefabName;
-	public bool UsePathfinding;
+	public PathFindingType PathFinding;
 	public Color HighlightColor;
 
 	// Enemy Stats
@@ -36,7 +36,7 @@ public class EnemyData
     {
         DisplayName = obj.DisplayName;
 		PrefabName = obj.PrefabName;
-		UsePathfinding = obj.UsePathfinding;
+		PathFinding = obj.PathFinding;
 		HighlightColor = obj.HighlightColor;
 	
 	    // Enemy Stats

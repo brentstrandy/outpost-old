@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Drone : Enemy
 {
-	private GameObject Target;
-
 	public Drone()
 	{
 
@@ -29,29 +27,6 @@ public class Drone : Enemy
 		//SetEnemyData(enemyData);
 	}
 
-	public override void Update()
-	{
-		// MASTER CLIENT movement
-		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-		{
-			if(Target != null)
-				this.transform.LookAt(Target.transform.position, Up);
-			else
-				this.transform.LookAt(MiningFacilityObject.transform.position, Up);
-
-			// Determine Acceleration
-			CurAcceleration = this.transform.forward * Acceleration;
-
-			// Determine Velocity
-			CurVelocity += CurAcceleration * Time.deltaTime * Time.deltaTime * Speed;
-			CurVelocity = Vector3.ClampMagnitude(CurVelocity, Speed);
-
-			// Determine Position
-			this.transform.position += CurVelocity * Time.deltaTime;
-			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
-		}
-	}
-
 	public override void OnTriggerEnter(Collider other)
 	{
 		// Only take action if the droid finds an enemy to follow
@@ -61,9 +36,9 @@ public class Drone : Enemy
 			if(other.GetComponent<Enemy>().Name != "Drone")
 			{
 				// Only start following the enemy if the Drone isn't already following an enemy
-				if(Target == null)
+				if(TargetObject == null)
 				{
-					Target = other.gameObject;
+					TargetObject = other.gameObject;
 				}
 			}
 		}

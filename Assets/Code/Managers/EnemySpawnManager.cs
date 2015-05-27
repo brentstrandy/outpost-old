@@ -48,6 +48,7 @@ public class EnemySpawnManager : MonoBehaviour
 			ObjPhotonView = gameObject.AddComponent<PhotonView>();
 		else
 			ObjPhotonView = gameObject.GetComponent<PhotonView>();
+		ObjPhotonView.viewID = SessionManager.Instance.AllocateNewViewID();
 
 		LoadSpawnData();
 
@@ -77,24 +78,25 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void SpawnEnemy(EnemySpawnData spawnDetails)
     {
-        try
-        {
+        //try
+        //{
 			// Only spawn an enemy if you are the Master Client. Otherwise, the Master client will tell all clients to spawn an enemy
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			{
 				// Only spawn the enemy if there are the appropriate number of co-op players
 				if(SessionManager.Instance.GetRoomPlayerCount() >= spawnDetails.PlayerCount)
 				{
+					Log ("About to call RPC");
 					// Tell all other players that an Enemy has spawned.
 					ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, spawnDetails.EnemyName, spawnDetails.StartAngle, SessionManager.Instance.AllocateNewViewID());
 					//SessionManager.Instance.InstantiateObject("Enemies/" + GameDataManager.Instance.EnemyDataMngr.FindEnemyPrefabNameByDisplayName(spawnDetails.EnemyName), AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
 				}
 			}
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("Error Instantiating Enemy: " + e.Message);
-        }
+        //}
+        //catch (Exception e)
+        //{
+        //    LogError("Error Instantiating Enemy: " + e.Message);
+        //}
     }
 
 	/// <summary>
@@ -107,22 +109,14 @@ public class EnemySpawnManager : MonoBehaviour
 	[RPC]
 	private void SpawnEnemyAcrossNetwork(string displayName, int startAngle, int viewID)
 	{
-		try
-		{
-			// Instantiate an Enemy
-			GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.EnemyDataMngr.FindEnemyPrefabNameByDisplayName(displayName)), AngleToPosition(startAngle), Quaternion.identity) as GameObject;
-			// The Prefab doesn't contain the correct default data. Set the Enemy's default data
-			newEnemy.GetComponent<Enemy>().SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName(displayName));
-
-			// Set player's PhotonView
-			PhotonView nView = newEnemy.GetComponent<PhotonView>();
-			nView.viewID = viewID;
-
-		}
-		catch (Exception e)
-		{
-			Debug.LogError("Error Instantiating Enemy: " + e.Message);
-		}
+		// Instantiate an Enemy
+		GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.EnemyDataMngr.FindEnemyPrefabNameByDisplayName(displayName)), AngleToPosition(startAngle), Quaternion.identity) as GameObject;
+		// Add a PhotonView to the Enemy
+		newEnemy.AddComponent<PhotonView>();
+		// Set Enemy's PhotonView to match the Master Client's PhotonView ID
+		newEnemy.GetComponent<PhotonView>().viewID = viewID;
+		// The Prefab doesn't contain the correct default data. Set the Enemy's default data
+		newEnemy.GetComponent<Enemy>().SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName(displayName));
 	}
 
 	/// <summary>

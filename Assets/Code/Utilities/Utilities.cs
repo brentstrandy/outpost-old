@@ -8,3 +8,10 @@ public enum Quadrant
 	East,
 	West
 }
+
+public enum PathFindingType
+{
+	ShortestPath,
+	TrackFriendly_IgnorePath,
+	TrackFriendly_FollowPath
+}
