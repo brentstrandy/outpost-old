@@ -18,10 +18,16 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// Tracks GUI objects for each tower that is selected for the Loadout
 	/// </summary>
 	private List<GameObject> TowerLoadoutSelections;
-	/// <summary>
+    private GameObject LevelLoadoutSelection;
+    /// <summary>
 	/// Tracks TowerData for each tower that is selected for the loadout
 	/// </summary>
 	private List<TowerData> TowerLoadoutData;
+    /// Tracks LevelData for the level that is selected for the Loadout
+    /// </summary>
+    private LevelData LevelLoadoutData;
+    private bool LevelSelected;
+
 	private PhotonView ObjPhotonView;
 
 	public void Awake()
@@ -44,13 +50,16 @@ public class RoomDetails_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMPlayerLeftRoom += PlayerLeftRoom_Event;
 
 		// Immediately refresh the player name list to show the host
-		RefreshPlayerNames();
-		
+        RefreshPlayerNames();
+
 		// Immediately refresh the room details
 		RefreshRoomDetails();
 
 		// Add Tower Butttons for each Tower
 		InitiateTowerButtons();
+
+        // Add Level Buttons for each Level
+        InitiateLevelButtons();
 
 		// See if the player is currently the room owner or just joining
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -84,7 +93,9 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// </summary>
 	public void StartGame_Click()
 	{
-		ObjPhotonView.RPC ("StartGame", PhotonTargets.All, null);
+        // only starts game if the user has selected a level
+        if (LevelSelected)
+		    ObjPhotonView.RPC ("StartGame", PhotonTargets.All, null);
 	}
 
 	/// <summary>
@@ -149,6 +160,34 @@ public class RoomDetails_Menu : MonoBehaviour
 			}
 		}
 	}
+
+    /// <summary>
+    /// Click event called when the player selects a level within this menu
+    /// </summary>	
+    public void LevelButton_Click(GameObject levelButton, LevelData levelData)
+    {
+        // If the toggle button was turned off
+        if (levelButton.GetComponent<Toggle>().isOn == false)
+            LevelSelected = false;
+        // If the toggle button was turned on
+        else
+        {
+            if (LevelLoadoutSelection != null)
+            {
+                // Turns off previously checked toggle buttons
+                if (levelButton.GetComponent<Toggle>().isOn == true && levelButton != LevelLoadoutSelection)
+                    LevelLoadoutSelection.GetComponent<Toggle>().isOn = false;
+            }
+
+            // Sets level to be loaded
+            LevelLoadoutData = levelData;
+            LevelSelected = true;
+        }
+
+        // Updates currently toggled-on button
+        LevelLoadoutSelection = levelButton;
+    }
+
 	#endregion
 	
 	#region EVENTS
@@ -193,7 +232,7 @@ public class RoomDetails_Menu : MonoBehaviour
 		// Record the Loadouts chosen by the player
 		Player.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
 		// Start the game
-		MenuManager.Instance.ShowStartGame();
+		MenuManager.Instance.ShowStartGame(LevelLoadoutData);
 	}
 	#endregion
 	
@@ -225,7 +264,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void InitiateTowerButtons()
 	{
 		int index = 0;
-
+        
 		foreach(TowerData towerData in GameDataManager.Instance.TowerDataMngr.TowerDataList)
 		{
 			// Create a local variable or else the foreach "AddListener" will use a reference to the foreach towerdata's last reference
@@ -253,6 +292,34 @@ public class RoomDetails_Menu : MonoBehaviour
 			index++;
 		}
 	}
+
+    private void InitiateLevelButtons()
+    {
+        int index = 0;
+        
+        foreach (LevelData levelData in GameDataManager.Instance.LevelDataMngr.LevelDataList)
+        {
+            LevelData ld = levelData;
+            
+            // instantiate a button for each level
+            GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
+            obj.GetComponentInChildren<Text>().text = levelData.DisplayName;
+            obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
+            obj.transform.SetParent(this.transform);
+            obj.transform.localScale = new Vector3(1, 1, 1);
+            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(160 + (70 * index), 50);
+            obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
+            obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
+            obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
+            obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+
+            // select Level1 by default (hacked way)
+            if (!LevelLoadoutSelection)
+                obj.GetComponent<Toggle>().isOn = true;
+
+            index++;
+        }
+    }
 
 	#region MessageHandling
 	protected void Log(string message)

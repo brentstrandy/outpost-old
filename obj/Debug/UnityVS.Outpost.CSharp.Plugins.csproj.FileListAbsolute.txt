@@ -13,6 +13,3 @@ C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Pho
 C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\UnityVS.Outpost.CSharp.Plugins.csprojResolveAssemblyReference.cache
 C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\obj\Debug\Assembly-CSharp-firstpass.pdb
-C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Mono.Cecil.dll
-C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\Unity.DataContract.dll
-C:\Users\John\PROGRAMMING\DIADEM\REPOSITORIES\Outpost\Temp\UnityVS_bin\Debug\ICSharpCode.NRefactory.dll

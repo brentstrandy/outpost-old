@@ -66,13 +66,13 @@ public class MenuManager : MonoBehaviour
 	}
 	
 	#region MENU TRANSITIONS
-	public void ShowStartGame()
+	public void ShowStartGame(LevelData levelData)
 	{
 		// Show the InGame menu
 		SetCurrentMenuPanel(InGamePanel);
 
-		// TO DO: Load the SELECTED level and start the game
-		Application.LoadLevel("Level1");
+		// Load the SELECTED level and start the game
+		Application.LoadLevel(levelData.SceneName);
 	}
 
 	public void ReturnToRoomDetailsMenu()
