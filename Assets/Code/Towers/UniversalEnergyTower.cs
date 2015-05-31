@@ -11,7 +11,7 @@ public class UniversalEnergyTower : Tower
 		base.Start();
 
 		// Load default attributes from TowerData
-		TowerData towerData = GameDataManager.Instance.TowerDataMngr.FindTowerDataByPrefabName("UniversalEnergyTower");
+		TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("UniversalEnergyTower");
 		SetTowerData(towerData);
 
 		EnemySphereCollider = this.GetComponent<SphereCollider>();

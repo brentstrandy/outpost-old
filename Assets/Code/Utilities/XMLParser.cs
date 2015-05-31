@@ -25,12 +25,12 @@ public static class XMLParser<T>
     /// Serialize a List of classes to an XML file.
     /// </summary>
     /// <param name="obj"></param>
-    public static void XMLSerializer_List(List<T> obj, string fileName)
+    public static void XMLSerializer_Local(List<T> obj, string fileName)
     {
         string currentClasss = typeof(T).ToString().ToLower();
 
         if (AvailableClasses.Contains(currentClasss))
-            SerializeToXML_List(obj, fileName);
+            SerializeToXML_Local(obj, fileName);
         else
             LogError("Unknown class serialized: " + typeof(T));
     }
@@ -39,12 +39,12 @@ public static class XMLParser<T>
     /// Deserialize a List of classes from an XML file.
     /// </summary>
     /// <returns></returns>
-    public static List<T> XMLDeserializer_List(string filename)
+    public static List<T> XMLDeserializer_Local(string filename)
     {
         string currentClasss = typeof(T).ToString().ToLower();
 
         if (AvailableClasses.Contains(currentClasss))
-            return (List<T>)DeserializeFromXML_List(filename);
+            return (List<T>)DeserializeFromXML_Local(filename);
         else
         {
             LogError("Unknown class deserialized: " + typeof(T));
@@ -52,12 +52,12 @@ public static class XMLParser<T>
         }
     }
 
-	public static List<T> XMLDeserializer_Data(string xmlData)
+	public static List<T> XMLDeserializer_Server(string xmlData)
 	{
 		string currentClasss = typeof(T).ToString().ToLower();
 
 		if (AvailableClasses.Contains(currentClasss))
-			return (List<T>)DeserializeFromXML_Data(xmlData);
+			return (List<T>)DeserializeFromXML_Server(xmlData);
 		else
 		{
 			LogError("Unknown class deserialized: " + typeof(T));
@@ -65,7 +65,7 @@ public static class XMLParser<T>
 		}
 	}
 
-    private static void SerializeToXML_List<U>(List<U> obj, string fileName)
+    private static void SerializeToXML_Local<U>(List<U> obj, string fileName)
     {
         XmlSerializer serializer = null;
         FileStream stream = null;
@@ -83,36 +83,35 @@ public static class XMLParser<T>
         Log("Serialized: " + Path.GetFileName(fileName));
     }
 
-    private static List<T> DeserializeFromXML_List(string fileName)
+    private static List<T> DeserializeFromXML_Server(string xmlData)
     {
         XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
         TextReader reader = null;
         List<T> classList = new List<T>();
 
-        //reader = new StreamReader(fileName);
-
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData.xml");
-		string myXML = www.text;
-		reader = new StringReader(myXML);
+		reader = new StringReader(xmlData);
 
         classList = (List<T>)deserializer.Deserialize(reader);
         reader.Close();
 
-        Log("Deserialized: " + fileName);
+        Log("Deserialized");
 
         return classList;
     }
 
-	private static List<T> DeserializeFromXML_Data(string xmlData)
+	private static List<T> DeserializeFromXML_Local(string filename)
 	{
 		XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
-		TextReader reader =  new StringReader(xmlData);
+		TextReader reader = null;
 		List<T> classList = new List<T>();
+		
+		reader = new StreamReader(filename);
 
 		classList = (List<T>)deserializer.Deserialize(reader);
+
 		reader.Close();
 		
-		Log("Deserialized: " + typeof(T));
+		Log("Deserialized: " + filename);
 		
 		return classList;
 	}

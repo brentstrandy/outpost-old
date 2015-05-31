@@ -276,7 +276,7 @@ public class EnemySpawnDataContainerEditor : Editor
     private List<EnemySpawnData> LoadFromXML()
     {
 		// Sort by StartTime and PlayerCount before loading
-		return XMLParser<EnemySpawnData>.XMLDeserializer_List(XMLPath).OrderBy(o => o.StartTime).ThenBy(o => o.PlayerCount).ToList();
+		return XMLParser<EnemySpawnData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.StartTime).ThenBy(o => o.PlayerCount).ToList();
     }
 
     /// <summary>
@@ -287,7 +287,7 @@ public class EnemySpawnDataContainerEditor : Editor
         if (GUILayout.Button("Save Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to SAVE?", "Yes", "No"))
-                XMLParser<EnemySpawnData>.XMLSerializer_List(MyScript.EnemySpawnDataList, XMLPath);
+                XMLParser<EnemySpawnData>.XMLSerializer_Local(MyScript.EnemySpawnDataList, XMLPath);
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Linq;
@@ -65,7 +65,7 @@ public class TowerDataContainerEditor : Editor
         if (File.Exists(XMLPath))
         {
             // Sort by DisplayName before loading
-            return XMLParser<TowerData>.XMLDeserializer_List(XMLPath).OrderBy(o => o.DisplayName).ToList();//ThenBy(o => o.PlayerCount).ToList();
+            return XMLParser<TowerData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.DisplayName).ToList();//ThenBy(o => o.PlayerCount).ToList();
         }
         else
         {
@@ -93,7 +93,7 @@ public class TowerDataContainerEditor : Editor
         if (GUILayout.Button("Save Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to SAVE?", "Yes", "No"))
-                XMLParser<TowerData>.XMLSerializer_List(MyScript.TowerDataList, XMLPath);
+                XMLParser<TowerData>.XMLSerializer_Local(MyScript.TowerDataList, XMLPath);
         }
     }
 
@@ -125,7 +125,7 @@ public class TowerDataContainerEditor : Editor
             // saves file based on the level name that's loaded in scene
             string fileName = Application.streamingAssetsPath + "/TowerData.xml";
 
-            XMLParser<TowerData>.XMLSerializer_List(MyScript.TowerDataList, fileName);
+            XMLParser<TowerData>.XMLSerializer_Local(MyScript.TowerDataList, fileName);
         }
     }
 

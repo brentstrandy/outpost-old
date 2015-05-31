@@ -11,7 +11,7 @@ public class EMPTower : Tower
 		base.Start();
 
 		// Load default attributes from TowerData
-		TowerData towerData = GameDataManager.Instance.TowerDataMngr.FindTowerDataByPrefabName("EMPTower");
+		TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("EMPTower");
 		SetTowerData(towerData);
 
 		EnemySphereCollider = this.GetComponent<SphereCollider>();

@@ -75,7 +75,7 @@ public class EnemySpawnManager : MonoBehaviour
 		myXML = www.text;
 		
 		// Deserialize XML and add each enemy spawn to the lists
-		foreach (EnemySpawnData spawnData in XMLParser<EnemySpawnData>.XMLDeserializer_Data(myXML))
+		foreach (EnemySpawnData spawnData in XMLParser<EnemySpawnData>.XMLDeserializer_Server(myXML))
 		{
 			SpawnDataHandler.AddSpawnData(spawnData);
 		}
@@ -136,13 +136,13 @@ public class EnemySpawnManager : MonoBehaviour
 	private void SpawnEnemyAcrossNetwork(string displayName, int startAngle, int viewID)
 	{
 		// Instantiate an Enemy
-		GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.EnemyDataMngr.FindEnemyPrefabNameByDisplayName(displayName)), AngleToPosition(startAngle), Quaternion.identity) as GameObject;
+		GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.FindEnemyPrefabNameByDisplayName(displayName)), AngleToPosition(startAngle), Quaternion.identity) as GameObject;
 		// Add a PhotonView to the Enemy
 		newEnemy.AddComponent<PhotonView>();
 		// Set Enemy's PhotonView to match the Master Client's PhotonView ID
 		newEnemy.GetComponent<PhotonView>().viewID = viewID;
 		// The Prefab doesn't contain the correct default data. Set the Enemy's default data
-		newEnemy.GetComponent<Enemy>().SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName(displayName));
+		newEnemy.GetComponent<Enemy>().SetEnemyData(GameDataManager.Instance.FindEnemyDataByDisplayName(displayName));
 	}
 
 	/// <summary>

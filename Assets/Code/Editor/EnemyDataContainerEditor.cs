@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Linq;
@@ -75,7 +75,7 @@ public class EnemyDataContainerEditor : Editor
         if (File.Exists(XMLPath))
         {
             // Sort by DisplayName before loading
-            return XMLParser<EnemyData>.XMLDeserializer_List(XMLPath).OrderBy(o => o.DisplayName).ToList();//ThenBy(o => o.PlayerCount).ToList();
+            return XMLParser<EnemyData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.DisplayName).ToList();
         }
         else
         {
@@ -83,6 +83,11 @@ public class EnemyDataContainerEditor : Editor
             return null;
         }
     }
+
+	/*private List<EnemyData> LoadFromXML_Server()
+	{
+		return XMLParser<EnemyData>.XMLDeserializer_Data(
+	}*/
 
     /// <summary>
     /// Saves current Inspector List to XML.
@@ -92,9 +97,31 @@ public class EnemyDataContainerEditor : Editor
         if (GUILayout.Button("Save Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to SAVE?", "Yes", "No"))
-                XMLParser<EnemyData>.XMLSerializer_List(MyScript.EnemyDataList, XMLPath);
+                XMLParser<EnemyData>.XMLSerializer_Local(MyScript.EnemyDataList, XMLPath);
         }
     }
+
+	private void SaveToXML_Server_Button()
+	{
+		/*
+		// Create a form object for sending high score data to the server
+		var form = new WWWForm();
+		
+		// The score
+		form.AddField( "data", MyScript.EnemyDataList );
+		
+		// Create a download object
+		var download = new WWW( "www.diademstudios.com/EnemyData.xml", form );
+		
+		// Wait until the download is done
+		yield download;
+		
+		if(download.error)
+			LogError("Error submitting XML: " + download.error);
+		else
+			Log("XML data was saved to server");
+		*/
+	}
 
     /// <summary>
     /// Load from Enemy Data XML.
@@ -113,6 +140,11 @@ public class EnemyDataContainerEditor : Editor
             }
         }
     }
+
+	private void LoadFromXML_Server_Button()
+	{
+
+	}
 
     #region MessageHandling
     protected void Log(string message)

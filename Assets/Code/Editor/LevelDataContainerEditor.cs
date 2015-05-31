@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Linq;
@@ -77,7 +77,7 @@ public class LevelDataContainerEditor : Editor
         if (File.Exists(XMLPath))
         {
             // Sort by DisplayName before loading
-            return XMLParser<LevelData>.XMLDeserializer_List(XMLPath).OrderBy(o => o.DisplayName).ToList();
+            return XMLParser<LevelData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.DisplayName).ToList();
         }
         else
         {
@@ -94,7 +94,7 @@ public class LevelDataContainerEditor : Editor
         if (GUILayout.Button("Save Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to SAVE?", "Yes", "No"))
-                XMLParser<LevelData>.XMLSerializer_List(MyScript.LevelDataList, XMLPath);
+                XMLParser<LevelData>.XMLSerializer_Local(MyScript.LevelDataList, XMLPath);
         }
     }
 

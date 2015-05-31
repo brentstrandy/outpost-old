@@ -12,6 +12,8 @@ public class Start_Menu : MonoBehaviour
 	public GameObject CannotConnectText;
 	public GameObject RetryButton;
 	public GameObject OfflineButton;
+	public GameObject DataLocationButton;
+	public GameObject DataLocationText;
 
 	private void OnEnable()
 	{
@@ -32,13 +34,6 @@ public class Start_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMConnectionFail -= ConnectionFailed_Event;
 	}
 
-	#region OnEndEdit
-	public void InputFinished()
-	{
-		Start_Click();
-	}
-	#endregion
-	
 	#region OnClick
 	public void Start_Click()
 	{
@@ -59,6 +54,23 @@ public class Start_Menu : MonoBehaviour
 		// Go into Offline mode and open the main menu
 		SessionManager.Instance.SetOfflineMode(true);
 		MenuManager.Instance.ShowMainMenu();
+	}
+
+	public void DataLocation_Click()
+	{
+		// Check to see which data location the user is currently connected to
+		if(DataLocationButton.GetComponentInChildren<Text>().text == "Use Server Data")
+		{
+			GameDataManager.Instance.SwitchToServerData();
+			DataLocationButton.GetComponentInChildren<Text>().text = "Use Local Data";
+			DataLocationText.GetComponent<Text>().text = "Connected to SERVER Data";
+		}
+		else
+		{
+			GameDataManager.Instance.SwitchToLocalData();
+			DataLocationButton.GetComponentInChildren<Text>().text = "Use Server Data";
+			DataLocationText.GetComponent<Text>().text = "Connected to LOCAL Data";
+		}
 	}
 	#endregion
 	
