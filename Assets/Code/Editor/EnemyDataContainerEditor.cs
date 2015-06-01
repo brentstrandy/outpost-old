@@ -23,7 +23,7 @@ public class EnemyDataContainerEditor : Editor
         MyScript = (EnemyDataContainer)target;
 
         if (!IsListLoaded())
-            MyScript.EnemyDataList = LoadFromXML();
+            MyScript.EnemyDataList = LoadFromXML_Local();
     }
 
     public override void OnInspectorGUI()
@@ -32,6 +32,9 @@ public class EnemyDataContainerEditor : Editor
 
         if (IsListLoaded())
         {
+			GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
+			GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
+			EditorGUILayout.Space();
             NewItem_Button();
             EditorGUILayout.Space();
             SaveToXML_Button();
@@ -40,6 +43,7 @@ public class EnemyDataContainerEditor : Editor
         EditorGUILayout.Space();
 
         LoadFromXML_Button();
+		LoadFromXML_Server_Button();
     }
 
     private bool IsListLoaded()
@@ -70,7 +74,7 @@ public class EnemyDataContainerEditor : Editor
     /// Load XML file to List<T>.
     /// </summary>
     /// <returns></returns>
-    private List<EnemyData> LoadFromXML()
+    private List<EnemyData> LoadFromXML_Local()
     {
         if (File.Exists(XMLPath))
         {
@@ -84,6 +88,22 @@ public class EnemyDataContainerEditor : Editor
         }
     }
 
+	private List<EnemyData> LoadFromXML_Server()
+	{
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData.xml");
+		string myXML;
+		
+		while(!www.isDone)
+		{
+			
+		}
+		
+		myXML = www.text;
+
+		// Sort by StartTime and PlayerCount before loading
+		return XMLParser<EnemyData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
+	}
+
 	/*private List<EnemyData> LoadFromXML_Server()
 	{
 		return XMLParser<EnemyData>.XMLDeserializer_Data(
@@ -96,7 +116,7 @@ public class EnemyDataContainerEditor : Editor
     {
         if (GUILayout.Button("Save Data"))
         {
-            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to SAVE?", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
                 XMLParser<EnemyData>.XMLSerializer_Local(MyScript.EnemyDataList, XMLPath);
         }
     }
@@ -128,22 +148,34 @@ public class EnemyDataContainerEditor : Editor
     /// </summary>
     private void LoadFromXML_Button()
     {
-        if (GUILayout.Button("Load Data"))
+        if (GUILayout.Button("Load LOCAL Data"))
         {
-            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD?", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD LOCAL data?", "Yes", "No"))
             {
                 MyScript.EnemyDataList.Clear();
                 if (!Application.isPlaying)
                     OnEnable();
                 else
-                    MyScript.EnemyDataList = LoadFromXML();
+                    MyScript.EnemyDataList = LoadFromXML_Local();
             }
         }
     }
 
 	private void LoadFromXML_Server_Button()
 	{
-
+		if (GUILayout.Button("Load SERVER Data"))
+		{
+			if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD data from the SERVER?", "Yes", "No"))
+			{
+				if (Application.isPlaying)
+					EditorUtility.DisplayDialog("Nope.", "Data cannot be loaded form the SERVER during runtime.", "OK");
+				else
+				{
+					MyScript.EnemyDataList.Clear();
+					MyScript.EnemyDataList = LoadFromXML_Server();
+				}
+			}
+		}
 	}
 
     #region MessageHandling

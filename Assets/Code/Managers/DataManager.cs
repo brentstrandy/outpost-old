@@ -74,33 +74,7 @@ public class DataManager<T>
 	{
 		return DataList.Count;
 	}
-	
-	/// <summary>
-	/// Returns an array of the Display Names for all the currently loaded Levels
-	/// </summary>
-	/// <returns>The display names.</returns>
-	/*public string[] DisplayNames()
-	{
-		string[] displayNames = new string[DataList.Count];
-		
-		for(int i = 0; i < DataList.Count; i++)
-		{
-			displayNames[i] = DataList[i].DisplayName;
-		}
-		
-		return displayNames;
-	}*/
-	
-	/// <summary>
-	/// Finds the LevelData based on a display name
-	/// </summary>
-	/// <returns>The LevelData by display name.</returns>
-	/// <param name="displayName">Display name.</param>
-	/*public LevelData FindDataByDisplayName(string displayName)
-	{
-		return DataList.Find(x => x.DisplayName.Equals(displayName));
-	}*/
-	
+
 	/// <summary>
 	/// Clears all currently loaded LevelData
 	/// </summary>

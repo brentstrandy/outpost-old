@@ -40,7 +40,7 @@ public class EnemySpawnDataContainerEditor : Editor
                 //foreach (EnemySpawnData enemy in LoadFromXML())
                 //    MyScript.EnemySpawnDataList.Add(enemy);
 
-                MyScript.EnemySpawnDataList = LoadFromXML();
+                MyScript.EnemySpawnDataList = LoadFromXML_Local();
 
                 SortListByStartTime();
             }
@@ -65,6 +65,8 @@ public class EnemySpawnDataContainerEditor : Editor
         ReorderList.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
 
+		GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
+		GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
         // "Save Data" button at bottom of Inspector window
         if (IsListLoaded())
             SaveToXML_Button();
@@ -273,7 +275,7 @@ public class EnemySpawnDataContainerEditor : Editor
     /// Load XML file to List<T>
     /// </summary>
     /// <returns></returns>
-    private List<EnemySpawnData> LoadFromXML()
+    private List<EnemySpawnData> LoadFromXML_Local()
     {
 		// Sort by StartTime and PlayerCount before loading
 		return XMLParser<EnemySpawnData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.StartTime).ThenBy(o => o.PlayerCount).ToList();
@@ -296,16 +298,16 @@ public class EnemySpawnDataContainerEditor : Editor
     /// </summary>
     private void LoadFromXML_Button()
     {
-        if (GUILayout.Button("Load Data"))
+        if (GUILayout.Button("Load LOCAL Data"))
         {
-            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD?", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("Warning!", "Data will be loaded from the LOCAL XML file. Are you sure you want to LOAD?", "Yes", "No"))
             {
                 MyScript.EnemySpawnDataList.Clear();
 
                 if (!Application.isPlaying)
                     OnEnable();
                 else
-                    MyScript.EnemySpawnDataList = LoadFromXML();
+                    MyScript.EnemySpawnDataList = LoadFromXML_Local();
             }
         }
     }
