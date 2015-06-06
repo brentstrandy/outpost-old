@@ -12,6 +12,12 @@ public class LevelData
 	// Level Details
 	public string DisplayName;
 	public string SceneName;
+	public string Description;
+	public LoadOut PlayerLoadOut;
+	public string AvailableQuadrants;
+	public Quadrant StartingQuadrant;
+	public string AvailableTowers;
+	public int MaxTowersPerPlayer;
 
     [HideInInspector] [XmlIgnore]
 	public bool ShowDebugLogs = true;
@@ -22,6 +28,12 @@ public class LevelData
 	{
 		DisplayName = obj.DisplayName;
 		SceneName = obj.SceneName;
+		Description = obj.Description;
+		PlayerLoadOut = obj.PlayerLoadOut;
+		AvailableQuadrants = obj.AvailableQuadrants;
+		StartingQuadrant = obj.StartingQuadrant;
+		AvailableTowers = obj.AvailableTowers;
+		MaxTowersPerPlayer = obj.MaxTowersPerPlayer;
 	}
 
 	public LevelData(string displayName, string sceneName)

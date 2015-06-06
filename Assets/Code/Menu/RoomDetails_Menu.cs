@@ -95,7 +95,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	{
         // only starts game if the user has selected a level
         if (LevelSelected)
-		    ObjPhotonView.RPC ("StartGame", PhotonTargets.All, null);
+		    ObjPhotonView.RPC ("LoadLevel", PhotonTargets.All, null);
 	}
 
 	/// <summary>
@@ -217,20 +217,21 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// <param name="playerName">Chatting Player's name</param>
 	/// <param name="msg">Chat Message</param>
 	[RPC]
-	void ReceiveChatMessage(string playerName, string msg)
+	private void ReceiveChatMessage(string playerName, string msg)
 	{
 		// Add the recieved chat to the player's chat area (on the GUI)
 		Chat_GUIText.GetComponent<Text>().text += System.Environment.NewLine + "[" + playerName + "]: " + msg;
 	}
 
 	/// <summary>
-	/// RPC call to tell the client the game is starting
+	/// RPC call to tell the client to start loading the level
 	/// </summary>
 	[RPC]
-	void StartGame()
+	private void LoadLevel()
 	{
 		// Record the Loadouts chosen by the player
 		Player.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
+
 		// Start the game
 		MenuManager.Instance.ShowStartGame(LevelLoadoutData);
 	}

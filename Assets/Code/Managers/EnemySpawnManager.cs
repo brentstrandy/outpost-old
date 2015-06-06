@@ -80,8 +80,8 @@ public class EnemySpawnManager : MonoBehaviour
 			SpawnDataHandler.AddSpawnData(spawnData);
 		}
 
-		// Spawning can now begin
-		StartSpawning();
+		// Spawning can now begin, waiting for final approval to begin spawning
+		FinishedLoadingData = true;
 	}
 
 	// Update is called once per frame
@@ -90,6 +90,9 @@ public class EnemySpawnManager : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// Starts the enemy spawning coroutine
+	/// </summary>
 	public void StartSpawning()
 	{
 		StartTime = Time.time;
@@ -97,32 +100,31 @@ public class EnemySpawnManager : MonoBehaviour
 		StartCoroutine("SpawnEnemies");
 	}
 
+	/// <summary>
+	/// Stops the enemy spawning coroutine
+	/// </summary>
 	public void StopSpawning()
 	{
 		StartTime = -1;
 		StopCoroutine("SpawnEnemies");
 	}
 
+	/// <summary>
+	/// Validate that an enemy can be spawned and if so, spawn it across the network
+	/// </summary>
+	/// <param name="spawnDetails">Enemy Spawn Data</param>
     private void SpawnEnemy(EnemySpawnData spawnDetails)
     {
-        //try
-        //{
-			// Only spawn an enemy if you are the Master Client. Otherwise, the Master client will tell all clients to spawn an enemy
-			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		// Only spawn an enemy if you are the Master Client. Otherwise, the Master client will tell all clients to spawn an enemy
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			// Only spawn the enemy if there are the appropriate number of co-op players
+			if(SessionManager.Instance.GetRoomPlayerCount() >= spawnDetails.PlayerCount)
 			{
-				// Only spawn the enemy if there are the appropriate number of co-op players
-				if(SessionManager.Instance.GetRoomPlayerCount() >= spawnDetails.PlayerCount)
-				{
-					// Tell all other players that an Enemy has spawned.
-					ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, spawnDetails.EnemyName, spawnDetails.StartAngle, SessionManager.Instance.AllocateNewViewID());
-					//SessionManager.Instance.InstantiateObject("Enemies/" + GameDataManager.Instance.EnemyDataMngr.FindEnemyPrefabNameByDisplayName(spawnDetails.EnemyName), AngleToPosition(spawnDetails.StartAngle), Quaternion.identity);
-				}
+				// Tell all other players that an Enemy has spawned.
+				ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, spawnDetails.EnemyName, spawnDetails.StartAngle, SessionManager.Instance.AllocateNewViewID());
 			}
-        //}
-        //catch (Exception e)
-        //{
-        //    LogError("Error Instantiating Enemy: " + e.Message);
-        //}
+		}
     }
 
 	/// <summary>
@@ -157,7 +159,11 @@ public class EnemySpawnManager : MonoBehaviour
 		// Note from J.S. 2015-03-29: Shouldn't the sin and cos be reversed here? I think that would put 0 degrees to the north, which seems to be typical.
 		return new Vector3(Mathf.Sin(radians), Mathf.Cos(radians), 0) * 30;
 	}
-					
+
+	/// <summary>
+	/// Coroutine that handles the spawning of all enemies.
+	/// </summary>
+	/// <returns>Nothing</returns>
 	private IEnumerator SpawnEnemies()
 	{
 		// Loop until there are no enemies left to spawn

@@ -11,6 +11,8 @@ public class InGame_Menu : MonoBehaviour
 	public GameObject MoneyText;
 	public GameObject OutpostHealthText;
 	public GameObject DirectionText;
+
+	private bool FinishedLoadingLevel = false;
 	
 	private void OnEnable()
 	{
@@ -42,17 +44,26 @@ public class InGame_Menu : MonoBehaviour
 
 	private void OnDisable()
 	{
-
+		FinishedLoadingLevel = false;
 	}
 
 	public void Update()
 	{
-		if(this.enabled)
+		// Only check for updates if the level has loaded and the game is currently running
+		if(FinishedLoadingLevel)
 		{
-			// Display how much money the player current has
-			MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
-			OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.MiningFacilityObject.Health.ToString();
+			if(GameManager.Instance.GameRunning)
+			{
+				// Display how much money the player current has
+				MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
+				OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.MiningFacilityObject.Health.ToString();
+			}
 		}
+	}
+
+	private void OnLevelWasLoaded(int level)
+	{
+		FinishedLoadingLevel = true;
 	}
 
 	#region OnClick

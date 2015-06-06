@@ -16,7 +16,6 @@ public class SessionManager : MonoBehaviour
 	public delegate void SessionManagerActionFailure(DisconnectCause cause);
 	public delegate void SessionManagerActionRoomFailure(object[] codeAndMsg);
 	public delegate void SessionManagerActionPlayer(PhotonPlayer player);
-	public delegate void SessionManagerActionInstantiate(GameObject go);
 
 	/// <summary>
 	/// Called when authenticated (if applicable) and connected to network services
@@ -78,10 +77,6 @@ public class SessionManager : MonoBehaviour
 	/// Called when the master client was switched to a different client
 	/// </summary>
 	public event SessionManagerActionPlayer OnSMSwitchMaster;
-	/// <summary>
-	/// Calle when a GameObject is instantiated across the network
-	/// </summary>
-	public event SessionManagerActionInstantiate OnSMInstantiate;
 	#endregion
 
 	#region INSTANCE (SINGLETON)

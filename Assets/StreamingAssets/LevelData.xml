@@ -1,11 +1,21 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
     <DisplayName>Level1</DisplayName>
     <SceneName>Level1</SceneName>
+    <Description />
+    <AvailableQuadrants />
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers />
+    <MaxTowersPerPlayer>0</MaxTowersPerPlayer>
   </LevelData>
   <LevelData>
     <DisplayName>Level2</DisplayName>
     <SceneName>Level2</SceneName>
+    <Description />
+    <AvailableQuadrants />
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers />
+    <MaxTowersPerPlayer>0</MaxTowersPerPlayer>
   </LevelData>
 </ArrayOfLevelData>
