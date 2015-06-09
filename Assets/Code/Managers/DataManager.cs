@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class DataManager<T>
 {
-	public bool ShowDebugLogs = true;
+	public bool ShowDebugLogs = false;
 	
 	public bool FinishedLoadingData { get; private set; }
 	 

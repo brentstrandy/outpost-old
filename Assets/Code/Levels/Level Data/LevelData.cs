@@ -13,7 +13,8 @@ public class LevelData
 	public string DisplayName;
 	public string SceneName;
 	public string Description;
-	public LoadOut PlayerLoadOut;
+	public int MinimumPlayers;
+	public int MaximumPlayers;
 	public string AvailableQuadrants;
 	public Quadrant StartingQuadrant;
 	public string AvailableTowers;
@@ -29,7 +30,8 @@ public class LevelData
 		DisplayName = obj.DisplayName;
 		SceneName = obj.SceneName;
 		Description = obj.Description;
-		PlayerLoadOut = obj.PlayerLoadOut;
+		MinimumPlayers = obj.MinimumPlayers;
+		MaximumPlayers = obj.MaximumPlayers;
 		AvailableQuadrants = obj.AvailableQuadrants;
 		StartingQuadrant = obj.StartingQuadrant;
 		AvailableTowers = obj.AvailableTowers;

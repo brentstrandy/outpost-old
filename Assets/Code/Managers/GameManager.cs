@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 	public bool ShowDebugLogs = true;
 
 	private static GameManager instance;
-	private PhotonView ObjPhotonView;
+	//private PhotonView ObjPhotonView;
 	
 	public LevelData CurrentLevelData { get; private set; }
 
@@ -160,36 +160,36 @@ public class GameManager : MonoBehaviour
 	
 	private Quadrant GetNextClockwiseQuadrant()
 	{
-		Quadrant quadrant = Quadrant.North;
+		Quadrant quadrant = Player.Instance.CurrentQuadrant;
 		
-		if(Player.Instance.CurrentQuadrant == Quadrant.North)
+		if(Player.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("East"))
 			quadrant = Quadrant.East;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.East)
+		else if(Player.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("South"))
 			quadrant = Quadrant.South;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.South)
+		else if(Player.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("West"))
 			quadrant = Quadrant.West;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.West)
+		else if(Player.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("North"))
 			quadrant = Quadrant.North;
-		
+
 		return quadrant;
 	}
 	
 	private Quadrant GetNextCounterClockwiseQuadrant()
 	{
-		Quadrant quadrant = Quadrant.North;
+		Quadrant quadrant = Player.Instance.CurrentQuadrant;
 		
-		if(Player.Instance.CurrentQuadrant == Quadrant.North)
-			quadrant = Quadrant.West;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.East)
-			quadrant = Quadrant.North;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.South)
-			quadrant = Quadrant.East;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.West)
-			quadrant = Quadrant.South;
-		
+		if(Player.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("West"))
+				quadrant = Quadrant.West;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("North"))
+				quadrant = Quadrant.North;
+		else if(Player.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("East"))
+				quadrant = Quadrant.East;	
+		else if(Player.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("South"))
+				quadrant = Quadrant.South;
+
 		return quadrant;
 	}
-	
+
 	#region MessageHandling
 	protected void Log(string message)
 	{

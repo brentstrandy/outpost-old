@@ -40,6 +40,8 @@ public class Enemy : MonoBehaviour
 	protected Pathfinder ObjPathfinder = null;
 	protected HexLocation ObjHexLocation = null;
 
+	private GameObject Shot;
+
 	public virtual void Awake()
 	{
 		// Save a reference to the center mining facility
@@ -50,6 +52,8 @@ public class Enemy : MonoBehaviour
 
 		// Add the enemy to the EnemyManager object to track the Enemy
 		EnemyManager.Instance.AddActiveEnemy(this);
+
+		Shot = Resources.Load("Enemies/LightSpeederShot") as GameObject;
 	}
 
 	// Use this for initialization
@@ -272,6 +276,7 @@ public class Enemy : MonoBehaviour
 				{
 					MiningFacilityObject.TakeDamage(DamageDealt);
 					TimeLastShotFired = Time.time;
+					Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 				}
 				Firing = true;
 			}

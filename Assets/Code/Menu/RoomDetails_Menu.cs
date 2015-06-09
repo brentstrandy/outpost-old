@@ -17,13 +17,15 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// <summary>
 	/// Tracks GUI objects for each tower that is selected for the Loadout
 	/// </summary>
-	private List<GameObject> TowerLoadoutSelections;
+	private List<GameObject> SelectedTowerButtonList;
+	private List<GameObject> TowerButtonList;
     private GameObject LevelLoadoutSelection;
     /// <summary>
 	/// Tracks TowerData for each tower that is selected for the loadout
 	/// </summary>
 	private List<TowerData> TowerLoadoutData;
-    /// Tracks LevelData for the level that is selected for the Loadout
+    /// <summary>
+	/// Tracks LevelData for the level that is selected for the Loadout
     /// </summary>
     private LevelData LevelLoadoutData;
     private bool LevelSelected;
@@ -32,7 +34,8 @@ public class RoomDetails_Menu : MonoBehaviour
 
 	public void Awake()
 	{
-		TowerLoadoutSelections = new List<GameObject>();
+		TowerButtonList = new List<GameObject>();
+		SelectedTowerButtonList = new List<GameObject>();
 		TowerLoadoutData = new List<TowerData>();
 
 		// Save a handle to the photon view associated with this GameObject for use later
@@ -54,12 +57,13 @@ public class RoomDetails_Menu : MonoBehaviour
 
 		// Immediately refresh the room details
 		RefreshRoomDetails();
+		
+		// Add Level Buttons for each Level (this needs to be done before the tower buttons because the 
+		// towers depend on the LevelData
+		InitiateLevelButtons();
 
 		// Add Tower Butttons for each Tower
-		InitiateTowerButtons();
-
-        // Add Level Buttons for each Level
-        InitiateLevelButtons();
+		RefreshTowerButtons();
 
 		// See if the player is currently the room owner or just joining
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -144,19 +148,19 @@ public class RoomDetails_Menu : MonoBehaviour
 		// If the toggle was turned off, then remove it from the Loadout
 		if(towerButton.GetComponent<Toggle>().isOn == false)
 		{
-			TowerLoadoutSelections.Remove(towerButton);
+			SelectedTowerButtonList.Remove(towerButton);
 			TowerLoadoutData.Remove(towerData);
 		}
 		else
 		{
 			// Add the new tower to the loadout
-			TowerLoadoutSelections.Add(towerButton);
+			SelectedTowerButtonList.Add(towerButton);
 			TowerLoadoutData.Add(towerData);
 
-			if(TowerLoadoutSelections.Count > 2)
+			if(SelectedTowerButtonList.Count > LevelLoadoutData.MaxTowersPerPlayer)
 			{
 				// Untoggle the last selected tower (This will trigger the event to call this function again)
-				TowerLoadoutSelections[0].GetComponent<Toggle>().isOn = false;
+				SelectedTowerButtonList[0].GetComponent<Toggle>().isOn = false;
 			}
 		}
 	}
@@ -166,26 +170,19 @@ public class RoomDetails_Menu : MonoBehaviour
     /// </summary>	
     public void LevelButton_Click(GameObject levelButton, LevelData levelData)
     {
-        // If the toggle button was turned off
-        if (levelButton.GetComponent<Toggle>().isOn == false)
-            LevelSelected = false;
-        // If the toggle button was turned on
-        else
-        {
-            if (LevelLoadoutSelection != null)
-            {
-                // Turns off previously checked toggle buttons
-                if (levelButton.GetComponent<Toggle>().isOn == true && levelButton != LevelLoadoutSelection)
-                    LevelLoadoutSelection.GetComponent<Toggle>().isOn = false;
-            }
-
+		// Whenever the toggle is TRUE that means the toggle has JUST been changed to true.
+		if(levelButton.GetComponent<Toggle>().isOn == true)
+		{
             // Sets level to be loaded
             LevelLoadoutData = levelData;
             LevelSelected = true;
-        }
 
-        // Updates currently toggled-on button
-        LevelLoadoutSelection = levelButton;
+			// Updates currently toggled-on button
+			LevelLoadoutSelection = levelButton;
+
+			// Update the available Towers to choose from
+			RefreshTowerButtons();
+        }
     }
 
 	#endregion
@@ -262,35 +259,58 @@ public class RoomDetails_Menu : MonoBehaviour
 		RoomTitle_GUIInput.GetComponent<InputField>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
 	}
 
-	private void InitiateTowerButtons()
+	private void RefreshTowerButtons()
 	{
 		int index = 0;
-        
-		foreach(TowerData towerData in GameDataManager.Instance.TowerDataMngr.DataList)
-		{
-			// Create a local variable or else the foreach "AddListener" will use a reference to the foreach towerdata's last reference
-			// and will not use unique towerData's for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)
-			TowerData td = towerData;
-			// Instantiate a button for each tower
-			GameObject obj = Instantiate(Resources.Load("GUI_TowerDetails")) as GameObject;
-			obj.GetComponentInChildren<Text>().text = towerData.DisplayName + "($" + towerData.InstallCost.ToString() + ")";
-			obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate{TowerButton_Click(obj, td);});
-			obj.transform.SetParent(this.transform);
-			obj.transform.localScale = new Vector3(1, 1, 1);
-			obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-160 + (60 * index), 50);
-			obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
-			obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
-			obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
-			obj.transform.rotation = new Quaternion(0, 0, 0, 0);
-			// Select the first two towers by default
-			if(index < 2)
-			{
-				obj.GetComponent<Toggle>().isOn = true;
-			}
-			else
-				obj.GetComponent<Toggle>().isOn = false;
 
-			index++;
+		// Delete all previously created buttons (and their associated data
+		foreach(GameObject button in TowerButtonList)
+			Destroy (button);
+		TowerButtonList.Clear();
+		SelectedTowerButtonList.Clear();
+		TowerLoadoutData.Clear();
+
+		if(LevelLoadoutData != null)
+		{
+			foreach(TowerData towerData in GameDataManager.Instance.TowerDataMngr.DataList)
+			{
+				// Only display this tower if the current level data allows it
+				if(LevelLoadoutData.AvailableTowers.Contains(towerData.DisplayName))
+				{
+					// Create a local variable or else the foreach "AddListener" will use a reference to the foreach towerdata's last reference
+					// and will not use unique towerData's for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)
+					TowerData td = towerData;
+					// Instantiate a button for each tower
+					GameObject obj = Instantiate(Resources.Load("GUI_TowerDetails")) as GameObject;
+					obj.GetComponentInChildren<Text>().text = towerData.DisplayName + "($" + towerData.InstallCost.ToString() + ")";
+					obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate{TowerButton_Click(obj, td);});
+					obj.transform.SetParent(this.transform);
+					obj.transform.localScale = new Vector3(1, 1, 1);
+					obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(160 + (60 * index), 50);
+					obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
+					obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
+					obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
+					obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+
+					// Save a reference to this button (so it can be destroyed later)
+					TowerButtonList.Add(obj);
+
+					// Select the first X towers by default
+					if(index < LevelLoadoutData.MaxTowersPerPlayer)
+						obj.GetComponent<Toggle>().isOn = true;
+					else
+						obj.GetComponent<Toggle>().isOn = false;
+
+					index++;
+				}
+			}
+
+			// Disable all toggles if the player does not have an option to pick different towers
+			if(SelectedTowerButtonList.Count <= LevelLoadoutData.MaxTowersPerPlayer)
+			{
+				foreach(GameObject obj in SelectedTowerButtonList)
+					obj.GetComponent<Toggle>().enabled = false;
+			}
 		}
 	}
 
@@ -298,17 +318,23 @@ public class RoomDetails_Menu : MonoBehaviour
     {
         int index = 0;
         
+		// Create a toggle group to grop all the toggles and automatically enforce only one selection
+		GameObject toggleGroup = new GameObject();
+		toggleGroup.AddComponent<ToggleGroup>();
+		toggleGroup.GetComponent<ToggleGroup>().allowSwitchOff = true;
+
         foreach (LevelData levelData in GameDataManager.Instance.LevelDataMngr.DataList)
         {
-            LevelData ld = levelData;
-            
+			LevelData ld = levelData;
+
             // instantiate a button for each level
             GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
             obj.GetComponentInChildren<Text>().text = levelData.DisplayName;
             obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
             obj.transform.SetParent(this.transform);
             obj.transform.localScale = new Vector3(1, 1, 1);
-            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(160 + (70 * index), 50);
+			obj.GetComponent<Toggle>().group = toggleGroup.GetComponent<ToggleGroup>();
+            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-180 + (70 * index), 50);
             obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
             obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
             obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
