@@ -1,6 +1,23 @@
 fileFormatVersion: 2
-guid: f7abb89b0c5fb9b46a2b75438df57fd4
-DefaultImporter:
+guid: dff5fb46cb0f93347a91c8a124aa8b4c
+timeCreated: 1433344537
+licenseType: Store
+PluginImporter:
+  serializedVersion: 1
+  iconMap: {}
+  executionOrder: {}
+  isPreloaded: 0
+  platformData:
+    Any:
+      enabled: 0
+      settings: {}
+    Editor:
+      enabled: 0
+      settings:
+        DefaultValueInitialized: true
+    WP8:
+      enabled: 1
+      settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
