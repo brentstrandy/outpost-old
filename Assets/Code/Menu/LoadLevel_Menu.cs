@@ -8,7 +8,9 @@ public class LoadLevel_Menu : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	private List<string> PlayerNames;
 	private PhotonView ObjPhotonView;
-	
+
+	public GameObject Level_GUIText;
+
 	private bool LevelLoaded;
 	private bool DataLoaded;
 	
@@ -25,6 +27,9 @@ public class LoadLevel_Menu : MonoBehaviour
 		// TO DO: Create a GUI Object for every player, showing their loading status
 		foreach(PhotonPlayer player in SessionManager.Instance.GetAllPlayersInRoom())
 			PlayerNames.Add(player.name);
+
+		// Show the name and description of the level being loaded
+		Level_GUIText.GetComponent<Text>().text = MenuManager.Instance.CurrentLevelData.DisplayName + "\n\n" + MenuManager.Instance.CurrentLevelData.Description;
 	}
 	
 	private void OnDisable()

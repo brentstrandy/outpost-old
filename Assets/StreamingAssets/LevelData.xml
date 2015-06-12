@@ -18,7 +18,7 @@
     <MinimumPlayers>0</MinimumPlayers>
     <MaximumPlayers>0</MaximumPlayers>
     <AvailableQuadrants>North, East</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
+    <StartingQuadrant>East</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
   </LevelData>

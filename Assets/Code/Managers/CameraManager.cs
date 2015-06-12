@@ -62,10 +62,6 @@ public class CameraManager : MonoBehaviour
 		PositionSouth = new Vector3(DirectionSouth.position.x, -1.0f, this.transform.position.z - 5);
 		// West
 		PositionWest = new Vector3(-1.0f, DirectionWest.position.y, this.transform.position.z - 5);
-
-		// Default to starting North
-		TargetDirection = DirectionNorth.position;
-		TargetPosition = PositionNorth;
     }
 
     void Update()
@@ -73,6 +69,13 @@ public class CameraManager : MonoBehaviour
 		transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetDirection - transform.position, Up), Time.deltaTime * TurningSpeed );
 		transform.position = Vector3.Slerp( transform.position, TargetPosition, Time.deltaTime * TurningSpeed );
     }
+
+	public void SetStartQuadrant(Quadrant quadrant)
+	{
+		UpdateCameraQuadrant(quadrant);
+		transform.rotation = Quaternion.LookRotation(TargetDirection - transform.position, Up);
+		transform.position = TargetPosition;
+	}
 
 	public void UpdateCameraQuadrant(Quadrant newQuadrant)
 	{

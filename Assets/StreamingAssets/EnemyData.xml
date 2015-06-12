@@ -3,7 +3,7 @@
   <EnemyData>
     <DisplayName>Drone</DisplayName>
     <PrefabName>Drone</PrefabName>
-    <PathFinding>ShortestPath</PathFinding>
+    <PathFinding>TrackFriendly_IgnorePath</PathFinding>
     <HighlightColor>
       <r>1</r>
       <g>0</g>

@@ -75,18 +75,18 @@ public class MenuManager : MonoBehaviour
 	public void ShowStartGame(LevelData levelData)
 	{
 		// TO DO: Lock the room - no one else can join
-		
+
 		// Save a reference to the current level's data
 		CurrentLevelData = levelData;
+
+		// Load the selected level
+		Application.LoadLevelAsync(CurrentLevelData.SceneName);
 		
 		// Show the loading screen as the level is loaded
 		LoadLevelPanel.SetActive(true);
 		
 		// Show the InGame menu (behind the loading menu)
 		SetCurrentMenuPanel(InGamePanel);
-		
-		// Load the selected level
-		Application.LoadLevelAsync(CurrentLevelData.SceneName);
 	}
 	
 	public void ReturnToRoomDetailsMenu()

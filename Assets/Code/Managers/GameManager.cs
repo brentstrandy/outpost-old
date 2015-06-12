@@ -57,9 +57,6 @@ public class GameManager : MonoBehaviour
 		
 		GameRunning = false;
 		Victory = false;
-		
-		// Set the player's initial quadrant
-		Player.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
 	}
 	
 	// Update is called once per frame
@@ -80,6 +77,11 @@ public class GameManager : MonoBehaviour
 	public void StartGame()
 	{
 		GameRunning = true;
+
+		// Set the player's initial quadrant
+		Player.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
+		// Inform the Camera of the new quadrant
+		CameraManager.Instance.SetStartQuadrant(CurrentLevelData.StartingQuadrant);
 
 		// Inform all necessary managers that this game has started
 		EnemySpawnManager.Instance.StartSpawning();
