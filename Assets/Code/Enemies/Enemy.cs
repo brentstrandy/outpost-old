@@ -262,7 +262,6 @@ public class Enemy : MonoBehaviour
 		if(other.tag == "Terrain")
 		{
 			// Destroy the enemy whenver they crash to the ground
-			EnemyManager.Instance.RemoveActiveEnemy(this);
 			Destroy(this);
 		}
 	}
@@ -274,24 +273,51 @@ public class Enemy : MonoBehaviour
 	{
 		while(this)
 		{
-			// If the enemy is within range of the mining faclity, then open fire
-			if(Vector3.Distance(this.transform.position, MiningFacilityObject.transform.position) <= Range)
+			// Master Client - Responsible for showing effects AND making gameplay decisions
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			{
-				if(Time.time - TimeLastShotFired >= RateOfFire)
+				// If the enemy is within range of the mining faclity, then open fire
+				if(Vector3.Distance(this.transform.position, MiningFacilityObject.transform.position) <= Range)
 				{
-					MiningFacilityObject.TakeDamage(DamageDealt);
-					TimeLastShotFired = Time.time;
-					Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+					if(Time.time - TimeLastShotFired >= RateOfFire)
+					{
+						// Master client needs to inform the mining facility that it has been hit
+						MiningFacilityObject.TakeDamage(DamageDealt);
+						TimeLastShotFired = Time.time;
+						Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+					}
+					Firing = true;
 				}
-				Firing = true;
+				else
+					Firing = false;
 			}
+			// Client is only responsible for showing effects - not for making gameplay decisions
 			else
-				Firing = false;
+			{
+				// TO DO: Have the Master Client tell the client when to fire next and have the client "predict" when to fire
+
+				// If the enemy is within range of the mining faclity, then open fire
+				if(Vector3.Distance(this.transform.position, MiningFacilityObject.transform.position) <= Range)
+				{
+					if(Time.time - TimeLastShotFired >= RateOfFire)
+					{
+						TimeLastShotFired = Time.time;
+						Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+					}
+					Firing = true;
+				}
+				else
+					Firing = false;
+			}
 
 			yield return 0;
 		}
 	}
 
+	/// <summary>
+	/// CLIENT: Tells the client the next hex to enemy is traveling towards
+	/// </summary>
+	/// <param name="newTargetHex">New target hex.</param>
 	[RPC]
 	protected void UpdateEnemyTargetHex(Vector2 newTargetHex)
 	{
