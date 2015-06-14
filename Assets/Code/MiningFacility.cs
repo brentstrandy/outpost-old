@@ -32,7 +32,8 @@ public class MiningFacility : MonoBehaviour
 		if(other.tag == "Enemy")
 		{
 			Health--;
-			SessionManager.Instance.DestroyObject(other.gameObject);
+			// Force Enemy to kill itself
+			other.gameObject.GetComponent<Enemy>().ForceInstantDeath();
 		}
 	}
 

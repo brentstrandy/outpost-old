@@ -218,47 +218,52 @@ public class Enemy : MonoBehaviour
 
 		// Check to see if enemy is dead
 		if(Health <= 0)
-			Die();
+		{
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+				ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
+		}
 	}
 
 	/// <summary>
 	/// Destroy the enemy (only if the player is the master client)
 	/// </summary>
-	protected virtual void Die()
+	[RPC]
+	protected virtual void DieAcrossNetwork()
 	{
 		Rigidbody rb = this.GetComponent<Rigidbody>();
 
 		rb.constraints = RigidbodyConstraints.None;
-		rb.AddForce(new Vector3(100, 100, -100), ForceMode.Force);
+		// TO DO: Fix this - Brent lost the original code and now he is too dumb to make it work again
+		Vector3 temp = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z - 2);
+		rb.AddForceAtPosition(new Vector3(0, 0, -20), temp);
 
 		// Stop sending network updates for this object - it is dead
 		ObjPhotonView.ObservedComponents.Clear();
 
-		// Only kill the enemy if this is the master client
-		//if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-		//	SessionManager.Instance.DestroyObject(this.gameObject);
+
+		Destroy (this);
 	}
 
 	public void OnDestroy()
 	{
+		// TO DO: Instantiate explosion
 
-	}
-
-	[RPC]
-	protected void DestroyAcrossNetwork()
-	{
 		// Tell the enemy manager this enemy is being destroyed
 		EnemyManager.Instance.RemoveActiveEnemy(this);
-		Destroy (this);
+	}
+
+	public virtual void ForceInstantDeath()
+	{
+		Destroy(this);
 	}
 
 	public virtual void OnTriggerEnter(Collider other)
 	{
 		if(other.tag == "Terrain")
 		{
-			// If player is the MASTER CLIENT then have the player tell all other players to destroy this Enemy
-			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-				ObjPhotonView.RPC("DestroyAcrossNetwork", PhotonTargets.All, null);
+			// Destroy the enemy whenver they crash to the ground
+			EnemyManager.Instance.RemoveActiveEnemy(this);
+			Destroy(this);
 		}
 	}
 
