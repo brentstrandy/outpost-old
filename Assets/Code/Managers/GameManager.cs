@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 	public bool Victory { get; private set; }
 	public bool GameRunning { get; private set; }
 	
-	public MiningFacility MiningFacilityObject;
+	public MiningFacility ObjMiningFacility;
 	
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -78,6 +78,9 @@ public class GameManager : MonoBehaviour
 	{
 		GameRunning = true;
 
+		// Initialize the mining facility's properties based on the level data
+		ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
+
 		// Set the player's initial quadrant
 		Player.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
 		// Inform the Camera of the new quadrant
@@ -111,7 +114,7 @@ public class GameManager : MonoBehaviour
 		// Check to see if all the enemies have spawned and if all enemies are dead
 		if(EnemySpawnManager.Instance.FinishedSpawning && EnemyManager.Instance.ActiveEnemyCount() == 0)
 			EndGame_Victory();
-		else if(MiningFacilityObject.Health <= 0)
+		else if(ObjMiningFacility.Health <= 0)
 			EndGame_Loss();
 	}
 

@@ -57,9 +57,8 @@ public class RoomDetails_Menu : MonoBehaviour
 
 		// Immediately refresh the room details
 		RefreshRoomDetails();
-		
-		// Add Level Buttons for each Level (this needs to be done before the tower buttons because the 
-		// towers depend on the LevelData
+
+		// Add Level Buttons for each Level (this needs to be done before the tower buttons because the towers depend on the LevelData)
 		InitiateLevelButtons();
 
 		// Add Tower Butttons for each Tower
@@ -173,6 +172,9 @@ public class RoomDetails_Menu : MonoBehaviour
 		// Whenever the toggle is TRUE that means the toggle has JUST been changed to true.
 		if(levelButton.GetComponent<Toggle>().isOn == true)
 		{
+			// Tell all other clients that a new level has been selected
+			ObjPhotonView.RPC("NewLevelSelected", PhotonTargets.Others, levelData.DisplayName);
+
             // Sets level to be loaded
             LevelLoadoutData = levelData;
             LevelSelected = true;
@@ -184,7 +186,6 @@ public class RoomDetails_Menu : MonoBehaviour
 			RefreshTowerButtons();
         }
     }
-
 	#endregion
 	
 	#region EVENTS
@@ -218,6 +219,20 @@ public class RoomDetails_Menu : MonoBehaviour
 	{
 		// Add the recieved chat to the player's chat area (on the GUI)
 		Chat_GUIText.GetComponent<Text>().text += System.Environment.NewLine + "[" + playerName + "]: " + msg;
+	}
+
+	/// <summary>
+	/// RPC call to tell the clients a new level has been selected and to update their available tower choices
+	/// </summary>
+	/// <param name="levelName">Level name.</param>
+	[RPC]
+	private void NewLevelSelected(string levelName)
+	{;
+		LevelData levelData = GameDataManager.Instance.FindLevelDataByDisplayName(levelName);
+	
+		// Refresh the list of Towers regardless if LevelData can be found. The tower buttons will handle missing data
+		LevelLoadoutData = levelData;
+		RefreshTowerButtons();
 	}
 
 	/// <summary>
@@ -316,36 +331,39 @@ public class RoomDetails_Menu : MonoBehaviour
 
     private void InitiateLevelButtons()
     {
-        int index = 0;
-        
-		// Create a toggle group to grop all the toggles and automatically enforce only one selection
-		GameObject toggleGroup = new GameObject();
-		toggleGroup.AddComponent<ToggleGroup>();
-		toggleGroup.GetComponent<ToggleGroup>().allowSwitchOff = true;
+		// Only initiate Level buttos if this is the MASTER CLIENT
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+	        int index = 0;
+			// Create a toggle group to grop all the toggles and automatically enforce only one selection
+			GameObject toggleGroup = new GameObject();
+			toggleGroup.AddComponent<ToggleGroup>();
+			toggleGroup.GetComponent<ToggleGroup>().allowSwitchOff = true;
 
-        foreach (LevelData levelData in GameDataManager.Instance.LevelDataMngr.DataList)
-        {
-			LevelData ld = levelData;
+	        foreach (LevelData levelData in GameDataManager.Instance.LevelDataMngr.DataList)
+	        {
+				LevelData ld = levelData;
 
-            // instantiate a button for each level
-            GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
-            obj.GetComponentInChildren<Text>().text = levelData.DisplayName;
-            obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
-            obj.transform.SetParent(this.transform);
-            obj.transform.localScale = new Vector3(1, 1, 1);
-			obj.GetComponent<Toggle>().group = toggleGroup.GetComponent<ToggleGroup>();
-            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-180 + (70 * index), 50);
-            obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
-            obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
-            obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
-            obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+	            // instantiate a button for each level
+	            GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
+	            obj.GetComponentInChildren<Text>().text = levelData.DisplayName;
+	            obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
+	            obj.transform.SetParent(this.transform);
+	            obj.transform.localScale = new Vector3(1, 1, 1);
+				obj.GetComponent<Toggle>().group = toggleGroup.GetComponent<ToggleGroup>();
+	            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-180 + (70 * index), 50);
+	            obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
+	            obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
+	            obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
+	            obj.transform.rotation = new Quaternion(0, 0, 0, 0);
 
-            // select Level1 by default (hacked way)
-            if (!LevelLoadoutSelection)
-                obj.GetComponent<Toggle>().isOn = true;
+	            // select Level1 by default (hacked way)
+	            if (!LevelLoadoutSelection)
+	                obj.GetComponent<Toggle>().isOn = true;
 
-            index++;
-        }
+	            index++;
+	        }
+		}
     }
 
 	#region MessageHandling

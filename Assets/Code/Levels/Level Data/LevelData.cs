@@ -19,6 +19,9 @@ public class LevelData
 	public Quadrant StartingQuadrant;
 	public string AvailableTowers;
 	public int MaxTowersPerPlayer;
+	// Mining Facility Details
+	public float IncomePerSecond;
+	public float MiningFacilityHealth;
 
     [HideInInspector] [XmlIgnore]
 	public bool ShowDebugLogs = true;
@@ -36,6 +39,9 @@ public class LevelData
 		StartingQuadrant = obj.StartingQuadrant;
 		AvailableTowers = obj.AvailableTowers;
 		MaxTowersPerPlayer = obj.MaxTowersPerPlayer;
+		// Mining Facility Details
+		IncomePerSecond = obj.IncomePerSecond;
+		MiningFacilityHealth = obj.MiningFacilityHealth;
 	}
 
 	public LevelData(string displayName, string sceneName)

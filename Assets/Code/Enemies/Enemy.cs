@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
 	public virtual void Awake()
 	{
 		// Save a reference to the center mining facility
-		MiningFacilityObject = GameManager.Instance.MiningFacilityObject;
+		MiningFacilityObject = GameManager.Instance.ObjMiningFacility;
 
 		// Allow the first bullet to be fired when the enemy is instantiated
 		TimeLastShotFired = Time.time - (RateOfFire * 2);

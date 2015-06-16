@@ -3,7 +3,9 @@ using System.Collections;
 
 public class MiningFacility : MonoBehaviour
 {
-	public float IncomeAmountPerSecond { get; private set; }
+	private static MiningFacility instance;
+
+	public float IncomePerSecond { get; private set; }
 	public float Health { get; private set; }
 
 	private float LastIncomeTime;
@@ -12,7 +14,7 @@ public class MiningFacility : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		IncomeAmountPerSecond = 1.0f;
+		IncomePerSecond = 1.0f;
 		LastIncomeTime = Time.time;
 		Health = 100.0f;
 
@@ -22,7 +24,8 @@ public class MiningFacility : MonoBehaviour
 
 	public void InitializeFromLevelData(LevelData levelData)
 	{
-
+		IncomePerSecond = levelData.IncomePerSecond;
+		Health = levelData.MiningFacilityHealth;
 	}
 	
 	// Update is called once per frame
@@ -58,7 +61,7 @@ public class MiningFacility : MonoBehaviour
 		// Only earn income if enough time has passed
 		if(Time.time - LastIncomeTime >= 1)
 		{
-			Player.Instance.EarnIncome(IncomeAmountPerSecond);
+			Player.Instance.EarnIncome(IncomePerSecond);
 			LastIncomeTime = Time.time;
 		}
 	}

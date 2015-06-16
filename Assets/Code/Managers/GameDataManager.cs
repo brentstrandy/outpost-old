@@ -111,6 +111,11 @@ public class GameDataManager : MonoBehaviour
 		return EnemyDataMngr.DataList.Find(x => x.DisplayName.Equals(displayName)).PrefabName;
 	}
 
+	public LevelData FindLevelDataByDisplayName(string displayName)
+	{
+		return LevelDataMngr.DataList.Find(x => x.DisplayName.Equals(displayName));
+	}
+
 	// Update is called once per frame
 	void Update () {
 	

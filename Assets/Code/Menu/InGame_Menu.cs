@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,7 +56,7 @@ public class InGame_Menu : MonoBehaviour
 			{
 				// Display how much money the player current has
 				MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
-				OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.MiningFacilityObject.Health.ToString();
+				OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.ObjMiningFacility.Health.ToString();
 			}
 		}
 	}
