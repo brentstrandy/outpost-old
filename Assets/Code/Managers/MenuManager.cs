@@ -100,7 +100,12 @@ public class MenuManager : MonoBehaviour
 		// No level is being played when in the menu
 		CurrentLevelData = null;
 	}
-	
+
+    public void ShowStartMenu()
+    {
+        SetCurrentMenuPanel(StartMenuPanel);
+    }
+
 	public void ShowJoinGameMenu()
 	{
 		SetCurrentMenuPanel(JoinGamePanel);

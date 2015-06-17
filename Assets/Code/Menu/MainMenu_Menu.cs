@@ -44,6 +44,19 @@ public class MainMenu_Menu : MonoBehaviour
 		// Tell the MenuManager to transition to Settings menu
 		MenuManager.Instance.ShowSettingsMenu();
 	}
+
+    /// <summary>
+    /// Used by the GUI system to go leave the room when the Back button is pressed
+    /// </summary>
+    public void Back_Click()
+    {
+        // TO DO: Ask the user if they're sure they want to leave
+
+        SessionManager.Instance.LeaveRoom();
+
+        // Tell the MenuManager to transition back
+        MenuManager.Instance.ShowStartMenu();
+    }
 	#endregion
 	
 	#region Events

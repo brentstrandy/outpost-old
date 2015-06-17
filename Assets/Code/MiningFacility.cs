@@ -40,7 +40,7 @@ public class MiningFacility : MonoBehaviour
 		ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.All, damage);
 	}
 
-	[RPC]
+	[PunRPC]
 	private void TakeDamageAcrossNetwork(float damage)
 	{
 		Health -= damage;

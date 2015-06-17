@@ -84,8 +84,8 @@ public class EndGame_Menu : MonoBehaviour
 	}
 	#endregion
 
-	#region RPC CALLS
-	[RPC]
+    #region [PunRPC] CALLS
+    [PunRPC]
 	private void Continue()
 	{
 		// Reset player Loadout data

@@ -227,7 +227,7 @@ public class Enemy : MonoBehaviour
 	/// <summary>
 	/// Destroy the enemy (only if the player is the master client)
 	/// </summary>
-	[RPC]
+	[PunRPC]
 	protected virtual void DieAcrossNetwork()
 	{
 		Rigidbody rb = this.GetComponent<Rigidbody>();
@@ -318,7 +318,7 @@ public class Enemy : MonoBehaviour
 	/// CLIENT: Tells the client the next hex to enemy is traveling towards
 	/// </summary>
 	/// <param name="newTargetHex">New target hex.</param>
-	[RPC]
+	[PunRPC]
 	protected void UpdateEnemyTargetHex(Vector2 newTargetHex)
 	{
 		TargetHex = newTargetHex;

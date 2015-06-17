@@ -27,7 +27,7 @@ using System.IO;
 public static class PhotonNetwork
 {
     /// <summary>Version number of PUN. Also used in GameVersion to separate client version from each other.</summary>
-    public const string versionPUN = "1.54";
+    public const string versionPUN = "1.56";
 
     public static string gameVersion
     {
@@ -140,7 +140,6 @@ public static class PhotonNetwork
                 case PeerState.ConnectingToMasterserver:
                 case PeerState.ConnectingToNameServer:
                 case PeerState.Joining:
-                case PeerState.Leaving:
                     return false;   // we are not ready to execute any operations
             }
 
@@ -374,7 +373,7 @@ public static class PhotonNetwork
             networkingPeer.PlayerName = value;
         }
     }
-
+    
     /// <summary>
     /// The full PhotonPlayer list, including the local player.
     /// </summary>
@@ -805,15 +804,17 @@ public static class PhotonNetwork
     }
 
     /// <summary>
-    /// Photon network time, synched with the server
+    /// Photon network time, synched with the server.
     /// </summary>
     /// <remarks>
-    /// v1.3:
-    /// This time reflects milliseconds since start of the server, cut down to 4 bytes.
-    /// It will overflow every 49 days from a high value to 0. We do not (yet) compensate this overflow.
-    /// Master- and Game-Server will have different time values.
-    /// v1.10:
-    /// Fixed issues with precision for high server-time values. This should update with 15ms precision by default.
+    /// v1.55</br>
+    /// This time value depends on the server's Environment.TickCount. It is different per server
+    /// but inside a Room, all clients should have the same value (Rooms are on one server only).</br>
+    /// This is not a DateTime!</br>
+    /// 
+    /// Use this value with care: </br>
+    /// It can start with any positive value.</br>
+    /// It will "wrap around" from 4294967.295 to 0!
     /// </remarks>
     public static double time
     {
@@ -825,7 +826,8 @@ public static class PhotonNetwork
             }
             else
             {
-                float t = networkingPeer.ServerTimeInMilliSeconds;
+                uint u = (uint)networkingPeer.ServerTimeInMilliSeconds;
+                double t = u;
                 return t / 1000;
             }
         }
@@ -2866,7 +2868,7 @@ public static class PhotonNetwork
     [Conditional("UNITY_EDITOR")]
     public static void CreateSettings()
     {
-        //Debug.LogWarning("CreateSettings() PhotonNetwork.PhotonServerSettings == null:" + (PhotonNetwork.PhotonServerSettings == null));
+        PhotonNetwork.PhotonServerSettings = (ServerSettings)Resources.Load(PhotonNetwork.serverSettingsAssetFile, typeof(ServerSettings));
         if (PhotonNetwork.PhotonServerSettings != null)
         {
             return;
@@ -2880,11 +2882,11 @@ public static class PhotonNetwork
             return;
         }
         UnityEngine.Object.DestroyImmediate(serverSettingTest);
+        
 
         // if still not loaded, create one
         if (PhotonNetwork.PhotonServerSettings == null)
         {
-
             string settingsPath = Path.GetDirectoryName(PhotonNetwork.serverSettingsAssetPath);
             if (!Directory.Exists(settingsPath))
             {
@@ -2899,11 +2901,9 @@ public static class PhotonNetwork
             }
             else
             {
-                Debug.LogError("missing settings");
+                Debug.LogError("PUN failed creating a settings file. ScriptableObject.CreateInstance(\"ServerSettings\") returned null. Will try again later.");
             }
         }
-
-        return;
     }
 #endif
 

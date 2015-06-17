@@ -211,7 +211,7 @@ public interface IPunCallbacks
     /// </summary>
     /// <remarks>
     /// This method is commonly used to instantiate player characters.
-    /// If a match has to be started "actively", you can call an [RPC](@ref PhotonView.RPC) triggered by a user's button-press or a timer.
+    /// If a match has to be started "actively", you can call an [PunRPC](@ref PhotonView.RPC) triggered by a user's button-press or a timer.
     ///
     /// When this is called, you can usually already access the existing players in the room via PhotonNetwork.playerList.
     /// Also, all custom properties should be already available as Room.customProperties. Check Room.playerCount to find out if
@@ -563,7 +563,7 @@ namespace Photon
         /// </summary>
         /// <remarks>
         /// This method is commonly used to instantiate player characters.
-        /// If a match has to be started "actively", you can call an [RPC](@ref PhotonView.RPC) triggered by a user's button-press or a timer.
+        /// If a match has to be started "actively", you can call an [PunRPC](@ref PhotonView.RPC) triggered by a user's button-press or a timer.
         ///
         /// When this is called, you can usually already access the existing players in the room via PhotonNetwork.playerList.
         /// Also, all custom properties should be already available as Room.customProperties. Check Room.playerCount to find out if
@@ -767,7 +767,12 @@ public class PhotonMessageInfo
 
     public double timestamp
     {
-        get { return ((double)(uint)this.timeInt) / 1000.0f; }
+        get
+        {
+            uint u = (uint)this.timeInt;
+            double t = u;
+            return t / 1000;
+        }
     }
 
     public override string ToString()
@@ -780,9 +785,6 @@ public class PhotonMessageInfo
 /// <remarks>This directly maps to what the fields in the Room class.</remarks>
 public class RoomOptions
 {
-    /// <summary>Max number of players that can be in the room at any time. 0 means "no limit".</summary>
-    public byte maxPlayers;
-
     /// <summary>Defines if this room is listed in the lobby. If not, it also is not joined randomly.</summary>
     /// <remarks>
     /// A room that is not visible will be excluded from the room lists that are sent to the clients in lobbies.
@@ -802,6 +804,22 @@ public class RoomOptions
     /// </remarks>
     public bool isOpen { get { return this.isOpenField; } set { this.isOpenField = value; } }
     private bool isOpenField = true;
+
+    /// <summary>Max number of players that can be in the room at any time. 0 means "no limit".</summary>
+    public byte maxPlayers;
+
+    /// <summary>Time To Live (TTL) for an 'actor' in a room. If a client disconnects, this actor is inactive first and removed after this timeout. In milliseconds.</summary>
+    //public int PlayerTtl;
+
+    /// <summary>Time To Live (TTL) for a room when the last player leaves. Keeps room in memory for case a player re-joins soon. In milliseconds.</summary>
+    //public int EmptyRoomTtl;
+
+    /// <summary>Activates UserId checks on joining - allowing a users to be only once in the room.</summary>
+    /// <remarks>
+    /// Turnbased rooms should be created with this check turned on! They should also use custom authentication.
+    /// Disabled by default for backwards-compatibility.
+    /// </remarks>
+    //public bool CheckUserOnJoin = false;
 
     /// <summary>Removes a user's events and properties from the room when a user leaves.</summary>
     /// <remarks>
@@ -830,8 +848,18 @@ public class RoomOptions
     /// </remarks>
     public string[] customRoomPropertiesForLobby = new string[0];
 
-    /// <summary>Time To Live (TTL) for an 'actor' in a room. If a client disconnects, this actor is inactive first and removed after this timeout. In milliseconds.</summary>
-    //public int PlayerTtl;
+    /// <summary>
+    /// Tells the server to skip room events for joining and leaving players.
+    /// </summary>
+    /// <remarks>
+    /// Using this makes the client unaware of the other players in a room. 
+    /// That can save some traffic if you have some server logic that updates players
+    /// but it can also limit the client's usability.
+    /// 
+    /// PUN will break if you use this, so it's not settable.
+    /// </remarks>
+    public bool suppressRoomEvents { get { return this.suppressRoomEventsField; } /*set { this.suppressRoomEventsField = value; }*/ }
+    private bool suppressRoomEventsField = false;
 }
 
 

@@ -1,3 +1,14 @@
+v1.56 (16. June 2015)
+Changed: The RPC attribute is now replaced by PunRPC and no longer supported. Search and replace your code for [RPC] and replace it with [PunRPC]. The change is necessary, because the RPC attribute is obsolete in Unity 5.1 (which causes a large amount of warnings at compile time).
+
+
+v1.55 (12. June 2015)
+Changed: PhotonNetwork.time so that it's always positive, even on iOS 64bit exports. Note: this time value does not start at 0 and it will "wrap around" from 4294967.295 to 0! Use with care - we will implement a better soltion asap.
+Changed: ServerSettings.EnabledRegions (for "Best Region" Cloud hosting) now defaults to "all". The old default had the same effect but it was labelled as "none" of the regions (which is not allowed).
+Fixed: Re-creation of the PhotonServerSettings file in case you deleted a duplicate. This always created a file in the default location. Now, it does not matter where the PhotonSettingsFile is: If you have one at least, it will be found.
+Changed: AuthenticationValues now has a property UserId. You can set a UserId independent from the playerName now. This UserId should be unique per player and does not have to be readable. FindFriends will use this UserId (or one set by a Custom Auth Service). If you don't set it, PUN will use PhotonNetwork.playerName to identify a user.
+Changed: AuthenticationValues now uses AddAuthParameter(key, value) to set parameters. Simply call it once for each parameter that your authentication service expects. Changed GUICustomAuth accordingly.
+
 v1.54 (3. June 2015)
 Fixed: In Offline Mode, the NetworkingPeer.mMasterClientId always returns the local player ID. This fixes RPCs in offline mode targeted at the Master Client.
 Fixed: WebGL support no longer breaks other platform exports. Download the package from the Asset Store with Unity 5 to get WebGL support (Unity 4 can't handle it).
@@ -5,7 +16,6 @@ Changed: WebSockets are now only used for the WebGL platform (in-editor and in e
 Added: When you select "Best Region" as Hosting Type (in PhotonServerSettings), you can now select the regions that are enabled. Deselect those you don't want to use and they are dropped from the list of available regions (in the client, obviously).
 Changed: Setup Wizard. It's now considerably leaner. The idea is to improve the Inspector for the PhotonServerSettings some more. Working but also "Work in Progress".
 Fixed: A bug when setting properties via SetCustomProperties(propertiesToSet, expectedValues). Those updates were not sent reliable, so they could get lost and de-sync with any clients. This only affects currently updated clients which used this new feature (since v1.52). Thanks, Lino.
-
 
 v1.53 (28. May 2015)
 Fixed: Master Client selection for older servers (was broken in v1.52 only). Effectively, if the new features are not present on the server, we use the old client-side workflow. Photon OnPremise is still v3.x and the "Server Side Master Client" feature requires Photon v4. The public cloud servers support this feature already.

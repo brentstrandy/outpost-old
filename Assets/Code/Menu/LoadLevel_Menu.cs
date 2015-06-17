@@ -46,7 +46,7 @@ public class LoadLevel_Menu : MonoBehaviour
 		}
 	}
 	
-	[RPC]
+	[PunRPC]
 	private void StartGame()
 	{
 		// TO DO: Add screen fade
@@ -86,7 +86,7 @@ public class LoadLevel_Menu : MonoBehaviour
 		ObjPhotonView.RPC ("LevelLoadingCompete", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name);
 	}
 	
-	[RPC]
+	[PunRPC]
 	private void LevelLoadingCompete(string playerName)
 	{
 		Log (playerName + " Finished Loading Level");

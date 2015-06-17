@@ -208,13 +208,13 @@ public class RoomDetails_Menu : MonoBehaviour
 	}
 	#endregion
 
-	#region RPC CALLS
-	/// <summary>
-	/// RPC call that Receives chat messages from any/all clients and displays them in the GUI
+    #region [PunRPC] CALLS
+    /// <summary>
+	/// PunRPC call that Receives chat messages from any/all clients and displays them in the GUI
 	/// </summary>
 	/// <param name="playerName">Chatting Player's name</param>
 	/// <param name="msg">Chat Message</param>
-	[RPC]
+	[PunRPC]
 	private void ReceiveChatMessage(string playerName, string msg)
 	{
 		// Add the recieved chat to the player's chat area (on the GUI)
@@ -222,10 +222,10 @@ public class RoomDetails_Menu : MonoBehaviour
 	}
 
 	/// <summary>
-	/// RPC call to tell the clients a new level has been selected and to update their available tower choices
+	/// PunRPC call to tell the clients a new level has been selected and to update their available tower choices
 	/// </summary>
 	/// <param name="levelName">Level name.</param>
-	[RPC]
+	[PunRPC]
 	private void NewLevelSelected(string levelName)
 	{;
 		LevelData levelData = GameDataManager.Instance.FindLevelDataByDisplayName(levelName);
@@ -236,9 +236,9 @@ public class RoomDetails_Menu : MonoBehaviour
 	}
 
 	/// <summary>
-	/// RPC call to tell the client to start loading the level
+	/// PunRPC call to tell the client to start loading the level
 	/// </summary>
-	[RPC]
+	[PunRPC]
 	private void LoadLevel()
 	{
 		// Record the Loadouts chosen by the player
@@ -296,12 +296,18 @@ public class RoomDetails_Menu : MonoBehaviour
 					// and will not use unique towerData's for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)
 					TowerData td = towerData;
 					// Instantiate a button for each tower
+
 					GameObject obj = Instantiate(Resources.Load("GUI_TowerDetails")) as GameObject;
-					obj.GetComponentInChildren<Text>().text = towerData.DisplayName + "($" + towerData.InstallCost.ToString() + ")";
+                    
+                    //remove " Tower" from end of towerDisplayName (helps with GUI spacing)
+                    int stringIndex = towerData.DisplayName.IndexOf(" Tower");
+                    string displayName = stringIndex != -1 ? towerData.DisplayName.Remove(stringIndex) : towerData.DisplayName;
+
+                    obj.GetComponentInChildren<Text>().text = displayName + " ($" + towerData.InstallCost.ToString() + ")";
 					obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate{TowerButton_Click(obj, td);});
 					obj.transform.SetParent(this.transform);
 					obj.transform.localScale = new Vector3(1, 1, 1);
-					obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(160 + (60 * index), 50);
+					obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(180 + (110 * index), 50);
 					obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
 					obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
 					obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
@@ -351,7 +357,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	            obj.transform.SetParent(this.transform);
 	            obj.transform.localScale = new Vector3(1, 1, 1);
 				obj.GetComponent<Toggle>().group = toggleGroup.GetComponent<ToggleGroup>();
-	            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-180 + (70 * index), 50);
+	            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 + (70 * index), 50);
 	            obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
 	            obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
 	            obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);

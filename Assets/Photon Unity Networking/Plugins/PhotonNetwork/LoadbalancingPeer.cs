@@ -134,6 +134,10 @@ namespace ExitGames.Client.Photon
                     op[ParameterCode.CleanupCacheOnLeave] = true;               // this is actually setting the room's config
                     gameProperties[GameProperties.CleanupCacheOnLeave] = true;  // this is only informational for the clients which join
                 }
+                if (roomOptions.suppressRoomEvents)
+                {
+                    op[ParameterCode.SuppressRoomEvents] = true;
+                }
             }
 
             // UnityEngine.Debug.Log("CreateGame: " + SupportClass.DictionaryToString(op));
@@ -191,6 +195,10 @@ namespace ExitGames.Client.Photon
                     {
                         op[ParameterCode.CleanupCacheOnLeave] = true;               // this is actually setting the room's config
                         gameProperties[GameProperties.CleanupCacheOnLeave] = true;  // this is only informational for the clients which join
+                    }
+                    if (roomOptions.suppressRoomEvents)
+                    {
+                        op[ParameterCode.SuppressRoomEvents] = true;
                     }
                 }
             }
@@ -365,11 +373,10 @@ namespace ExitGames.Client.Photon
         /// </remarks>
         /// <param name="appId">Your application's name or ID to authenticate. This is assigned by Photon Cloud (webpage).</param>
         /// <param name="appVersion">The client's version (clients with differing client appVersions are separated and players don't meet).</param>
-        /// <param name="userId"></param>
         /// <param name="authValues"></param>
         /// <param name="regionCode">When authenticating for a specific region, a NameServer will forward you to that region's MasterServer.</param>
         /// <returns>If the operation could be sent (has to be connected).</returns>
-        public virtual bool OpAuthenticate(string appId, string appVersion, string userId, AuthenticationValues authValues, string regionCode)
+        public virtual bool OpAuthenticate(string appId, string appVersion, AuthenticationValues authValues, string regionCode)
         {
             if (this.DebugOut >= DebugLevel.INFO)
             {
@@ -377,9 +384,9 @@ namespace ExitGames.Client.Photon
             }
 
             Dictionary<byte, object> opParameters = new Dictionary<byte, object>();
-            if (authValues != null && authValues.Secret != null)
+            if (authValues != null && authValues.Token != null)
             {
-                opParameters[ParameterCode.Secret] = authValues.Secret;
+                opParameters[ParameterCode.Secret] = authValues.Token;
                 return this.OpCustom(OperationCode.Authenticate, opParameters, true, (byte)0, false);
             }
 
@@ -391,36 +398,39 @@ namespace ExitGames.Client.Photon
                 opParameters[ParameterCode.Region] = regionCode;
             }
 
-            if (!string.IsNullOrEmpty(userId))
+            if (authValues != null)
             {
-                opParameters[ParameterCode.UserId] = userId;
-            }
-
-
-            if (authValues != null && authValues.AuthType != CustomAuthenticationType.None)
-            {
-                if (!this.IsProtocolSecure && !this.IsEncryptionAvailable)
+                if (!string.IsNullOrEmpty(authValues.UserId))
                 {
-                    this.Listener.DebugReturn(DebugLevel.ERROR, "OpAuthenticate() failed. When you want Custom Authentication encryption is mandatory.");
-                    return false;
+                    UnityEngine.Debug.LogWarning("UserId sent: " + authValues.UserId);
+                    opParameters[ParameterCode.UserId] = authValues.UserId;
                 }
 
-                opParameters[ParameterCode.ClientAuthenticationType] = (byte)authValues.AuthType;
-                if (!string.IsNullOrEmpty(authValues.Secret))
+                if (authValues.AuthType != CustomAuthenticationType.None)
                 {
-                    opParameters[ParameterCode.Secret] = authValues.Secret;
-                }
-                //else
-                //{
-                    if (!string.IsNullOrEmpty(authValues.AuthParameters))
+                    if (!this.IsProtocolSecure && !this.IsEncryptionAvailable)
                     {
-                        opParameters[ParameterCode.ClientAuthenticationParams] = authValues.AuthParameters;
+                        this.Listener.DebugReturn(DebugLevel.ERROR, "OpAuthenticate() failed. When you want Custom Authentication encryption is mandatory.");
+                        return false;
+                    }
+
+                    opParameters[ParameterCode.ClientAuthenticationType] = (byte)authValues.AuthType;
+                    if (!string.IsNullOrEmpty(authValues.Token))
+                    {
+                        opParameters[ParameterCode.Secret] = authValues.Token;
+                    }
+                    //else
+                    //{
+                    if (!string.IsNullOrEmpty(authValues.AuthGetParameters))
+                    {
+                        opParameters[ParameterCode.ClientAuthenticationParams] = authValues.AuthGetParameters;
                     }
                     if (authValues.AuthPostData != null)
                     {
                         opParameters[ParameterCode.ClientAuthenticationData] = authValues.AuthPostData;
                     }
-                //}
+                    //}
+                }
             }
 
             bool sent = this.OpCustom(OperationCode.Authenticate, opParameters, true, (byte)0, this.IsEncryptionAvailable);
@@ -1115,10 +1125,17 @@ public enum CustomAuthenticationType : byte
     None = byte.MaxValue
 }
 
+
 /// <summary>
-/// Container for "Custom Authentication" values in Photon (default: user and token). Set AuthParameters before connecting - all else is handled.
+/// Container for user authentication in Photon. Set AuthValues before you connect - all else is handled.
 /// </summary>
 /// <remarks>
+/// On Photon, user authentication is optional but can be useful in many cases. 
+/// If you want to FindFriends, a unique ID per user is very practical.
+/// 
+/// There are basically three options for user authentification: None at all, the client sets some UserId
+/// or you can use some account web-service to authenticate a user (and set the UserId server-side).
+/// 
 /// Custom Authentication lets you verify end-users by some kind of login or token. It sends those
 /// values to Photon which will verify them before granting access or disconnecting the client.
 ///
@@ -1128,19 +1145,34 @@ public enum CustomAuthenticationType : byte
 public class AuthenticationValues
 {
     /// <summary>The type of custom authentication provider that should be used. Currently only "Custom" or "None" (turns this off).</summary>
-    public CustomAuthenticationType AuthType = CustomAuthenticationType.Custom;
+    public CustomAuthenticationType AuthType = CustomAuthenticationType.None;
 
     /// <summary>This string must contain any (http get) parameters expected by the used authentication service. By default, username and token.</summary>
     /// <remarks>Standard http get parameters are used here and passed on to the service that's defined in the server (Photon Cloud Dashboard).</remarks>
-    public string AuthParameters;   // { get { return a; } set { a = value; UnityEngine.Debug.LogWarning("AuthParameters set: " + value + " server: " + PhotonNetwork.ServerAddress); } }
-    //private string a;
-
-    /// <summary>After initial authentication, Photon provides a secret for this client / user, which is subsequently used as (cached) validation.</summary>
-    public string Secret;   // { get { return s; } set { s = value; UnityEngine.Debug.LogWarning("Secret set: " + value + " server: " + PhotonNetwork.ServerAddress); } }
-    //private string s;
+    public string AuthGetParameters;
 
     /// <summary>Data to be passed-on to the auth service via POST. Default: null (not sent). Either string or byte[] (see setters).</summary>
     public object AuthPostData { get; private set; }
+
+    /// <summary>After initial authentication, Photon provides a token for this client / user, which is subsequently used as (cached) validation.</summary>
+    public string Token;
+
+
+    /// <summary>The UserId should be a unique identifier per user. This is for finding friends, etc..</summary>
+    public string UserId { get; set; }
+
+
+    /// <summary>Creates empty auth values without any info.</summary>
+    public AuthenticationValues()
+    {
+    }
+
+    /// <summary>Creates minimal info about the user. If this is authenticated or not, depends on the set AuthType.</summary>
+    /// <param name="userId">Some UserId to set in Photon.</param>
+    public AuthenticationValues(string userId)
+    {
+        this.UserId = userId;
+    }
 
     /// <summary>Sets the data to be passed-on to the auth service via POST.</summary>
     /// <param name="byteData">Binary token / auth-data to pass on. Empty string will set AuthPostData to null.</param>
@@ -1156,17 +1188,18 @@ public class AuthenticationValues
         this.AuthPostData = byteData;
     }
 
-    /// <summary>Creates the default parameter string from a user and token value, escaping both. Alternatively set AuthParameters yourself.</summary>
-    /// <remarks>The default parameter string is: "username={user}&token={token}"</remarks>
-    /// <param name="user">Name or other end-user ID used in custom authentication service.</param>
-    /// <param name="token">Token provided by authentication service to be used on initial "login" to Photon.</param>
-    public virtual void SetAuthParameters(string user, string token)
+    /// <summary>Adds a key-value pair to the get-parameters used for Custom Auth.</summary>
+    /// <remarks>This method does uri-encoding for you.</remarks>
+    /// <param name="key">Key for the value to set.</param>
+    /// <param name="value">Some value relevant for Custom Authentication.</param>
+    public virtual void AddAuthParameter(string key, string value)
     {
-        this.AuthParameters = "username=" + System.Uri.EscapeDataString(user) + "&token=" + System.Uri.EscapeDataString(token);
+        string ampersand = string.IsNullOrEmpty(this.AuthGetParameters) ? "" : "&";
+        this.AuthGetParameters = string.Format("{0}{1}{2}={3}", this.AuthGetParameters, ampersand, System.Uri.EscapeDataString(key), System.Uri.EscapeDataString(value));
     }
 
     public override string ToString()
     {
-        return AuthParameters + " s: " + Secret;
+        return string.Format("AuthenticationValues UserId: {0}, GetParameters: {1} Token available: {2}", UserId, this.AuthGetParameters, Token != null);
     }
 }

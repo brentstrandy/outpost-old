@@ -123,12 +123,12 @@ public class EnemySpawnManager : MonoBehaviour
 
 	/// <summary>
 	/// Spawn's Enemy on all client machines.
-	/// An RPC option is needed in order to set the Enemy's default data AFTER being created
+	/// An PunRPC option is needed in order to set the Enemy's default data AFTER being created
 	/// </summary>
 	/// <param name="displayName">Display name.</param>
 	/// <param name="startAngle">Start angle.</param>
 	/// <param name="viewID">View ID.</param>
-	[RPC]
+	[PunRPC]
 	private void SpawnEnemyAcrossNetwork(string displayName, int startAngle, int viewID)
 	{
 		// Instantiate an Enemy
