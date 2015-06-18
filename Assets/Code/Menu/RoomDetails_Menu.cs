@@ -195,6 +195,9 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// <param name="player">Player Data</param>
 	private void PlayerJoinedRoom_Event(PhotonPlayer player)
 	{
+		// Tell the new Player which level is currently selected
+		ObjPhotonView.RPC("NewLevelSelected", player, LevelLoadoutData.DisplayName);
+
 		RefreshPlayerNames();
 	}
 
