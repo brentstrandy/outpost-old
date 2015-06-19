@@ -17,10 +17,14 @@ public class Tower : MonoBehaviour
 	public float BallisticDamaage;
 	public float TrackingSpeed; // Number of seconds it takes to lock onto a target
 
-	private GameObject Shot;
+	public int NetworkViewID { get; private set; }
 
 	protected Enemy TargetedEnemy = null;
 	protected float TimeLastShotFired;
+
+	// Components
+	protected PhotonView ObjPhotonView;
+	private GameObject Shot;
 
 	public void Awake()
 	{
@@ -32,9 +36,16 @@ public class Tower : MonoBehaviour
 	{
 		// Allow the first bullet to be fired immediately after the tower is instantiated
 		TimeLastShotFired = 0;
-
+		
 		GetComponent<HexLocation>().ApplyPosition(); // Update the hex coordinate to reflect the spawned position
+		
+		ObjPhotonView = PhotonView.Get(this);
+		NetworkViewID = ObjPhotonView.viewID;
+		
 		TowerManager.Instance.AddActiveTower(this);
+		
+		// Make the Master Client the owner of this object (authoritative server)
+		ObjPhotonView.TransferOwnership(SessionManager.Instance.GetMasterClientID());
 	}
 	
 	// Update is called once per frame
@@ -60,15 +71,40 @@ public class Tower : MonoBehaviour
 		TrackingSpeed = towerData.TrackingSpeed;
 	}
 
+	[PunRPC]
+	protected void TargetNewEnemy(int viewID)
+	{
+		// Find Enemy using the given Network View ID.
+		TargetedEnemy = EnemyManager.Instance.FindEnemyByID(viewID);
+	}
+	
+	[PunRPC]
+	protected void FireAcrossNetwork()
+	{
+		// TO DO: Make enemy take damage over the network
+		// TargetedEnemy is not being set
+		TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);
+		TimeLastShotFired = Time.time;
+		Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+	}
+	
 	protected virtual void OnTriggerStay(Collider other)
 	{
-		if(other.tag == "Enemy")
+		// Only Target enemies if this is the Master Client
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
+			// Only target a new enemy if an enemy isn't already targeted
 			if(TargetedEnemy == null)
-				TargetedEnemy = other.gameObject.GetComponent<Enemy>();
+			{
+				// Only target Enemy game objects
+				if(other.tag == "Enemy")
+				{
+					TargetedEnemy = other.gameObject.GetComponent<Enemy>();
+				}
+			}
 		}
 	}
-
+	
 	protected virtual void OnTriggerExit(Collider other)
 	{
 		if(TargetedEnemy != null)
@@ -82,29 +118,34 @@ public class Tower : MonoBehaviour
 		}
 	}
 
+	
+	
 	protected IEnumerator Fire()
 	{
 		while(this)
 		{
-			if(TargetedEnemy)
+			// Only perform the act of firing if this is the Master Client
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			{
-				if(Time.time - TimeLastShotFired >= RateOfFire)
+				if(TargetedEnemy)
 				{
-					// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
-					if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position - this.transform.position) <= 8 || Pivot == null)
+					if(Time.time - TimeLastShotFired >= RateOfFire)
 					{
-						TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);
-						TimeLastShotFired = Time.time;
-						//Instantiate(Resources.Load("Towers/SmallThraceiumLaserShot"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
-						Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+						// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
+						if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position - this.transform.position) <= 8 || Pivot == null)
+						{
+							ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
+						}
 					}
 				}
 			}
-
+			
 			yield return 0;
 		}
 	}
 
+
+	
 	#region MessageHandling
 	protected virtual void Log(string message)
 	{

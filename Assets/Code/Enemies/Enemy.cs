@@ -27,6 +27,8 @@ public class Enemy : MonoBehaviour
 	protected Vector3 CurVelocity;
 	protected Vector2 TargetHex;
 
+	public int NetworkViewID { get; private set; }
+
 	// Pathfinding
 	protected PathFindingType PathFinding;
 	protected GameObject TargetObject;
@@ -74,6 +76,7 @@ public class Enemy : MonoBehaviour
 	{
 		// Save reference to PhotonView
 		ObjPhotonView = PhotonView.Get (this);
+		NetworkViewID = ObjPhotonView.viewID;
 		// PhotonView does not instantiate the ObservedComponents list - you must instantiate this list before attempting
 		// to add any items into it.
 		ObjPhotonView.ObservedComponents = new List<Component>();

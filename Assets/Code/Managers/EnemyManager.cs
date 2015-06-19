@@ -65,6 +65,11 @@ public class EnemyManager : MonoBehaviour
 		ActiveEnemyList.Remove (enemy);
 	}
 
+	public Enemy FindEnemyByID(int viewID)
+	{
+		return ActiveEnemyList.Find(x => x.NetworkViewID == viewID);
+	}
+
 	#region MessageHandling
 	protected void Log(string message)
 	{

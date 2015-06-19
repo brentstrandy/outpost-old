@@ -323,6 +323,10 @@ public class SessionManager : MonoBehaviour
 		PhotonNetwork.LoadLevel(level);
 	}
 
+	public int GetMasterClientID()
+	{
+		return PhotonNetwork.masterClient.ID;
+	}
 	#endregion
 
 	#region PHOTON CONNECT/DISCONNECT
