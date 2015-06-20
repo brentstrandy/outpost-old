@@ -3,6 +3,7 @@
   <LevelData>
     <DisplayName>Level 1</DisplayName>
     <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>Level1</EnemySpawnFilename>
     <Description>This is the first level of the game. It's a great level.</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
@@ -16,6 +17,7 @@
   <LevelData>
     <DisplayName>Level 2</DisplayName>
     <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>Level2</EnemySpawnFilename>
     <Description>You beat the first level. Now try your luck on level 2</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
@@ -29,6 +31,7 @@
   <LevelData>
     <DisplayName>Level 3</DisplayName>
     <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>Level3</EnemySpawnFilename>
     <Description>Level 3 is by far the hardest level ever made</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
@@ -42,6 +45,7 @@
   <LevelData>
     <DisplayName>Level 4</DisplayName>
     <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>Level4</EnemySpawnFilename>
     <Description>This is the last level. It's super easy</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
@@ -55,6 +59,7 @@
   <LevelData>
     <DisplayName>Level 5</DisplayName>
     <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>Level5</EnemySpawnFilename>
     <Description>Join a team and take down these terrible mean enemies</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>

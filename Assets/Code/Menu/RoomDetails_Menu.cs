@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -290,7 +290,7 @@ public class RoomDetails_Menu : MonoBehaviour
 
 		if(LevelLoadoutData != null)
 		{
-			foreach(TowerData towerData in GameDataManager.Instance.TowerDataMngr.DataList)
+			foreach(TowerData towerData in GameDataManager.Instance.TowerDataManager.DataList)
 			{
 				// Only display this tower if the current level data allows it
 				if(LevelLoadoutData.AvailableTowers.Contains(towerData.DisplayName))
@@ -349,7 +349,7 @@ public class RoomDetails_Menu : MonoBehaviour
 			toggleGroup.AddComponent<ToggleGroup>();
 			toggleGroup.GetComponent<ToggleGroup>().allowSwitchOff = true;
 
-	        foreach (LevelData levelData in GameDataManager.Instance.LevelDataMngr.DataList)
+	        foreach (LevelData levelData in GameDataManager.Instance.LevelDataManager.DataList)
 	        {
 				LevelData ld = levelData;
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Analytics;
@@ -62,7 +62,7 @@ public class PlayerAnalytics : MonoBehaviour
     public void Start() 
     {
         // initialize based on number of levels
-        levelWins = new List<bool[]>(GameDataManager.Instance.LevelDataMngr.DataList.Count);
+        levelWins = new List<bool[]>(GameDataManager.Instance.LevelDataManager.DataList.Count);
         lastLevelReached = 1;
 
 	}

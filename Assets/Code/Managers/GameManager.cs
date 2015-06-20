@@ -11,16 +11,21 @@ public class GameManager : MonoBehaviour
 	public bool ShowDebugLogs = true;
 
 	private static GameManager instance;
-	//private PhotonView ObjPhotonView;
 
+	// Gameplay Managers
 	public EnemyManager EnemyManager { get; private set; }
 	public TowerManager TowerManager { get; private set; }
+	public EnemySpawnManager EnemySpawnManager { get; private set; }
 	public LevelData CurrentLevelData { get; private set; }
+
+	public DataManager<EnemySpawnData> EnemySpawnDataManager { get; private set; }
 
 	public bool Victory { get; private set; }
 	public bool GameRunning { get; private set; }
-	
+
+	// Components
 	public MiningFacility ObjMiningFacility;
+	private PhotonView ObjPhotonView;
 	
 	#region INSTANCE (SINGLETON)
 	/// <summary>
@@ -54,12 +59,26 @@ public class GameManager : MonoBehaviour
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
 		InputManager.Instance.OnQuadrantRotate += OnCameraQuadrantChanged;
 
-		EnemyManager = new EnemyManager();
-		TowerManager = new TowerManager();
-
 		// Store LevelData from MenuManager
 		CurrentLevelData = MenuManager.Instance.CurrentLevelData;
-		
+		// Store a reference to the PhotonView
+		ObjPhotonView = PhotonView.Get(this);
+
+		// Instantiate objects to manage Enemies and Towers
+		EnemyManager = new EnemyManager();
+		TowerManager = new TowerManager();
+		// Instantiate object to manage Enemy spawning
+		EnemySpawnManager = new EnemySpawnManager(ObjPhotonView);
+
+		// Begin gathering Enemy Spawn data that the EnemySpawnManager will eventually use
+		EnemySpawnDataManager = new DataManager<EnemySpawnData>();
+		// Grab the Enemy Spawn data from either the web server or local xml file. The EnemySpawnManager will use this
+		// data to spawn enemies once it has been loaded into the game
+		if(GameDataManager.Instance.DataLocation == "Local")
+			EnemySpawnDataManager.LoadDataFromLocal(CurrentLevelData.EnemySpawnFilename + ".xml");
+		else
+			StartCoroutine(EnemySpawnDataManager.LoadDataFromServer(CurrentLevelData.EnemySpawnFilename + ".xml"));
+
 		GameRunning = false;
 		Victory = false;
 	}
@@ -72,6 +91,11 @@ public class GameManager : MonoBehaviour
 		{
 			// TO DO: This should not be checked every update loop. It can probably just be checked every 1-2 seconds
 			EndGameCheck();
+		}
+		else
+		{
+			// Instantiate object to manage Enemy spawning
+			EnemySpawnManager = new EnemySpawnManager(ObjPhotonView);
 		}
 	}
 
@@ -91,8 +115,9 @@ public class GameManager : MonoBehaviour
 		// Inform the Camera of the new quadrant
 		CameraManager.Instance.SetStartQuadrant(CurrentLevelData.StartingQuadrant);
 
-		// Inform all necessary managers that this game has started
-		EnemySpawnManager.Instance.StartSpawning();
+		// Start Game is called once all data has been loaded. We can now tell the EnemySpawnManager to start 
+		// spawning enemies based on the previously loaded spawn data.
+		StartCoroutine(EnemySpawnManager.SpawnEnemies(EnemySpawnDataManager.DataList));
 	}
 
 	/// <summary>
@@ -105,8 +130,9 @@ public class GameManager : MonoBehaviour
 
 		// At the moment the only data that needs to be checked is the EnemySpawnManager
 		// Add additional checks for loaded data here if necessary
-		if(EnemySpawnManager.Instance.FinishedLoadingData)
-			success = true;
+		if(EnemySpawnDataManager != null)
+			if(EnemySpawnDataManager.FinishedLoadingData)
+				success = true;
 
 		return success;
 	}
@@ -117,10 +143,43 @@ public class GameManager : MonoBehaviour
 	private void EndGameCheck()
 	{
 		// Check to see if all the enemies have spawned and if all enemies are dead
-		if(EnemySpawnManager.Instance.FinishedSpawning && GameManager.Instance.EnemyManager.ActiveEnemyCount() == 0)
+		if(EnemySpawnManager.FinishedSpawning && GameManager.Instance.EnemyManager.ActiveEnemyCount() == 0)
 			EndGame_Victory();
 		else if(ObjMiningFacility.Health <= 0)
 			EndGame_Loss();
+	}
+
+	/// <summary>
+	/// Spawn's Enemy on all client machines.
+	/// An PunRPC option is needed in order to set the Enemy's default data AFTER being created
+	/// </summary>
+	/// <param name="displayName">Display name.</param>
+	/// <param name="startAngle">Start angle.</param>
+	/// <param name="viewID">View ID.</param>
+	[PunRPC]
+	private void SpawnEnemyAcrossNetwork(string displayName, int startAngle, int viewID)
+	{
+		// Instantiate a new Enemy
+		GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.FindEnemyPrefabNameByDisplayName(displayName)), AngleToPosition(startAngle), Quaternion.identity) as GameObject;
+		// Add a PhotonView to the Enemy
+		newEnemy.AddComponent<PhotonView>();
+		// Set Enemy's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
+		newEnemy.GetComponent<PhotonView>().viewID = viewID;
+		// The Prefab doesn't contain the correct default data. Set the Enemy's default data now
+		newEnemy.GetComponent<Enemy>().SetEnemyData(GameDataManager.Instance.FindEnemyDataByDisplayName(displayName));
+	}
+	
+	/// <summary>
+	/// Calculates the starting position of an enemy based on a given angle
+	/// </summary>
+	/// <returns>The to position.</returns>
+	/// <param name="angle">Angle.</param>
+	private Vector3 AngleToPosition(int angle)
+	{
+		float radians = (Mathf.PI / 180) * angle; // Mathf.Deg2Rad;
+		
+		// Note from J.S. 2015-03-29: Shouldn't the sin and cos be reversed here? I think that would put 0 degrees to the north, which seems to be typical.
+		return new Vector3(Mathf.Sin(radians), Mathf.Cos(radians), 0) * 25;
 	}
 
 	/// <summary>

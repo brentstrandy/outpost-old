@@ -333,6 +333,9 @@ public class Enemy : MonoBehaviour
 		TargetHex = newTargetHex;
 	}
 
+	/// <summary>
+	/// Destroy the Enemy from all areas of the game
+	/// </summary>
 	private void DestroyEnemy()
 	{
 		// TO DO: Instantiate explosion

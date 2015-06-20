@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class DataManager<T>
 {
-	public bool ShowDebugLogs = false;
+	public bool ShowDebugLogs = true;
 	
 	public bool FinishedLoadingData { get; private set; }
 	 
@@ -36,6 +36,7 @@ public class DataManager<T>
 				DataList.Add(data);
 			}
 
+			FinishedLoadingData = true;
 			Log ("Loaded " + typeof(T) + " (Local)");
 		}
 		else
@@ -63,6 +64,7 @@ public class DataManager<T>
 			DataList.Add(data);
 		}
 
+		FinishedLoadingData = true;
 		Log ("Loaded " + typeof(T) + " (Server)");
 	}
 	
