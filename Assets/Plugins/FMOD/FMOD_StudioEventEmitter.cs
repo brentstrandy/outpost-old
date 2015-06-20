@@ -170,7 +170,7 @@ public class FMOD_StudioEventEmitter : MonoBehaviour
 	{
 		if (evt != null && evt.isValid ()) 
 		{
-			var attributes = UnityUtil.to3DAttributes(gameObject, cachedRigidBody);			
+			var attributes = FMOD.Studio.UnityUtil.to3DAttributes(gameObject, cachedRigidBody);			
 			ERRCHECK(evt.set3DAttributes(attributes));
 		}
 	}    

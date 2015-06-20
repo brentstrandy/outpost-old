@@ -16,7 +16,7 @@ namespace FMOD
     */
     public class VERSION
     {
-        public const int    number = 0x00010600;
+        public const int    number = 0x00010604;
 #if UNITY_IPHONE && !UNITY_EDITOR
         public const string dll    = "__Internal";
 #elif (UNITY_PS4) && !UNITY_EDITOR
@@ -25,6 +25,8 @@ namespace FMOD
         public const string dll    = "libfmodstudio";
 #elif (UNITY_WIIU) && !UNITY_EDITOR
         public const string dll    = "libfmodstudio";
+#elif (UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX) && FMOD_DEBUG
+        public const string dll    = "fmodl";
 #else
         public const string dll    = "fmod";
 #endif
@@ -1034,6 +1036,38 @@ namespace FMOD
         PREUPDATE              = 0x00000400,  /* Called at start of System::update function. */
         POSTUPDATE             = 0x00000800,  /* Called at end of System::update function. */
     }
+	
+    #region wrapperinternal
+    [StructLayout(LayoutKind.Sequential)]
+    public struct StringWrapper
+    {
+        IntPtr nativeUtf8Ptr;
+
+        public static implicit operator string(StringWrapper fstring)
+        {
+            if (fstring.nativeUtf8Ptr == IntPtr.Zero)
+            {
+                return "";
+            }
+
+            int strlen = 0;
+            while (Marshal.ReadByte(fstring.nativeUtf8Ptr, strlen) != 0)
+            {
+                strlen++;
+            }
+            if (strlen > 0)
+            {
+                byte[] bytes = new byte[strlen];
+                Marshal.Copy(fstring.nativeUtf8Ptr, bytes, 0, strlen);
+                return Encoding.UTF8.GetString(bytes, 0, strlen);
+            }
+            else
+            {
+                return "";
+            }
+        }
+    }
+    #endregion
 
     /*
         FMOD Callbacks
@@ -1050,16 +1084,16 @@ namespace FMOD
     public delegate RESULT SOUND_PCMREADCALLBACK    (IntPtr soundraw, IntPtr data, uint datalen);
     public delegate RESULT SOUND_PCMSETPOSCALLBACK  (IntPtr soundraw, int subsound, uint position, TIMEUNIT postype);
 
-    public delegate RESULT FILE_OPENCALLBACK        ([MarshalAs(UnmanagedType.LPWStr)]string name, ref uint filesize, ref IntPtr handle, IntPtr userdata);
+    public delegate RESULT FILE_OPENCALLBACK        (StringWrapper name, ref uint filesize, ref IntPtr handle, IntPtr userdata);
     public delegate RESULT FILE_CLOSECALLBACK       (IntPtr handle, IntPtr userdata);
     public delegate RESULT FILE_READCALLBACK        (IntPtr handle, IntPtr buffer, uint sizebytes, ref uint bytesread, IntPtr userdata);
     public delegate RESULT FILE_SEEKCALLBACK        (IntPtr handle, int pos, IntPtr userdata);
     public delegate RESULT FILE_ASYNCREADCALLBACK   (IntPtr handle, IntPtr info, IntPtr userdata);
     public delegate RESULT FILE_ASYNCCANCELCALLBACK (IntPtr handle, IntPtr userdata);
 
-    public delegate IntPtr MEMORY_ALLOC_CALLBACK    (uint size, MEMORY_TYPE type, string sourcestr);
-    public delegate IntPtr MEMORY_REALLOC_CALLBACK  (IntPtr ptr, uint size, MEMORY_TYPE type, string sourcestr);
-    public delegate void   MEMORY_FREE_CALLBACK     (IntPtr ptr, MEMORY_TYPE type, string sourcestr);
+    public delegate IntPtr MEMORY_ALLOC_CALLBACK    (uint size, MEMORY_TYPE type, StringWrapper sourcestr);
+    public delegate IntPtr MEMORY_REALLOC_CALLBACK  (IntPtr ptr, uint size, MEMORY_TYPE type, StringWrapper sourcestr);
+    public delegate void   MEMORY_FREE_CALLBACK     (IntPtr ptr, MEMORY_TYPE type, StringWrapper sourcestr);
 
     public delegate float  CB_3D_ROLLOFFCALLBACK    (IntPtr channelraw, float distance);
 
@@ -1420,18 +1454,18 @@ namespace FMOD
     [StructLayout(LayoutKind.Sequential)]
     public struct REVERB_PROPERTIES
     {                            /*        MIN     MAX    DEFAULT   DESCRIPTION */
-        float DecayTime;         /* [r/w]  0.0    20000.0 1500.0  Reverberation decay time in ms                                        */
-        float EarlyDelay;        /* [r/w]  0.0    300.0   7.0     Initial reflection delay time                                         */
-        float LateDelay;         /* [r/w]  0.0    100     11.0    Late reverberation delay time relative to initial reflection          */
-        float HFReference;       /* [r/w]  20.0   20000.0 5000    Reference high frequency (hz)                                         */
-        float HFDecayRatio;      /* [r/w]  10.0   100.0   50.0    High-frequency to mid-frequency decay time ratio                      */
-        float Diffusion;         /* [r/w]  0.0    100.0   100.0   Value that controls the echo density in the late reverberation decay. */
-        float Density;           /* [r/w]  0.0    100.0   100.0   Value that controls the modal density in the late reverberation decay */
-        float LowShelfFrequency; /* [r/w]  20.0   1000.0  250.0   Reference low frequency (hz)                                          */
-        float LowShelfGain;      /* [r/w]  -36.0  12.0    0.0     Relative room effect level at low frequencies                         */
-        float HighCut;           /* [r/w]  20.0   20000.0 20000.0 Relative room effect level at high frequencies                        */
-        float EarlyLateMix;      /* [r/w]  0.0    100.0   50.0    Early reflections level relative to room effect                       */
-        float WetLevel;          /* [r/w]  -80.0  20.0    -6.0    Room effect level (at mid frequencies)
+        public float DecayTime;         /* [r/w]  0.0    20000.0 1500.0  Reverberation decay time in ms                                        */
+        public float EarlyDelay;        /* [r/w]  0.0    300.0   7.0     Initial reflection delay time                                         */
+        public float LateDelay;         /* [r/w]  0.0    100     11.0    Late reverberation delay time relative to initial reflection          */
+        public float HFReference;       /* [r/w]  20.0   20000.0 5000    Reference high frequency (hz)                                         */
+        public float HFDecayRatio;      /* [r/w]  10.0   100.0   50.0    High-frequency to mid-frequency decay time ratio                      */
+        public float Diffusion;         /* [r/w]  0.0    100.0   100.0   Value that controls the echo density in the late reverberation decay. */
+        public float Density;           /* [r/w]  0.0    100.0   100.0   Value that controls the modal density in the late reverberation decay */
+        public float LowShelfFrequency; /* [r/w]  20.0   1000.0  250.0   Reference low frequency (hz)                                          */
+        public float LowShelfGain;      /* [r/w]  -36.0  12.0    0.0     Relative room effect level at low frequencies                         */
+        public float HighCut;           /* [r/w]  20.0   20000.0 20000.0 Relative room effect level at high frequencies                        */
+        public float EarlyLateMix;      /* [r/w]  0.0    100.0   50.0    Early reflections level relative to room effect                       */
+        public float WetLevel;          /* [r/w]  -80.0  20.0    -6.0    Room effect level (at mid frequencies)
                                   * */
         #region wrapperinternal
         public REVERB_PROPERTIES(float decayTime, float earlyDelay, float lateDelay, float hfReference,
@@ -3646,19 +3680,19 @@ namespace FMOD
         }
 
         // Connection / disconnection / input and output enumeration.
-        public RESULT addInput(DSP target, out DSPConnection connection)
+        public RESULT addInput(DSP target, out DSPConnection connection, DSPCONNECTION_TYPE type)
         {
             connection = null;
 
             IntPtr dspconnectionraw;
-            RESULT result = FMOD5_DSP_AddInput(rawPtr, target.getRaw(), out dspconnectionraw);
+            RESULT result = FMOD5_DSP_AddInput(rawPtr, target.getRaw(), out dspconnectionraw, type);
             connection = new DSPConnection(dspconnectionraw);
 
             return result;
         }
-        public RESULT disconnectFrom            (DSP target)
+        public RESULT disconnectFrom            (DSP target, DSPConnection connection)
         {
-            return FMOD5_DSP_DisconnectFrom(rawPtr, target.getRaw());
+            return FMOD5_DSP_DisconnectFrom(rawPtr, target.getRaw(), connection.getRaw());
         }
         public RESULT disconnectAll             (bool inputs, bool outputs)
         {
@@ -3857,9 +3891,9 @@ namespace FMOD
         [DllImport(VERSION.dll)]
         private static extern RESULT FMOD5_DSP_GetSystemObject           (IntPtr dsp, out IntPtr system);
         [DllImport(VERSION.dll)]
-        private static extern RESULT FMOD5_DSP_AddInput                  (IntPtr dsp, IntPtr target, out IntPtr connection);
+        private static extern RESULT FMOD5_DSP_AddInput                  (IntPtr dsp, IntPtr target, out IntPtr connection, DSPCONNECTION_TYPE type);
         [DllImport(VERSION.dll)]
-        private static extern RESULT FMOD5_DSP_DisconnectFrom            (IntPtr dsp, IntPtr target);
+        private static extern RESULT FMOD5_DSP_DisconnectFrom            (IntPtr dsp, IntPtr target, IntPtr connection);
         [DllImport(VERSION.dll)]
         private static extern RESULT FMOD5_DSP_DisconnectAll             (IntPtr dsp, bool inputs, bool outputs);
         [DllImport(VERSION.dll)]

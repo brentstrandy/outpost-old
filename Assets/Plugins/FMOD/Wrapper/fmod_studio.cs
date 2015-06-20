@@ -18,6 +18,8 @@ namespace Studio
         public const string dll    = "__Internal";
 #elif (UNITY_PS4 || UNITY_WIIU || UNITY_PSP2) && !UNITY_EDITOR
 		public const string dll    = "libfmodstudio";
+#elif (UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX) && FMOD_DEBUG
+        public const string dll    = "fmodstudiol";
 #else
 		public const string dll    = "fmodstudio";
 #endif
@@ -176,7 +178,15 @@ namespace Studio
             {
                 if (((mode & (MODE.OPENMEMORY | MODE.OPENMEMORY_POINT)) == 0) && (name_or_data != null))
                 {
-                    return Encoding.UTF8.GetString(name_or_data);
+                    int strlen = Array.IndexOf(name_or_data, (byte)0);
+                    if (strlen > 0)
+                    {
+                        return Encoding.UTF8.GetString(name_or_data, 0, strlen);
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 else
                 {
@@ -433,7 +443,7 @@ namespace Studio
     public delegate RESULT EVENT_CALLBACK(EVENT_CALLBACK_TYPE type, IntPtr eventInstance, IntPtr parameters);
 
     public delegate RESULT COMMANDREPLAY_FRAME_CALLBACK(IntPtr replay, int commandIndex, float currentTime, IntPtr userdata);
-    public delegate RESULT COMMANDREPLAY_LOAD_BANK_CALLBACK(IntPtr replay, ref Guid guid, byte[] bankFilename, LOAD_BANK_FLAGS flags, out IntPtr bank, IntPtr userdata);
+    public delegate RESULT COMMANDREPLAY_LOAD_BANK_CALLBACK(IntPtr replay, ref Guid guid, StringWrapper bankFilename, LOAD_BANK_FLAGS flags, out IntPtr bank, IntPtr userdata);
     public delegate RESULT COMMANDREPLAY_CREATE_INSTANCE_CALLBACK(IntPtr replay, IntPtr eventDescription, IntPtr originalHandle, out IntPtr instance, IntPtr userdata);
 
     public enum INSTANCETYPE
@@ -2152,9 +2162,13 @@ namespace Studio
         {
             return FMOD_Studio_CommandReplay_Stop(rawPtr);
         }
-        public RESULT seek(int commandIndex)
+        public RESULT seekToTime(float time)
         {
-            return FMOD_Studio_CommandReplay_Seek(rawPtr, commandIndex);
+            return FMOD_Studio_CommandReplay_SeekToTime(rawPtr, time);
+        }
+        public RESULT seekToCommand(int commandIndex)
+        {
+            return FMOD_Studio_CommandReplay_SeekToCommand(rawPtr, commandIndex);
         }
         public RESULT getPaused(out bool paused)
         {
@@ -2221,7 +2235,9 @@ namespace Studio
         [DllImport(STUDIO_VERSION.dll)]
         private static extern RESULT FMOD_Studio_CommandReplay_Stop(IntPtr replay);
         [DllImport(STUDIO_VERSION.dll)]
-        private static extern RESULT FMOD_Studio_CommandReplay_Seek(IntPtr replay, int commandIndex);
+        private static extern RESULT FMOD_Studio_CommandReplay_SeekToTime(IntPtr replay, float time);
+        [DllImport(STUDIO_VERSION.dll)]
+        private static extern RESULT FMOD_Studio_CommandReplay_SeekToCommand(IntPtr replay, int commandIndex);
         [DllImport(STUDIO_VERSION.dll)]
         private static extern RESULT FMOD_Studio_CommandReplay_GetPaused(IntPtr replay, out bool paused);
         [DllImport(STUDIO_VERSION.dll)]
@@ -2279,7 +2295,7 @@ namespace Studio
             if (len == 0) return string.Empty;
             byte[] buffer = new byte[len];
             Marshal.Copy(nativeUtf8, buffer, 0, buffer.Length);
-            return Encoding.UTF8.GetString(buffer);
+            return Encoding.UTF8.GetString(buffer, 0, len);
         }
     }
 

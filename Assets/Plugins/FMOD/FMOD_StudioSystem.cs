@@ -1,9 +1,11 @@
-#define FMOD_LIVEUPDATE
-
 using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
+#if UNITY_EDITOR && FMOD_DEBUG
+using System.IO;
+#endif
 
 namespace FMOD
 {
@@ -240,6 +242,8 @@ public class FMOD_StudioSystem : MonoBehaviour
 	{
 		get { return system; }
 	}
+
+    
 	
 	void Init()
     {
@@ -272,6 +276,10 @@ public class FMOD_StudioSystem : MonoBehaviour
         }
 #endif
 
+		#if FMOD_DEBUG
+			FMOD.Debug.Initialize(FMOD.DEBUG_FLAGS.LOG, FMOD.DEBUG_MODE.FILE, null, "fmod.log");
+		#endif
+
 
         FMOD.Studio.UnityUtil.Log("FMOD_StudioSystem: system.init");
         FMOD.RESULT result = FMOD.RESULT.OK;
@@ -303,8 +311,17 @@ public class FMOD_StudioSystem : MonoBehaviour
             ERRCHECK(result);
         }
 
+        #if UNITY_EDITOR && FMOD_DEBUG
+        var fileStream = new FileStream("fmod.log",FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        logReader = new StreamReader(fileStream);
+        #endif
+
         isInitialized = true;
     }
+    
+    #if UNITY_EDITOR && FMOD_DEBUG
+    StreamReader logReader;
+    #endif
 	
 	void OnApplicationPause(bool pauseStatus)
 	{
@@ -337,6 +354,36 @@ public class FMOD_StudioSystem : MonoBehaviour
 		if (isInitialized)
 		{
 			ERRCHECK(system.update());
+            #if FMOD_DEBUG && UNITY_EDITOR
+            try
+            {
+                if (logReader != null && !logReader.EndOfStream)
+                {
+                    var line = logReader.ReadLine();
+                    if (line != null)
+                    {
+                        string severity = line.Substring(0, 5);
+                        string location = line.Substring(6, 40);
+                        string message = line.Substring(49);
+                        string formattedMessage = String.Format("{0}\t{1}", location, message);
+                        if (severity == "[ERR]")
+                        {
+                            UnityEngine.Debug.LogError(formattedMessage, null);
+                        }
+                        else if (severity == "[WRN]")
+                        {
+                            UnityEngine.Debug.LogWarning(formattedMessage, null);
+                        }
+                        else
+                        {
+                            UnityEngine.Debug.Log(formattedMessage, null);
+                        }
+                    }
+                }
+            }
+            catch
+            { }
+            #endif
 		}
 	}
 	
@@ -346,6 +393,14 @@ public class FMOD_StudioSystem : MonoBehaviour
 		{
 			FMOD.Studio.UnityUtil.Log("__ SHUT DOWN FMOD SYSTEM __");
 			ERRCHECK(system.release());
+
+            #if FMOD_DEBUG && UNITY_EDITOR
+            if (logReader != null)
+            {
+                logReader.Close();
+                logReader = null;
+            }   
+            #endif
 
             if (this == sInstance)
             {

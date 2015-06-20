@@ -843,7 +843,7 @@ public class FMODEditorExtension : MonoBehaviour
 			DeleteBinaryFile(studioLib);
 		}
 		
-		#if !UNITY_5_0
+		#if !UNITY_5
 		if (!UnityEditorInternal.InternalEditorUtility.HasPro())
 		{
 			if (Application.platform == RuntimePlatform.WindowsEditor)
