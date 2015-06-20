@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour
 
 	private static GameManager instance;
 	//private PhotonView ObjPhotonView;
-	
+
+	public EnemyManager EnemyManager { get; private set; }
+	public TowerManager TowerManager { get; private set; }
 	public LevelData CurrentLevelData { get; private set; }
 
 	public bool Victory { get; private set; }
@@ -51,7 +53,10 @@ public class GameManager : MonoBehaviour
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
 		InputManager.Instance.OnQuadrantRotate += OnCameraQuadrantChanged;
-		
+
+		EnemyManager = new EnemyManager();
+		TowerManager = new TowerManager();
+
 		// Store LevelData from MenuManager
 		CurrentLevelData = MenuManager.Instance.CurrentLevelData;
 		
@@ -112,7 +117,7 @@ public class GameManager : MonoBehaviour
 	private void EndGameCheck()
 	{
 		// Check to see if all the enemies have spawned and if all enemies are dead
-		if(EnemySpawnManager.Instance.FinishedSpawning && EnemyManager.Instance.ActiveEnemyCount() == 0)
+		if(EnemySpawnManager.Instance.FinishedSpawning && GameManager.Instance.EnemyManager.ActiveEnemyCount() == 0)
 			EndGame_Victory();
 		else if(ObjMiningFacility.Health <= 0)
 			EndGame_Loss();

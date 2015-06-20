@@ -6,53 +6,20 @@ using System.Collections.Generic;
 /// Manages a reference to all currently active Enemies
 /// Created By: Brent Strandy
 /// </summary>
-public class EnemyManager : MonoBehaviour
+public class EnemyManager
 {
 	public bool ShowDebugLogs = true;
 
-	private static EnemyManager instance;
-
 	private List<Enemy> ActiveEnemyList;
-
-	#region INSTANCE (SINGLETON)
-	/// <summary>
-	/// Singleton - There can only be one
-	/// </summary>
-	/// <value>The instance.</value>
-	public static EnemyManager Instance
-	{
-		get
-		{
-			if(instance == null)
-			{
-				instance = GameObject.FindObjectOfType<EnemyManager>();
-			}
-			
-			return instance;
-		}
-	}
 	
-	void Awake()
+	public EnemyManager()
 	{
-		instance = this;
+		ActiveEnemyList = new List<Enemy>();
 	}
-	#endregion
 
 	public int ActiveEnemyCount()
 	{
 		return ActiveEnemyList.Count;
-	}
-
-	// Use this for initialization
-	void Start ()
-	{
-		ActiveEnemyList = new List<Enemy>();
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
 	}
 
 	public void AddActiveEnemy(Enemy enemy)

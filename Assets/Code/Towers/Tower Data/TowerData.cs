@@ -17,7 +17,6 @@ public class TowerData
 
 	// Tower Stats
 	public int Health;
-    public int PlayerCount; // how many players required to spawn this enemy
     public float RateOfFire;
     public float Cooldown;
 	public float Range;
@@ -56,7 +55,7 @@ public class TowerData
     {
         DisplayName = PrefabName = "";
 
-        Health = PlayerCount = 0;
+        Health = 0;
         RateOfFire = Cooldown = Range = ThraceiumDamage = BallisticDamage = TransitionTime = 0;
         InstallCost = 0;
         MaintenanceCost = StartupTime = TrackingSpeed = 0;

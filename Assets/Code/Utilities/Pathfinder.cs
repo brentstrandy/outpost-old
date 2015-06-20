@@ -56,7 +56,7 @@ public class Pathfinder : MonoBehaviour
 
 		if (AvoidTowers)
 		{
-			if (TowerManager.Instance.HasTower(coord))
+			if (GameManager.Instance.TowerManager.HasTower(coord))
 			{
 				return true;
 			}

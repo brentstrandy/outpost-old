@@ -3,48 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Settworks.Hexagons;
 
-public class TowerManager : MonoBehaviour
+public class TowerManager
 {
 	public bool ShowDebugLogs = true;
-	private static TowerManager instance;
 
 	private List<Tower> ActiveTowerList;
 	private HashSet<HexCoord> TowerLocations = new HashSet<HexCoord>();
 
-	#region INSTANCE (SINGLETON)
-	/// <summary>
-	/// Singleton - There can only be one
-	/// </summary>
-	/// <value>The instance.</value>
-	public static TowerManager Instance
-	{
-		get
-		{
-			if(instance == null)
-			{
-				instance = GameObject.FindObjectOfType<TowerManager>();
-			}
-			
-			return instance;
-		}
-	}
-	
-	void Awake()
-	{
-		instance = this;
-	}
-	#endregion
-
 	// Use this for initialization
-	void Start ()
+	public TowerManager()
 	{
 		ActiveTowerList = new List<Tower>();
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-
 	}
 
 	public int ActiveTowerCount()

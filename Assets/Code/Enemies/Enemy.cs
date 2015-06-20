@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
 		TimeLastShotFired = Time.time - (RateOfFire * 2);
 
 		// Add the enemy to the EnemyManager object to track the Enemy
-		EnemyManager.Instance.AddActiveEnemy(this);
+		GameManager.Instance.EnemyManager.AddActiveEnemy(this);
 
 		Shot = Resources.Load("Enemies/LightSpeederShot") as GameObject;
 	}
@@ -202,33 +202,46 @@ public class Enemy : MonoBehaviour
 
 	public virtual void TakeDamage(float ballisticsDamage, float thraceiumDamage)
 	{
-		// Take damage from Ballistics and Thraceium
-		Health -= (ballisticsDamage * BallisticDefense);
-		Health -= (thraceiumDamage * ThraceiumDefense);
-		Health = Mathf.Max(Health, 0);
-
-		// Only update the Health Bar if there is one to update
-		if(HealthBar)
+		// Only the master client dictates how to handle damage
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			HealthBar.UpdateHealthBar(Health);
+			// Take damage from Ballistics and Thraceium
+			Health -= (ballisticsDamage * BallisticDefense);
+			Health -= (thraceiumDamage * ThraceiumDefense);
+			Health = Mathf.Max(Health, 0);
 
-			// Save previous size in order to reposition the health bar to the left
-			//float previousSize = HealthBar.transform.position.;
-			//HealthBar.transform.localScale = new Vector3(Health / MaxHealth, HealthBar.transform.localScale.y, HealthBar.transform.localScale.z);
-			// Move health bar in order to give the illusion that the health bar is losing width from right-to-left (not outside-to-inside)
-			//HealthBar.transform.localPosition = new Vector3(HealthBar.transform.localPosition.x - (previousSize - HealthBar.transform.localScale.x), HealthBar.transform.localPosition.y, HealthBar.transform.localPosition.z);
-		}
+			// Only update the Health Bar if there is one to update
+			if(HealthBar)
+				HealthBar.UpdateHealthBar(Health);
 
-		// Check to see if enemy is dead
-		if(Health <= 0)
-		{
-			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			// Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
+			if(Health <= 0)
 				ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
+			else
+				ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticsDamage, thraceiumDamage);
 		}
 	}
 
 	/// <summary>
-	/// Destroy the enemy (only if the player is the master client)
+	/// RPC Call to tell players the enemy needs to take damage
+	/// </summary>
+	/// <param name="ballisticsDamage">Ballistics damage</param>
+	/// <param name="thraceiumDamage">Thraceium damage</param>
+	[PunRPC]
+	protected virtual void TakeDamageAcrossNetwork(float ballisticsDamage, float thraceiumDamage)
+	{
+		// Take damage from Ballistics and Thraceium
+		Health -= (ballisticsDamage * BallisticDefense);
+		Health -= (thraceiumDamage * ThraceiumDefense);
+		Health = Mathf.Max(Health, 0);
+		
+		// Only update the Health Bar if there is one to update
+		if(HealthBar)
+			HealthBar.UpdateHealthBar(Health);
+	}
+
+	/// <summary>
+	/// RPC Call to tell players to kill the enemy
 	/// </summary>
 	[PunRPC]
 	protected virtual void DieAcrossNetwork()
@@ -242,30 +255,23 @@ public class Enemy : MonoBehaviour
 
 		// Stop sending network updates for this object - it is dead
 		ObjPhotonView.ObservedComponents.Clear();
-
-
-		Destroy (this);
 	}
 
-	public void OnDestroy()
-	{
-		// TO DO: Instantiate explosion
-
-		// Tell the enemy manager this enemy is being destroyed
-		EnemyManager.Instance.RemoveActiveEnemy(this);
-	}
-
+	/// <summary>
+	/// Forces the Enemy to die regardless of how much health is left
+	/// </summary>
 	public virtual void ForceInstantDeath()
 	{
-		Destroy(this);
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
 	}
 
 	public virtual void OnTriggerEnter(Collider other)
 	{
 		if(other.tag == "Terrain")
 		{
-			// Destroy the enemy whenver they crash to the ground
-			Destroy(this);
+			// Destroy the enemy when it crashes to the ground
+			DestroyEnemy();
 		}
 	}
 
@@ -326,7 +332,18 @@ public class Enemy : MonoBehaviour
 	{
 		TargetHex = newTargetHex;
 	}
-	
+
+	private void DestroyEnemy()
+	{
+		// TO DO: Instantiate explosion
+
+		// Tell the enemy manager this enemy is being destroyed
+		GameManager.Instance.EnemyManager.RemoveActiveEnemy(this);
+
+		// The GameObject must be destroyed or else the enemy will stay instantiated
+		Destroy (this.gameObject);
+	}
+
 	#region MessageHandling
 	protected virtual void Log(string message)
 	{

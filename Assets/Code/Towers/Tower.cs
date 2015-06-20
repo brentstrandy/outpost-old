@@ -26,6 +26,7 @@ public class Tower : MonoBehaviour
 	protected PhotonView ObjPhotonView;
 	private GameObject Shot;
 
+	#region Initialize
 	public void Awake()
 	{
 		Shot = Resources.Load("Towers/SmallThraceiumLaserShot") as GameObject;
@@ -42,23 +43,16 @@ public class Tower : MonoBehaviour
 		ObjPhotonView = PhotonView.Get(this);
 		NetworkViewID = ObjPhotonView.viewID;
 		
-		TowerManager.Instance.AddActiveTower(this);
+		GameManager.Instance.TowerManager.AddActiveTower(this);
 		
 		// Make the Master Client the owner of this object (authoritative server)
 		ObjPhotonView.TransferOwnership(SessionManager.Instance.GetMasterClientID());
 	}
-	
-	// Update is called once per frame
-	public virtual void Update()
-	{
-		if(TargetedEnemy)
-		{
-			// Have the tower's pivot point look at the targeted enemy
-			if(Pivot)
-				transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - transform.position, Up), Time.deltaTime * TrackingSpeed );
-		}
-	}
 
+	/// <summary>
+	/// Sets the tower's properties based on TowerData
+	/// </summary>
+	/// <param name="towerData">Tower data</param>
 	protected void SetTowerData(TowerData towerData)
 	{
 		Name = towerData.DisplayName;
@@ -70,24 +64,24 @@ public class Tower : MonoBehaviour
 		BallisticDamaage = towerData.BallisticDamage;
 		TrackingSpeed = towerData.TrackingSpeed;
 	}
+	#endregion
 
-	[PunRPC]
-	protected void TargetNewEnemy(int viewID)
+	// Update is called once per frame
+	public virtual void Update()
 	{
-		// Find Enemy using the given Network View ID.
-		TargetedEnemy = EnemyManager.Instance.FindEnemyByID(viewID);
+		if(TargetedEnemy)
+		{
+			// Have the tower's pivot point look at the targeted enemy
+			if(Pivot)
+				transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - transform.position, Up), Time.deltaTime * TrackingSpeed );
+		}
 	}
-	
-	[PunRPC]
-	protected void FireAcrossNetwork()
-	{
-		// TO DO: Make enemy take damage over the network
-		// TargetedEnemy is not being set
-		TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);
-		TimeLastShotFired = Time.time;
-		Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
-	}
-	
+
+	#region Identifying Target
+	/// <summary>
+	/// Trigger event used to identify when Enemies enter the tower's firing radius
+	/// </summary>
+	/// <param name="other">Collider definitions</param>
 	protected virtual void OnTriggerStay(Collider other)
 	{
 		// Only Target enemies if this is the Master Client
@@ -99,41 +93,97 @@ public class Tower : MonoBehaviour
 				// Only target Enemy game objects
 				if(other.tag == "Enemy")
 				{
+					// Tell all other clients to target a new enemy
+					ObjPhotonView.RPC("TargetNewEnemy", PhotonTargets.Others, other.GetComponent<Enemy>().NetworkViewID);
+
+					// Master Client targets the Enemy
 					TargetedEnemy = other.gameObject.GetComponent<Enemy>();
 				}
 			}
 		}
 	}
-	
+
+	/// <summary>
+	/// Trigger event used to identify when Enemies exit the tower's firing radius
+	/// </summary>
+	/// <param name="other">Collider definitions</param>
 	protected virtual void OnTriggerExit(Collider other)
 	{
-		if(TargetedEnemy != null)
+		// Only Target enemies if this is the Master Client
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			if(other.tag == "Enemy")
+			// Only reset the target enemy if one is already targeted
+			if(TargetedEnemy != null)
 			{
-				// Remove the targeted Enemy when the enemy leaves
-				if(other.gameObject.GetComponent<Enemy>().Equals(TargetedEnemy))
-					TargetedEnemy = null;
+				// Only reset the target if the object exiting is an enemy
+				if(other.tag == "Enemy")
+				{
+					// Remove the targeted Enemy when the enemy leaves
+					if(other.gameObject.GetComponent<Enemy>().Equals(TargetedEnemy))
+					{
+						// Tell all other clients that 
+						ObjPhotonView.RPC("TargetNewEnemy", PhotonTargets.Others, -1);
+
+						TargetedEnemy = null;
+					}
+				}
 			}
 		}
 	}
+	#endregion
 
-	
-	
-	protected IEnumerator Fire()
+	#region RPC Calls
+	/// <summary>
+	/// Tells the client to target a new enemy
+	/// </summary>
+	/// <param name="viewID">Network ViewID of the enemy to target. Pass -1 to set the target to null.</param>
+	[PunRPC]
+	protected virtual void TargetNewEnemy(int viewID)
 	{
+		// A viewID of -1 means there is no targeted enemy. Otherwise, find the enemy by the networkViewID
+		if(viewID == -1)
+			TargetedEnemy = null;
+		else
+			TargetedEnemy = GameManager.Instance.EnemyManager.FindEnemyByID(viewID);
+	}
+	
+	/// <summary>
+	/// RPC call to tell players to fire a shot
+	/// </summary>
+	[PunRPC]
+	protected virtual void FireAcrossNetwork()
+	{
+		// Tell enemy to take damage
+		TargetedEnemy.TakeDamage(BallisticDamaage, ThraceiumDamage);
+		// Reset timer for tracking when to fire next
+		TimeLastShotFired = Time.time;
+		// Instantiate prefab
+		Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+	}
+	#endregion
+
+	#region Attacking
+	/// <summary>
+	/// Coroutine that constantly checks to see if tower is ready to fire upon an enemy
+	/// </summary>
+	protected virtual IEnumerator Fire()
+	{
+		// Infinite Loop FTW
 		while(this)
 		{
 			// Only perform the act of firing if this is the Master Client
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			{
-				if(TargetedEnemy)
+				// Only fire if there is an enemy being targeted
+				if(TargetedEnemy != null)
 				{
+					// Only fire if tower is ready to fire
 					if(Time.time - TimeLastShotFired >= RateOfFire)
 					{
 						// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
 						if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position - this.transform.position) <= 8 || Pivot == null)
 						{
+							// Tell all clients to fire upon the enemy
 							ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
 						}
 					}
@@ -143,10 +193,9 @@ public class Tower : MonoBehaviour
 			yield return 0;
 		}
 	}
+	#endregion
 
-
-	
-	#region MessageHandling
+	#region Message Handling
 	protected virtual void Log(string message)
 	{
 		if(ShowDebugLogs)
