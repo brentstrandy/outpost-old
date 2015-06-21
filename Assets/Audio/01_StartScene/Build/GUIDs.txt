@@ -1,13 +1,14 @@
 {4b824090-dda9-4fdb-816c-3c205571a969} event:/Ambience/WindDustAmbience
+{99c493d2-f70a-4da6-8f71-5015f75dff83} event:/Drone/DroneExplosion
 {71fa2b2a-eb18-486f-b31e-f10c4cd10f75} event:/Drone/DroneMovement
 {d18902e7-bf5c-40f4-8b0d-ba48ca72a06a} event:/HeavySpeeder/HeavySpeederExplosion
 {ac04d67e-bf4c-40e5-af0b-4497ccf48f07} event:/HeavySpeeder/HeavySpeederMovement
 {a2d34bb0-ea92-4e9a-a1f7-3e6e69a207d9} event:/LightSpeeder/LightSpeederExplosion
 {22834fbc-b7bc-47e3-837e-d32a813d14ee} event:/LightSpeeder/LightSpeederMovement
-{08eb7176-b6b1-4b6c-914e-fa42ec86f272} event:/SmallThraciumTower/SmallThraciumFire
+{08eb7176-b6b1-4b6c-914e-fa42ec86f272} event:/SmallThraceiumTower/SmallThraceiumFire
 {e7a4712b-707a-47f6-9b9c-9f26ad9af425} bus:/
 {3d69b9e0-5ab0-495c-8514-30d04341e1b1} bus:/Reverb
 {ccc759a1-9146-47bd-9a08-43ef8526370c} bank:/Ambience
 {c430db1f-5e91-45af-a232-4bb3e734836c} bank:/Master Bank
-{f12a6c9e-4338-4728-8159-f044029e8819} bank:/Towers
 {3787ac68-7dc1-4ece-a837-4b210c4919c5} bank:/Enemies
+{f12a6c9e-4338-4728-8159-f044029e8819} bank:/Towers
