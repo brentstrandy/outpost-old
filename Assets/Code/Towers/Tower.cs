@@ -53,7 +53,7 @@ public class Tower : MonoBehaviour
 	/// Sets the tower's properties based on TowerData
 	/// </summary>
 	/// <param name="towerData">Tower data</param>
-	protected void SetTowerData(TowerData towerData)
+	public void SetTowerData(TowerData towerData, Color playerColor)
 	{
 		Name = towerData.DisplayName;
 		InstallCost = towerData.InstallCost;
@@ -63,6 +63,8 @@ public class Tower : MonoBehaviour
 		ThraceiumDamage = towerData.ThraceiumDamage;
 		BallisticDamaage = towerData.BallisticDamage;
 		TrackingSpeed = towerData.TrackingSpeed;
+
+		gameObject.GetComponent<Renderer>().material.color = playerColor;
 	}
 	#endregion
 

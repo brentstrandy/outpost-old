@@ -11,8 +11,7 @@ public class SmallThraceiumTower : Tower
 		base.Start();
 
 		// Load default attributes from TowerData
-		TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("SmallThraceiumTower");
-		SetTowerData(towerData);
+		//TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("SmallThraceiumTower");
 
 		EnemyCircleCollider = this.GetComponent<SphereCollider>();
 

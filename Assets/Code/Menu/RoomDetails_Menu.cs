@@ -230,7 +230,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// <param name="levelName">Level name.</param>
 	[PunRPC]
 	private void NewLevelSelected(string levelName)
-	{;
+	{
 		LevelData levelData = GameDataManager.Instance.FindLevelDataByDisplayName(levelName);
 	
 		// Refresh the list of Towers regardless if LevelData can be found. The tower buttons will handle missing data
@@ -244,6 +244,9 @@ public class RoomDetails_Menu : MonoBehaviour
 	[PunRPC]
 	private void LoadLevel()
 	{
+		int playerColorIndex = Random.Range(0, 8);
+		SessionManager.Instance.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", playerColorIndex } });
+
 		// Record the Loadouts chosen by the player
 		Player.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
 

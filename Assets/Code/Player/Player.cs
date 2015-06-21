@@ -22,11 +22,18 @@ public class Player : MonoBehaviour
 	private TowerData PlacementTowerData;
 	private HexMesh TerrainMesh;
 
+	private int PlayerColorIndex;
+
+	// Componentes
+	PhotonView ObjPhotonView;
+
 	public void Start()
 	{
 		Money = 0.0f;
 		PlacementTowerData = null;
 		LastTowerPlacementTime = Time.time;
+
+		ObjPhotonView = PhotonView.Get(this);
 	}
 
 	#region INSTANCE (SINGLETON)
@@ -80,11 +87,12 @@ public class Player : MonoBehaviour
 						// Test to see if the player's click intersected with the Terrain (HexMesh)
 						if (TerrainMesh.IntersectRay(ray, out hit, out coord) && TerrainMesh.InPlacementRange(coord))
 						{
-							// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
-							var rotation = Quaternion.LookRotation(hit.point, new Vector3(0.0f, 0.0f, -1.0f));
-							
+							// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
+							ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, hit.point, SessionManager.Instance.AllocateNewViewID());
+
+							// TO DO: Instantiate tower how enemies are instantiated - manually
 							// Tell all players to instantiate a tower
-							SessionManager.Instance.InstantiateObject("Towers/" + PlacementTowerData.PrefabName, hit.point, rotation);
+							//SessionManager.Instance.InstantiateObject("Towers/" + PlacementTowerData.PrefabName, hit.point, rotation);
 							
 							LastTowerPlacementTime = Time.time;
 
@@ -115,6 +123,22 @@ public class Player : MonoBehaviour
 			PlayerLocator.transform.position = Camera.main.transform.position + (Camera.main.transform.forward * 10);
 			PlayerLocator.transform.position = new Vector3(PlayerLocator.transform.position.x, PlayerLocator.transform.position.y, 0);
 		}
+	}
+
+	[PunRPC]
+	private void SpawnTowerAcrossNetwork(string displayName, Vector3 position, int viewID, PhotonMessageInfo info)
+	{
+		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
+		var rotation = Quaternion.LookRotation(position, new Vector3(0.0f, 0.0f, -1.0f));
+
+		// Instantiate a new Enemy
+		GameObject newTower = Instantiate(Resources.Load("Towers/" + GameDataManager.Instance.FindTowerPrefabByDisplayName(displayName)), position, rotation) as GameObject;
+		// Add a PhotonView to the Tower
+		newTower.AddComponent<PhotonView>();
+		// Set Tower's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
+		newTower.GetComponent<PhotonView>().viewID = viewID;
+		// The Prefab doesn't contain the correct default data. Set the Tower's default data now
+		newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), PlayerColors.colors[(int)info.sender.customProperties["PlayerColorIndex"]]);
 	}
 
 	public void TowerSelectedForPlacement(TowerData towerData)

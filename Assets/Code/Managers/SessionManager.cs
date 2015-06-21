@@ -215,6 +215,15 @@ public class SessionManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Sets custom properties of the player as defined in the Hashtable.
+	/// </summary>
+	/// <param name="properties">Properties to set</param>
+	public void SetPlayerCustomProperties(ExitGames.Client.Photon.Hashtable properties)
+	{
+		PhotonNetwork.player.SetCustomProperties(properties);
+	}
+
+	/// <summary>
 	/// Instantiate an object and propogate the object across the network
 	/// </summary>
 	/// <param name="name">Prefab name - must be found in \Resources.</param>
@@ -316,6 +325,15 @@ public class SessionManager : MonoBehaviour
 	public PhotonPlayer[] GetOtherPlayersInRoom()
 	{
 		return PhotonNetwork.otherPlayers;
+	}
+
+	/// <summary>
+	/// Gets all the current custom properties applied to the character
+	/// </summary>
+	/// <returns>The player's custom properties</returns>
+	public ExitGames.Client.Photon.Hashtable GetPlayerCustomProperties()
+	{
+		return PhotonNetwork.player.customProperties;
 	}
 
 	public void LoadGameLevel(string level)

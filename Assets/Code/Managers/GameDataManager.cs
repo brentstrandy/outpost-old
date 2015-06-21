@@ -96,9 +96,14 @@ public class GameDataManager : MonoBehaviour
 		LevelDataManager.LoadDataFromLocal("LevelData.xml");
 	}
 
-	public TowerData FindTowerDataByPrefabName(string prefabName)
+	public TowerData FindTowerDataByDisplayName(string displayName)
 	{
-		return TowerDataManager.DataList.Find(x => x.PrefabName.Equals(prefabName));
+		return TowerDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
+	}
+
+	public string FindTowerPrefabByDisplayName(string displayName)
+	{
+		return TowerDataManager.DataList.Find(x => x.DisplayName.Equals(displayName)).PrefabName;
 	}
 
 	public EnemyData FindEnemyDataByDisplayName(string displayName)

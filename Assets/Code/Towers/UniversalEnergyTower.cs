@@ -11,8 +11,7 @@ public class UniversalEnergyTower : Tower
 		base.Start();
 
 		// Load default attributes from TowerData
-		TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("UniversalEnergyTower");
-		SetTowerData(towerData);
+		//TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("UniversalEnergyTower");
 
 		EnemySphereCollider = this.GetComponent<SphereCollider>();
 		TimeLastShotFired = Time.time;

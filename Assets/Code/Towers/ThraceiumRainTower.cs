@@ -11,8 +11,7 @@ public class ThraceiumRainTower : Tower
 		base.Start();
 
 		// Load default attributes from TowerData
-		TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("ThraceiumRainTower");
-		SetTowerData(towerData);
+		//TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("ThraceiumRainTower");
 
 		EnemySphereCollider = this.GetComponent<SphereCollider>();
 		TimeLastShotFired = Time.time;
