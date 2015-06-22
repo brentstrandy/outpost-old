@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b1ae48a0099720f48b5a3fff48f9b05e
-timeCreated: 1434977927
+guid: 249accdde1dccab4a816bf30728f8de4
+timeCreated: 1434977925
 licenseType: Store
 PluginImporter:
   serializedVersion: 1
@@ -16,7 +16,7 @@ PluginImporter:
       enabled: 0
       settings: {}
     Editor:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
@@ -43,9 +43,6 @@ PluginImporter:
         CPU: AnyCPU
         DontProcess: False
         PlaceholderPath: 
-    WebGL:
-      enabled: 0
-      settings: {}
     Win:
       enabled: 0
       settings:
@@ -55,11 +52,11 @@ PluginImporter:
       settings:
         CPU: AnyCPU
     WindowsStoreApps:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: AnyCPU
         DontProcess: False
-        PlaceholderPath: 
+        PlaceholderPath: Assets/Plugins/Photon3Unity3D.dll
         SDK: AnySDK
     iOS:
       enabled: 0

@@ -55,7 +55,8 @@ namespace FMOD
 			
 			static public void LogWarning(string msg)
 			{
-                UnityEngine.Debug.LogWarning(msg);
+                // FITZGERALD: TODO: make a global dev bool for use when Jaime needs to use. 
+                //UnityEngine.Debug.LogWarning(msg);
 			}
 			
 			static public void LogError(string msg)

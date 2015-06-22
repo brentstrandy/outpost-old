@@ -1,3 +1,11 @@
+v1.57 (22. June 2015)
+Fixed: An issue with the RPC list update, which was still looking for the old RPC attribute. So when you switched over to PunRPC, the list was empty.
+Added: Automatic check if the obsolete RPC attribute is in source, to offer an automatic conversion to the new PunRPC attribute. Conversion uses search and replace for [RPC] to [PunRPC] and @RPC to @PunRPC.
+Added: PhotonNetwork.ConnectToRegion(), which enables you to connect to a specific region easily. This can be useful when you do your own region selection.
+Note: Best Region selection won't work in WebGL exports currently. A fix needs updates on the server side and is in work.
+Note: Chat API won't work in WebGL exports at the moment. Delete it from a project which targets WebGL.
+Note: PUN+ does not support WebGL at the moment. It requires an update of the lower level APIs which we work on. Unity 5 can export PUN Free to all platforms, so use this as workaround.
+
 v1.56 (16. June 2015)
 Changed: The RPC attribute is now replaced by PunRPC and no longer supported. Search and replace your code for [RPC] and replace it with [PunRPC]. The change is necessary, because the RPC attribute is obsolete in Unity 5.1 (which causes a large amount of warnings at compile time).
 

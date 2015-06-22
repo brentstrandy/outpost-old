@@ -1250,6 +1250,18 @@ public class PhotonStream
 }
 
 
+#if UNITY_5_0 || !UNITY_5
+/// <summary>Empty implementation of the upcoming HelpURL of Unity 5.1. This one is only for compatibility of attributes.</summary>
+/// <remarks>http://feedback.unity3d.com/suggestions/override-component-documentation-slash-help-link</remarks>
+public class HelpURL : Attribute
+{
+    public HelpURL(string url)
+    {
+    }
+}
+#endif
+
+
 /// <summary>Provides easy access to most common WebRpc-Response values.</summary>
 /// <remarks>
 /// See method PhotonNetwork.WebRpc.<br/>
