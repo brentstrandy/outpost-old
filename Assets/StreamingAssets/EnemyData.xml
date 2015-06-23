@@ -16,12 +16,12 @@
     <RateOfFire>0</RateOfFire>
     <Cooldown>0</Cooldown>
     <DamageDealt>0.5</DamageDealt>
-    <Acceleration>30</Acceleration>
-    <Speed>6</Speed>
+    <Acceleration>18</Acceleration>
+    <Speed>2</Speed>
     <Range>0</Range>
     <BallisticDefense>1</BallisticDefense>
     <ThraceiumDefense>1</ThraceiumDefense>
-    <TurningSpeed>2</TurningSpeed>
+    <TurningSpeed>8</TurningSpeed>
   </EnemyData>
   <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
@@ -68,6 +68,29 @@
     <BallisticDefense>0.8</BallisticDefense>
     <ThraceiumDefense>0.8</ThraceiumDefense>
     <TurningSpeed>3</TurningSpeed>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Land Drone</DisplayName>
+    <PrefabName>Land Drone</PrefabName>
+    <PathFinding>ShortestPath</PathFinding>
+    <HighlightColor>
+      <r>0.8206897</r>
+      <g>1</g>
+      <b>0</b>
+      <a>0</a>
+    </HighlightColor>
+    <AttackTowers>false</AttackTowers>
+    <AttackMiningFacility>true</AttackMiningFacility>
+    <Health>5</Health>
+    <RateOfFire>1</RateOfFire>
+    <Cooldown>0</Cooldown>
+    <DamageDealt>0.5</DamageDealt>
+    <Acceleration>0</Acceleration>
+    <Speed>0.6</Speed>
+    <Range>7</Range>
+    <BallisticDefense>0.8</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
+    <TurningSpeed>4</TurningSpeed>
   </EnemyData>
   <EnemyData>
     <DisplayName>Light Speeder</DisplayName>

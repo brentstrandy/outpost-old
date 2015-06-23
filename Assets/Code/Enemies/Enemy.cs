@@ -149,7 +149,7 @@ public class Enemy : MonoBehaviour
 			// MASTER CLIENT movement
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			{
-				// Use Pathfinding for movement
+				// Use Shortest Path for movement
 				if(PathFinding == PathFindingType.ShortestPath)
 				{
 					// SJODING: What does this check accomplish?
@@ -164,8 +164,12 @@ public class Enemy : MonoBehaviour
 
 						// Slerp the Enemy's rotation to look at the new Hex location
 						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation((Vector3)TargetHex - transform.position, Up), Time.deltaTime * TurningSpeed );
+
+						// The enemy's current velocity is always the speed (during this pathfinding)
+						CurVelocity = transform.forward * Speed;
 					}
 				}
+				// Track Friendly while Ignoring Pathfinding for movement
 				else if(PathFinding == PathFindingType.TrackFriendly_IgnorePath)
 				{
 					if(TargetObject != null)
@@ -181,8 +185,7 @@ public class Enemy : MonoBehaviour
 					CurVelocity = Vector3.ClampMagnitude(CurVelocity, Speed);
 					
 					// Determine Position
-					this.transform.position += CurVelocity * Time.deltaTime;
-					//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime * Speed, ForceMode.Force);
+					//this.transform.position += CurVelocity * Time.deltaTime;
 				}
 			}
 			// CLIENT movement
@@ -192,11 +195,16 @@ public class Enemy : MonoBehaviour
 				if(ObjPathfinder != null)
 				{
 					transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation((Vector3)TargetHex - transform.position, Up), Time.deltaTime * TurningSpeed );
+
+					// The enemy's current velocity is always the speed (during this pathfinding)
+					CurVelocity = transform.forward * Speed;
 				}
 			}
 
+			// Do not allow the Z axis to be updated - that is static
+			CurVelocity.z = 0;
 			// Manually change the Enemy's position
-			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
+			this.transform.position += CurVelocity * Time.deltaTime;
 		}
 	}
 
@@ -246,15 +254,8 @@ public class Enemy : MonoBehaviour
 	[PunRPC]
 	protected virtual void DieAcrossNetwork()
 	{
-		Rigidbody rb = this.GetComponent<Rigidbody>();
-
-		rb.constraints = RigidbodyConstraints.None;
-		// TO DO: Fix this - Brent lost the original code and now he is too dumb to make it work again
-		Vector3 temp = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z - 2);
-		rb.AddForceAtPosition(new Vector3(0, 0, -20), temp);
-
-		// Stop sending network updates for this object - it is dead
-		ObjPhotonView.ObservedComponents.Clear();
+		// Simply destroy the enemy (show explosion and play sound)
+		DestroyEnemy();
 	}
 
 	/// <summary>
@@ -262,17 +263,14 @@ public class Enemy : MonoBehaviour
 	/// </summary>
 	public virtual void ForceInstantDeath()
 	{
+		// If this is the master client then they tell all other clients to destroy this enemy
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 			ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
 	}
 
 	public virtual void OnTriggerEnter(Collider other)
 	{
-		if(other.tag == "Terrain")
-		{
-			// Destroy the enemy when it crashes to the ground
-			DestroyEnemy();
-		}
+		// By default, enemies do nothing when their trigger is flagged
 	}
 
 	/// <summary>
@@ -336,7 +334,7 @@ public class Enemy : MonoBehaviour
 	/// <summary>
 	/// Destroy the Enemy from all areas of the game
 	/// </summary>
-	private void DestroyEnemy()
+	protected virtual void DestroyEnemy()
 	{
 		// TO DO: Instantiate explosion
 

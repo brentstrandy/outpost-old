@@ -22,51 +22,32 @@ public class HeavySpeeder : Enemy
 		// Start the Heavy Speeder off the ground
 		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f);
 	}
-	/*
-	public override void FixedUpdate()
-	{
-		if(!Firing)
-			this.transform.position += this.transform.forward * Speed * Time.deltaTime;
-			//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
-	}
-	
-	public override void Update()
-	{
-		/*RaycastHit hit;
 
-		foreach(GameObject obj in HoverLocation)
+	public override void OnTriggerEnter(Collider other)
+	{
+		if(other.tag == "Terrain")
 		{
-			if (Physics.Raycast (obj.transform.position, Vector3.down, out hit, 1.0f))
-			{
-				Log("HIT: " + Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime);
-				rigidbody.AddForceAtPosition(Vector3.up * (HoverSpeed * (1.0f - hit.distance)) * Time.fixedDeltaTime, obj.transform.position, ForceMode.Force);
-			}
+			// Destroy the enemy when it crashes to the ground
+			DestroyEnemy();
 		}
+	}
+
+	/// <summary>
+	/// RPC Call to tell players to kill this enemy. Heavy Speeders respond in a special way - they careen out of the sky when they die
+	/// </summary>
+	[PunRPC]
+	protected override void DieAcrossNetwork()
+	{
+		Rigidbody rb = this.GetComponent<Rigidbody>();
 		
-		if (Firing)
-		{
-			// Land speeders don't move while they are firing
-			return;
-		}
+		rb.constraints = RigidbodyConstraints.None;
+		// TO DO: Fix this - Brent lost the original code and now he is too dumb to make it work again
+		Vector3 temp = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z - 2);
+		rb.AddForceAtPosition(new Vector3(0, 0, -20), temp);
 		
-		var pathfinder = GetComponent<Pathfinder>();
-		var location = GetComponent<HexLocation>().location;
-		var next = pathfinder.Next();
-		if (next != location)
-		{
-			Vector3 target = next.Position();
-			// Do not allow the Z position to change or else the speeder will slowly move downward over time
-			target.z = this.transform.position.z;
-			transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(target - transform.position, Up), Time.deltaTime * TurningSpeed );
-		}
-		else
-		{
-			Log("Arrived... Target: " + pathfinder.Target + " Next: " + pathfinder.Next() + " Location: " + location + " Path: " + pathfinder.PathToString());
-		}
-		
-		this.transform.position += this.transform.forward * Speed * Time.deltaTime;
-		//GetComponent<Rigidbody>().AddForce(this.transform.forward * Time.fixedDeltaTime, ForceMode.Force);
-	}*/
+		// Stop sending network updates for this object - it is dead
+		ObjPhotonView.ObservedComponents.Clear();
+	}
 
 	#region MessageHandling
 	protected override void Log(string message)

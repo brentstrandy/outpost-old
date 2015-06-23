@@ -19,7 +19,7 @@ public class Drone : Enemy
 		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
 
 		// Start the Drone off the ground
-		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.7f);
+		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1.0f);
 
 		// TO DO: Implement the loading of EnemyData via XML before uncommenting
 		// Load default attributes from EnemyData
@@ -47,6 +47,31 @@ public class Drone : Enemy
 		{
 			MiningFacilityObject.TakeDamage(DamageDealt);
 		}
+	}
+
+	public override void Update()
+	{
+		base.Update();
+
+		if(this.transform.position.z >= 0)
+			DestroyEnemy();
+	}
+
+	/// <summary>
+	/// RPC Call to tell players to kill this enemy. Drones respond in a special way - they careen out of the sky when they die
+	/// </summary>
+	[PunRPC]
+	protected override void DieAcrossNetwork()
+	{
+		Rigidbody rb = this.GetComponent<Rigidbody>();
+		
+		rb.constraints = RigidbodyConstraints.None;
+		// TO DO: Fix this - Brent lost the original code and now he is too dumb to make it work again
+		Vector3 temp = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z - 2);
+		rb.AddForceAtPosition(new Vector3(0, 0, -20), temp);
+		
+		// Stop sending network updates for this object - it is dead
+		ObjPhotonView.ObservedComponents.Clear();
 	}
 	
 	#region MessageHandling
