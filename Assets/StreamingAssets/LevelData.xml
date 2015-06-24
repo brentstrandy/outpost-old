@@ -61,7 +61,7 @@
     <SceneName>Level1</SceneName>
     <EnemySpawnFilename>Level5</EnemySpawnFilename>
     <Description>Join a team and take down these terrible mean enemies</Description>
-    <MinimumPlayers>1</MinimumPlayers>
+    <MinimumPlayers>2</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>

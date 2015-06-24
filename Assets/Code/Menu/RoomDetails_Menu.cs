@@ -13,6 +13,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	public GameObject Chat_GUIText;
 	public GameObject SendChat_GUIInput;
 	public GameObject StartGame_GUIButton;
+	public GameObject LevelTitle_GUILabel;
 
 	/// <summary>
 	/// Tracks GUI objects for each tower that is selected for the Loadout
@@ -184,6 +185,9 @@ public class RoomDetails_Menu : MonoBehaviour
 
 			// Update the available Towers to choose from
 			RefreshTowerButtons();
+
+			// Update whether or not the start button is enabled based on the current number of players in the room
+			RefreshStartGameButton();
         }
     }
 	#endregion
@@ -199,6 +203,9 @@ public class RoomDetails_Menu : MonoBehaviour
 		ObjPhotonView.RPC("NewLevelSelected", player, LevelLoadoutData.DisplayName);
 
 		RefreshPlayerNames();
+
+		// Update whether or not the start button is enabled based on the current number of players in the room
+		RefreshStartGameButton();
 	}
 
 	/// <summary>
@@ -208,6 +215,9 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void PlayerLeftRoom_Event(PhotonPlayer player)
 	{
 		RefreshPlayerNames();
+
+		// Update whether or not the start button is enabled based on the current number of players in the room
+		RefreshStartGameButton();
 	}
 	#endregion
 
@@ -232,7 +242,13 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void NewLevelSelected(string levelName)
 	{
 		LevelData levelData = GameDataManager.Instance.FindLevelDataByDisplayName(levelName);
-	
+
+		// Display the level name for the clients
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			LevelTitle_GUILabel.GetComponent<Text>().text = "Choose Level:";
+		else
+			LevelTitle_GUILabel.GetComponent<Text>().text = "Level: " + levelName;
+
 		// Refresh the list of Towers regardless if LevelData can be found. The tower buttons will handle missing data
 		LevelLoadoutData = levelData;
 		RefreshTowerButtons();
@@ -278,6 +294,37 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void RefreshRoomDetails()
 	{
 		RoomTitle_GUIInput.GetComponent<InputField>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
+	}
+
+	/// <summary>
+	/// Refreshes the start button in the game to allow/deny the Master Client to start the game
+	/// </summary>
+	private void RefreshStartGameButton()
+	{
+		// Only make updates if the player is the Master Client - other players do not see the "Start Game"
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			PhotonPlayer[] playerList = SessionManager.Instance.GetAllPlayersInRoom();
+
+			// Not enough players in the room for this level
+			if(playerList.Length < LevelLoadoutData.MinimumPlayers)
+			{
+				StartGame_GUIButton.GetComponent<Button>().enabled = false;
+				StartGame_GUIButton.GetComponentInChildren<Text>().text = "Need Players";
+			}
+			// Too many players for this level
+			else if(playerList.Length > LevelLoadoutData.MaximumPlayers)
+			{
+				StartGame_GUIButton.GetComponent<Button>().enabled = false;
+				StartGame_GUIButton.GetComponentInChildren<Text>().text = "Too Many Players";
+			}
+			// Eneough players for this level
+			else
+			{
+				StartGame_GUIButton.GetComponent<Button>().enabled = true;
+				StartGame_GUIButton.GetComponentInChildren<Text>().text = "Start Game";
+			}
+		}
 	}
 
 	private void RefreshTowerButtons()
@@ -347,6 +394,28 @@ public class RoomDetails_Menu : MonoBehaviour
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
 	        int index = 0;
+			string levelDescription = "";
+			/*
+			GameObject comboBox = new GameObject();
+			comboBox.AddComponent<StyledComboBox>();
+
+			// populate the combo box with text
+			comboBox.AddItems("Test1", "Test2", "Test3", "Unity", "Needs", "A", "Better", "Encapsulation", "System", "Than", "Prefabs");
+			
+			// or, populate it with textures
+			comboBox.AddItems(myTex1, myText2);
+			
+			// or populate it with both
+			
+			comboBox.AddItems(StyledComboBox(new StyledItemButtonImageText.Data("MyString", myTex1));
+			                  
+			                  // finally, listen for changes:
+			                  comboBox.OnSelectionChanged += delegate(StyledItemitem)
+			                  {
+				Debug.Log (item.GetText() + "" + comboBox.SelectedIndex);
+			}
+			*/
+
 			// Create a toggle group to grop all the toggles and automatically enforce only one selection
 			GameObject toggleGroup = new GameObject();
 			toggleGroup.AddComponent<ToggleGroup>();
@@ -358,7 +427,14 @@ public class RoomDetails_Menu : MonoBehaviour
 
 	            // instantiate a button for each level
 	            GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
-	            obj.GetComponentInChildren<Text>().text = levelData.DisplayName;
+				if(levelData.MinimumPlayers == 1 && levelData.MaximumPlayers == 1)
+					levelDescription = levelData.DisplayName + "\n[1 Player]";
+				else if(levelData.MinimumPlayers == levelData.MaximumPlayers)
+					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " Players]";
+				else
+					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
+
+				obj.GetComponentInChildren<Text>().text = levelDescription;
 	            obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
 	            obj.transform.SetParent(this.transform);
 	            obj.transform.localScale = new Vector3(1, 1, 1);
