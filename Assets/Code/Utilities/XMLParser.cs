@@ -17,7 +17,7 @@ using System.Linq;
 public static class XMLParser<T>
 {
     static bool ShowDebugLogs = false;
-    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata"};
+    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "levelnotificationdata"};
 
 
     #region LIST DE/SERIALIZERS

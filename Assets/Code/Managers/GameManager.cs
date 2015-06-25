@@ -9,20 +9,21 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
-
+	
 	private static GameManager instance;
-
+	
 	// Gameplay Managers
 	public EnemyManager EnemyManager { get; private set; }
 	public TowerManager TowerManager { get; private set; }
 	public EnemySpawnManager EnemySpawnManager { get; private set; }
+	
 	public LevelData CurrentLevelData { get; private set; }
-
 	public DataManager<EnemySpawnData> EnemySpawnDataManager { get; private set; }
-
+	public DataManager<LevelNotificationData> LevelNotificationDataManager { get; private set; }
+	
 	public bool Victory { get; private set; }
 	public bool GameRunning { get; private set; }
-
+	
 	// Components
 	public MiningFacility ObjMiningFacility;
 	private PhotonView ObjPhotonView;
@@ -58,18 +59,18 @@ public class GameManager : MonoBehaviour
 		SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
 		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
 		InputManager.Instance.OnQuadrantRotate += OnCameraQuadrantChanged;
-
+		
 		// Store LevelData from MenuManager
 		CurrentLevelData = MenuManager.Instance.CurrentLevelData;
 		// Store a reference to the PhotonView
 		ObjPhotonView = PhotonView.Get(this);
-
+		
 		// Instantiate objects to manage Enemies and Towers
 		EnemyManager = new EnemyManager();
 		TowerManager = new TowerManager();
 		// Instantiate object to manage Enemy spawning
 		EnemySpawnManager = new EnemySpawnManager(ObjPhotonView);
-
+		
 		// Begin gathering Enemy Spawn data that the EnemySpawnManager will eventually use
 		EnemySpawnDataManager = new DataManager<EnemySpawnData>();
 		// Grab the Enemy Spawn data from either the web server or local xml file. The EnemySpawnManager will use this
@@ -78,7 +79,20 @@ public class GameManager : MonoBehaviour
 			EnemySpawnDataManager.LoadDataFromLocal(CurrentLevelData.EnemySpawnFilename + ".xml");
 		else
 			StartCoroutine(EnemySpawnDataManager.LoadDataFromServer(CurrentLevelData.EnemySpawnFilename + ".xml"));
+		
+		// Determine if there is a Notification File for this level
+		if(CurrentLevelData.NotificationFilename != "")
+		{
+			LevelNotificationDataManager = new DataManager<LevelNotificationData>();
 
+			// Grab the Level Notification data from either the web server or local xml file. The NotificationManager will use this
+			// data to automatically show Notifications once it has been loaded into the game
+			if(GameDataManager.Instance.DataLocation == "Local")
+				LevelNotificationDataManager.LoadDataFromLocal("Notifications/" + CurrentLevelData.NotificationFilename + ".xml");
+			else
+				StartCoroutine(LevelNotificationDataManager.LoadDataFromServer(CurrentLevelData.NotificationFilename + ".xml"));
+		}
+		
 		GameRunning = false;
 		Victory = false;
 	}
@@ -92,13 +106,8 @@ public class GameManager : MonoBehaviour
 			// TO DO: This should not be checked every update loop. It can probably just be checked every 1-2 seconds
 			EndGameCheck();
 		}
-		else
-		{
-			// Instantiate object to manage Enemy spawning
-			EnemySpawnManager = new EnemySpawnManager(ObjPhotonView);
-		}
 	}
-
+	
 	/// <summary>
 	/// The game is essentially on hold until StartGame is called. This allows the player to wait for other
 	/// clients with slower machines/connects to gather/load all the level data
@@ -106,20 +115,24 @@ public class GameManager : MonoBehaviour
 	public void StartGame()
 	{
 		GameRunning = true;
-
+		
 		// Initialize the mining facility's properties based on the level data
 		ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
-
+		
 		// Set the player's initial quadrant
 		Player.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
 		// Inform the Camera of the new quadrant
 		CameraManager.Instance.SetStartQuadrant(CurrentLevelData.StartingQuadrant);
-
-		// Start Game is called once all data has been loaded. We can now tell the EnemySpawnManager to start 
+		
+		// Start Game is called once all data has been loaded. We can now tell the EnemySpawnManager to start
 		// spawning enemies based on the previously loaded spawn data.
 		StartCoroutine(EnemySpawnManager.SpawnEnemies(EnemySpawnDataManager.DataList));
+		
+		// We can now tell the NotificationManager to start showing notifications based on the previously loaded spawn data.
+		if(LevelNotificationDataManager != null)
+			StartCoroutine(NotificationManager.Instance.DisplayLevelNotifications(LevelNotificationDataManager.DataList));
 	}
-
+	
 	/// <summary>
 	/// Check to see if all data associated with this level has been loaded.
 	/// </summary>
@@ -127,16 +140,16 @@ public class GameManager : MonoBehaviour
 	public bool FinishedLoadingLevel()
 	{
 		bool success = false;
-
+		
 		// At the moment the only data that needs to be checked is the EnemySpawnManager
 		// Add additional checks for loaded data here if necessary
 		if(EnemySpawnDataManager != null)
 			if(EnemySpawnDataManager.FinishedLoadingData)
 				success = true;
-
+		
 		return success;
 	}
-
+	
 	/// <summary>
 	/// Checks to see if the end game state has been met and takes action accordingly
 	/// </summary>
@@ -148,7 +161,7 @@ public class GameManager : MonoBehaviour
 		else if(ObjMiningFacility.Health <= 0)
 			EndGame_Loss();
 	}
-
+	
 	/// <summary>
 	/// Spawn's Enemy on all client machines.
 	/// An PunRPC option is needed in order to set the Enemy's default data AFTER being created
@@ -181,7 +194,7 @@ public class GameManager : MonoBehaviour
 		// Note from J.S. 2015-03-29: Shouldn't the sin and cos be reversed here? I think that would put 0 degrees to the north, which seems to be typical.
 		return new Vector3(Mathf.Sin(radians), Mathf.Cos(radians), 0) * 25;
 	}
-
+	
 	/// <summary>
 	/// End the game in a VICTORY
 	/// </summary>
@@ -191,7 +204,7 @@ public class GameManager : MonoBehaviour
 		GameRunning = false;
 		MenuManager.Instance.ShowVictoryMenu();
 	}
-
+	
 	/// <summary>
 	/// End the game in a LOSS
 	/// </summary>
@@ -239,7 +252,7 @@ public class GameManager : MonoBehaviour
 			quadrant = Quadrant.West;
 		else if(Player.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("North"))
 			quadrant = Quadrant.North;
-
+		
 		return quadrant;
 	}
 	
@@ -248,17 +261,17 @@ public class GameManager : MonoBehaviour
 		Quadrant quadrant = Player.Instance.CurrentQuadrant;
 		
 		if(Player.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("West"))
-				quadrant = Quadrant.West;
+			quadrant = Quadrant.West;
 		else if(Player.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("North"))
-				quadrant = Quadrant.North;
+			quadrant = Quadrant.North;
 		else if(Player.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("East"))
-				quadrant = Quadrant.East;	
+			quadrant = Quadrant.East;
 		else if(Player.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("South"))
-				quadrant = Quadrant.South;
-
+			quadrant = Quadrant.South;
+		
 		return quadrant;
 	}
-
+	
 	#region MessageHandling
 	protected void Log(string message)
 	{

@@ -13,6 +13,7 @@ public class LevelData
 	public string DisplayName;
 	public string SceneName;
 	public string EnemySpawnFilename;
+	public string NotificationFilename;
 	public string Description;
 	public int MinimumPlayers;
 	public int MaximumPlayers;
@@ -34,6 +35,7 @@ public class LevelData
 		DisplayName = obj.DisplayName;
 		SceneName = obj.SceneName;
 		EnemySpawnFilename = obj.EnemySpawnFilename;
+		NotificationFilename = obj.NotificationFilename;
 		Description = obj.Description;
 		MinimumPlayers = obj.MinimumPlayers;
 		MaximumPlayers = obj.MaximumPlayers;

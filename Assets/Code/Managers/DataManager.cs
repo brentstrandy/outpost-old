@@ -28,7 +28,7 @@ public class DataManager<T>
 	{
 		//location of level specific XML spawn data
 		string levelDataXMLPath = Application.streamingAssetsPath + "/" + filename;
-		
+
 		if (File.Exists(levelDataXMLPath))
 		{
 			foreach (T data in XMLParser<T>.XMLDeserializer_Local(levelDataXMLPath))
@@ -40,7 +40,7 @@ public class DataManager<T>
 			Log ("Loaded " + typeof(T) + " (Local)");
 		}
 		else
-			LogError("Cannot find XML data file");
+			LogError("Cannot find " + filename + " XML data file");
 	}
 	
 	/// <summary>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ArrayOfLevelNotificationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<LevelNotificationData>
+		<NotificationTitle></NotificationTitle>
+		<NotificationText></NotificationText>
+		<NotificationType>Tutorial_Quadrants</NotificationType>
+		<StartTime>20</StartTime>
+	</LevelNotificationData>
+</ArrayOfLevelNotificationData>
