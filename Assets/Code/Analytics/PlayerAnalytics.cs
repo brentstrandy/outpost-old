@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Analytics;
 
+/// <summary>
+/// A collection of analytics for the player and game
+/// Owner: John Fitzgerald
+/// </summary>
 public class PlayerAnalytics : MonoBehaviour
 {
     private static PlayerAnalytics instance;
     public bool ShowDebugLogs = true;
 
     //LEVEL
-    // make dynamic for players joining/leaving
-    public List<bool[]> levelWins;//??Win percentage for each level for each # of players
-    public int lastLevelReached;//Avg last level reached
+    public List<int> levelWins;//Win percentage for each level for each # of players (return on disconnect or level loss)
+    public int lastLevelReached = 1;//Avg last level reached (return on disconnect or level loss)
 
     //DAMAGE
-    public float totalBallisticDamage;//Avg total ballistic damage
-    public float totalThraceiumDamage;//Avg total thracium damage
+    public List<float> totalBallisticDamage;//Avg total ballistic damage
+    public List<float> totalThraceiumDamage;//Avg total thracium damage
 
     //TOWERS
     // change to an array
@@ -56,14 +59,16 @@ public class PlayerAnalytics : MonoBehaviour
             return instance;
         }
     }
+
+    void Awake()
+    {
+        instance = this;
+    }
     #endregion
 
     // Use this for initialization
     public void Start() 
     {
-        // initialize based on number of levels
-        levelWins = new List<bool[]>(GameDataManager.Instance.LevelDataManager.DataList.Count);
-        lastLevelReached = 1;
 
 	}
 

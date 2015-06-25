@@ -29,8 +29,8 @@ public class Tower : MonoBehaviour
 	#region Initialize
 	public void Awake()
 	{
-		Shot = Resources.Load("Towers/SmallThraceiumLaserShot") as GameObject;
-	}
+        Shot = Resources.Load("SFX/" + this.Name.Replace(" ", string.Empty) + "Shot") as GameObject;
+    }
 
 	// Use this for initialization
 	public virtual void Start () 

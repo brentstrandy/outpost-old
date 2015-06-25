@@ -203,6 +203,8 @@ public class GameManager : MonoBehaviour
 		Victory = true;
 		GameRunning = false;
 		MenuManager.Instance.ShowVictoryMenu();
+        PlayerAnalytics.Instance.levelWins.Add(PhotonNetwork.playerList.Length/*get number of current players -- may need to store it earlier*/);
+        PlayerAnalytics.Instance.lastLevelReached++;
 	}
 	
 	/// <summary>

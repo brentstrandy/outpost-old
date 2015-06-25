@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour
 	protected HexLocation ObjHexLocation = null;
 
 	private GameObject Shot;
+    private GameObject Explosion;
 
 	public virtual void Awake()
 	{
@@ -55,8 +56,9 @@ public class Enemy : MonoBehaviour
 		// Add the enemy to the EnemyManager object to track the Enemy
 		GameManager.Instance.EnemyManager.AddActiveEnemy(this);
 
-		Shot = Resources.Load("Enemies/LightSpeederShot") as GameObject;
-	}
+        Shot = Resources.Load("SFX/" + this.Name.Replace(" ", string.Empty) + "Shot") as GameObject;
+        Explosion = Resources.Load("SFX/" + this.Name.Replace(" ", string.Empty) + "Explosion") as GameObject;
+    }
 
 	// Use this for initialization
 	public virtual void Start()
@@ -223,10 +225,10 @@ public class Enemy : MonoBehaviour
 				HealthBar.UpdateHealthBar(Health);
 
 			// Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
-			if(Health <= 0)
-				ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
-			else
-				ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticsDamage, thraceiumDamage);
+            if (Health <= 0)
+                ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
+            else
+                ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticsDamage, thraceiumDamage);
 		}
 	}
 
@@ -336,7 +338,8 @@ public class Enemy : MonoBehaviour
 	/// </summary>
 	protected virtual void DestroyEnemy()
 	{
-		// TO DO: Instantiate explosion
+        // Instantiate a prefab containing an FMOD_OneShot of enemy's explosion sound.
+        Instantiate(Explosion, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 
 		// Tell the enemy manager this enemy is being destroyed
 		GameManager.Instance.EnemyManager.RemoveActiveEnemy(this);
