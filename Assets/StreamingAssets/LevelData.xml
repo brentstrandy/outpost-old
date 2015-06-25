@@ -12,6 +12,7 @@
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
     <IncomePerSecond>5</IncomePerSecond>
     <MiningFacilityHealth>10</MiningFacilityHealth>
   </LevelData>
@@ -24,9 +25,10 @@
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North, East</AvailableQuadrants>
-    <StartingQuadrant>East</StartingQuadrant>
+    <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
@@ -42,6 +44,7 @@
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
@@ -57,6 +60,7 @@
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
@@ -72,6 +76,7 @@
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>

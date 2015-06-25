@@ -72,8 +72,6 @@ public class NotificationManager : MonoBehaviour
 		// Remember when displaying started in order to display future notifications at the right time
 		StartTime = Time.time;
 
-		Log (LevelNotificationList.Count + "  " + GameManager.Instance.GameRunning);
-
 		// Loop until there are no notifications left to display
 		while(LevelNotificationList.Count != 0 && GameManager.Instance.GameRunning)
 		{

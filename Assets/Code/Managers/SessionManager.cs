@@ -215,6 +215,27 @@ public class SessionManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Sets the visibility of the current room
+	/// </summary>
+	/// <param name="newValue">If set to <c>true</c>, room can be seen by everyone. <c>false</c> means by invite only</param>
+	public void SetRoomVisibility(bool newValue)
+	{
+		if(PhotonNetwork.inRoom)
+			PhotonNetwork.room.visible = newValue;
+	}
+
+	/// <summary>
+	/// Sets the room to either open or closed. When closed, no one can join
+	/// </summary>
+	/// <param name="newValue">If set to <c>true</c> new value.</param>
+	public void SetRoomOpen(bool newValue)
+	{
+		if(PhotonNetwork.inRoom)
+			PhotonNetwork.room.open = newValue;
+	}
+
+
+	/// <summary>
 	/// Sets custom properties of the player as defined in the Hashtable.
 	/// </summary>
 	/// <param name="properties">Properties to set</param>

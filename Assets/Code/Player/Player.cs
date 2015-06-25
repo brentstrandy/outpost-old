@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
 	public Quadrant CurrentQuadrant;
 
 	private GameObject PlayerLocator;
-	private string Name;
+	public string Name { get; private set; }
 	private LoadOut GameLoadOut;
 	private double LastTowerPlacementTime;
 	private TowerData PlacementTowerData;

@@ -30,6 +30,7 @@ public class RoomDetails_Menu : MonoBehaviour
     /// </summary>
     private LevelData LevelLoadoutData;
     private bool LevelSelected;
+	private string AvailableColorIndexes = "01234567";
 
 	private PhotonView ObjPhotonView;
 
@@ -52,24 +53,25 @@ public class RoomDetails_Menu : MonoBehaviour
 		// so that they are not triggered erroneously)
 		SessionManager.Instance.OnSMPlayerJoinedRoom += PlayerJoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerLeftRoom += PlayerLeftRoom_Event;
-
+		
 		// Immediately refresh the player name list to show the host
-        RefreshPlayerNames();
-
+		RefreshPlayerNames();
+		
 		// Immediately refresh the room details
 		RefreshRoomDetails();
-
+		
 		// Add Level Buttons for each Level (this needs to be done before the tower buttons because the towers depend on the LevelData)
 		InitiateLevelButtons();
-
+		
 		// Add Tower Butttons for each Tower
 		RefreshTowerButtons();
-
+		
 		// See if the player is currently the room owner or just joining
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
 			RoomTitle_GUIInput.GetComponent<InputField>().enabled = true;
 			StartGame_GUIButton.SetActive(true);
+			SessionManager.Instance.SetRoomVisibility(true);
 		}
 		else
 		{
@@ -97,9 +99,15 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// </summary>
 	public void StartGame_Click()
 	{
-        // only starts game if the user has selected a level
-        if (LevelSelected)
-		    ObjPhotonView.RPC ("LoadLevel", PhotonTargets.All, null);
+		// only starts game if the user has selected a level
+		if (LevelSelected)
+		{
+			// Hide the room from other players (but still keep it open to be joined by invite)
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+				SessionManager.Instance.SetRoomVisibility(false);
+			// Tell all the clients to load the level
+			ObjPhotonView.RPC ("LoadLevel", PhotonTargets.All, null);
+		}
 	}
 
 	/// <summary>
@@ -199,11 +207,16 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// <param name="player">Player Data</param>
 	private void PlayerJoinedRoom_Event(PhotonPlayer player)
 	{
+		// Give the player a color (assign it only if player is the Master Client)
+		int colorIndex = AssignColor();
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", colorIndex } });
+		
 		// Tell the new Player which level is currently selected
 		ObjPhotonView.RPC("NewLevelSelected", player, LevelLoadoutData.DisplayName);
-
+		
 		RefreshPlayerNames();
-
+		
 		// Update whether or not the start button is enabled based on the current number of players in the room
 		RefreshStartGameButton();
 	}
@@ -214,8 +227,11 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// <param name="player">Player.</param>
 	private void PlayerLeftRoom_Event(PhotonPlayer player)
 	{
+		// Unassign color given to the player
+		UnassignColor((int)player.customProperties["PlayerColorIndex"]);
+		
 		RefreshPlayerNames();
-
+		
 		// Update whether or not the start button is enabled based on the current number of players in the room
 		RefreshStartGameButton();
 	}
@@ -277,15 +293,34 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void RefreshPlayerNames()
 	{
 		PhotonPlayer[] playerList = SessionManager.Instance.GetAllPlayersInRoom();
-
+		
 		// Reset all names to blank
 		for(int i = 0; i < PlayerName_GUIText.Length; i++)
 		{
 			if(playerList.Length > i)
+			{
 				PlayerName_GUIText[i].GetComponent<Text>().text = playerList[i].name;
+				//PlayerName_GUIText[i].GetComponent<Text>().material.color = PlayerColors.colors[(int)playerList[i].customProperties["PlayerColorIndex"]];
+			}
 			else
+			{
 				PlayerName_GUIText[i].GetComponent<Text>().text = "<OPEN>";
+				//PlayerName_GUIText[i].GetComponent<Text>().material.color = Color.White;
+			}
 		}
+	}
+	
+	private int AssignColor()
+	{
+		int index = (int)AvailableColorIndexes[0];
+		AvailableColorIndexes = AvailableColorIndexes.Remove(0, 1);
+		
+		return index;
+	}
+	
+	private void UnassignColor(int colorIndex)
+	{
+		AvailableColorIndexes = colorIndex.ToString() + AvailableColorIndexes;
 	}
 
 	/// <summary>
