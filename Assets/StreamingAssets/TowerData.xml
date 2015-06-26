@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="us-ascii"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <ArrayOfTowerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <TowerData>
     <DisplayName>EMP Tower</DisplayName>
     <PrefabName>EMPTower</PrefabName>
     <Health>350</Health>
-    <PlayerCount>0</PlayerCount>
     <RateOfFire>2</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>4</Range>
@@ -19,15 +18,14 @@
   <TowerData>
     <DisplayName>Small Thraceium Tower</DisplayName>
     <PrefabName>SmallThraceiumTower</PrefabName>
-    <Health>200</Health>
-    <PlayerCount>0</PlayerCount>
-    <RateOfFire>3</RateOfFire>
+    <Health>80</Health>
+    <RateOfFire>0.6</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>3</Range>
-    <ThraceiumDamage>8</ThraceiumDamage>
-    <BallisticDamage>4</BallisticDamage>
+    <ThraceiumDamage>6</ThraceiumDamage>
+    <BallisticDamage>2</BallisticDamage>
     <TransitionTime>0</TransitionTime>
-    <InstallCost>1</InstallCost>
+    <InstallCost>9</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
     <StartupTime>0</StartupTime>
     <TrackingSpeed>4</TrackingSpeed>
@@ -36,7 +34,6 @@
     <DisplayName>Thraceium Rain Tower</DisplayName>
     <PrefabName>ThraceiumRainTower</PrefabName>
     <Health>400</Health>
-    <PlayerCount>0</PlayerCount>
     <RateOfFire>12</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>8</Range>
@@ -52,7 +49,6 @@
     <DisplayName>Universal Energy Tower</DisplayName>
     <PrefabName>UniversalEnergyTower</PrefabName>
     <Health>100</Health>
-    <PlayerCount>0</PlayerCount>
     <RateOfFire>1</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>4</Range>

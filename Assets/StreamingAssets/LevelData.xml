@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="us-ascii"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
     <DisplayName>Level 1</DisplayName>
@@ -43,7 +43,7 @@
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
     <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
+    <MiningFacilityHealth>450</MiningFacilityHealth>
   </LevelData>
   <LevelData>
     <DisplayName>Level 4</DisplayName>
@@ -52,13 +52,13 @@
     <NotificationFilename />
     <Description>This is the last level. It's super easy</Description>
     <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>1</MaximumPlayers>
+    <MaximumPlayers>4</MaximumPlayers>
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
     <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
+    <MiningFacilityHealth>125</MiningFacilityHealth>
   </LevelData>
   <LevelData>
     <DisplayName>Level 5</DisplayName>
