@@ -161,6 +161,9 @@ public class Tower : MonoBehaviour
 		TimeLastShotFired = Time.time;
 		// Instantiate prefab
 		Instantiate(Shot, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+
+        PlayerAnalytics.Instance.ballisticDamage += BallisticDamaage;
+        PlayerAnalytics.Instance.thraceiumDamage += ThraceiumDamage;
 	}
 	#endregion
 

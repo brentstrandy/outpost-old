@@ -17,8 +17,11 @@ public class PlayerAnalytics : MonoBehaviour
     public int lastLevelReached = 1;//Avg last level reached (return on disconnect or level loss)
 
     //DAMAGE
-    public List<float> totalBallisticDamage;//Avg total ballistic damage
-    public List<float> totalThraceiumDamage;//Avg total thracium damage
+    public float ballisticDamage;//Accumulated in a single level
+    public float thraceiumDamage;//Accumulated in a seingle level
+    // Redundant if we send data at the end of each level
+    //public List<float> totalBallisticDamage;//Avg total ballistic damage
+    //public List<float> totalThraceiumDamage;//Avg total thracium damage
 
     //TOWERS
     // change to an array
@@ -69,8 +72,45 @@ public class PlayerAnalytics : MonoBehaviour
     // Use this for initialization
     public void Start() 
     {
-
+        
 	}
+
+    // Resets variables that accumulate in a single level
+    public void ResetLevelStats()
+    {
+        ballisticDamage = 0;
+        thraceiumDamage = 0;
+    }
+
+    // Send all the level stats to the Unity Analaytics server
+    // *************************************************
+    //http://docs.unity3d.com/Manual/UnityAnalyticsCustomAttributes51.html
+    // *************************************************
+    //                      RULES
+    // Limit 10 paramters per "CustomEvent",
+    // Limit 500 characters for the dictionary content,
+    // Limit 100 "CustomEvent"s per hour (per user),
+    // Only strings and booleans are categorizable.
+    // *************************************************
+    public void SendLevelStats()
+    {
+        // send levels total ballistic and thraceium damage
+        Analytics.CustomEvent("TotalLevelDamage", new Dictionary<string, object>
+        {
+            {"ballisticDamage", ballisticDamage},
+            {"thraceiumDamage", thraceiumDamage},
+            //{"levelName", GameManager.Instance.CurrentLevelData.SceneName}// to categorize data (if Justin deems necessary)
+        });
+
+    }
+
+    // Optional stats for game
+    public void SendInitialStats()
+    {
+        //Analytics.SetUserBirthYear(1986);
+        //Analytics.SetUserGender(0);
+        //Analytics.SetUserId("ID Number");
+    }
 
     #region MessageHandling
     protected void Log(string message)
