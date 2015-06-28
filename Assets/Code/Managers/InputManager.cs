@@ -58,6 +58,29 @@ public class InputManager : MonoBehaviour
 				if(OnQuadrantRotate != null)
 					OnQuadrantRotate("right");
 			}
+            // Speed game up for testing purposes
+            #if UNITY_EDITOR
+            // Increase by 1
+            if(Input.GetKeyDown(KeyCode.Equals))
+            {
+                Time.timeScale += 1f;
+                Log("Time.timeScale: " + Time.timeScale);
+            }
+            // Decrease by 1
+            else if(Input.GetKeyDown(KeyCode.Minus))
+            {
+                if (Time.timeScale > 1f)
+                    Time.timeScale -= 1;
+
+                Log("Time.timeScale: " + Time.timeScale);                    
+            }
+            // Return to 1
+            else if(Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                Time.timeScale = 1;
+                Log("Time.timeScale: " + Time.timeScale);
+            }
+            #endif 
 		}
 	}
 
