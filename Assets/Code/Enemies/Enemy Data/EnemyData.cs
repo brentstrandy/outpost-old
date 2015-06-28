@@ -16,9 +16,10 @@ public class EnemyData
 	public Color HighlightColor;
 	public bool AttackTowers;
 	public bool AttackMiningFacility;
+	public bool AttackWhileMoving;
 
 	// Enemy Stats
-	public int Health;
+	public int MaxHealth;
 	public float RateOfFire;
 	public float Cooldown;
 	public float DamageDealt;
@@ -42,9 +43,10 @@ public class EnemyData
 		HighlightColor = obj.HighlightColor;
 		AttackTowers = obj.AttackTowers;
 		AttackMiningFacility = obj.AttackMiningFacility;
+		AttackWhileMoving = obj.AttackWhileMoving;
 	
 	    // Enemy Stats
-	    Health = obj.Health;
+	    MaxHealth = obj.MaxHealth;
 	    RateOfFire = obj.RateOfFire;
 	    Cooldown = obj.Cooldown;
 	    DamageDealt = obj.DamageDealt;
@@ -63,7 +65,7 @@ public class EnemyData
     {
         DisplayName = "";
 	
-	    Health = 0;
+	    MaxHealth = 0;
 	    RateOfFire = Cooldown = DamageDealt = Acceleration = Speed = Range = BallisticDefense = 0;
     }
 

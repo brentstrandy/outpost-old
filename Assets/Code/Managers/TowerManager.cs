@@ -33,8 +33,14 @@ public class TowerManager
 		TowerLocations.Remove(tower.gameObject.GetComponent<HexLocation>().location);
 	}
 
-	public bool HasTower(HexCoord coord) {
+	public bool HasTower(HexCoord coord)
+	{
 		return TowerLocations.Contains(coord);
+	}
+
+	public Tower FindTowerByID(int viewID)
+	{
+		return ActiveTowerList.Find(x => x.NetworkViewID == viewID);
 	}
 
 	#region MessageHandling

@@ -16,7 +16,7 @@ public class TowerData
     public string PrefabName;
 
 	// Tower Stats
-	public int Health;
+	public int MaxHealth;
     public float RateOfFire;
     public float Cooldown;
 	public float Range;
@@ -55,7 +55,7 @@ public class TowerData
     {
         DisplayName = PrefabName = "";
 
-        Health = 0;
+        MaxHealth = 0;
         RateOfFire = Cooldown = Range = ThraceiumDamage = BallisticDamage = TransitionTime = 0;
         InstallCost = 0;
         MaintenanceCost = StartupTime = TrackingSpeed = 0;

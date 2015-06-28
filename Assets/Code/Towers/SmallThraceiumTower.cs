@@ -18,7 +18,7 @@ public class SmallThraceiumTower : Tower
 		// Small Thraceium Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 
-		EnemyCircleCollider.radius = Range;
+		EnemyCircleCollider.radius = TowerAttributes.Range;
 	}
 	
 	// Update is called once per frame

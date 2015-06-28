@@ -17,7 +17,7 @@ public class HeavySpeeder : Enemy
 		// Load default attributes from EnemyData for this enemy
 		//SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Heavy Speeder"));
 
-		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
+		this.transform.LookAt(GameManager.Instance.ObjMiningFacility.transform.position, Up);
 
 		// Start the Heavy Speeder off the ground
 		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f);

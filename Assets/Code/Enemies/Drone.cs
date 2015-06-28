@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Drone : Enemy
@@ -16,7 +16,7 @@ public class Drone : Enemy
 		// Load default attributes from EnemyData for this enemy
 		//SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Drone"));
 
-		this.transform.LookAt(MiningFacilityObject.transform.position, Up);
+		this.transform.LookAt(GameManager.Instance.ObjMiningFacility.transform.position, Up);
 
 		// Start the Drone off the ground
 		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1.0f);
@@ -33,19 +33,19 @@ public class Drone : Enemy
 		if(other.tag == "Enemy")
 		{
 			// Only take action if the droid does not find another droid
-			if(other.GetComponent<Enemy>().Name != "Drone")
+			if(other.GetComponent<Enemy>().EnemyAttributes.DisplayName != "Drone")
 			{
 				// Only start following the enemy if the Drone isn't already following an enemy
-				if(TargetObject == null)
+				if(TargetedObjectToFollow == null)
 				{
-					TargetObject = other.gameObject;
+					TargetedObjectToFollow = other.gameObject;
 				}
 			}
 		}
 		// Check to see if the Enemy encounters the Mining Facility and - if so - explode on impact
 		else if(other.tag == "Mining Facility")
 		{
-			MiningFacilityObject.TakeDamage(DamageDealt);
+			GameManager.Instance.ObjMiningFacility.TakeDamage(EnemyAttributes.DamageDealt);
 		}
 	}
 

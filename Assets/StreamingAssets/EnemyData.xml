@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfEnemyData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EnemyData>
     <DisplayName>Drone</DisplayName>
@@ -12,6 +12,7 @@
     </HighlightColor>
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
     <Health>35</Health>
     <RateOfFire>1</RateOfFire>
     <Cooldown>0</Cooldown>
@@ -35,6 +36,7 @@
     </HighlightColor>
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
     <Health>115</Health>
     <RateOfFire>1.5</RateOfFire>
     <Cooldown>0</Cooldown>
@@ -58,6 +60,7 @@
     </HighlightColor>
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
     <Health>65</Health>
     <RateOfFire>0.7</RateOfFire>
     <Cooldown>0</Cooldown>
@@ -79,8 +82,9 @@
       <b>0</b>
       <a>0</a>
     </HighlightColor>
-    <AttackTowers>false</AttackTowers>
+    <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
     <Health>35</Health>
     <RateOfFire>0.5</RateOfFire>
     <Cooldown>0</Cooldown>
@@ -104,6 +108,7 @@
     </HighlightColor>
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
     <Health>75</Health>
     <RateOfFire>0.4</RateOfFire>
     <Cooldown>0</Cooldown>

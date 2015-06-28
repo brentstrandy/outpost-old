@@ -19,7 +19,7 @@ public class UniversalEnergyTower : Tower
 		// Universal Energy Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 
-		EnemySphereCollider.radius = Range;
+		EnemySphereCollider.radius = TowerAttributes.Range;
 	}
 	
 	// Update is called once per frame
