@@ -157,6 +157,9 @@ public class Tower : MonoBehaviour
 		// Instantiate prefab for firing a shot
 		if(FiringEffect)
 			Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+
+		PlayerAnalytics.Instance.ballisticDamage += TowerAttributes.BallisticDamage;
+		PlayerAnalytics.Instance.thraceiumDamage += TowerAttributes.ThraceiumDamage;
 	}
 
 	/// <summary>
@@ -222,7 +225,7 @@ public class Tower : MonoBehaviour
 		
 		// Tell the enemy manager this enemy is being destroyed
 		GameManager.Instance.TowerManager.RemoveActiveTower(this);
-		
+
 		// The GameObject must be destroyed or else the enemy will stay instantiated
 		Destroy (this.gameObject);
 	}
