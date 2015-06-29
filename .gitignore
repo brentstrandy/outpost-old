@@ -11,3 +11,6 @@ TestBuild_Win.exe
 TestBuild_Win.zip
 TestBuild_Win_Data
 TestBuild_WebGL
+Assets/UnityVS/Editor/UnityVS.VersionSpecific.dll
+Assets/UnityVS/Editor/UnityVS.VersionSpecific.dll.meta
+UnityVS.Outpost.v12.suo

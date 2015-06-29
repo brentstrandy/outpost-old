@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
 			else
 				StartCoroutine(LevelNotificationDataManager.LoadDataFromServer(CurrentLevelData.NotificationFilename + ".xml"));
 		}
-		
+
 		GameRunning = false;
 		Victory = false;
 	}
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
 	public bool FinishedLoadingLevel()
 	{
 		bool success = false;
-		
+
 		// At the moment the only data that needs to be checked is the EnemySpawnManager
 		// Add additional checks for loaded data here if necessary
 		if(EnemySpawnDataManager != null)
@@ -204,8 +204,11 @@ public class GameManager : MonoBehaviour
 		GameRunning = false;
 		MenuManager.Instance.ShowVictoryMenu();
 
-        PlayerAnalytics.Instance.levelWins.Add(PhotonNetwork.playerList.Length/*get number of current players -- may need to store it earlier*/);
-        PlayerAnalytics.Instance.lastLevelReached++;
+        SendAnalytics();
+
+        PlayerAnalytics.Instance.LastLevelReached++;
+        // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
+        //SendAnalytics()
 	}
 	
 	/// <summary>
@@ -216,8 +219,20 @@ public class GameManager : MonoBehaviour
 		Victory = false;
 		GameRunning = false;
 		MenuManager.Instance.ShowLossMenu();
+
+        // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
+        //SendAnalytics();
 	}
 	
+    // DO NOT activate until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
+    private void SendAnalytics()
+    {
+        //PlayerAnalytics.Instance.SendLevelStats();
+        //PlayerAnalytics.Instance.ResetLevelStats();
+    }
+
+
+
 	private void OnSwitchMaster(PhotonPlayer player)
 	{
 		

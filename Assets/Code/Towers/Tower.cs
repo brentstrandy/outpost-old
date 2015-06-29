@@ -158,8 +158,8 @@ public class Tower : MonoBehaviour
 		if(FiringEffect)
 			Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 
-		PlayerAnalytics.Instance.ballisticDamage += TowerAttributes.BallisticDamage;
-		PlayerAnalytics.Instance.thraceiumDamage += TowerAttributes.ThraceiumDamage;
+		PlayerAnalytics.Instance.BallisticDamage += TowerAttributes.BallisticDamage;
+		PlayerAnalytics.Instance.ThraceiumDamage += TowerAttributes.ThraceiumDamage;
 	}
 
 	/// <summary>
