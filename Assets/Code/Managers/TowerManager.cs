@@ -24,13 +24,15 @@ public class TowerManager
 	public void AddActiveTower(Tower tower)
 	{
 		ActiveTowerList.Add(tower);
-		TowerLocations.Add(tower.gameObject.GetComponent<HexLocation>().location);
+		if(tower.gameObject.GetComponent<HexLocation>())
+			TowerLocations.Add(tower.gameObject.GetComponent<HexLocation>().location);
 	}
 
 	public void RemoveActiveTower(Tower tower)
 	{
 		ActiveTowerList.Remove(tower);
-		TowerLocations.Remove(tower.gameObject.GetComponent<HexLocation>().location);
+		if(tower.gameObject.GetComponent<HexLocation>())
+			TowerLocations.Remove(tower.gameObject.GetComponent<HexLocation>().location);
 	}
 
 	public bool HasTower(HexCoord coord)

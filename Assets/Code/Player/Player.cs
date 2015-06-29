@@ -161,6 +161,11 @@ public class Player : MonoBehaviour
 		Money += amount;
 	}
 
+	public void SetStartingMoney(float amount)
+	{
+		Money = amount;
+	}
+
 	public void ResetData()
 	{
 		GameLoadOut = null;

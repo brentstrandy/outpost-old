@@ -64,13 +64,17 @@ public class GameManager : MonoBehaviour
 		CurrentLevelData = MenuManager.Instance.CurrentLevelData;
 		// Store a reference to the PhotonView
 		ObjPhotonView = PhotonView.Get(this);
-		
+
 		// Instantiate objects to manage Enemies and Towers
 		EnemyManager = new EnemyManager();
 		TowerManager = new TowerManager();
 		// Instantiate object to manage Enemy spawning
 		EnemySpawnManager = new EnemySpawnManager(ObjPhotonView);
-		
+
+		// Initialize the mining facility
+		ObjMiningFacility = GameObject.FindGameObjectWithTag("Mining Facility").GetComponent<MiningFacility>();
+		ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
+
 		// Begin gathering Enemy Spawn data that the EnemySpawnManager will eventually use
 		EnemySpawnDataManager = new DataManager<EnemySpawnData>();
 		// Grab the Enemy Spawn data from either the web server or local xml file. The EnemySpawnManager will use this
@@ -115,9 +119,6 @@ public class GameManager : MonoBehaviour
 	public void StartGame()
 	{
 		GameRunning = true;
-		
-		// Initialize the mining facility's properties based on the level data
-		ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
 		
 		// Set the player's initial quadrant
 		Player.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;

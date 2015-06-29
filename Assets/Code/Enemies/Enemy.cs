@@ -13,8 +13,6 @@ public class Enemy : MonoBehaviour
 	protected float Health;
 
 	protected float TimeLastShotFired;
-	protected bool FiringOnMiningFacility;
-	protected bool FiringOnTower;
 	protected Vector3 CurAcceleration;
 	protected Vector3 CurVelocity;
 	protected Vector2 TargetHex;
@@ -25,9 +23,8 @@ public class Enemy : MonoBehaviour
 	protected PathFindingType PathFinding;
 	protected GameObject TargetedObjectToFollow;
 	protected GameObject TargetedObjectToAttack;
-
-	//protected Tower TargetedTower;
-	//protected MiningFacility MiningFacilityObject;
+	protected bool AttackingMiningFacility;
+	
 	protected Quadrant CurrentQuadrant;
 
 	// Components
@@ -52,12 +49,6 @@ public class Enemy : MonoBehaviour
 	{
 		// Add the enemy to the EnemyManager object to track the Enemy
 		GameManager.Instance.EnemyManager.AddActiveEnemy(this);
-
-		var hexLocation = GetComponent<HexLocation>();
-		if (hexLocation != null)
-		{
-			hexLocation.ApplyPosition();
-		}
 	}
 
 	/// <summary>
@@ -66,6 +57,8 @@ public class Enemy : MonoBehaviour
 	/// <param name="enemyData">EnemyData to be used when instantiating Enemy</param>
 	public void SetEnemyData(EnemyData enemyData)
 	{
+		EnemyAttributes = enemyData;
+
 		// Save reference to PhotonView
 		ObjPhotonView = PhotonView.Get (this);
 		NetworkViewID = ObjPhotonView.viewID;
@@ -75,7 +68,7 @@ public class Enemy : MonoBehaviour
 		ObjPhotonView.ObservedComponents = new List<Component>();
 		ObjPhotonView.synchronization = ViewSynchronization.Off;
 
-		PathFinding = enemyData.PathFinding;
+		PathFinding = EnemyAttributes.PathFinding;
 
 		// Allow the first bullet to be fired when the enemy is instantiated
 		TimeLastShotFired = Time.time - (EnemyAttributes.RateOfFire * 2);
@@ -99,6 +92,7 @@ public class Enemy : MonoBehaviour
 			ObjHexLocation.layout = HexCoord.Layout.Horizontal;
 			ObjHexLocation.autoSnap = false;
 			ObjHexLocation.gridScale = 1;
+			ObjHexLocation.ApplyPosition();
 
 			TargetHex = ObjPathfinder.Next().Position();
 		}
@@ -113,22 +107,31 @@ public class Enemy : MonoBehaviour
 		if(EnemyAttributes.AttackMiningFacility || EnemyAttributes.AttackTowers)
 			StartCoroutine("Fire");
 
-		Health = enemyData.MaxHealth;
+		Health = EnemyAttributes.MaxHealth;
 
 		// Only initialize the health bar if it is used for this enemy
 		if(HealthBar)
 			HealthBar.InitializeBars(EnemyAttributes.MaxHealth);
 
+		// If the enemy has range attack, add a sphere collider to detect range
+		if(EnemyAttributes.Range > 0)
+		{
+			GameObject go = new GameObject("Awareness", typeof(SphereCollider) );
+			go.GetComponent<SphereCollider>().isTrigger = true;
+			go.GetComponent<SphereCollider>().radius = EnemyAttributes.Range;
+			go.transform.parent = this.transform;
+			go.transform.localPosition = Vector3.zero;
+		}
+
 		// Set the enemy's highlight color
-		gameObject.GetComponent<Renderer>().material.color = enemyData.HighlightColor;
+		gameObject.GetComponent<Renderer>().material.color = EnemyAttributes.HighlightColor;
 	}
 	#endregion
 
 	public virtual void Update()
 	{
-		// Units cannot move if they are firing on Mining Facility - AND - 
-		// Units can only move while firing on a tower IF that ability has been enabled
-		if((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null)
+		// Units can only move while firing on a tower IF that ability has been enabled. Also, units will not move when attacking the mining facility
+		if(((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null) && !AttackingMiningFacility)
 		{
 			// MASTER CLIENT movement
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -195,26 +198,11 @@ public class Enemy : MonoBehaviour
 		// Only Target enemies if this is the Master Client
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			// Only target a new object if an object isn't already targeted
-			if(TargetedObjectToAttack == null)
+			// Always attack the mining facility and forget about any targeted towers when the Mining Facility is within range.
+			if((other.tag == "Mining Facility" && EnemyAttributes.AttackMiningFacility) || (TargetedObjectToAttack == null && other.tag == "Tower" && EnemyAttributes.AttackTowers))
 			{
-				// Only target a tower game object if the enemy has that ability
-				if(other.tag == "Tower" && EnemyAttributes.AttackTowers)
-				{
-					// Tell all other clients to target a new object
-					ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.Others, other.GetComponent<Enemy>().NetworkViewID);
-					
-					// Master Client targets the object
-					TargetedObjectToAttack = other.gameObject;
-				}
-				/*else if(other.tag == "MiningFacility" && EnemyAttributes.AttackMiningFacility)
-				{
-					// Tell all other clients to target a new enemy
-					ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.Others, other.GetComponent<Enemy>().NetworkViewID);
-					
-					// Master Client targets the Enemy
-					TargetedObjectToAttack = GameManager.Instance.ObjMiningFacility;
-				}*/
+				// Tell everyone to target a new enemy
+				ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.All, other.GetComponent<Tower>().NetworkViewID);
 			}
 		}
 	}
@@ -246,13 +234,16 @@ public class Enemy : MonoBehaviour
 			}
 		}
 	}
+
+	public virtual void OnTriggerEnter(Collider other)
+	{ }
 	#endregion
 
 	#region RPC CALLS
 	/// <summary>
 	/// Tells the client to target a new GameObject
 	/// </summary>
-	/// <param name="viewID">Network ViewID of the enemy to target. Pass -1 to set the target to null.</param>
+	/// <param name="viewID">Network ViewID of the enemy to target. Pass -100 to target the mining facility. Pass -1 to set the target to null.</param>
 	[PunRPC]
 	protected virtual void TargetNewObjectToAttack(int viewID)
 	{
@@ -260,7 +251,15 @@ public class Enemy : MonoBehaviour
 		if(viewID == -1)
 			TargetedObjectToAttack = null;
 		else
+		{
 			TargetedObjectToAttack = GameManager.Instance.TowerManager.FindTowerByID(viewID).gameObject;
+
+			// Remember when attacking the mining facility for use in Update for movement
+			if(TargetedObjectToAttack.tag == "Mining Facility")
+				AttackingMiningFacility = true;
+			else
+				AttackingMiningFacility = false;
+		}
 	}
 
 	/// <summary>
@@ -269,8 +268,9 @@ public class Enemy : MonoBehaviour
 	[PunRPC]
 	protected virtual void FireAcrossNetwork()
 	{
-		// Tell enemy to take damage
+		// Tell object to take damage
 		TargetedObjectToAttack.GetComponent<Tower>().TakeDamage(EnemyAttributes.DamageDealt);
+
 		// Reset timer for tracking when to fire next
 		TimeLastShotFired = Time.time;
 		// Instantiate prefab for firing a shot
@@ -399,10 +399,6 @@ public class Enemy : MonoBehaviour
 		}
 	}
 	#endregion
-	
-	public virtual void OnTriggerEnter(Collider other)
-	{ }
-
 
 	#region MessageHandling
 	protected virtual void Log(string message)
@@ -413,8 +409,7 @@ public class Enemy : MonoBehaviour
 	
 	protected virtual void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[Enemy] " + message);
+		Debug.LogError("[Enemy] " + message);
 	}
 	#endregion
 }

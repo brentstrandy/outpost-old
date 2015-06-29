@@ -44,8 +44,7 @@ public class HealthBarController : MonoBehaviour
 	
 	private void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[HealthBarController] " + message);
+		Debug.LogError("[HealthBarController] " + message);
 	}
 
 	private void LogWarning(string message)

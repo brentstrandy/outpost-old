@@ -9,8 +9,8 @@ public class Tower : MonoBehaviour
 
 	// Tower Attributes/Details/Data
 	public TowerData TowerAttributes;
-	private float Health;
-	public int NetworkViewID { get; private set; }
+	public float Health { get; protected set; }
+	public int NetworkViewID { get; protected set; }
 
 	protected Enemy TargetedEnemy = null;
 	protected float TimeLastShotFired;
@@ -18,7 +18,7 @@ public class Tower : MonoBehaviour
 	public GameObject TurretPivot;
 
 	// Components
-	protected HealthBarController HealthBar;
+	public HealthBarController HealthBar;
 	protected PhotonView ObjPhotonView;
 	// Effects
 	public GameObject FiringEffect;
@@ -37,13 +37,14 @@ public class Tower : MonoBehaviour
 		TimeLastShotFired = 0;
 
 		// Update the hex coordinate to reflect the spawned position
-		GetComponent<HexLocation>().ApplyPosition();
+		var hexLocation = GetComponent<HexLocation>();
+		if (hexLocation != null)
+		{
+			hexLocation.ApplyPosition();
+		}
 
 		// Track the newly added tower in the TowerManager
 		GameManager.Instance.TowerManager.AddActiveTower(this);
-		
-		// Make the Master Client the owner of this object (authoritative server)
-		ObjPhotonView.TransferOwnership(SessionManager.Instance.GetMasterClientID());
 	}
 
 	/// <summary>
@@ -58,7 +59,24 @@ public class Tower : MonoBehaviour
 		ObjPhotonView = PhotonView.Get(this);
 		NetworkViewID = ObjPhotonView.viewID;
 
+		// Make the Master Client the owner of this object (authoritative server)
+		ObjPhotonView.TransferOwnership(SessionManager.Instance.GetMasterClientID());
+
+		// If the tower has range attack, add a sphere collider to detect range
+		if(TowerAttributes.Range > 0)
+		{
+			GameObject go = new GameObject("Awareness", typeof(SphereCollider) );
+			go.GetComponent<SphereCollider>().isTrigger = true;
+			go.GetComponent<SphereCollider>().radius = TowerAttributes.Range;
+			go.transform.parent = this.transform;
+			go.transform.localPosition = Vector3.zero;
+		}
+
 		gameObject.GetComponent<Renderer>().material.color = playerColor;
+
+		// Only initialize the health bar if it is used for this enemy
+		if(HealthBar)
+			HealthBar.InitializeBars(TowerAttributes.MaxHealth);
 	}
 	#endregion
 
@@ -126,6 +144,11 @@ public class Tower : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	protected virtual void OnTriggerEnter(Collider other)
+	{
+
 	}
 	#endregion
 
@@ -273,8 +296,7 @@ public class Tower : MonoBehaviour
 	
 	protected virtual void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[Tower] " + message);
+		Debug.LogError("[Tower] " + message);
 	}
 	#endregion
 }

@@ -13,7 +13,7 @@
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
     <AttackWhileMoving>false</AttackWhileMoving>
-    <Health>35</Health>
+    <MaxHealth>1</MaxHealth>
     <RateOfFire>1</RateOfFire>
     <Cooldown>0</Cooldown>
     <DamageDealt>12</DamageDealt>
@@ -37,7 +37,7 @@
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
     <AttackWhileMoving>false</AttackWhileMoving>
-    <Health>115</Health>
+    <MaxHealth>20</MaxHealth>
     <RateOfFire>1.5</RateOfFire>
     <Cooldown>0</Cooldown>
     <DamageDealt>25</DamageDealt>
@@ -61,7 +61,7 @@
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
     <AttackWhileMoving>false</AttackWhileMoving>
-    <Health>65</Health>
+    <MaxHealth>10</MaxHealth>
     <RateOfFire>0.7</RateOfFire>
     <Cooldown>0</Cooldown>
     <DamageDealt>15</DamageDealt>
@@ -82,16 +82,16 @@
       <b>0</b>
       <a>0</a>
     </HighlightColor>
-    <AttackTowers>true</AttackTowers>
+    <AttackTowers>false</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
-    <AttackWhileMoving>false</AttackWhileMoving>
-    <Health>35</Health>
+    <AttackWhileMoving>true</AttackWhileMoving>
+    <MaxHealth>1</MaxHealth>
     <RateOfFire>0.5</RateOfFire>
     <Cooldown>0</Cooldown>
-    <DamageDealt>10</DamageDealt>
+    <DamageDealt>0.5</DamageDealt>
     <Acceleration>0</Acceleration>
     <Speed>0.6</Speed>
-    <Range>7</Range>
+    <Range>3</Range>
     <BallisticDefense>1</BallisticDefense>
     <ThraceiumDefense>1</ThraceiumDefense>
     <TurningSpeed>4</TurningSpeed>
@@ -109,7 +109,7 @@
     <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
     <AttackWhileMoving>false</AttackWhileMoving>
-    <Health>75</Health>
+    <MaxHealth>10</MaxHealth>
     <RateOfFire>0.4</RateOfFire>
     <Cooldown>0</Cooldown>
     <DamageDealt>16</DamageDealt>
