@@ -24,7 +24,7 @@ public class MainMenu_Menu : MonoBehaviour
 	#region OnClick
 	public void CreateGame_Click()
 	{
-		SessionManager.Instance.CreateRoom("Room of " + Player.Instance.Name + "(" + System.Guid.NewGuid().ToString() + ")", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 8 }, TypedLobby.Default);
+		SessionManager.Instance.CreateRoom("Room of " + PlayerManager.Instance.Name + "(" + System.Guid.NewGuid().ToString() + ")", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 8 }, TypedLobby.Default);
 	}
 	
 	public void JoinGame_Click()

@@ -78,7 +78,7 @@ public class EndGame_Menu : MonoBehaviour
 	#region Events
 	private void MasterClientQuit_Event(PhotonPlayer player)
 	{
-		Player.Instance.ResetData();
+		PlayerManager.Instance.ResetData();
 
 		MenuManager.Instance.ReturnToRoomDetailsMenu();
 	}
@@ -89,7 +89,7 @@ public class EndGame_Menu : MonoBehaviour
 	private void Continue()
 	{
 		// Reset player Loadout data
-		Player.Instance.ResetData();
+		PlayerManager.Instance.ResetData();
 		
 		MenuManager.Instance.ReturnToRoomDetailsMenu();
 	}

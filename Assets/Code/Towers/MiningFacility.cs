@@ -28,7 +28,7 @@ public class MiningFacility : Tower
 
 		IncomePerSecond = levelData.IncomePerSecond;
 		Health = levelData.MiningFacilityHealth;
-		Player.Instance.SetStartingMoney(levelData.StartingMoney);
+		PlayerManager.Instance.SetStartingMoney(levelData.StartingMoney);
 	}
 	
 	// Update is called once per frame
@@ -63,7 +63,7 @@ public class MiningFacility : Tower
 		// Only earn income if enough time has passed
 		if(Time.time - LastIncomeTime >= 1)
 		{
-			Player.Instance.EarnIncome(IncomePerSecond);
+			PlayerManager.Instance.EarnIncome(IncomePerSecond);
 			LastIncomeTime = Time.time;
 		}
 	}

@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
 		GameRunning = true;
 		
 		// Set the player's initial quadrant
-		Player.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
+		PlayerManager.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
 		// Inform the Camera of the new quadrant
 		CameraManager.Instance.SetStartQuadrant(CurrentLevelData.StartingQuadrant);
 		
@@ -254,22 +254,22 @@ public class GameManager : MonoBehaviour
 			newQuadrant = GetNextClockwiseQuadrant();
 		
 		// Inform the Player of the new quadrant
-		Player.Instance.CurrentQuadrant = newQuadrant;
+		PlayerManager.Instance.CurrentQuadrant = newQuadrant;
 		// Inform the Camera of the new quadrant
 		CameraManager.Instance.UpdateCameraQuadrant(newQuadrant);
 	}
 	
 	private Quadrant GetNextClockwiseQuadrant()
 	{
-		Quadrant quadrant = Player.Instance.CurrentQuadrant;
+		Quadrant quadrant = PlayerManager.Instance.CurrentQuadrant;
 		
-		if(Player.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("East"))
+		if(PlayerManager.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("East"))
 			quadrant = Quadrant.East;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("South"))
+		else if(PlayerManager.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("South"))
 			quadrant = Quadrant.South;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("West"))
+		else if(PlayerManager.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("West"))
 			quadrant = Quadrant.West;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("North"))
+		else if(PlayerManager.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("North"))
 			quadrant = Quadrant.North;
 		
 		return quadrant;
@@ -277,15 +277,15 @@ public class GameManager : MonoBehaviour
 	
 	private Quadrant GetNextCounterClockwiseQuadrant()
 	{
-		Quadrant quadrant = Player.Instance.CurrentQuadrant;
+		Quadrant quadrant = PlayerManager.Instance.CurrentQuadrant;
 		
-		if(Player.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("West"))
+		if(PlayerManager.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("West"))
 			quadrant = Quadrant.West;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("North"))
+		else if(PlayerManager.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("North"))
 			quadrant = Quadrant.North;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("East"))
+		else if(PlayerManager.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("East"))
 			quadrant = Quadrant.East;
-		else if(Player.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("South"))
+		else if(PlayerManager.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("South"))
 			quadrant = Quadrant.South;
 		
 		return quadrant;

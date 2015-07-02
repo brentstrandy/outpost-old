@@ -3,8 +3,6 @@ using System.Collections;
 
 public class ThraceiumRainTower : Tower
 {
-	private SphereCollider EnemySphereCollider;
-
 	// Use this for initialization
 	public override void Start()
 	{
@@ -13,13 +11,10 @@ public class ThraceiumRainTower : Tower
 		// Load default attributes from TowerData
 		//TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("ThraceiumRainTower");
 
-		EnemySphereCollider = this.GetComponent<SphereCollider>();
 		TimeLastShotFired = Time.time;
 
 		// Thraceium Rain Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
-
-		EnemySphereCollider.radius = TowerAttributes.Range;
 	}
 	
 	// Update is called once per frame
@@ -37,8 +32,7 @@ public class ThraceiumRainTower : Tower
 	
 	protected override void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[ThraceiumRainTower] " + message);
+		Debug.LogError("[ThraceiumRainTower] " + message);
 	}
 	#endregion
 }

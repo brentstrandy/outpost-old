@@ -17,7 +17,7 @@ public class InGame_Menu : MonoBehaviour
 	private void OnEnable()
 	{
 		// Get the list of tower names in the loadout for the player
-		List<TowerData> towerData = Player.Instance.GetGameLoadOutTowers();
+		List<TowerData> towerData = PlayerManager.Instance.GetGameLoadOutTowers();
 		int index = 0;
 
 		// Run through each button slot available to the player and associate it with
@@ -55,7 +55,7 @@ public class InGame_Menu : MonoBehaviour
 			if(GameManager.Instance.GameRunning)
 			{
 				// Display how much money the player current has
-				MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(Player.Instance.Money).ToString();
+				MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(PlayerManager.Instance.Money).ToString();
 				OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.ObjMiningFacility.Health.ToString();
 			}
 		}
@@ -70,7 +70,7 @@ public class InGame_Menu : MonoBehaviour
 	public void Tower_Click(TowerData towerData)
 	{
 		// Inform the player a tower has been selected for placement
-		Player.Instance.TowerSelectedForPlacement(towerData);
+		PlayerManager.Instance.TowerSelectedForPlacement(towerData);
 	}
 	#endregion
 

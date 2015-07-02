@@ -280,7 +280,7 @@ public class RoomDetails_Menu : MonoBehaviour
 		SessionManager.Instance.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", playerColorIndex } });
 
 		// Record the Loadouts chosen by the player
-		Player.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
+		PlayerManager.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
 
 		// Start the game
 		MenuManager.Instance.ShowStartGame(LevelLoadoutData);
@@ -423,69 +423,60 @@ public class RoomDetails_Menu : MonoBehaviour
 		}
 	}
 
-    private void InitiateLevelButtons()
-    {
+	private void InitiateLevelButtons()
+	{
 		// Only initiate Level buttos if this is the MASTER CLIENT
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-	        int index = 0;
+			int index = 0;
 			string levelDescription = "";
-			/*
-			GameObject comboBox = new GameObject();
-			comboBox.AddComponent<StyledComboBox>();
-
-			// populate the combo box with text
-			comboBox.AddItems("Test1", "Test2", "Test3", "Unity", "Needs", "A", "Better", "Encapsulation", "System", "Than", "Prefabs");
+			bool previousLevelComplete = true;
 			
-			// or, populate it with textures
-			comboBox.AddItems(myTex1, myText2);
-			
-			// or populate it with both
-			
-			comboBox.AddItems(StyledComboBox(new StyledItemButtonImageText.Data("MyString", myTex1));
-			                  
-			                  // finally, listen for changes:
-			                  comboBox.OnSelectionChanged += delegate(StyledItemitem)
-			                  {
-				Debug.Log (item.GetText() + "" + comboBox.SelectedIndex);
-			}
-			*/
-
 			// Create a toggle group to grop all the toggles and automatically enforce only one selection
 			GameObject toggleGroup = new GameObject();
 			toggleGroup.AddComponent<ToggleGroup>();
 			toggleGroup.GetComponent<ToggleGroup>().allowSwitchOff = true;
-
-	        foreach (LevelData levelData in GameDataManager.Instance.LevelDataManager.DataList)
-	        {
+			
+			foreach (LevelData levelData in GameDataManager.Instance.LevelDataManager.DataList)
+			{
 				LevelData ld = levelData;
-
-	            // instantiate a button for each level
-	            GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
+				
+				// instantiate a button for each level
+				GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
 				if(levelData.MinimumPlayers == 1 && levelData.MaximumPlayers == 1)
 					levelDescription = levelData.DisplayName + "\n[1 Player]";
 				else if(levelData.MinimumPlayers == levelData.MaximumPlayers)
 					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " Players]";
 				else
 					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
-
+				
 				obj.GetComponentInChildren<Text>().text = levelDescription;
-	            obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
-	            obj.transform.SetParent(this.transform);
-	            obj.transform.localScale = new Vector3(1, 1, 1);
+				obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
+				obj.transform.SetParent(this.transform);
+				obj.transform.localScale = new Vector3(1, 1, 1);
 				obj.GetComponent<Toggle>().group = toggleGroup.GetComponent<ToggleGroup>();
-	            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 + (70 * index), 50);
-	            obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
-	            obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
-	            obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
-	            obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 + (70 * index), 50);
+				obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
+				obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
+				obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
+				obj.transform.rotation = new Quaternion(0, 0, 0, 0);
 
-	            // select Level1 by default (hacked way)
-	            if (!LevelLoadoutSelection)
-	                obj.GetComponent<Toggle>().isOn = true;
+				//if(previousLevelComplete)
+				//	obj.GetComponent<Toggle>().enabled = true;
+				//else
+				//	obj.GetComponent<Toggle>().enabled = false;
 
-	            index++;
-	        }
+				// select Level1 by default (hacked way)
+				if (!LevelLoadoutSelection)
+					obj.GetComponent<Toggle>().isOn = true;
+				
+				if(PlayerManager.Instance.LevelComplete(levelData.DisplayName))
+					previousLevelComplete = true;
+				else
+					previousLevelComplete = false;
+
+				index++;
+			}
 		}
     }
 

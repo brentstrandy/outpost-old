@@ -1,13 +1,42 @@
 fileFormatVersion: 2
-guid: 0474269ae57694a138e58a3871f8c551
+guid: 001e1d69dbf5f41eca89a9dd34349ef9
+timeCreated: 1435733556
+licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: pCube9
+    100000: pCylinder1
+    100002: polySurface2
+    100004: polySurface3
+    100006: polySurface4
+    100008: polySurface5
+    100010: thracium
+    100012: //RootNode
+    400000: pCylinder1
+    400002: polySurface2
+    400004: polySurface3
+    400006: polySurface4
+    400008: polySurface5
+    400010: thracium
+    400012: //RootNode
+    2300000: pCylinder1
+    2300002: polySurface2
+    2300004: polySurface3
+    2300006: polySurface4
+    2300008: polySurface5
+    2300010: thracium
+    3300000: pCylinder1
+    3300002: polySurface2
+    3300004: polySurface3
+    3300006: polySurface4
+    3300008: polySurface5
+    3300010: thracium
+    4300000: pCylinder1
+    4300002: thracium
+    4300004: polySurface3
+    4300006: polySurface2
+    4300008: polySurface4
+    4300010: polySurface5
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -18,6 +47,10 @@ ModelImporter:
     bakeSimulation: 0
     optimizeGameObjects: 0
     motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
@@ -28,7 +61,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: .200000003
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
@@ -42,7 +75,7 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 0
+    useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
