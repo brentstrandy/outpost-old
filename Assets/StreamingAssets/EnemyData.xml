@@ -3,7 +3,7 @@
   <EnemyData>
     <DisplayName>Drone</DisplayName>
     <PrefabName>Drone</PrefabName>
-    <PathFinding>TrackFriendly_IgnorePath</PathFinding>
+    <PathFinding>TrackEnemy_IgnorePath</PathFinding>
     <HighlightColor>
       <r>1</r>
       <g>0</g>
@@ -15,13 +15,14 @@
     <AttackWhileMoving>false</AttackWhileMoving>
     <MaxHealth>1</MaxHealth>
     <RateOfFire>1</RateOfFire>
-    <Cooldown>0</Cooldown>
     <DamageDealt>12</DamageDealt>
     <Acceleration>18</Acceleration>
     <Speed>2</Speed>
     <Range>2</Range>
-    <BallisticDefense>1</BallisticDefense>
-    <ThraceiumDefense>1</ThraceiumDefense>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
+    <BallisticDefense>0.1</BallisticDefense>
+    <ThraceiumDefense>0.1</ThraceiumDefense>
     <TurningSpeed>8</TurningSpeed>
   </EnemyData>
   <EnemyData>
@@ -39,11 +40,12 @@
     <AttackWhileMoving>false</AttackWhileMoving>
     <MaxHealth>20</MaxHealth>
     <RateOfFire>1.5</RateOfFire>
-    <Cooldown>0</Cooldown>
     <DamageDealt>25</DamageDealt>
     <Acceleration>0</Acceleration>
     <Speed>0.8</Speed>
     <Range>8</Range>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDefense>1</BallisticDefense>
     <ThraceiumDefense>1</ThraceiumDefense>
     <TurningSpeed>0.5</TurningSpeed>
@@ -63,11 +65,12 @@
     <AttackWhileMoving>false</AttackWhileMoving>
     <MaxHealth>10</MaxHealth>
     <RateOfFire>0.7</RateOfFire>
-    <Cooldown>0</Cooldown>
     <DamageDealt>15</DamageDealt>
     <Acceleration>0</Acceleration>
     <Speed>1.5</Speed>
     <Range>8</Range>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDefense>0.8</BallisticDefense>
     <ThraceiumDefense>0.8</ThraceiumDefense>
     <TurningSpeed>3</TurningSpeed>
@@ -87,11 +90,12 @@
     <AttackWhileMoving>true</AttackWhileMoving>
     <MaxHealth>1</MaxHealth>
     <RateOfFire>0.5</RateOfFire>
-    <Cooldown>0</Cooldown>
     <DamageDealt>0.5</DamageDealt>
     <Acceleration>0</Acceleration>
     <Speed>0.6</Speed>
     <Range>3</Range>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDefense>1</BallisticDefense>
     <ThraceiumDefense>1</ThraceiumDefense>
     <TurningSpeed>4</TurningSpeed>
@@ -111,11 +115,12 @@
     <AttackWhileMoving>false</AttackWhileMoving>
     <MaxHealth>10</MaxHealth>
     <RateOfFire>0.4</RateOfFire>
-    <Cooldown>0</Cooldown>
     <DamageDealt>16</DamageDealt>
     <Acceleration>0</Acceleration>
     <Speed>1.3</Speed>
     <Range>8</Range>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDefense>0.8</BallisticDefense>
     <ThraceiumDefense>0.8</ThraceiumDefense>
     <TurningSpeed>3</TurningSpeed>

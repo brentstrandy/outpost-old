@@ -49,6 +49,9 @@ public class Enemy : MonoBehaviour
 	{
 		// Add the enemy to the EnemyManager object to track the Enemy
 		GameManager.Instance.EnemyManager.AddActiveEnemy(this);
+
+		// Allow the first bullet to be fired immediatly after the enemy is instantiated
+		TimeLastShotFired = 0;
 	}
 
 	/// <summary>
@@ -69,9 +72,6 @@ public class Enemy : MonoBehaviour
 		ObjPhotonView.synchronization = ViewSynchronization.Off;
 
 		PathFinding = EnemyAttributes.PathFinding;
-
-		// Allow the first bullet to be fired when the enemy is instantiated
-		TimeLastShotFired = Time.time - (EnemyAttributes.RateOfFire * 2);
 
 		// Initialize the proper pathfinding
 		if(PathFinding == PathFindingType.ShortestPath)
@@ -157,7 +157,7 @@ public class Enemy : MonoBehaviour
 					}
 				}
 				// Track Friendly while Ignoring Pathfinding for movement
-				else if(PathFinding == PathFindingType.TrackFriendly_IgnorePath)
+				else if(PathFinding == PathFindingType.TrackEnemy_IgnorePath)
 				{
 					if(TargetedObjectToFollow != null)
 						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetedObjectToFollow.transform.position - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
@@ -287,8 +287,8 @@ public class Enemy : MonoBehaviour
 	protected virtual void TakeDamageAcrossNetwork(float ballisticsDamage, float thraceiumDamage)
 	{
 		// Take damage from Ballistics and Thraceium
-		Health -= (ballisticsDamage * EnemyAttributes.BallisticDefense);
-		Health -= (thraceiumDamage * EnemyAttributes.ThraceiumDefense);
+		Health -= (ballisticsDamage * (1 - EnemyAttributes.BallisticDefense));
+		Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
 		Health = Mathf.Max(Health, 0);
 		
 		// Only update the Health Bar if there is one to update
@@ -324,8 +324,8 @@ public class Enemy : MonoBehaviour
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
 			// Take damage from Ballistics and Thraceium
-			Health -= (ballisticsDamage * EnemyAttributes.BallisticDefense);
-			Health -= (thraceiumDamage * EnemyAttributes.ThraceiumDefense);
+			Health -= (ballisticsDamage * (1 - EnemyAttributes.BallisticDefense));
+			Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
 			Health = Mathf.Max(Health, 0);
 			
 			// Only update the Health Bar if there is one to update
@@ -383,7 +383,7 @@ public class Enemy : MonoBehaviour
 				if(TargetedObjectToAttack != null)
 				{
 					// Only fire if tower is ready to fire
-					if(Time.time - TimeLastShotFired >= EnemyAttributes.RateOfFire)
+					if(Time.time - TimeLastShotFired >= (1 / EnemyAttributes.RateOfFire))
 					{
 						// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
 						if(Vector3.Angle(this.transform.forward, TargetedObjectToAttack.transform.position - this.transform.position) <= 8 || TurretPivot == null)

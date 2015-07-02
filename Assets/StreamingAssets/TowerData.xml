@@ -7,8 +7,10 @@
     <RateOfFire>2</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>4</Range>
-    <ThraceiumDamage>1</ThraceiumDamage>
     <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>1</ThraceiumDamage>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
     <InstallCost>20</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
@@ -19,11 +21,13 @@
     <DisplayName>Small Thraceium Tower</DisplayName>
     <PrefabName>Heleur_STT</PrefabName>
     <MaxHealth>10</MaxHealth>
-    <RateOfFire>3</RateOfFire>
+    <RateOfFire>1</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>3</Range>
-    <ThraceiumDamage>0.1</ThraceiumDamage>
-    <BallisticDamage>0.1</BallisticDamage>
+    <BallisticDamage>10</BallisticDamage>
+    <ThraceiumDamage>10</ThraceiumDamage>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
     <InstallCost>1</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
@@ -37,8 +41,10 @@
     <RateOfFire>12</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>8</Range>
-    <ThraceiumDamage>50</ThraceiumDamage>
     <BallisticDamage>28</BallisticDamage>
+    <ThraceiumDamage>50</ThraceiumDamage>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
     <InstallCost>30</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
@@ -52,8 +58,10 @@
     <RateOfFire>1</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>4</Range>
-    <ThraceiumDamage>5</ThraceiumDamage>
     <BallisticDamage>5</BallisticDamage>
+    <ThraceiumDamage>5</ThraceiumDamage>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
     <InstallCost>35</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>

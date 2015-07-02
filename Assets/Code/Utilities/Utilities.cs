@@ -12,8 +12,8 @@ public enum Quadrant
 public enum PathFindingType
 {
 	ShortestPath,
-	TrackFriendly_IgnorePath,
-	TrackFriendly_FollowPath
+	TrackEnemy_IgnorePath,
+	TrackEnemy_FollowPath
 }
 
 public enum NotificationType

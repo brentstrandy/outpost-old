@@ -21,11 +21,12 @@ public class EnemyData
 	// Enemy Stats
 	public int MaxHealth;
 	public float RateOfFire;
-	public float Cooldown;
 	public float DamageDealt;
 	public float Acceleration;
 	public float Speed;
 	public float Range;
+	public float BallisticDamage;
+	public float ThraceiumDamage;
 	public float BallisticDefense;
 	public float ThraceiumDefense;
 	public float TurningSpeed;
@@ -48,11 +49,12 @@ public class EnemyData
 	    // Enemy Stats
 	    MaxHealth = obj.MaxHealth;
 	    RateOfFire = obj.RateOfFire;
-	    Cooldown = obj.Cooldown;
 	    DamageDealt = obj.DamageDealt;
 	    Acceleration = obj.Acceleration;
 	    Speed = obj.Speed;
 	    Range = obj.Range;
+		BallisticDamage = obj.BallisticDamage;
+		ThraceiumDamage = obj.ThraceiumDamage;
 	    BallisticDefense = obj.BallisticDefense;
         ThraceiumDefense = obj.ThraceiumDefense;
 		TurningSpeed = obj.TurningSpeed;
@@ -66,7 +68,7 @@ public class EnemyData
         DisplayName = "";
 	
 	    MaxHealth = 0;
-	    RateOfFire = Cooldown = DamageDealt = Acceleration = Speed = Range = BallisticDefense = 0;
+	    RateOfFire = DamageDealt = Acceleration = Speed = Range = BallisticDefense = 0;
     }
 
 	#region MessageHandling

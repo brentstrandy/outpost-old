@@ -20,8 +20,10 @@ public class TowerData
     public float RateOfFire;
     public float Cooldown;
 	public float Range;
+	public float BallisticDamage;
     public float ThraceiumDamage;
-    public float BallisticDamage;
+	public float BallisticDefense;
+	public float ThraceiumDefense;
     public float TransitionTime;
     public int InstallCost;
     public float MaintenanceCost;

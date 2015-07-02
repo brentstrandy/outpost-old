@@ -270,7 +270,7 @@ public class Tower : MonoBehaviour
 				if(TargetedEnemy != null)
 				{
 					// Only fire if tower is ready to fire
-					if(Time.time - TimeLastShotFired >= TowerAttributes.RateOfFire)
+					if(Time.time - TimeLastShotFired >= (1 / TowerAttributes.RateOfFire))
 					{
 						// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
 						if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position - this.transform.position) <= 8 || TurretPivot == null)
