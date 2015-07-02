@@ -3,6 +3,7 @@
   <LevelData>
     <DisplayName>Level 1</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>1</LevelID>
     <EnemySpawnFilename>Level1</EnemySpawnFilename>
     <NotificationFilename>Level1_Notifications</NotificationFilename>
     <Description>This is the first level of the game. It's a great level.</Description>
@@ -19,13 +20,14 @@
   <LevelData>
     <DisplayName>Level 2</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>2</LevelID>
     <EnemySpawnFilename>Level2</EnemySpawnFilename>
     <NotificationFilename>Level2_Notifications</NotificationFilename>
     <Description>You beat the first level. Now try your luck on level 2</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North, East</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
+    <StartingQuadrant>East</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
@@ -35,6 +37,7 @@
   <LevelData>
     <DisplayName>Level 3</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>3</LevelID>
     <EnemySpawnFilename>Level3</EnemySpawnFilename>
     <NotificationFilename />
     <Description>Level 3 is by far the hardest level ever made</Description>
@@ -46,27 +49,29 @@
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>450</MiningFacilityHealth>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
     <DisplayName>Level 4</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>4</LevelID>
     <EnemySpawnFilename>Level4</EnemySpawnFilename>
     <NotificationFilename />
     <Description>This is the last level. It's super easy</Description>
     <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>4</MaximumPlayers>
+    <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>125</MiningFacilityHealth>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
     <DisplayName>Level 5</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>5</LevelID>
     <EnemySpawnFilename>Level5</EnemySpawnFilename>
     <NotificationFilename />
     <Description>Join a team and take down these terrible mean enemies</Description>

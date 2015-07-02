@@ -23,7 +23,9 @@ public class GameManager : MonoBehaviour
 	
 	public bool Victory { get; private set; }
 	public bool GameRunning { get; private set; }
-	
+
+    public float LevelStartTime { get; private set; }
+
 	// Components
 	public MiningFacility ObjMiningFacility;
 	private PhotonView ObjPhotonView;
@@ -119,7 +121,9 @@ public class GameManager : MonoBehaviour
 	public void StartGame()
 	{
 		GameRunning = true;
-		
+
+        LevelStartTime = Time.time;//Used for Analytics -- keep track of level's start time
+
 		// Set the player's initial quadrant
 		PlayerManager.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
 		// Inform the Camera of the new quadrant
@@ -205,11 +209,11 @@ public class GameManager : MonoBehaviour
 		GameRunning = false;
 		MenuManager.Instance.ShowVictoryMenu();
 
-        SendAnalytics();
-
-        PlayerAnalytics.Instance.LastLevelReached++;
+        PlayerAnalytics.Instance.GameLength = Time.time - LevelStartTime;
+        PlayerAnalytics.Instance.LastLevelReached = CurrentLevelData.LevelID;
         // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
         //SendAnalytics()
+        //ResetLevelAnalytics();
 	}
 	
 	/// <summary>
@@ -223,6 +227,7 @@ public class GameManager : MonoBehaviour
 
         // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
         //SendAnalytics();
+        //ResetLevelAnalytics();
 	}
 	
     // DO NOT activate until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
@@ -232,16 +237,20 @@ public class GameManager : MonoBehaviour
         //PlayerAnalytics.Instance.ResetLevelStats();
     }
 
-
+    // Reset the PlayerAnalytics relevant to the ending of a game
+    private void ResetLevelAnalytics()
+    {
+        PlayerAnalytics.Instance.ResetLevelStats();
+    }
 
 	private void OnSwitchMaster(PhotonPlayer player)
 	{
-		
+		// TODO -- Analytics -- indicate who the master client is (they will send the global data for the game)
 	}
 	
 	private void OnPlayerLeft(PhotonPlayer player)
 	{
-		
+        PlayerAnalytics.Instance.PlayerCountChanged = true;
 	}
 	
 	private void OnCameraQuadrantChanged(string direction)

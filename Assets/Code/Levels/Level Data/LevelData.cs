@@ -12,6 +12,7 @@ public class LevelData
 	// Level Details
 	public string DisplayName;
 	public string SceneName;
+    public int LevelID;
 	public string EnemySpawnFilename;
 	public string NotificationFilename;
 	public string Description;
@@ -35,6 +36,7 @@ public class LevelData
 	{
 		DisplayName = obj.DisplayName;
 		SceneName = obj.SceneName;
+        LevelID = obj.LevelID;
 		EnemySpawnFilename = obj.EnemySpawnFilename;
 		NotificationFilename = obj.NotificationFilename;
 		Description = obj.Description;
@@ -50,10 +52,11 @@ public class LevelData
 		MiningFacilityHealth = obj.MiningFacilityHealth;
 	}
 
-	public LevelData(string displayName, string sceneName)
+    public LevelData(string displayName, string sceneName, int levelID)
 	{
         DisplayName = displayName;
         SceneName = sceneName;
+        LevelID = levelID;
 	}
 	
 	/// <summary>
