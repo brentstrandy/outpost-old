@@ -45,7 +45,7 @@ public class Drone : Enemy
 		// Check to see if the Enemy encounters the Mining Facility and - if so - explode on impact
 		else if(other.tag == "Mining Facility")
 		{
-			GameManager.Instance.ObjMiningFacility.TakeDamage(EnemyAttributes.DamageDealt);
+			GameManager.Instance.ObjMiningFacility.TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
 		}
 	}
 

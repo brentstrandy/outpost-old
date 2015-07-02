@@ -42,7 +42,7 @@ public class MiningFacility : Tower
 		if(other.tag == "Enemy")
 		{
 			// Deal damage to the Mining Facility
-			this.TakeDamage(other.gameObject.GetComponent<Enemy>().EnemyAttributes.DamageDealt);
+			this.TakeDamage(other.gameObject.GetComponent<Enemy>().EnemyAttributes.BallisticDamage, other.gameObject.GetComponent<Enemy>().EnemyAttributes.ThraceiumDamage);
 			// Force Enemy to kill itself
 			other.gameObject.GetComponent<Enemy>().ForceInstantDeath();
 		}

@@ -21,7 +21,6 @@ public class EnemyData
 	// Enemy Stats
 	public int MaxHealth;
 	public float RateOfFire;
-	public float DamageDealt;
 	public float Acceleration;
 	public float Speed;
 	public float Range;
@@ -49,7 +48,6 @@ public class EnemyData
 	    // Enemy Stats
 	    MaxHealth = obj.MaxHealth;
 	    RateOfFire = obj.RateOfFire;
-	    DamageDealt = obj.DamageDealt;
 	    Acceleration = obj.Acceleration;
 	    Speed = obj.Speed;
 	    Range = obj.Range;
@@ -68,7 +66,7 @@ public class EnemyData
         DisplayName = "";
 	
 	    MaxHealth = 0;
-	    RateOfFire = DamageDealt = Acceleration = Speed = Range = BallisticDefense = 0;
+	    RateOfFire = Acceleration = Speed = Range = BallisticDefense = 0;
     }
 
 	#region MessageHandling

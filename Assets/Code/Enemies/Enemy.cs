@@ -269,7 +269,7 @@ public class Enemy : MonoBehaviour
 	protected virtual void FireAcrossNetwork()
 	{
 		// Tell object to take damage
-		TargetedObjectToAttack.GetComponent<Tower>().TakeDamage(EnemyAttributes.DamageDealt);
+		TargetedObjectToAttack.GetComponent<Tower>().TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
 
 		// Reset timer for tracking when to fire next
 		TimeLastShotFired = Time.time;
@@ -284,10 +284,10 @@ public class Enemy : MonoBehaviour
 	/// <param name="ballisticsDamage">Ballistics damage</param>
 	/// <param name="thraceiumDamage">Thraceium damage</param>
 	[PunRPC]
-	protected virtual void TakeDamageAcrossNetwork(float ballisticsDamage, float thraceiumDamage)
+	protected virtual void TakeDamageAcrossNetwork(float ballisticDamage, float thraceiumDamage)
 	{
 		// Take damage from Ballistics and Thraceium
-		Health -= (ballisticsDamage * (1 - EnemyAttributes.BallisticDefense));
+		Health -= (ballisticDamage * (1 - EnemyAttributes.BallisticDefense));
 		Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
 		Health = Mathf.Max(Health, 0);
 		

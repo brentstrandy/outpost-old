@@ -191,10 +191,12 @@ public class Tower : MonoBehaviour
 	/// <param name="ballisticsDamage">Ballistics damage</param>
 	/// <param name="thraceiumDamage">Thraceium damage</param>
 	[PunRPC]
-	protected virtual void TakeDamageAcrossNetwork(float damage)
+	protected virtual void TakeDamageAcrossNetwork(float ballisticDamage, float thraceiumDamage)
 	{
-		// Take damage
-		Health = Mathf.Max(Health - damage, 0);
+		// Take damage from Ballistics and Thraceium
+		Health -= (ballisticDamage * (1 - TowerAttributes.BallisticDefense));
+		Health -= (thraceiumDamage * (1 - TowerAttributes.ThraceiumDefense));
+		Health = Mathf.Max(Health, 0);
 		
 		// Only update the Health Bar if there is one to update
 		if(HealthBar)
@@ -217,13 +219,15 @@ public class Tower : MonoBehaviour
 	/// Tower takes damage and responds accordingly
 	/// </summary>
 	/// <param name="damage">Damage.</param>
-	public virtual void TakeDamage(float damage)
+	public virtual void TakeDamage(float ballisticDamage, float thraceiumDamage)
 	{
 		// Only the master client dictates how to handle damage
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			// Take damage 
-			Health = Mathf.Max(Health - damage, 0);
+			// Take damage from Ballistics and Thraceium
+			Health -= (ballisticDamage * (1 - TowerAttributes.BallisticDefense));
+			Health -= (thraceiumDamage * (1 - TowerAttributes.ThraceiumDefense));
+			Health = Mathf.Max(Health, 0);
 			
 			// Only update the Health Bar if there is one to update
 			if(HealthBar)
@@ -233,7 +237,7 @@ public class Tower : MonoBehaviour
 			if (Health <= 0)
 				ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
 			else
-				ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, damage);
+				ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticDamage, thraceiumDamage);
 		}
 	}
 
