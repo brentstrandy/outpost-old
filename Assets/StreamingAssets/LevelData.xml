@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
-    <DisplayName>Level 1</DisplayName>
-    <SceneName>Level1</SceneName>
     <LevelID>1</LevelID>
+    <DisplayName>First Contact</DisplayName>
+    <SceneName>Level1</SceneName>
     <EnemySpawnFilename>Level1</EnemySpawnFilename>
     <NotificationFilename>Level1_Notifications</NotificationFilename>
-    <Description>This is the first level of the game. It's a great level.</Description>
+    <Description>We've established our first Mining Facility on the planet's surface. Protect it!</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North</AvailableQuadrants>
@@ -14,20 +14,20 @@
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>5</IncomePerSecond>
+    <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>10</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <DisplayName>Level 2</DisplayName>
-    <SceneName>Level1</SceneName>
     <LevelID>2</LevelID>
+    <DisplayName>Expanded Battlefront</DisplayName>
+    <SceneName>Level1</SceneName>
     <EnemySpawnFilename>Level2</EnemySpawnFilename>
     <NotificationFilename>Level2_Notifications</NotificationFilename>
-    <Description>You beat the first level. Now try your luck on level 2</Description>
+    <Description>Our secondary site on the planet is under heavy fire from two sides. Hold them back!</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North, East</AvailableQuadrants>
-    <StartingQuadrant>East</StartingQuadrant>
+    <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
@@ -35,43 +35,43 @@
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <DisplayName>Level 3</DisplayName>
-    <SceneName>Level1</SceneName>
     <LevelID>3</LevelID>
+    <DisplayName>Bigger Toys</DisplayName>
+    <SceneName>Level1</SceneName>
     <EnemySpawnFilename>Level3</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>Level 3 is by far the hardest level ever made</Description>
+    <Description>Our R&amp;D department has created additional towers and you've been given seed money. Stop the enemy!</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North, East</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
-    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower</AvailableTowers>
+    <MaxTowersPerPlayer>4</MaxTowersPerPlayer>
+    <StartingMoney>50</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
+    <LevelID>4</LevelID>
     <DisplayName>Level 4</DisplayName>
     <SceneName>Level1</SceneName>
-    <LevelID>4</LevelID>
     <EnemySpawnFilename>Level4</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>This is the last level. It's super easy</Description>
+    <Description>Enemies are coming from all angles.</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
-    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower</AvailableTowers>
+    <MaxTowersPerPlayer>4</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
+    <LevelID>5</LevelID>
     <DisplayName>Level 5</DisplayName>
     <SceneName>Level1</SceneName>
-    <LevelID>5</LevelID>
     <EnemySpawnFilename>Level5</EnemySpawnFilename>
     <NotificationFilename />
     <Description>Join a team and take down these terrible mean enemies</Description>

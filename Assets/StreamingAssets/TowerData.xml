@@ -21,11 +21,11 @@
     <DisplayName>Small Thraceium Tower</DisplayName>
     <PrefabName>Heleur_STT</PrefabName>
     <MaxHealth>10</MaxHealth>
-    <RateOfFire>1</RateOfFire>
+    <RateOfFire>3</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>3</Range>
-    <BallisticDamage>10</BallisticDamage>
-    <ThraceiumDamage>10</ThraceiumDamage>
+    <BallisticDamage>1</BallisticDamage>
+    <ThraceiumDamage>1</ThraceiumDamage>
     <BallisticDefense>0</BallisticDefense>
     <ThraceiumDefense>0</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>

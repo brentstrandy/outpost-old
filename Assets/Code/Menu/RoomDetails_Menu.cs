@@ -440,7 +440,7 @@ public class RoomDetails_Menu : MonoBehaviour
 			foreach (LevelData levelData in GameDataManager.Instance.LevelDataManager.DataList)
 			{
 				LevelData ld = levelData;
-				
+
 				// instantiate a button for each level
 				GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
 				if(levelData.MinimumPlayers == 1 && levelData.MaximumPlayers == 1)
@@ -449,27 +449,32 @@ public class RoomDetails_Menu : MonoBehaviour
 					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " Players]";
 				else
 					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
-				
+
+				if(PlayerManager.Instance.LevelScore(levelData.DisplayName) != 0)
+					levelDescription += "\n[Score: " + PlayerManager.Instance.LevelScore(levelData.DisplayName) + "]";
+				else
+					levelDescription += "\n[Not Played]";
+
 				obj.GetComponentInChildren<Text>().text = levelDescription;
 				obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
 				obj.transform.SetParent(this.transform);
 				obj.transform.localScale = new Vector3(1, 1, 1);
 				obj.GetComponent<Toggle>().group = toggleGroup.GetComponent<ToggleGroup>();
-				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 + (70 * index), 50);
+				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 + (70 * index), 60);
 				obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
 				obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
 				obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
 				obj.transform.rotation = new Quaternion(0, 0, 0, 0);
 
-				//if(previousLevelComplete)
-				//	obj.GetComponent<Toggle>().enabled = true;
-				//else
-				//	obj.GetComponent<Toggle>().enabled = false;
+				if(previousLevelComplete)
+					obj.SetActive(true);
+				else
+					obj.SetActive(false);
 
 				// select Level1 by default (hacked way)
 				if (!LevelLoadoutSelection)
 					obj.GetComponent<Toggle>().isOn = true;
-				
+					
 				if(PlayerManager.Instance.LevelComplete(levelData.DisplayName))
 					previousLevelComplete = true;
 				else

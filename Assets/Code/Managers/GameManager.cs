@@ -209,6 +209,9 @@ public class GameManager : MonoBehaviour
 		GameRunning = false;
 		MenuManager.Instance.ShowVictoryMenu();
 
+		// Save player progress (won level)
+		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, true, 10);
+
         PlayerAnalytics.Instance.GameLength = Time.time - LevelStartTime;
         PlayerAnalytics.Instance.LastLevelReached = CurrentLevelData.LevelID;
         // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
@@ -224,6 +227,9 @@ public class GameManager : MonoBehaviour
 		Victory = false;
 		GameRunning = false;
 		MenuManager.Instance.ShowLossMenu();
+
+		// Save player progress (lost level)
+		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, false, 10);
 
         // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
         //SendAnalytics();

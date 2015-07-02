@@ -10,9 +10,9 @@ using System.Xml.Serialization;
 public class LevelData 
 {
 	// Level Details
+	public int LevelID;
 	public string DisplayName;
 	public string SceneName;
-    public int LevelID;
 	public string EnemySpawnFilename;
 	public string NotificationFilename;
 	public string Description;
@@ -34,9 +34,9 @@ public class LevelData
 	
 	public LevelData(LevelData obj)
 	{
+		LevelID = obj.LevelID;
 		DisplayName = obj.DisplayName;
 		SceneName = obj.SceneName;
-        LevelID = obj.LevelID;
 		EnemySpawnFilename = obj.EnemySpawnFilename;
 		NotificationFilename = obj.NotificationFilename;
 		Description = obj.Description;

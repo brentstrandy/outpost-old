@@ -48,14 +48,15 @@ public class PlayerManager : MonoBehaviour
 			else
 			{
 				// If no level progress is saved in PlayerPrefs, add it to the PlayerPrefs and load it into the game as zero progress
-				PlayerPrefs.SetString(levelData.DisplayName, "0");
-				LevelProgress.Add(levelData.DisplayName, "0");
+				PlayerPrefs.SetString(levelData.DisplayName, "false~0");
+				LevelProgress.Add(levelData.DisplayName, "false~0");
 			}
 		}
+
 		// Save any updates to the PlayerPrefs for safe measure (this action is also done on Application.Quit)
 		PlayerPrefs.Save();
 	}
-	
+
 	#region INSTANCE (SINGLETON)
 	/// <summary>
 	/// Singleton - There can be only one
@@ -171,9 +172,10 @@ public class PlayerManager : MonoBehaviour
 		if(LevelProgress.TryGetValue(levelDisplayName, out details))
 		{
 			detailsSplit = details.Split('~');
-			bool.TryParse(detailsSplit[0], out playedLevel);
+			if(detailsSplit[0] == "True")
+				playedLevel = true;
 		}
-		
+
 		return playedLevel;
 	}
 	
@@ -195,11 +197,16 @@ public class PlayerManager : MonoBehaviour
 	
 	public void SaveLevelProgress(string levelDisplayName, bool complete, int score)
 	{
-		// Save progress on the level
-		if(PlayerPrefs.HasKey(levelDisplayName))
-			PlayerPrefs.SetString(levelDisplayName, complete.ToString() + "~" + score.ToString());
+		// Save progress on the level to the player prefs
+		PlayerPrefs.SetString(levelDisplayName, complete.ToString() + "~" + score.ToString());
+
+		// Save progress locally
+		if(LevelProgress.ContainsKey(levelDisplayName))
+			LevelProgress[levelDisplayName] = complete.ToString() + "~" + score.ToString();
 		else
-			PlayerPrefs.SetString(levelDisplayName, complete.ToString() + "~" + score.ToString());
+			LevelProgress.Add(levelDisplayName, complete.ToString() + "~" + score.ToString());
+
+		PlayerPrefs.Save();
 	}
 	
 	public void TowerSelectedForPlacement(TowerData towerData)
