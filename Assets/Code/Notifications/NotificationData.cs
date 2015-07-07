@@ -7,19 +7,19 @@ using System.Xml.Serialization;
 /// Owner: Brent Strandy
 /// </summary>
 [Serializable]
-public class LevelNotificationData
+public class NotificationData
 {
 	public string NotificationTitle;
 	public string NotificationText;
-	public NotificationType NotificationType;
+	public string NotificationType;
 	public float StartTime;
 
 	[HideInInspector] [XmlIgnore]
 	public bool ShowDebugLogs = true;
 
-	public LevelNotificationData() { }
+	public NotificationData() { }
 
-	public LevelNotificationData(LevelNotificationData obj)
+	public NotificationData(NotificationData obj)
 	{
 		NotificationTitle = obj.NotificationTitle;
 		NotificationText = obj.NotificationText;
@@ -27,13 +27,13 @@ public class LevelNotificationData
 		StartTime = obj.StartTime;
 	}
 
-	public LevelNotificationData(string notificationTitle, string notificationText)
+	public NotificationData(string notificationTitle, string notificationText)
 	{
 		NotificationTitle = notificationTitle;
 		NotificationText = notificationText;
 	}
 
-	public LevelNotificationData(string empty)
+	public NotificationData(string empty)
 	{
 		NotificationTitle = "";
 		NotificationText = "";

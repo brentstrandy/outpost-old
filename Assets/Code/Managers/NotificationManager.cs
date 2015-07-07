@@ -14,7 +14,7 @@ public class NotificationManager : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	public bool FinishedSpawning { get; private set; }
 
-	private List<LevelNotificationData> LevelNotificationList;
+	private List<NotificationData> LevelNotificationList;
 	private float StartTime;
 	private PhotonView ObjPhotonView;
 
@@ -51,19 +51,16 @@ public class NotificationManager : MonoBehaviour
 		FinishedSpawning = false;
 	}
 
-	public void DisplayNotification(LevelNotificationData notification)
+	public void DisplayNotification(NotificationData notificationData)
 	{
-		GameObject newNotification = Instantiate(Resources.Load("Notifications/" + notification.NotificationType.ToString()), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+		Log ("Displaying notification: " + notificationData.NotificationType);
+		GameObject newNotification = Instantiate(Resources.Load("Notifications/" + notificationData.NotificationType), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
-		// Tutorial notifications can take care of themselves. Other notifications need
-		// to be handled properly
-		if(!notification.NotificationType.ToString().StartsWith("Tutorial_"))
-		{
-			// Handle all different types of Notifications
-		}
+		// Load the notification's details in order to display correctly
+		newNotification.GetComponent<Notification>().SetNotificationData(notificationData);
 	}
 
-	public IEnumerator DisplayLevelNotifications(List<LevelNotificationData> levelNotificationList)
+	public IEnumerator DisplayLevelNotifications(List<NotificationData> levelNotificationList)
 	{
 		LevelNotificationList = levelNotificationList;
 
@@ -99,9 +96,9 @@ public class NotificationManager : MonoBehaviour
 		return startTime;
 	}
 
-	private LevelNotificationData DisplayNext()
+	private NotificationData DisplayNext()
 	{
-		LevelNotificationData notification = null;
+		NotificationData notification = null;
 
 		if(LevelNotificationList.Count > 0)
 		{

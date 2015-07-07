@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 	
 	public LevelData CurrentLevelData { get; private set; }
 	public DataManager<EnemySpawnData> EnemySpawnDataManager { get; private set; }
-	public DataManager<LevelNotificationData> LevelNotificationDataManager { get; private set; }
+	public DataManager<NotificationData> LevelNotificationDataManager { get; private set; }
 	
 	public bool Victory { get; private set; }
 	public bool GameRunning { get; private set; }
@@ -82,21 +82,21 @@ public class GameManager : MonoBehaviour
 		// Grab the Enemy Spawn data from either the web server or local xml file. The EnemySpawnManager will use this
 		// data to spawn enemies once it has been loaded into the game
 		if(GameDataManager.Instance.DataLocation == "Local")
-			EnemySpawnDataManager.LoadDataFromLocal(CurrentLevelData.EnemySpawnFilename + ".xml");
+			EnemySpawnDataManager.LoadDataFromLocal("EnemySpawn/" + CurrentLevelData.EnemySpawnFilename + ".xml");
 		else
-			StartCoroutine(EnemySpawnDataManager.LoadDataFromServer(CurrentLevelData.EnemySpawnFilename + ".xml"));
-		
+			StartCoroutine(EnemySpawnDataManager.LoadDataFromServer("EnemySpawn/" + CurrentLevelData.EnemySpawnFilename + ".xml"));
+
 		// Determine if there is a Notification File for this level
 		if(CurrentLevelData.NotificationFilename != "")
 		{
-			LevelNotificationDataManager = new DataManager<LevelNotificationData>();
+			LevelNotificationDataManager = new DataManager<NotificationData>();
 
 			// Grab the Level Notification data from either the web server or local xml file. The NotificationManager will use this
 			// data to automatically show Notifications once it has been loaded into the game
 			if(GameDataManager.Instance.DataLocation == "Local")
 				LevelNotificationDataManager.LoadDataFromLocal("Notifications/" + CurrentLevelData.NotificationFilename + ".xml");
 			else
-				StartCoroutine(LevelNotificationDataManager.LoadDataFromServer(CurrentLevelData.NotificationFilename + ".xml"));
+				StartCoroutine(LevelNotificationDataManager.LoadDataFromServer("Notifications/" + CurrentLevelData.NotificationFilename + ".xml"));
 		}
 
 		GameRunning = false;
@@ -249,6 +249,7 @@ public class GameManager : MonoBehaviour
         PlayerAnalytics.Instance.ResetLevelStats();
     }
 
+	#region EVENTS
 	private void OnSwitchMaster(PhotonPlayer player)
 	{
 		// TODO -- Analytics -- indicate who the master client is (they will send the global data for the game)
@@ -273,7 +274,13 @@ public class GameManager : MonoBehaviour
 		// Inform the Camera of the new quadrant
 		CameraManager.Instance.UpdateCameraQuadrant(newQuadrant);
 	}
-	
+	#endregion
+
+	public void AddAvailableQuadrant(Quadrant newQuadrant)
+	{
+		CurrentLevelData.AvailableQuadrants += ", " + newQuadrant.ToString();
+	}
+
 	private Quadrant GetNextClockwiseQuadrant()
 	{
 		Quadrant quadrant = PlayerManager.Instance.CurrentQuadrant;

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="us-ascii"?>
-<ArrayOfLevelNotificationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <LevelNotificationData>
-    <NotificationTitle />
-    <NotificationText />
-    <NotificationType>Tutorial_MiningFacility</NotificationType>
-    <StartTime>2</StartTime>
-  </LevelNotificationData>
-</ArrayOfLevelNotificationData>

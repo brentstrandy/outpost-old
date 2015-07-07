@@ -2,68 +2,17 @@
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
     <LevelID>1</LevelID>
-    <DisplayName>First Contact</DisplayName>
+    <DisplayName>Establishing Roots</DisplayName>
     <SceneName>Level1</SceneName>
-    <EnemySpawnFilename>Level1</EnemySpawnFilename>
-    <NotificationFilename>Level1_Notifications</NotificationFilename>
-    <Description>We've established our first Mining Facility on the planet's surface. Protect it!</Description>
+    <EnemySpawnFilename>1_EstablishingRoots</EnemySpawnFilename>
+    <NotificationFilename>1_Notifications</NotificationFilename>
+    <Description>We've set up a Mining Facility on a remote planet. Protect it!</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>10</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <LevelID>2</LevelID>
-    <DisplayName>Expanded Battlefront</DisplayName>
-    <SceneName>Level1</SceneName>
-    <EnemySpawnFilename>Level2</EnemySpawnFilename>
-    <NotificationFilename>Level2_Notifications</NotificationFilename>
-    <Description>Our secondary site on the planet is under heavy fire from two sides. Hold them back!</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>1</MaximumPlayers>
-    <AvailableQuadrants>North, East</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
-    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <LevelID>3</LevelID>
-    <DisplayName>Bigger Toys</DisplayName>
-    <SceneName>Level1</SceneName>
-    <EnemySpawnFilename>Level3</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>Our R&amp;D department has created additional towers and you've been given seed money. Stop the enemy!</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>1</MaximumPlayers>
-    <AvailableQuadrants>North, East</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower</AvailableTowers>
-    <MaxTowersPerPlayer>4</MaxTowersPerPlayer>
-    <StartingMoney>50</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <LevelID>4</LevelID>
-    <DisplayName>Level 4</DisplayName>
-    <SceneName>Level1</SceneName>
-    <EnemySpawnFilename>Level4</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>Enemies are coming from all angles.</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>1</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower</AvailableTowers>
-    <MaxTowersPerPlayer>4</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>

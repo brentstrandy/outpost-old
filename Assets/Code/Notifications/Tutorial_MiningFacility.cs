@@ -1,22 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tutorial_MiningFacility : MonoBehaviour
-{
-	public float TimeToDestroy;
-
-	private float StartTime;
-	
-	void Start ()
+public class Tutorial_MiningFacility : Notification
+{	
+	public override void Start ()
 	{
-		StartTime = Time.time;
+		base.Start();
 
 		// Align this Notification to the mining facility
 		this.transform.position = GameManager.Instance.ObjMiningFacility.transform.position;
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	public override void Update ()
 	{
 		if(Time.time - StartTime >= TimeToDestroy)
 		{

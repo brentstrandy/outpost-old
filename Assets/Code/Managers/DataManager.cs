@@ -94,8 +94,7 @@ public class DataManager<T>
 	
 	protected void LogError(string message)
 	{
-		//if(ShowDebugLogs)
-			Debug.LogError("[DataManager] " + message);
+		Debug.LogError("[DataManager] " + message);
 	}
 	#endregion
 

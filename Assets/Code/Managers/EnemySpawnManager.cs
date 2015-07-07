@@ -110,8 +110,7 @@ public class EnemySpawnManager
 	
 	protected void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[EnemySpawnManager] " + message);
+		Debug.LogError("[EnemySpawnManager] " + message);
 	}
 	#endregion
 }

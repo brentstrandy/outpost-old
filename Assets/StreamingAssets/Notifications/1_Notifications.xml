@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ArrayOfNotificationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<NotificationData>
+		<NotificationTitle>Objective</NotificationTitle>
+		<NotificationText>Your Mining Facility must be protected.</NotificationText>
+		<NotificationType>Tutorial_MiningFacility</NotificationType>
+		<StartTime>2</StartTime>
+	</NotificationData>
+	<NotificationData>
+		<NotificationTitle>WARNING</NotificationTitle>
+		<NotificationText>Incoming enemies from the East! Establish towers and guard both fronts.</NotificationText>
+		<NotificationType>Tutorial_EastQuadrant</NotificationType>
+		<StartTime>80</StartTime>
+	</NotificationData>
+	<NotificationData>
+		<NotificationTitle>New Enemy</NotificationTitle>
+		<NotificationText>Light Speeder Incoming!</NotificationText>
+		<NotificationType>NewEnemy</NotificationType>
+		<StartTime>110</StartTime>
+	</NotificationData>
+	<NotificationData>
+		<NotificationTitle>WARNING</NotificationTitle>
+		<NotificationText>We're being attacked from all sides! Establish towers all around the Mining Facility.</NotificationText>
+		<NotificationType>Tutorial_AllQuadrants</NotificationType>
+		<StartTime>160</StartTime>
+	</NotificationData>
+	<NotificationData>
+		<NotificationTitle>Final Wave</NotificationTitle>
+		<NotificationText>The Enemy forces have one final push.</NotificationText>
+		<NotificationType>Information</NotificationType>
+		<StartTime>215</StartTime>
+	</NotificationData>
+	<NotificationData>
+		<NotificationTitle>New Enemy</NotificationTitle>
+		<NotificationText>Heavy Speeder Incoming!</NotificationText>
+		<NotificationType>NewEnemy</NotificationType>
+		<StartTime>240</StartTime>
+	</NotificationData>
+</ArrayOfNotificationData>

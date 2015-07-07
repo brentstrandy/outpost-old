@@ -1,24 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tutorial_Quadrants : MonoBehaviour
+public class Tutorial_EastQuadrant : Notification
 {
-	private float StartTime;
-	private float TimeToDestroy = 5;
 	private bool QuadrantChanged = false;
 
-	void Start ()
+	public override void Start ()
 	{
-		InputManager.Instance.OnQuadrantRotate += OnQuadrantChanged;
+		base.Start();
 
-		StartTime = Time.time;
+		InputManager.Instance.OnQuadrantRotate += OnQuadrantChanged;
 
 		// Align this Notification to the mining facility
 		this.transform.position = GameManager.Instance.ObjMiningFacility.transform.position;
+
+		// Allow the player to navigate to the East Quadrant
+		GameManager.Instance.AddAvailableQuadrant(Quadrant.East);
 	}
-	
+
 	// Update is called once per frame
-	void Update ()
+	public override void Update ()
 	{
 		if(QuadrantChanged && Time.time - StartTime >= TimeToDestroy)
 		{
