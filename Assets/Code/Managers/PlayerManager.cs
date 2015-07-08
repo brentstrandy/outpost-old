@@ -19,7 +19,10 @@ public class PlayerManager : MonoBehaviour
 	public string Name { get; private set; }
 	private LoadOut GameLoadOut;
 	private double LastTowerPlacementTime;
+	// Selected Tower to build
 	private TowerData PlacementTowerData;
+	public GameObject PlacementTowerPrefab;
+
 	private HexMesh TerrainMesh;
 	
 	private Dictionary<string, string> LevelProgress;
@@ -98,33 +101,30 @@ public class PlayerManager : MonoBehaviour
 				// Ensure towers cannot be repeatedly placed every frame
 				if(Time.time - LastTowerPlacementTime > 1)
 				{
-					// Make sure the player has enough money to place the tower
-					if(this.Money >= PlacementTowerData.InstallCost)
+
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit hit;
+					HexCoord coord;
+					
+					// Test to see if the player's click intersected with the Terrain (HexMesh)
+					if (TerrainMesh.IntersectRay(ray, out hit, out coord) && TerrainMesh.InPlacementRange(coord))
 					{
-						Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-						RaycastHit hit;
-						HexCoord coord;
-						
-						// Test to see if the player's click intersected with the Terrain (HexMesh)
-						if (TerrainMesh.IntersectRay(ray, out hit, out coord) && TerrainMesh.InPlacementRange(coord))
+						// Make sure the player has enough money to place the tower
+						if(this.Money >= PlacementTowerData.InstallCost)
 						{
-							// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
-							ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, hit.point, SessionManager.Instance.AllocateNewViewID());
-							
-							// TO DO: Instantiate tower how enemies are instantiated - manually
-							// Tell all players to instantiate a tower
-							//SessionManager.Instance.InstantiateObject("Towers/" + PlacementTowerData.PrefabName, hit.point, rotation);
-							
 							LastTowerPlacementTime = Time.time;
 							
 							// Charge the player for building the tower
 							this.Money -= PlacementTowerData.InstallCost;
+
+							// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
+							ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, hit.point, SessionManager.Instance.AllocateNewViewID());
 						}
-					}
-					else
-					{
-						// This currently does not work. My intent is to display this message alongside the place where the player clicks
-						NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+						else
+						{
+							// This currently does not work. My intent is to display this message alongside the place where the player clicks
+							NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+						}
 					}
 				}
 			}
@@ -153,6 +153,12 @@ public class PlayerManager : MonoBehaviour
 		newTower.GetComponent<PhotonView>().viewID = viewID;
 		// The Prefab doesn't contain the correct default data. Set the Tower's default data now
 		newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), PlayerColors.colors[(int)info.sender.customProperties["PlayerColorIndex"]]);
+
+		// Deselect the selected tower (force the user to select a new one)
+		PlacementTowerData = null;
+		// Destroy the shell prefab
+		Destroy(PlacementTowerPrefab);
+		PlacementTowerPrefab = null;
 	}
 	
 	public bool LevelComplete(string levelDisplayName)
@@ -205,6 +211,24 @@ public class PlayerManager : MonoBehaviour
 	public void TowerSelectedForPlacement(TowerData towerData)
 	{
 		PlacementTowerData = towerData;
+		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
+		var rotation = Quaternion.LookRotation(new Vector3(10, 10, 0), new Vector3(0.0f, 0.0f, -1.0f));
+
+		// Remove the old prefab (if applicable)
+		if(PlacementTowerPrefab != null)
+			Destroy(PlacementTowerPrefab);
+
+		// Load the shell prefab to show
+		PlacementTowerPrefab = Instantiate(Resources.Load("Towers/" + towerData.PrefabName + "_Shell"), Vector3.zero, rotation) as GameObject;
+	}
+
+	public void SetShellTowerPosition(Vector3 newPosition)
+	{
+		// Only place the tower if a tower has been selected
+		if(PlacementTowerPrefab != null)
+		{
+			PlacementTowerPrefab.transform.position = newPosition;
+		}
 	}
 	
 	public List<TowerData> GetGameLoadOutTowers()

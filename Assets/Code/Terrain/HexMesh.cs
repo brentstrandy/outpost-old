@@ -235,6 +235,9 @@ public class HexMesh : MonoBehaviour
 				Highlight.GetComponent<MeshFilter>().mesh = BuildHighlightMesh(coord);
 			}
 			Highlight.GetComponent<MeshRenderer>().enabled = true;
+
+			// Show the selected tower (if applicable)
+			PlayerManager.Instance.SetShellTowerPosition(coord.Position());
 		}
 	}
 	
