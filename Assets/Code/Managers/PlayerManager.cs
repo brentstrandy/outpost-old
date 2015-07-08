@@ -124,14 +124,7 @@ public class PlayerManager : MonoBehaviour
 					else
 					{
 						// This currently does not work. My intent is to display this message alongside the place where the player clicks
-						/*
-                        var position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                        var rotation = Quaternion.LookRotation(position, new Vector3(0.0f, 0.0f, -1.0f));
-
-                        // Display Insufficient Capital
-                        GameObject go = Instantiate(Resources.Load("Utilities/InsufficientCapital"), position, rotation) as GameObject;
-                        go.transform.SetParent(GameObject.Find("InGame Canvas").transform, false);
-                        */
+						NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
 					}
 				}
 			}

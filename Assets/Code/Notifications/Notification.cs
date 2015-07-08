@@ -14,7 +14,6 @@ public class Notification : MonoBehaviour
 	public virtual void Start ()
 	{
 		StartTime = Time.time;
-		Log (StartTime.ToString());
 	}
 
 	public virtual void SetNotificationData(NotificationData notificationData)
@@ -28,6 +27,13 @@ public class Notification : MonoBehaviour
 				textObj.text = NotificationAttributes.NotificationTitle;
 			else if(textObj.name == "Body Text")
 				textObj.text = NotificationAttributes.NotificationText;
+		}
+
+		// Set the position of the notification if applicable
+		if(notificationData.Position != default(Vector3))
+		{
+			// Transform the world position onto the GUI Canvas
+			//transform.FindChild("UI Handle").GetComponent<RectTransform>().anchoredPosition = GUIUtility.ScreenToGUIPoint(notificationData.Position);
 		}
 	}
 	

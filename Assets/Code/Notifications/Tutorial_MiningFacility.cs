@@ -8,7 +8,7 @@ public class Tutorial_MiningFacility : Notification
 		base.Start();
 
 		// Align this Notification to the mining facility
-		this.transform.position = GameManager.Instance.ObjMiningFacility.transform.position;
+		gameObject.GetComponent<RectTransform>().anchoredPosition = GameManager.Instance.ObjMiningFacility.transform.position;
 	}
 	
 	// Update is called once per frame

@@ -16,6 +16,8 @@ public class NotificationData
 
 	[HideInInspector] [XmlIgnore]
 	public bool ShowDebugLogs = true;
+	[HideInInspector] [XmlIgnore]
+	public Vector3 Position;
 
 	public NotificationData() { }
 
@@ -27,10 +29,13 @@ public class NotificationData
 		StartTime = obj.StartTime;
 	}
 
-	public NotificationData(string notificationTitle, string notificationText)
+	public NotificationData(string header, string body, string type, float startTime = 0, Vector3 position = default(Vector3))
 	{
-		NotificationTitle = notificationTitle;
-		NotificationText = notificationText;
+		NotificationTitle = header;
+		NotificationText = body;
+		NotificationType = type;
+		StartTime = startTime;
+		Position = position;
 	}
 
 	public NotificationData(string empty)

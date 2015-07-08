@@ -53,7 +53,6 @@ public class NotificationManager : MonoBehaviour
 
 	public void DisplayNotification(NotificationData notificationData)
 	{
-		Log ("Displaying notification: " + notificationData.NotificationType);
 		GameObject newNotification = Instantiate(Resources.Load("Notifications/" + notificationData.NotificationType), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
 		// Load the notification's details in order to display correctly
