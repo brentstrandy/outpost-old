@@ -211,6 +211,7 @@ public class PlayerManager : MonoBehaviour
 	public void TowerSelectedForPlacement(TowerData towerData)
 	{
 		PlacementTowerData = towerData;
+
 		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
 		var rotation = Quaternion.LookRotation(new Vector3(10, 10, 0), new Vector3(0.0f, 0.0f, -1.0f));
 
@@ -220,6 +221,15 @@ public class PlayerManager : MonoBehaviour
 
 		// Load the shell prefab to show
 		PlacementTowerPrefab = Instantiate(Resources.Load("Towers/" + towerData.PrefabName + "_Shell"), Vector3.zero, rotation) as GameObject;
+
+		float range;
+		if(PlacementTowerData.Range > 1)
+			range = 1 + ((PlacementTowerData.Range - 1) / 2);
+		else
+			range = PlacementTowerData.Range;
+
+		// Set the range based on player prefab
+		PlacementTowerPrefab.GetComponentInChildren<SpriteRenderer>().transform.localScale *= range;
 	}
 
 	public void SetShellTowerPosition(Vector3 newPosition)
