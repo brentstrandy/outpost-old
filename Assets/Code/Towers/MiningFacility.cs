@@ -29,6 +29,9 @@ public class MiningFacility : Tower
 		IncomePerSecond = levelData.IncomePerSecond;
 		Health = levelData.MiningFacilityHealth;
 		PlayerManager.Instance.SetStartingMoney(levelData.StartingMoney);
+
+		// Lift the facility up to whatever the height of the ground below it is
+		gameObject.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(gameObject.transform.position);
 	}
 	
 	// Update is called once per frame

@@ -118,8 +118,11 @@ public class PlayerManager : MonoBehaviour
 								// Charge the player for building the tower
 								this.Money -= PlacementTowerData.InstallCost;
 
+								// Calculate the tower placement based on the clicked coordinate
+								var position = terrainMesh.IntersectPosition((Vector3)coord.Position());
+
 								// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
-								ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, hit.point, SessionManager.Instance.AllocateNewViewID());
+								ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, position, SessionManager.Instance.AllocateNewViewID());
 							}
 							else
 							{
@@ -145,7 +148,7 @@ public class PlayerManager : MonoBehaviour
 	private void SpawnTowerAcrossNetwork(string displayName, Vector3 position, int viewID, PhotonMessageInfo info)
 	{
 		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
-		var rotation = Quaternion.LookRotation(position, new Vector3(0.0f, 0.0f, -1.0f));
+		var rotation = Quaternion.LookRotation(new Vector3(position.x, position.y, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
 		
 		// Instantiate a new Enemy
 		GameObject newTower = Instantiate(Resources.Load("Towers/" + GameDataManager.Instance.FindTowerPrefabByDisplayName(displayName)), position, rotation) as GameObject;

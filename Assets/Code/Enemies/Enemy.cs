@@ -198,21 +198,19 @@ public class Enemy : MonoBehaviour
 				}
 			}
 
-			// Do not allow the Z axis to be updated - that is static
-			CurVelocity.z = 0;
+			// Ensure that we don't get too close to the ground
+			// NOTE: This is a kludge. In the end we should adjust the ship's yaw so that it doesn't hit the surface instead of just putting this weird upward force on it
+			float minHoverDistance = EnemyAttributes.HoverDistance * 0.5f;
+			var intersection = GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position);
+			var distance = Mathf.Abs(this.transform.position.z - intersection.z);
+			if (distance < minHoverDistance)
+			{
+				// We're too close to the ground, apply upward velocity proportionate to how close we are
+				CurVelocity.z -= (minHoverDistance - distance) * EnemyAttributes.Speed * 10.0f;
+			}
+
 			// Manually change the Enemy's position
 			this.transform.position += CurVelocity * Time.deltaTime;
-
-			/*
-			// Ensure we stay above the surface of the terrain
-			var terrainMesh = GameManager.Instance.TerrainMesh;
-			if (terrainMesh != null)
-			{
-				var pos = GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position);
-				pos.z -= EnemyAttributes.HoverDistance;
-				this.transform.position = pos;
-			}
-			*/
 		}
 	}
 

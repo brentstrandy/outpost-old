@@ -88,9 +88,11 @@ public class HexMesh : MonoBehaviour
 
 	public Vector3 IntersectPosition(Vector3 pos, float distance = 0f)
 	{
+		// TODO: Translate pos into local coordinates?
 		RaycastHit hit;
 		HexCoord coord;
-		var down = new Vector3(0f, 0f, 1.0f);
+		pos.z = -100.0f; // Be sure to place the source of the ray cast above the mesh
+		var down = new Vector3(0f, 0f, 1.0f); // Fire the ray down toward the mesh
 		if (IntersectRay(new Ray(pos, down), out hit, out coord))
 		{
 			return new Vector3(hit.point.x, hit.point.y, hit.point.z - distance); // Note: Up is negative Z
@@ -100,23 +102,21 @@ public class HexMesh : MonoBehaviour
 	
 	public bool IntersectRay(Ray ray, out RaycastHit hit, out HexCoord coord)
 	{
-		int mask = 1 << gameObject.layer;
-		if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) {
+		if (GetComponent<MeshCollider>().Raycast(ray, out hit, Mathf.Infinity))
+		{
 			// Note from J.S. 2015-03-29: The intersection seems to occur with a simple plane right now. The original gameobject was a plane, perhaps the MeshCollider is
 			// working against that original mesh and not the real one that we generate?
-			if (hit.collider == GetComponent<MeshCollider>()) {
-				// Convert from world space to local space
-				var xy = (Vector2)hit.transform.InverseTransformPoint(hit.point);
+			// Convert from world space to local space
+			var xy = (Vector2)hit.transform.InverseTransformPoint(hit.point);
 
-				// Scale to fit the grid
-				float scale = 1.0f; // TODO: Base this on the hexagon diameter
-				xy *= scale;
+			// Scale to fit the grid
+			float scale = 1.0f; // TODO: Base this on the hexagon diameter
+			xy *= scale;
 
-				// Convert to a hex coordinate
-				coord = HexCoord.AtPosition(xy);
+			// Convert to a hex coordinate
+			coord = HexCoord.AtPosition(xy);
 
-				return true;
-			}
+			return true;
 		}
 		coord = default(HexCoord);
 		return false;
@@ -223,7 +223,7 @@ public class HexMesh : MonoBehaviour
 			}
 		}
 		
-		Log("Outline Mesh Summary: " + builder.Summary());
+		//Log("Outline Mesh Summary: " + builder.Summary());
 		return builder.Build();
 	}
 	
@@ -233,7 +233,7 @@ public class HexMesh : MonoBehaviour
 		
 		builder.AddHexagon(coord);
 		
-		Log("Highlight Mesh Summary: " + builder.Summary());
+		//Log("Highlight Mesh Summary: " + builder.Summary());
 		return builder.Build();
 	}
 	
@@ -345,11 +345,11 @@ public class HexMesh : MonoBehaviour
 	{
 		if (HeightMap == null)
 		{
-			Log("No HeightMap Specified");
+			//Log("No HeightMap Specified");
 			return (Vector2 uv) => 0.0f;
 		}
 		
-		Log("Using HeightMap");
+		//Log("Using HeightMap");
 		return (Vector2 uv) => HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale * -HeightScale;
 	}
 	

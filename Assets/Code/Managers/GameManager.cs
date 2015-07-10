@@ -146,8 +146,6 @@ public class GameManager : MonoBehaviour
 		if(Application.loadedLevelName.StartsWith("Level"))
 		{
 			TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexMesh>() as HexMesh;
-			var test = TerrainMesh.IntersectPosition(new Vector3(7.0f, 1.0f, 0.0f));
-			Log("TerrainMesh located upon level load: " + test.ToString());
 		}
 	}
 	
