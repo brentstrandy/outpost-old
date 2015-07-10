@@ -86,6 +86,18 @@ public class HexMesh : MonoBehaviour
 		return distance >= FacilityRadius && distance <= PeripheralRadius;
 	}
 
+	public Vector3 IntersectPosition(Vector3 pos, float distance = 0f)
+	{
+		RaycastHit hit;
+		HexCoord coord;
+		var down = new Vector3(0f, 0f, 1.0f);
+		if (IntersectRay(new Ray(pos, down), out hit, out coord))
+		{
+			return new Vector3(hit.point.x, hit.point.y, hit.point.z - distance); // Note: Up is negative Z
+		}
+		return pos;
+	}
+	
 	public bool IntersectRay(Ray ray, out RaycastHit hit, out HexCoord coord)
 	{
 		int mask = 1 << gameObject.layer;

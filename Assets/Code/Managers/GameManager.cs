@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public float LevelStartTime { get; private set; }
 
 	// Components
+	public HexMesh TerrainMesh;
 	public MiningFacility ObjMiningFacility;
 	private PhotonView ObjPhotonView;
 	
@@ -136,6 +137,18 @@ public class GameManager : MonoBehaviour
 		// We can now tell the NotificationManager to start showing notifications based on the previously loaded spawn data.
 		if(LevelNotificationDataManager != null)
 			StartCoroutine(NotificationManager.Instance.DisplayLevelNotifications(LevelNotificationDataManager.DataList));
+	}
+	
+	public void OnLevelWasLoaded(int level)
+	{
+		// TerrainMesh must be set when the level is started because the HexMesh object is not created
+		// until the level loads. All levels MUST begin with a defined prefix for this to work properly
+		if(Application.loadedLevelName.StartsWith("Level"))
+		{
+			TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexMesh>() as HexMesh;
+			var test = TerrainMesh.IntersectPosition(new Vector3(7.0f, 1.0f, 0.0f));
+			Log("TerrainMesh located upon level load: " + test.ToString());
+		}
 	}
 	
 	/// <summary>

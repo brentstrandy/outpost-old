@@ -23,6 +23,7 @@ public class EnemyData
 	public float RateOfFire;
 	public float Acceleration;
 	public float Speed;
+	public float HoverDistance;
 	public float Range;
 	public float BallisticDamage;
 	public float ThraceiumDamage;
@@ -50,6 +51,7 @@ public class EnemyData
 	    RateOfFire = obj.RateOfFire;
 	    Acceleration = obj.Acceleration;
 	    Speed = obj.Speed;
+		HoverDistance = obj.HoverDistance;
 	    Range = obj.Range;
 		BallisticDamage = obj.BallisticDamage;
 		ThraceiumDamage = obj.ThraceiumDamage;

@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour
 	protected float TimeLastShotFired;
 	protected Vector3 CurAcceleration;
 	protected Vector3 CurVelocity;
-	protected Vector2 TargetHex;
 
 	public int NetworkViewID { get; private set; }
 
@@ -26,6 +25,20 @@ public class Enemy : MonoBehaviour
 	protected bool AttackingMiningFacility;
 	
 	protected Quadrant CurrentQuadrant;
+	
+	protected Vector2 TargetHex;
+	public Vector3 Target
+	{
+		get
+		{
+			var target = (Vector3)TargetHex;
+			if (GameManager.Instance.TerrainMesh != null )
+			{
+				target = GameManager.Instance.TerrainMesh.IntersectPosition(target, EnemyAttributes.HoverDistance);
+			}
+			return target;
+		}
+	}
 
 	// Components
 	public HealthBarController HealthBar;
@@ -37,7 +50,7 @@ public class Enemy : MonoBehaviour
 	// Effects
 	public GameObject FiringEffect;
 	public GameObject ExplodingEffect;
-
+	
 	#region INITIALIZATION
 	public virtual void Awake()
 	{
@@ -63,7 +76,7 @@ public class Enemy : MonoBehaviour
 		EnemyAttributes = enemyData;
 
 		// Save reference to PhotonView
-		ObjPhotonView = PhotonView.Get (this);
+		ObjPhotonView = PhotonView.Get(this);
 		NetworkViewID = ObjPhotonView.viewID;
 
 		// PhotonView does not instantiate the ObservedComponents list - you must instantiate this list before attempting
@@ -150,7 +163,7 @@ public class Enemy : MonoBehaviour
 						}
 
 						// Slerp the Enemy's rotation to look at the new Hex location
-						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation((Vector3)TargetHex - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
+						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(Target - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
 
 						// The enemy's current velocity is always the speed (during this pathfinding) - it does not use acceleration
 						CurVelocity = transform.forward * EnemyAttributes.Speed;
@@ -178,7 +191,7 @@ public class Enemy : MonoBehaviour
 				// Use pathfinding to predict movement
 				if(ObjPathfinder != null)
 				{
-					transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation((Vector3)TargetHex - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
+					transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(Target - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
 
 					// The enemy's current velocity is always the speed (during this pathfinding)
 					CurVelocity = transform.forward * EnemyAttributes.Speed;
@@ -189,6 +202,17 @@ public class Enemy : MonoBehaviour
 			CurVelocity.z = 0;
 			// Manually change the Enemy's position
 			this.transform.position += CurVelocity * Time.deltaTime;
+
+			/*
+			// Ensure we stay above the surface of the terrain
+			var terrainMesh = GameManager.Instance.TerrainMesh;
+			if (terrainMesh != null)
+			{
+				var pos = GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position);
+				pos.z -= EnemyAttributes.HoverDistance;
+				this.transform.position = pos;
+			}
+			*/
 		}
 	}
 

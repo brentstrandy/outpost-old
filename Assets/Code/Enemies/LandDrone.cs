@@ -19,7 +19,7 @@ public class LandDrone : Enemy
 		this.transform.LookAt(GameManager.Instance.ObjMiningFacility.transform.position, Up);
 
 		// Start the Land Drone barely off the ground
-		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.1f);
+		this.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position, 0.1f);
 	}
 
 	#region MessageHandling

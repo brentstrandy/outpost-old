@@ -22,8 +22,6 @@ public class PlayerManager : MonoBehaviour
 	// Selected Tower to build
 	private TowerData PlacementTowerData;
 	public GameObject PlacementTowerPrefab;
-
-	private HexMesh TerrainMesh;
 	
 	private Dictionary<string, string> LevelProgress;
 	
@@ -105,25 +103,29 @@ public class PlayerManager : MonoBehaviour
 					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 					RaycastHit hit;
 					HexCoord coord;
-					
-					// Test to see if the player's click intersected with the Terrain (HexMesh)
-					if (TerrainMesh.IntersectRay(ray, out hit, out coord) && TerrainMesh.InPlacementRange(coord))
-					{
-						// Make sure the player has enough money to place the tower
-						if(this.Money >= PlacementTowerData.InstallCost)
-						{
-							LastTowerPlacementTime = Time.time;
-							
-							// Charge the player for building the tower
-							this.Money -= PlacementTowerData.InstallCost;
 
-							// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
-							ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, hit.point, SessionManager.Instance.AllocateNewViewID());
-						}
-						else
+					var terrainMesh = GameManager.Instance.TerrainMesh;
+					if (terrainMesh != null)
+					{
+						// Test to see if the player's click intersected with the Terrain (HexMesh)
+						if (terrainMesh.IntersectRay(ray, out hit, out coord) && terrainMesh.InPlacementRange(coord))
 						{
-							// This currently does not work. My intent is to display this message alongside the place where the player clicks
-							NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+							// Make sure the player has enough money to place the tower
+							if(this.Money >= PlacementTowerData.InstallCost)
+							{
+								LastTowerPlacementTime = Time.time;
+								
+								// Charge the player for building the tower
+								this.Money -= PlacementTowerData.InstallCost;
+
+								// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
+								ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, hit.point, SessionManager.Instance.AllocateNewViewID());
+							}
+							else
+							{
+								// This currently does not work. My intent is to display this message alongside the place where the player clicks
+								NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+							}
 						}
 					}
 				}
@@ -274,11 +276,9 @@ public class PlayerManager : MonoBehaviour
 	
 	public void OnLevelWasLoaded(int level)
 	{
-		// TerrainMesh must be set when the level is started because the HexMesh object is not created
-		// until the level loads. All levels MUST begin with a defined prefix for this to work properly
+		// All levels MUST begin with a defined prefix for this to work properly
 		if(Application.loadedLevelName.StartsWith("Level"))
 		{
-			TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexMesh>() as HexMesh;
 			// Instantiate a player locator point that is used for the allies' Radar
 			PlayerLocator = SessionManager.Instance.InstantiateObject("PlayerLocator",  new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 			PlayerLocator.name = Name;
