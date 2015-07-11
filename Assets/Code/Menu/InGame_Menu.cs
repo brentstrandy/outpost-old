@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class InGame_Menu : MonoBehaviour
 {
@@ -40,6 +41,9 @@ public class InGame_Menu : MonoBehaviour
 
 			index++;
 		}
+
+		// Add listeners for hotkeys
+		InputManager.Instance.OnTowerHotKeyPressed += OnTowerHotKey;
 	}
 
 	private void OnDisable()
@@ -64,6 +68,15 @@ public class InGame_Menu : MonoBehaviour
 	private void OnLevelWasLoaded(int level)
 	{
 		FinishedLoadingLevel = true;
+	}
+
+	private void OnTowerHotKey(int towerIndex)
+	{
+		// Only perform the hotkey actions if there is a tower button to select
+		if(TowerButtons.Count > towerIndex && towerIndex >= 0)
+		{
+			ExecuteEvents.Execute(TowerButtons[towerIndex], new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+		}
 	}
 
 	#region OnClick

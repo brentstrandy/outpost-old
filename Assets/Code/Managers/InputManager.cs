@@ -9,6 +9,8 @@ public class InputManager : MonoBehaviour
 	#region EVENTS (DELEGATES)
 	public delegate void QuadrantAction(string direction);
 	public event QuadrantAction OnQuadrantRotate;
+	public delegate void TowerHotKey(int towerIndex);
+	public event TowerHotKey OnTowerHotKeyPressed;
 	#endregion
 
 	#region INSTANCE (SINGLETON)
@@ -44,43 +46,67 @@ public class InputManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		// Only check for input if the game is currently running
-		if(GameManager.Instance.GameRunning)
+		if(GameManager.Instance != null)
 		{
-			// Test for a change in the player's current quadrant
-			if(Input.GetKeyDown("left"))
+			// Only check for input if the game is currently running
+			if(GameManager.Instance.GameRunning)
 			{
-				if(OnQuadrantRotate != null)
-					OnQuadrantRotate("left");
-			}
-			else if(Input.GetKeyDown("right"))
-			{
-				if(OnQuadrantRotate != null)
-					OnQuadrantRotate("right");
-			}
-            // Speed game up for testing purposes
-            #if UNITY_EDITOR
-            // Increase by 1
-            if(Input.GetKeyDown(KeyCode.Equals))
-            {
-                Time.timeScale += 1f;
-                Log("Time.timeScale: " + Time.timeScale);
-            }
-            // Decrease by 1
-            else if(Input.GetKeyDown(KeyCode.Minus))
-            {
-                if (Time.timeScale > 1f)
-                    Time.timeScale -= 1;
+				// Test for a change in the player's current quadrant
+				if(Input.GetKeyDown("left"))
+				{
+					if(OnQuadrantRotate != null)
+						OnQuadrantRotate("left");
+				}
+				else if(Input.GetKeyDown("right"))
+				{
+					if(OnQuadrantRotate != null)
+						OnQuadrantRotate("right");
+				}
+				else if(Input.GetKeyDown("q"))
+				{
+					if(OnTowerHotKeyPressed != null)
+						OnTowerHotKeyPressed(0);
+				}
+				else if(Input.GetKeyDown("w"))
+				{
+					if(OnTowerHotKeyPressed != null)
+						OnTowerHotKeyPressed(1);
+				}
+				else if(Input.GetKeyDown("e"))
+				{
+					if(OnTowerHotKeyPressed != null)
+						OnTowerHotKeyPressed(2);
+				}
+				else if(Input.GetKeyDown("r"))
+				{
+					if(OnTowerHotKeyPressed != null)
+						OnTowerHotKeyPressed(3);
+				}
 
-                Log("Time.timeScale: " + Time.timeScale);                    
-            }
-            // Return to 1
-            else if(Input.GetKeyDown(KeyCode.Alpha0))
-            {
-                Time.timeScale = 1;
-                Log("Time.timeScale: " + Time.timeScale);
-            }
-            #endif 
+	            // Speed game up for testing purposes
+	            #if UNITY_EDITOR
+	            // Increase by 1
+	            if(Input.GetKeyDown(KeyCode.Equals))
+	            {
+	                Time.timeScale += 1f;
+	                Log("Time.timeScale: " + Time.timeScale);
+	            }
+	            // Decrease by 1
+	            else if(Input.GetKeyDown(KeyCode.Minus))
+	            {
+	                if (Time.timeScale > 1f)
+	                    Time.timeScale -= 1;
+
+	                Log("Time.timeScale: " + Time.timeScale);                    
+	            }
+	            // Return to 1
+	            else if(Input.GetKeyDown(KeyCode.Alpha0))
+	            {
+	                Time.timeScale = 1;
+	                Log("Time.timeScale: " + Time.timeScale);
+	            }
+	            #endif 
+			}
 		}
 	}
 
