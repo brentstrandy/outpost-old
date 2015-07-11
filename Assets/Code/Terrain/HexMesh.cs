@@ -249,7 +249,7 @@ public class HexMesh : MonoBehaviour
 			Highlight.GetComponent<MeshRenderer>().enabled = true;
 
 			// Show the selected tower (if applicable)
-			PlayerManager.Instance.SetShellTowerPosition(coord.Position());
+			PlayerManager.Instance.SetShellTowerPosition(IntersectPosition((Vector3)coord.Position()));//coord.Position());
 		}
 	}
 	

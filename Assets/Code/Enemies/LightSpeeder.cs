@@ -26,7 +26,7 @@ public class LightSpeeder : Enemy
 		if(other.tag == "Terrain")
 		{
 			// Destroy the enemy when it crashes to the ground
-			DestroyEnemy();
+			//DestroyEnemy();
 		}
 	}
 

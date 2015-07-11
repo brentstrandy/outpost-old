@@ -131,7 +131,7 @@ public class Enemy : MonoBehaviour
 		{
 			GameObject go = new GameObject("Awareness", typeof(SphereCollider) );
 			go.GetComponent<SphereCollider>().isTrigger = true;
-			go.GetComponent<SphereCollider>().radius = EnemyAttributes.Range;
+			go.GetComponent<SphereCollider>().radius = EnemyAttributes.Range * 2;
 			go.transform.parent = this.transform;
 			go.transform.localPosition = Vector3.zero;
 		}

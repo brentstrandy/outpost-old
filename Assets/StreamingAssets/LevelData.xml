@@ -34,4 +34,21 @@
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
+  <LevelData>
+    <LevelID>2</LevelID>
+    <DisplayName>Grab Some Friends</DisplayName>
+    <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>Level1</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Play this level with a group.</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
+    <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
+    <StartingMoney>100</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
 </ArrayOfLevelData>

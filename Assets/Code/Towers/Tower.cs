@@ -67,7 +67,7 @@ public class Tower : MonoBehaviour
 		{
 			GameObject go = new GameObject("Awareness", typeof(SphereCollider) );
 			go.GetComponent<SphereCollider>().isTrigger = true;
-			go.GetComponent<SphereCollider>().radius = TowerAttributes.Range;
+			go.GetComponent<SphereCollider>().radius = TowerAttributes.Range * 2;
 			go.transform.parent = this.transform;
 			go.transform.localPosition = Vector3.zero;
 		}
@@ -90,6 +90,15 @@ public class Tower : MonoBehaviour
 			if(TurretPivot)
 				transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - transform.position, Up), Time.deltaTime * TowerAttributes.TrackingSpeed );
 		}
+	}
+
+	/// <summary>
+	/// Determines whether this tower has full health.
+	/// </summary>
+	/// <returns><c>true</c> if this tower has full health; otherwise, <c>false</c>.</returns>
+	public bool HasFullHealth()
+	{
+		return Health >= TowerAttributes.MaxHealth;
 	}
 
 	#region IDENTIFYING TARGETS
@@ -214,7 +223,7 @@ public class Tower : MonoBehaviour
 	}
 	#endregion
 	
-	#region TAKE DAMAGE / DIE
+	#region TAKE DAMAGE / DIE / HEAL
 	/// <summary>
 	/// Tower takes damage and responds accordingly
 	/// </summary>
@@ -256,6 +265,21 @@ public class Tower : MonoBehaviour
 		// The GameObject must be destroyed or else the enemy will stay instantiated
 		Destroy (this.gameObject);
 	}
+
+	/// <summary>
+	/// Heal the tower the specified amount.
+	/// </summary>
+	/// <param name="healAmount">Heal amount.</param>
+	public virtual void Heal(float healAmount)
+	{
+		// Only allow the tower to be healed to its max health
+		Health = Mathf.Min(Health + healAmount, TowerAttributes.MaxHealth);
+
+		// Only update the Health Bar if there is one to update
+		if(HealthBar)
+			HealthBar.UpdateHealthBar(Health);
+	}
+
 	#endregion
 
 	#region ATTACKING

@@ -68,4 +68,21 @@
     <StartupTime>0</StartupTime>
     <TrackingSpeed>4</TrackingSpeed>
   </TowerData>
+  <TowerData>
+    <DisplayName>Thraceium Healing Tower</DisplayName>
+    <PrefabName>Heleur_THT</PrefabName>
+    <MaxHealth>10</MaxHealth>
+    <RateOfFire>0.5</RateOfFire>
+    <Cooldown>0</Cooldown>
+    <Range>3</Range>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
+    <BallisticDefense>0.1</BallisticDefense>
+    <ThraceiumDefense>0.1</ThraceiumDefense>
+    <TransitionTime>0</TransitionTime>
+    <InstallCost>1</InstallCost>
+    <MaintenanceCost>0</MaintenanceCost>
+    <StartupTime>0</StartupTime>
+    <TrackingSpeed>0</TrackingSpeed>
+  </TowerData>
 </ArrayOfTowerData>
