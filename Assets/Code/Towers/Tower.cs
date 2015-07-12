@@ -99,7 +99,7 @@ public class Tower : MonoBehaviour
 		{
 			// Have the tower's pivot point look at the targeted enemy
 			if(TurretPivot)
-				transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - transform.position, Up), Time.deltaTime * TowerAttributes.TrackingSpeed );
+				TurretPivot.transform.rotation = Quaternion.Slerp( TurretPivot.transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - TurretPivot.transform.position, Up), Time.deltaTime * TowerAttributes.TrackingSpeed );
 		}
 	}
 
@@ -312,7 +312,7 @@ public class Tower : MonoBehaviour
 					if(Time.time - TimeLastShotFired >= (1 / TowerAttributes.RateOfFire))
 					{
 						// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
-						if(Vector3.Angle(this.transform.forward, TargetedEnemy.transform.position - this.transform.position) <= 8 || TurretPivot == null)
+						if(TurretPivot == null || Vector3.Angle(TurretPivot.transform.forward, TargetedEnemy.transform.position - TurretPivot.transform.position) <= 8)
 						{
 							// Tell all clients to fire upon the enemy
 							ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
