@@ -72,7 +72,18 @@ public class Tower : MonoBehaviour
 			go.transform.localPosition = Vector3.zero;
 		}
 
-		gameObject.GetComponentInChildren<Renderer>().material.color = playerColor;
+		foreach(Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+		{
+			foreach(Material material in renderer.materials)
+			{
+				if(material.name.Contains("PlayerColorMaterial"))
+				{
+					material.SetColor("_Color", playerColor);
+					material.SetColor("_EmissionColor", playerColor);
+				}
+			}
+		}
+
 
 		// Only initialize the health bar if it is used for this enemy
 		if(HealthBar)

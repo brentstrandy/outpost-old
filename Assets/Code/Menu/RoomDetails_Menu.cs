@@ -312,9 +312,10 @@ public class RoomDetails_Menu : MonoBehaviour
 	
 	private int AssignColor()
 	{
-		int index = (int)AvailableColorIndexes[0];
+		int index = -1;
+		int.TryParse(AvailableColorIndexes[0].ToString(), out index);
 		AvailableColorIndexes = AvailableColorIndexes.Remove(0, 1);
-		
+
 		return index;
 	}
 	
