@@ -14,6 +14,8 @@ public class Tower : MonoBehaviour
 
 	protected Enemy TargetedEnemy = null;
 	protected float TimeLastShotFired;
+	protected bool CanFire = false;
+	protected bool CanMove = false;
 	
 	public GameObject TurretPivot;
 
@@ -56,6 +58,9 @@ public class Tower : MonoBehaviour
 		TowerAttributes = towerData;
 		Health = TowerAttributes.MaxHealth;
 
+		// Set the speed at which this tower is built
+		this.GetComponent<Animation>()[TowerAttributes.PrefabName + "_Build"].speed = (1 / TowerAttributes.StartupTime);
+
 		ObjPhotonView = PhotonView.Get(this);
 		NetworkViewID = ObjPhotonView.viewID;
 
@@ -95,7 +100,7 @@ public class Tower : MonoBehaviour
 	public virtual void Update()
 	{
 		// Perform actions if the tower is targeting an enemy
-		if(TargetedEnemy)
+		if(CanMove && TargetedEnemy)
 		{
 			// Have the tower's pivot point look at the targeted enemy
 			if(TurretPivot)
@@ -110,6 +115,15 @@ public class Tower : MonoBehaviour
 	public bool HasFullHealth()
 	{
 		return Health >= TowerAttributes.MaxHealth;
+	}
+
+	/// <summary>
+	/// Used by the animation system. Called when the Startup Animation Finishes
+	/// </summary>
+	public void OnStartupAnimFinished()
+	{
+		CanFire = true;
+		CanMove = true;
 	}
 
 	#region IDENTIFYING TARGETS
@@ -302,20 +316,24 @@ public class Tower : MonoBehaviour
 		// Infinite Loop FTW
 		while(this)
 		{
-			// Only perform the act of firing if this is the Master Client
-			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			// Only fire if the tower can fire
+			if(CanFire)
 			{
-				// Only fire if there is an enemy being targeted
-				if(TargetedEnemy != null)
+				// Only perform the act of firing if this is the Master Client
+				if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 				{
-					// Only fire if tower is ready to fire
-					if(Time.time - TimeLastShotFired >= (1 / TowerAttributes.RateOfFire))
+					// Only fire if there is an enemy being targeted
+					if(TargetedEnemy != null)
 					{
-						// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
-						if(TurretPivot == null || Vector3.Angle(TurretPivot.transform.forward, TargetedEnemy.transform.position - TurretPivot.transform.position) <= 8)
+						// Only fire if tower is ready to fire
+						if(Time.time - TimeLastShotFired >= (1 / TowerAttributes.RateOfFire))
 						{
-							// Tell all clients to fire upon the enemy
-							ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
+							// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
+							if(TurretPivot == null || Vector3.Angle(TurretPivot.transform.forward, TargetedEnemy.transform.position - TurretPivot.transform.position) <= 8)
+							{
+								// Tell all clients to fire upon the enemy
+								ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
+							}
 						}
 					}
 				}
