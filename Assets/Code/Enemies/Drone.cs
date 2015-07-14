@@ -3,15 +3,14 @@ using System.Collections;
 
 public class Drone : Enemy
 {
-	public Drone()
-	{
-
-	}
+	private bool Alive;
 
 	// Use this for initialization
 	public override void Start ()
 	{
 		base.Start();
+
+		Alive = true;
 
 		// Load default attributes from EnemyData for this enemy
 		//SetEnemyData(GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByDisplayName("Drone"));
@@ -19,42 +18,24 @@ public class Drone : Enemy
 		this.transform.LookAt(GameManager.Instance.ObjMiningFacility.transform.position, Up);
 
 		// Start the Drone off the ground
-		this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1.0f);
+		this.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position, 0.1f);
 
+		Debug.Break();
 		// TO DO: Implement the loading of EnemyData via XML before uncommenting
 		// Load default attributes from EnemyData
 		//EnemyData enemyData = GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByPrefabName("Drone");
 		//SetEnemyData(enemyData);
 	}
 
-	public override void OnTriggerEnter(Collider other)
-	{
-		// Only take action if the droid finds an enemy to follow
-		if(other.tag == "Enemy")
-		{
-			// Only take action if the droid does not find another droid
-			if(other.GetComponent<Enemy>().EnemyAttributes.DisplayName != "Drone")
-			{
-				// Only start following the enemy if the Drone isn't already following an enemy
-				if(TargetedObjectToFollow == null)
-				{
-					TargetedObjectToFollow = other.gameObject;
-				}
-			}
-		}
-		// Check to see if the Enemy encounters the Mining Facility and - if so - explode on impact
-		else if(other.tag == "Mining Facility")
-		{
-			GameManager.Instance.ObjMiningFacility.TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
-		}
-	}
-
 	public override void Update()
 	{
-		base.Update();
+		if(Alive)
+		{
+			base.Update();
 
-		if(this.transform.position.z >= 0)
-			DestroyEnemy();
+			// Keep the drone at a specific height
+			//this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, EnemyAttributes.HoverDistance);
+		}
 	}
 
 	/// <summary>
@@ -69,6 +50,18 @@ public class Drone : Enemy
 		// TO DO: Fix this - Brent lost the original code and now he is too dumb to make it work again
 		Vector3 temp = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z - 2);
 		rb.AddForceAtPosition(new Vector3(0, 0, -20), temp);
+
+		// Change the Tag to "Dead Enemy" so that towers do not target it
+		this.tag = "Dead Enemy";
+		
+		Alive = false;
+		
+		// Hide the Healthbar if one exists
+		if(HealthBar)
+			HealthBar.HideHealthBar();
+		
+		// Tell the enemy to die in 1.5 seconds
+		Invoke("DestroyEnemy", 1.5f);
 		
 		// Stop sending network updates for this object - it is dead
 		ObjPhotonView.ObservedComponents.Clear();

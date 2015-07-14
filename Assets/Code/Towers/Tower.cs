@@ -149,6 +149,14 @@ public class Tower : MonoBehaviour
 					TargetedEnemy = other.gameObject.GetComponent<Enemy>();
 				}
 			}
+			// Check to see if the enemy has died
+			else if(TargetedEnemy.tag == "Dead Enemy")
+			{
+				// Tell all other clients that 
+				ObjPhotonView.RPC("TargetNewEnemy", PhotonTargets.Others, -1);
+				
+				TargetedEnemy = null;
+			}
 		}
 	}
 

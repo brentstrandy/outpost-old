@@ -35,6 +35,18 @@ public class HealthBarController : MonoBehaviour
 		HealthBar.transform.localScale = new Vector3(newHealth / MaxHealth * HealthBarSize, HealthBar.transform.localScale.y, HealthBar.transform.localScale.z);
 	}
 
+	public void HideHealthBar()
+	{
+		NegativeBar.SetActive(false);
+		HealthBar.SetActive(false);
+	}
+
+	public void ShowHealthBar()
+	{
+		NegativeBar.SetActive(true);
+		HealthBar.SetActive(true);
+	}
+
 	#region MessageHandling
 	private void Log(string message)
 	{

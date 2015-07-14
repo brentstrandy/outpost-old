@@ -11,12 +11,10 @@ public class Enemy : MonoBehaviour
 	// Enemy Attributes/Details/Data
 	public EnemyData EnemyAttributes;
 	protected float Health;
-
+	
 	protected float TimeLastShotFired;
 	protected Vector3 CurAcceleration;
 	protected Vector3 CurVelocity;
-
-	public int NetworkViewID { get; private set; }
 
 	// Pathfinding
 	protected PathFindingType PathFinding;
@@ -46,6 +44,8 @@ public class Enemy : MonoBehaviour
 	protected PhotonView ObjPhotonView;
 	protected Pathfinder ObjPathfinder = null;
 	protected HexLocation ObjHexLocation = null;
+
+	public int NetworkViewID { get; private set; }
 
 	// Effects
 	public GameObject FiringEffect;
@@ -226,6 +226,13 @@ public class Enemy : MonoBehaviour
 				// Tell everyone to target a new enemy
 				ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.All, other.GetComponent<Tower>().NetworkViewID);
 			}
+
+			// Check to see if the currently targeted enemy to follow has died (and stop following them)
+			if(other.tag == "Dead Enemy")
+			{
+				// Tell everyone to stop targetting the current enemy
+				ObjPhotonView.RPC("TargetNewObjectToFollow", PhotonTargets.All, -1);
+			}
 		}
 	}
 	
@@ -247,10 +254,8 @@ public class Enemy : MonoBehaviour
 					// Remove the targeted Tower when the enemy tower leaves the enemies range
 					if(other.gameObject.GetComponent<Tower>().Equals(TargetedObjectToAttack.GetComponent<Tower>()))
 					{
-						// Tell all other clients that the enemy isnot targeting anyone
-						ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.Others, -1);
-						
-						TargetedObjectToAttack = null;
+						// Tell everyone that the enemy isnot targeting anyone
+						ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.All, -1);
 					}
 				}
 			}
@@ -258,14 +263,43 @@ public class Enemy : MonoBehaviour
 	}
 
 	public virtual void OnTriggerEnter(Collider other)
-	{ }
+	{
+		// Only Target objects to follow if this is the Master Client
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			// Only look for other enemies if this enemy tracks enemies
+			if(PathFinding == PathFindingType.TrackEnemy_IgnorePath || PathFinding == PathFindingType.TrackEnemy_FollowPath)
+			{
+				// Only start following the enemy if the Drone isn't already following an enemy
+				if(TargetedObjectToFollow == null)
+				{
+					// Only take action if the droid finds an enemy to follow
+					if(other.tag == "Enemy")
+					{
+						// Only take action if the droid does not find another droid
+						if(other.GetComponent<Enemy>().EnemyAttributes.DisplayName != this.EnemyAttributes.DisplayName)
+						{
+							// Tell everyone to target a new enemy to follow
+							ObjPhotonView.RPC("TargetNewObjectToFollow", PhotonTargets.All, other.GetComponent<Enemy>().NetworkViewID);
+						}
+					}
+				}
+			}
+
+			// Check to see if the Enemy encounters the Mining Facility and - if so - explode on impact
+			if(other.tag == "Mining Facility")
+			{
+				GameManager.Instance.ObjMiningFacility.TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
+			}
+		}
+	}
 	#endregion
 
 	#region RPC CALLS
 	/// <summary>
 	/// Tells the client to target a new GameObject
 	/// </summary>
-	/// <param name="viewID">Network ViewID of the enemy to target. Pass -100 to target the mining facility. Pass -1 to set the target to null.</param>
+	/// <param name="viewID">Network ViewID of the enemy to target. Pass -1 to set the target to null.</param>
 	[PunRPC]
 	protected virtual void TargetNewObjectToAttack(int viewID)
 	{
@@ -282,6 +316,20 @@ public class Enemy : MonoBehaviour
 			else
 				AttackingMiningFacility = false;
 		}
+	}
+
+	/// <summary>
+	/// Tells the client to target a new Enemy to follow
+	/// </summary>
+	/// <param name="viewID">Network ViewID of the enemy to target. Pass -1 to set the target to null.</param>
+	[PunRPC]
+	protected virtual void TargetNewObjectToFollow(int viewID)
+	{
+		// A viewID of -1 means there is no targeted enemy. Otherwise, find the enemy by the networkViewID
+		if(viewID == -1)
+			TargetedObjectToFollow = null;
+		else
+			TargetedObjectToFollow = GameManager.Instance.EnemyManager.FindEnemyByID(viewID).gameObject;
 	}
 
 	/// <summary>
