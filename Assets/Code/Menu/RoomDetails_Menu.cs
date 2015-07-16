@@ -165,11 +165,11 @@ public class RoomDetails_Menu : MonoBehaviour
 			SelectedTowerButtonList.Add(towerButton);
 			TowerLoadoutData.Add(towerData);
 
-			if(SelectedTowerButtonList.Count > LevelLoadoutData.MaxTowersPerPlayer)
-			{
+			//if(SelectedTowerButtonList.Count > LevelLoadoutData.MaxTowersPerPlayer)
+			//{
 				// Untoggle the last selected tower (This will trigger the event to call this function again)
-				SelectedTowerButtonList[0].GetComponent<Toggle>().isOn = false;
-			}
+			//	SelectedTowerButtonList[0].GetComponent<Toggle>().isOn = false;
+			//}
 		}
 	}
 
@@ -416,11 +416,11 @@ public class RoomDetails_Menu : MonoBehaviour
 			}
 
 			// Disable all toggles if the player does not have an option to pick different towers
-			if(SelectedTowerButtonList.Count <= LevelLoadoutData.MaxTowersPerPlayer)
+			/*if(SelectedTowerButtonList.Count <= LevelLoadoutData.MaxTowersPerPlayer)
 			{
 				foreach(GameObject obj in SelectedTowerButtonList)
 					obj.GetComponent<Toggle>().enabled = false;
-			}
+			}*/
 		}
 	}
 
@@ -467,10 +467,10 @@ public class RoomDetails_Menu : MonoBehaviour
 				obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
 				obj.transform.rotation = new Quaternion(0, 0, 0, 0);
 
-				if(previousLevelComplete)
-					obj.SetActive(true);
-				else
-					obj.SetActive(false);
+				//if(previousLevelComplete)
+				//	obj.SetActive(true);
+				//else
+				//	obj.SetActive(false);
 
 				// select Level1 by default (hacked way)
 				if (!LevelLoadoutSelection)

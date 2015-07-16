@@ -13,13 +13,13 @@
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>16</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
 		<StartTime>16</StartTime>
 		<StartAngle>125</StartAngle>
 		<PlayerCount>1</PlayerCount>
