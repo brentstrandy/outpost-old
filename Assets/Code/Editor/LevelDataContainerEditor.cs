@@ -80,7 +80,7 @@ public class LevelDataContainerEditor : Editor
         if (File.Exists(XMLPath))
         {
             // Sort by DisplayName before loading
-            return XMLParser<LevelData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.DisplayName).ToList();
+            return XMLParser<LevelData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.LevelID).ToList();
         }
         else
         {

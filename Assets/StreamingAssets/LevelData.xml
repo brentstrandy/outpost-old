@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
-    <LevelID>2</LevelID>
-    <DisplayName>Better With Friends</DisplayName>
-    <SceneName>Level1</SceneName>
-    <EnemySpawnFilename>BetterWithFriends</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>Defending this Outpost should not be done alone.</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>8</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
-    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
     <LevelID>1</LevelID>
     <DisplayName>Establishing Roots</DisplayName>
     <SceneName>Level1</SceneName>
@@ -33,6 +16,23 @@
     <StartingMoney>10</StartingMoney>
     <IncomePerSecond>0.3</IncomePerSecond>
     <MiningFacilityHealth>50</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <LevelID>2</LevelID>
+    <DisplayName>Better With Friends</DisplayName>
+    <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>BetterWithFriends</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Defending this Outpost should not be done alone.</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower</AvailableTowers>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
     <LevelID>5</LevelID>
