@@ -1,54 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-<LevelData>
-  <LevelID>1</LevelID>
-  <DisplayName>Establishing Roots</DisplayName>
-  <SceneName>Level1</SceneName>
-  <EnemySpawnFilename>1_EstablishingRoots</EnemySpawnFilename>
-  <NotificationFilename>1_Notifications</NotificationFilename>
-  <Description>We've set up a Mining Facility on a remote planet. Protect it!</Description>
-  <MinimumPlayers>1</MinimumPlayers>
-  <MaximumPlayers>1</MaximumPlayers>
-  <AvailableQuadrants>North</AvailableQuadrants>
-  <StartingQuadrant>North</StartingQuadrant>
-  <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
-  <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-  <StartingMoney>10</StartingMoney>
-  <IncomePerSecond>.3</IncomePerSecond>
-  <MiningFacilityHealth>50</MiningFacilityHealth>
-</LevelData>
-<LevelData>
-  <LevelID>5</LevelID>
-  <DisplayName>Level 5</DisplayName>
-  <SceneName>Level1</SceneName>
-  <EnemySpawnFilename>Level5</EnemySpawnFilename>
-  <NotificationFilename />
-  <Description>Join a team and take down these terrible mean enemies</Description>
-  <MinimumPlayers>2</MinimumPlayers>
-  <MaximumPlayers>8</MaximumPlayers>
-  <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-  <StartingQuadrant>North</StartingQuadrant>
-  <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Universal Energy Tower</AvailableTowers>
-  <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-  <StartingMoney>0</StartingMoney>
-  <IncomePerSecond>1</IncomePerSecond>
-  <MiningFacilityHealth>100</MiningFacilityHealth>
-</LevelData>
-<LevelData>
-  <LevelID>2</LevelID>
-  <DisplayName>Better With Friends</DisplayName>
-  <SceneName>Level1</SceneName>
-  <EnemySpawnFilename>Level1</EnemySpawnFilename>
-  <NotificationFilename />
-  <Description>Defending this Outpost should not be done alone.</Description>
-  <MinimumPlayers>1</MinimumPlayers>
-  <MaximumPlayers>8</MaximumPlayers>
-  <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-  <StartingQuadrant>North</StartingQuadrant>
-  <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower, Thraceium Rain Tower</AvailableTowers>
-  <MaxTowersPerPlayer>4</MaxTowersPerPlayer>
-  <StartingMoney>0</StartingMoney>
-  <IncomePerSecond>1</IncomePerSecond>
-  <MiningFacilityHealth>100</MiningFacilityHealth>
-</LevelData>
+  <LevelData>
+    <LevelID>2</LevelID>
+    <DisplayName>Better With Friends</DisplayName>
+    <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>BetterWithFriends</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Defending this Outpost should not be done alone.</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <LevelID>1</LevelID>
+    <DisplayName>Establishing Roots</DisplayName>
+    <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>1_EstablishingRoots</EnemySpawnFilename>
+    <NotificationFilename>1_Notifications</NotificationFilename>
+    <Description>We've set up a Mining Facility on a remote planet. Protect it!</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>1</MaximumPlayers>
+    <AvailableQuadrants>North</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>10</StartingMoney>
+    <IncomePerSecond>0.3</IncomePerSecond>
+    <MiningFacilityHealth>50</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <LevelID>5</LevelID>
+    <DisplayName>Level 5</DisplayName>
+    <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>Level5</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Join a team and take down these terrible mean enemies</Description>
+    <MinimumPlayers>2</MinimumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
 </ArrayOfLevelData>
