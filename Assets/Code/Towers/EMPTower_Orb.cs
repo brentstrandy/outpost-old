@@ -68,7 +68,21 @@ public class EMPTower_Orb : MonoBehaviour
 				// Only effect Enemies
 				if(other.tag == "Enemy")
 				{
-					// Slow the enemy down
+                    other.gameObject.GetComponent<Enemy>().SendMessage("Stunned", 3f);
+
+                    //// An array of all the enemies within the blast radius
+                    //Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, MaxSize);
+                    //int i = 0;
+
+                    //while (i < hitColliders.Length)
+                    //{
+                    //    // Stun the enemy for 5 seconds
+                    //    if (hitColliders[i].tag == "Enemy")
+                    //        hitColliders[i].gameObject.GetComponent<Enemy>().SendMessage("Stunned", 5f);
+                    //    i++;
+
+                    //    // TODO -- add Photon control
+                    //}
 				}
 			}
 		}

@@ -51,6 +51,10 @@ public class Enemy : MonoBehaviour
 	public GameObject FiringEffect;
 	public GameObject ExplodingEffect;
 	
+    // Status Effects
+    public bool IsStunned { get; private set; }
+    public float StunEndTime { get; private set; }
+
 	#region INITIALIZATION
 	public virtual void Awake()
 	{
@@ -85,6 +89,8 @@ public class Enemy : MonoBehaviour
 		ObjPhotonView.synchronization = ViewSynchronization.Off;
 
 		PathFinding = EnemyAttributes.PathFinding;
+
+        IsStunned = false;
 
 		// Initialize the proper pathfinding
 		if(PathFinding == PathFindingType.ShortestPath)
@@ -143,6 +149,11 @@ public class Enemy : MonoBehaviour
 
 	public virtual void Update()
 	{
+
+        // Un-stun enemy when StunEndTime is past.
+        if (Time.time > StunEndTime)
+            IsStunned = false;
+
 		// Units can only move while firing on a tower IF that ability has been enabled. Also, units will not move when attacking the mining facility
 		if(((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null) && !AttackingMiningFacility)
 		{
@@ -209,8 +220,10 @@ public class Enemy : MonoBehaviour
 				CurVelocity.z -= (minHoverDistance - distance) * EnemyAttributes.Speed * 10.0f;
 			}
 
-			// Manually change the Enemy's position
-			this.transform.position += CurVelocity * Time.deltaTime;
+			// Allows the enemy to move if it isn't stunned
+			if(!IsStunned)    
+                // Manually change the Enemy's position
+                this.transform.position += CurVelocity * Time.deltaTime;
 		}
 	}
 
@@ -387,7 +400,7 @@ public class Enemy : MonoBehaviour
 	}
 	#endregion
 
-	#region TAKE DAMAGE / DIE
+	#region TAKE DAMAGE / DIE / STUN
 	public virtual void TakeDamage(float ballisticsDamage, float thraceiumDamage)
 	{
 		// Only the master client dictates how to handle damage
@@ -435,6 +448,15 @@ public class Enemy : MonoBehaviour
 		// The GameObject must be destroyed or else the enemy will stay instantiated
 		Destroy (this.gameObject);
 	}
+
+    /// <summary>
+    /// Forces the Enemy to stun (stop) for an alloted amount of time.
+    /// </summary>
+    public virtual void Stunned(float stunLength)
+    {
+        IsStunned = true;
+        StunEndTime = Time.time + stunLength;
+    }
 	#endregion
 	
 	#region ATTACKING
