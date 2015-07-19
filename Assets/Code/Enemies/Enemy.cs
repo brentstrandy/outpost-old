@@ -53,6 +53,7 @@ public class Enemy : MonoBehaviour
 	
     // Status Effects
     public bool IsStunned { get; private set; }
+    public float StunLength { get; private set; }
     public float StunEndTime { get; private set; }
 
 	#region INITIALIZATION
@@ -149,13 +150,12 @@ public class Enemy : MonoBehaviour
 
 	public virtual void Update()
 	{
-
         // Un-stun enemy when StunEndTime is past.
         if (Time.time > StunEndTime)
             IsStunned = false;
 
 		// Units can only move while firing on a tower IF that ability has been enabled. Also, units will not move when attacking the mining facility
-		if(((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null) && !AttackingMiningFacility)
+		if(((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null) && !AttackingMiningFacility && !IsStunned)
 		{
 			// MASTER CLIENT movement
 			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -220,10 +220,8 @@ public class Enemy : MonoBehaviour
 				CurVelocity.z -= (minHoverDistance - distance) * EnemyAttributes.Speed * 10.0f;
 			}
 
-			// Allows the enemy to move if it isn't stunned
-			if(!IsStunned)    
-                // Manually change the Enemy's position
-                this.transform.position += CurVelocity * Time.deltaTime;
+            // Manually change the Enemy's position
+            this.transform.position += CurVelocity * Time.deltaTime;
 		}
 	}
 
@@ -398,6 +396,16 @@ public class Enemy : MonoBehaviour
 	{
 		TargetHex = newTargetHex;
 	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [PunRPC]
+    public virtual void StunnedAcrossNetwork()
+    {
+        IsStunned = true;
+        Log("StunnedAcrossNetwork()");
+    }
 	#endregion
 
 	#region TAKE DAMAGE / DIE / STUN
@@ -452,13 +460,17 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Forces the Enemy to stun (stop) for an alloted amount of time.
     /// </summary>
-    public virtual void Stunned(float stunLength)
+    public virtual void Stunned(float stunnedDuration)
     {
-        IsStunned = true;
-        StunEndTime = Time.time + stunLength;
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
+            StunEndTime = Time.time + stunnedDuration;
+            // TODO -- how do I send a parameter across the network?
+            ObjPhotonView.RPC("StunnedAcrossNetwork", PhotonTargets.All, null);
+        }
     }
 	#endregion
-	
+
 	#region ATTACKING
 	/// <summary>
 	/// Coroutine that constantly checks to see if tower is ready to fire upon an enemy
@@ -466,26 +478,30 @@ public class Enemy : MonoBehaviour
 	protected virtual IEnumerator Fire()
 	{
 		// Infinite Loop FTW
-		while(this)
+        while (true)
 		{
-			// Only perform the act of firing if this is the Master Client
-			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-			{
-				// Only fire if there is an enemy being targeted
-				if(TargetedObjectToAttack != null)
-				{
-					// Only fire if tower is ready to fire
-					if(Time.time - TimeLastShotFired >= (1 / EnemyAttributes.RateOfFire))
-					{
-						// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
-						if(Vector3.Angle(this.transform.forward, TargetedObjectToAttack.transform.position - this.transform.position) <= 8 || TurretPivot == null)
-						{
-							// Tell all clients to fire upon the enemy
-							ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
-						}
-					}
-				}
-			}
+            // Only fire if the enemy isn't stunned.
+            if (!IsStunned)
+            {
+                // Only perform the act of firing if this is the Master Client
+                if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+                {
+                    // Only fire if there is an enemy being targeted
+                    if (TargetedObjectToAttack != null)
+                    {
+                        // Only fire if tower is ready to fire
+                        if (Time.time - TimeLastShotFired >= (1 / EnemyAttributes.RateOfFire))
+                        {
+                            // Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
+                            if (Vector3.Angle(this.transform.forward, TargetedObjectToAttack.transform.position - this.transform.position) <= 8 || TurretPivot == null)
+                            {
+                                // Tell all clients to fire upon the enemy
+                                ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
+                            }
+                        }
+                    }
+                }
+            }
 			
 			yield return 0;
 		}

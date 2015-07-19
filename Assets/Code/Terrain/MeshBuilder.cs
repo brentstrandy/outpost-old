@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MeshBuilder
 {
 	public int DeduplicationCount { get; protected set; }
+	public bool FlatShaded;
 	protected List<Vector3> Vertices;
 	protected List<Vector2> UV;
 	protected List<int> Indices;
@@ -15,9 +16,10 @@ public class MeshBuilder
 	public MeshBuilder()
 	{
 		DeduplicationCount = 0;
+		FlatShaded = true;
 		Vertices = new List<Vector3>();
-		SubMeshes = new List<List<int>>();
 		UV = new List<Vector2>();
+		SubMeshes = new List<List<int>>();
 		VertexLookup = new Dictionary<Vector3, int>();
 		UVLookup = new Dictionary<Vector3, Vector2>();
 		AddSubMesh();
@@ -40,7 +42,7 @@ public class MeshBuilder
 	{
 		int index;
 		Vector2 existingUV;
-		if (VertexLookup.TryGetValue(vertex, out index) && UVLookup.TryGetValue(vertex, out existingUV) && existingUV.Equals(uv))
+		if (!FlatShaded && VertexLookup.TryGetValue(vertex, out index) && UVLookup.TryGetValue(vertex, out existingUV) && existingUV.Equals(uv))
 		{
 			DeduplicationCount++;
 			return index;
@@ -48,8 +50,11 @@ public class MeshBuilder
 		index = Vertices.Count;
 		Vertices.Add(vertex);
 		UV.Add(uv);
-		VertexLookup.Add(vertex, index);
-		UVLookup.Add(vertex, uv);
+		if (!FlatShaded)
+		{
+			VertexLookup.Add(vertex, index);
+			UVLookup.Add(vertex, uv);
+		}
 		return index;
 	}
 
@@ -67,6 +72,17 @@ public class MeshBuilder
 		mesh.RecalculateBounds();
 		TangentSolver.Solve2(mesh);
 		return mesh;
+	}
+
+	public void Clear()
+	{
+		DeduplicationCount = 0;
+		Vertices.Clear();
+		UV.Clear();
+		SubMeshes.Clear();
+		VertexLookup.Clear();
+		UVLookup.Clear();
+		AddSubMesh();
 	}
 
 	public string Summary()

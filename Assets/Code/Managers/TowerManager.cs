@@ -8,7 +8,7 @@ public class TowerManager
 	public bool ShowDebugLogs = true;
 
 	private List<Tower> ActiveTowerList;
-	private HashSet<HexCoord> TowerLocations = new HashSet<HexCoord>();
+	private Dictionary<HexCoord, GameObject> TowerLocations = new Dictionary<HexCoord, GameObject>();
 
 	// Use this for initialization
 	public TowerManager()
@@ -25,7 +25,7 @@ public class TowerManager
 	{
 		ActiveTowerList.Add(tower);
 		if(tower.gameObject.GetComponent<HexLocation>())
-			TowerLocations.Add(tower.gameObject.GetComponent<HexLocation>().location);
+			TowerLocations[tower.gameObject.GetComponent<HexLocation>().location] = tower.gameObject;
 	}
 
 	public void RemoveActiveTower(Tower tower)
@@ -35,9 +35,14 @@ public class TowerManager
 			TowerLocations.Remove(tower.gameObject.GetComponent<HexLocation>().location);
 	}
 
+	public bool TryGetTower(HexCoord coord, out GameObject towerObject)
+	{
+		return TowerLocations.TryGetValue(coord, out towerObject);
+	}
+
 	public bool HasTower(HexCoord coord)
 	{
-		return TowerLocations.Contains(coord);
+		return TowerLocations.ContainsKey(coord);
 	}
 
 	public Tower FindTowerByID(int viewID)
