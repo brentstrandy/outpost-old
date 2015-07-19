@@ -105,6 +105,10 @@ public class InputManager : MonoBehaviour
 	                Time.timeScale = 1;
 	                Log("Time.timeScale: " + Time.timeScale);
 	            }
+				else if(Input.GetKeyDown(KeyCode.Alpha1))
+				{
+					PlayerManager.Instance.EarnIncome(100);
+				}
 	            #endif 
 			}
 		}
