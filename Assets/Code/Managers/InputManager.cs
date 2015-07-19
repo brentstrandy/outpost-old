@@ -88,14 +88,27 @@ public class InputManager : MonoBehaviour
 	            // Increase by 1
 	            if(Input.GetKeyDown(KeyCode.Equals))
 	            {
-	                Time.timeScale += 1f;
+					if (Time.timeScale < 1.0f)
+					{
+						Time.timeScale += 0.1f;
+					}
+					else
+					{
+	                	Time.timeScale += 1f;
+					}
 	                Log("Time.timeScale: " + Time.timeScale);
 	            }
 	            // Decrease by 1
 	            else if(Input.GetKeyDown(KeyCode.Minus))
 	            {
 	                if (Time.timeScale > 1f)
+					{
 	                    Time.timeScale -= 1;
+					}
+					else if (Time.timeScale >= 0.1f)
+					{
+						Time.timeScale -= 0.1f;
+					}
 
 	                Log("Time.timeScale: " + Time.timeScale);                    
 	            }
