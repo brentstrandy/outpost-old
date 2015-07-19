@@ -53,7 +53,6 @@ public class Enemy : MonoBehaviour
 	
     // Status Effects
     public bool IsStunned { get; private set; }
-    public float StunLength { get; private set; }
     public float StunEndTime { get; private set; }
 
 	#region INITIALIZATION
@@ -150,9 +149,12 @@ public class Enemy : MonoBehaviour
 
 	public virtual void Update()
 	{
-        // Un-stun enemy when StunEndTime is past.
-        if (Time.time > StunEndTime)
+        // Un-stun enemy when StunEndTime has passed.
+        if (StunEndTime > 0 && Time.time > StunEndTime)
+        {
             IsStunned = false;
+            StunEndTime = 0;
+        }
 
 		// Units can only move while firing on a tower IF that ability has been enabled. Also, units will not move when attacking the mining facility
 		if(((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null) && !AttackingMiningFacility && !IsStunned)
@@ -398,13 +400,24 @@ public class Enemy : MonoBehaviour
 	}
 
     /// <summary>
-    /// 
+    /// RPC call to tell players the enemy is indefinitely stunned.
     /// </summary>
     [PunRPC]
-    public virtual void StunnedAcrossNetwork()
+    public virtual void StunnedAcrossNetwork(bool isStunned)
     {
-        IsStunned = true;
-        Log("StunnedAcrossNetwork()");
+        IsStunned = isStunned;
+        Log("StunnedAcrossNetwork(bool)");
+    }
+
+    /// <summary>
+    /// RPC call to tell players the enemy is stunned for a length of time.
+    /// </summary>
+    [PunRPC]
+    public virtual void StunnedAcrossNetwork(float stunDuration)
+    {
+        IsStunned = true; // redundancy
+        StunEndTime = Time.time + stunDuration;
+        Log("StunnedAcrossNetwork(float)");
     }
 	#endregion
 
@@ -458,15 +471,24 @@ public class Enemy : MonoBehaviour
 	}
 
     /// <summary>
-    /// Forces the Enemy to stun (stop) for an alloted amount of time.
+    /// Stun the enemy indefinitely.
     /// </summary>
-    public virtual void Stunned(float stunnedDuration)
+    public virtual void Stunned(bool stunCondition)
     {
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
-            StunEndTime = Time.time + stunnedDuration;
-            // TODO -- how do I send a parameter across the network?
-            ObjPhotonView.RPC("StunnedAcrossNetwork", PhotonTargets.All, null);
+            ObjPhotonView.RPC("StunnedAcrossNetwork", PhotonTargets.All, stunCondition);
+        }
+    }
+
+    /// <summary>
+    /// Stun the enemy for an alloted amount of time.
+    /// </summary>
+    public virtual void Stunned(float stunDuration)
+    {
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
+            ObjPhotonView.RPC("StunnedAcrossNetwork", PhotonTargets.All, stunDuration);
         }
     }
 	#endregion

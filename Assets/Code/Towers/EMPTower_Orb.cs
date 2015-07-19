@@ -66,7 +66,27 @@ public class EMPTower_Orb : MonoBehaviour
                 // Only effect Enemies
                 if (other.tag == "Enemy")
                 {
+                    other.gameObject.GetComponent<Enemy>().Stunned(true);
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Only take action if this is the Master Client
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
+            // Only enact EMP effects when the EMP shot explodes
+            if (HitTarget)
+            {
+                // Only effect Enemies
+                if (other.tag == "Enemy")
+                {
+                    // Set how long the enemy will be stunned once it exits the sphere.
                     other.gameObject.GetComponent<Enemy>().Stunned(3f);
+                    
+                    Log("OnTriggerExit()");
                 }
             }
         }
