@@ -28,10 +28,10 @@
     <MaximumPlayers>8</MaximumPlayers>
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower</AvailableTowers>
-    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
+    <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
+    <IncomePerSecond>.4</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
