@@ -72,6 +72,21 @@ public class HexMeshOverlay
 
 		public Entry(GameObject parent, string name, float offset, Shader shader, HexMeshBuilder builder)
 		{
+			// Remove any previous instances of this entry (this can happen in the editor)
+			var old = new List<GameObject>();
+			foreach (Transform child in parent.transform)
+			{
+				if (child.gameObject.name.Equals(name))
+				{
+					old.Add(child.gameObject);
+				}
+			}
+			foreach (var gameObject in old)
+			{
+				Object.DestroyImmediate(gameObject);
+			}
+
+			// Prepare the new instance
 			Instance = new GameObject(name);
 			Coords = EmptyCoordinateSet();
 			Builder = builder;

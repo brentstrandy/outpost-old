@@ -13,6 +13,7 @@ public class HexMesh : MonoBehaviour
 	public Texture2D HeightMap;
 	public float HeightScale = 5.0f;
 	public bool ShowDebugLogs = true;
+	public bool FlatShaded = true;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
 	public int FacilityRadius = 5;
@@ -150,6 +151,7 @@ public class HexMesh : MonoBehaviour
 		
 		var bounds = GetHexBounds();
 		var builder = new HexMeshBuilder();
+		builder.FlatShaded = FlatShaded;
 		
 		// Note: Corner 0 is at the upper right, others proceed counterclockwise.
 		
@@ -215,6 +217,7 @@ public class HexMesh : MonoBehaviour
 		};
 		
 		var builder = new HexMeshBuilder();
+		builder.FlatShaded = false;
 		builder.SetPredicate(predicate);
 		builder.SetTriangles(new int[] {
 			0,6,7,		7,1,0,		1,7,8,		8,2,1,		2,8,9,		9,3,2,
