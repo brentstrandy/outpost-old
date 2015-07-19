@@ -13,6 +13,7 @@ public class HexMesh : MonoBehaviour
 	public Texture2D HeightMap;
 	public float HeightScale = 5.0f;
 	public bool ShowDebugLogs = true;
+	public bool FitToPlane = true;
 	public bool FlatShaded = true;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
@@ -143,10 +144,41 @@ public class HexMesh : MonoBehaviour
 		var height = GetHeightPredicate();
 		var tex = GetUVPredicate();
 		
-		HexMeshBuilder.NodeDelegate predicate = (HexCoord c, int i) => {
-			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + c.Position();
-			Vector2 uv = tex(pos);
-			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, height(uv)), uv);
+		HexMeshBuilder.NodeDelegate predicate = (HexCoord hex, int i) => {
+			Vector2 c = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
+			Vector2 uv = tex(c);
+			float h = height(uv);
+			Vector3 p = new Vector3(c.x, c.y, h);
+			if (FitToPlane && i >= 6)
+			{
+				// Centroid-based height
+				//float centroid = height(tex(hex.Position()));
+				//h = (h + centroid) * 0.5f;
+
+				// Loosely fit plane based an a sampling of three corners
+				Plane plane = new Plane();
+				Vector2 c0 = HexCoord.CornerVector(0) * inner + hex.Position();
+				Vector2 c2 = HexCoord.CornerVector(2) * inner + hex.Position();
+				Vector2 c4 = HexCoord.CornerVector(4) * inner + hex.Position();
+				Vector3 p0 = new Vector3(c0.x, c0.y, height(tex(c0)));
+				Vector3 p2 = new Vector3(c2.x, c2.y, height(tex(c2)));
+				Vector3 p4 = new Vector3(c4.x, c4.y, height(tex(c4)));
+				plane.Set3Points(p4, p2, p0);
+
+				// Prepare a ray from p that fires straight down toward the plane
+				// The offset is here to be sure we always start on the correct side of the plane (otherwise the raycast will fail)
+				Ray ray = new Ray(new Vector3(p.x, p.y, p.z - 100.0f), Vector3.forward);
+
+				// Raycast the ray against the loosely fit plane, and then use the intersection as our point
+				float distance;
+				if (plane.Raycast(ray, out distance))
+				{
+					p = ray.GetPoint(distance);
+				}
+			}
+			//float h = (i < 6) ? height(uv) : height(tex(hex.Position()));
+			//Vector3.ProjectOnPlane()
+			return new HexMeshBuilder.Node(p, uv);
 		};
 		
 		var bounds = GetHexBounds();
@@ -213,7 +245,9 @@ public class HexMesh : MonoBehaviour
 		HexMeshBuilder.NodeDelegate predicate = (HexCoord c, int i) => {
 			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + c.Position();
 			Vector2 uv = tex(pos);
-			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, height(uv)), uv);
+			//float h = (i < 6) ? height(uv) : height(tex(c.Position()));
+			float h = height(uv);
+			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, h), uv);
 		};
 		
 		var builder = new HexMeshBuilder();
