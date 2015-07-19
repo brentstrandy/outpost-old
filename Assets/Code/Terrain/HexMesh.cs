@@ -7,6 +7,7 @@ using Settworks.Hexagons;
 [ExecuteInEditMode]
 public class HexMesh : MonoBehaviour
 {
+
 	// Properties adjustable in the inspector
 	//public bool GenerateNoise = true;
 	public Texture2D HeightMap;
@@ -23,14 +24,7 @@ public class HexMesh : MonoBehaviour
 	public float HighlightWidth = 0.1f;
 	public Color HighlightColor = Color.red;
 
-	[SerializeField]
-	private HexCoord HighlightCoord;
-
-	private GameObject Outlines;
-	private GameObject Highlight;
-
-	private const string OutlineName = "HexOutlines";
-	private const string HighlightName = "HexHighlight";
+	public HexMeshOverlaySet Overlays;
 
 	// Use this for initialization
 	void Start ()
@@ -52,40 +46,11 @@ public class HexMesh : MonoBehaviour
 
 		gameObject.layer = LayerMask.NameToLayer("Terrain");
 
-		PrepareOverlays();
+		CreateOverlays();
 		UpdateMesh();
 		UpdateOutlines();
 	}
 	
-	// Update is called once per frame
-	void Update()
-	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		HexCoord coord;
-		
-		if (IntersectRay(ray, out hit, out coord) && InPlacementRange(coord))
-		{
-			ShowHighlight(coord);
-
-			if (Input.GetMouseButtonDown(0))
-			{
-				Log("HexMesh Collision: " + hit.point + " - " + coord);
-			}
-		}
-		else
-		{
-			HideHighlight();
-		}
-	}
-
-	public bool InPlacementRange(HexCoord coord)
-	{
-		// TODO: Consider moving this to the facility object
-		int distance = HexCoord.Distance(HexCoord.origin, coord);
-		return distance >= FacilityRadius && distance <= PeripheralRadius;
-	}
-
 	public Vector3 IntersectPosition(Vector3 pos, float distance = 0f)
 	{
 		// TODO: Translate pos into local coordinates?
@@ -104,18 +69,16 @@ public class HexMesh : MonoBehaviour
 	{
 		if (GetComponent<MeshCollider>().Raycast(ray, out hit, Mathf.Infinity))
 		{
-			// Note from J.S. 2015-03-29: The intersection seems to occur with a simple plane right now. The original gameobject was a plane, perhaps the MeshCollider is
-			// working against that original mesh and not the real one that we generate?
 			// Convert from world space to local space
 			var xy = (Vector2)hit.transform.InverseTransformPoint(hit.point);
-
+			
 			// Scale to fit the grid
 			float scale = 1.0f; // TODO: Base this on the hexagon diameter
 			xy *= scale;
-
+			
 			// Convert to a hex coordinate
 			coord = HexCoord.AtPosition(xy);
-
+			
 			return true;
 		}
 		coord = default(HexCoord);
@@ -135,24 +98,25 @@ public class HexMesh : MonoBehaviour
 			GridHeight += 1;
 		}
 
-		PrepareOverlays();
+		CreateOverlays();
 		UpdateMesh();
 		UpdateOutlines();
 	}
 	
-	public HexCoord[] GetHexBounds()
+	private void CreateOverlays()
 	{
-		var corner = new Vector2(GridWidth / 2, GridHeight / 2);
-		return HexCoord.CartesianRectangleBounds(corner, -corner);
-	}
-	
-	private void PrepareOverlays()
-	{
-		DestroyOverlay(OutlineName);
-		DestroyOverlay(HighlightName);
-		
-		Outlines = CreateOverlay(OutlineName, OutlineColor, "Particles/Additive", 0);
-		Highlight = CreateOverlay(HighlightName, HighlightColor, "Standard", 1);
+		if (Overlays == null)
+		{
+			Overlays = new HexMeshOverlaySet(gameObject);
+		}
+		else
+		{
+			Overlays.Clear();
+		}
+
+		Overlays.Add((int)TerrainOverlays.Outline, "TerrainOutline", "Particles/Additive", CreateOverlayBuilder(OutlineWidth));
+		Overlays.Add((int)TerrainOverlays.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth));
+		Overlays.Add((int)TerrainOverlays.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
 	}
 	
 	private void UpdateMesh()
@@ -164,10 +128,10 @@ public class HexMesh : MonoBehaviour
 	
 	private void UpdateOutlines()
 	{
-		if (Outlines != null)
-		{
-			Outlines.GetComponent<MeshFilter>().mesh = BuildOutlineMesh();
-		}
+		var overlay = Overlays[(int)TerrainOverlays.Outline][0];
+		overlay.Update(WithinPlacementRange());
+		overlay.Color = OutlineColor;
+		overlay.Show();
 	}
 	
 	private Mesh BuildBaseMesh()
@@ -210,109 +174,28 @@ public class HexMesh : MonoBehaviour
 		return builder.Build();
 	}
 	
-	private Mesh BuildOutlineMesh()
+	public HexCoord[] GetHexBounds()
 	{
-		var builder = CreateOverlayBuilder(OutlineWidth);
+		var corner = new Vector2(GridWidth / 2, GridHeight / 2);
+		return HexCoord.CartesianRectangleBounds(corner, -corner);
+	}
+	
+	public bool InPlacementRange(HexCoord coord)
+	{
+		// TODO: Consider moving this to the facility object
+		int distance = HexCoord.Distance(HexCoord.origin, coord);
+		return distance >= FacilityRadius && distance <= PeripheralRadius;
+	}
+
+	private IEnumerable<HexCoord> WithinPlacementRange()
+	{
 		var bounds = GetHexBounds();
-		
 		foreach (HexCoord coord in HexKit.WithinRect(bounds[0], bounds[1]))
 		{
 			if (InPlacementRange(coord))
 			{
-				builder.AddHexagon(coord);
+				yield return coord;
 			}
-		}
-		
-		//Log("Outline Mesh Summary: " + builder.Summary());
-		return builder.Build();
-	}
-	
-	private Mesh BuildHighlightMesh(HexCoord coord)
-	{
-		var builder = CreateOverlayBuilder(HighlightWidth);
-		
-		builder.AddHexagon(coord);
-		
-		//Log("Highlight Mesh Summary: " + builder.Summary());
-		return builder.Build();
-	}
-	
-	public void ShowHighlight(HexCoord coord)
-	{
-		if (Highlight != null)
-		{
-			if (HighlightCoord != coord)
-			{
-				HighlightCoord = coord;
-				Highlight.GetComponent<MeshFilter>().mesh = BuildHighlightMesh(coord);
-			}
-			Highlight.GetComponent<MeshRenderer>().enabled = true;
-
-			// Show the selected tower (if applicable)
-			PlayerManager.Instance.SetShellTowerPosition(IntersectPosition((Vector3)coord.Position()));//coord.Position());
-		}
-	}
-	
-	public void HideHighlight()
-	{
-		if (Highlight != null)
-		{
-			Highlight.GetComponent<MeshRenderer>().enabled = false;
-		}
-	}
-	
-	private GameObject GetOverlay(string name)
-	{
-		foreach (Transform child in transform)
-		{
-			if (child.gameObject.name.Equals(name))
-			{
-				return child.gameObject;
-			}
-		}
-
-		return null;
-	}
-	
-	private GameObject CreateOverlay(string name, Color color, string shader, int layer)
-	{
-		GameObject overlay = new GameObject(name);
-
-		float offset = -0.01f * (float)(layer + 1);
-
-		overlay.layer = LayerMask.NameToLayer("TransparentFX");
-		overlay.transform.parent = gameObject.transform;
-		overlay.transform.localRotation = Quaternion.identity;
-		overlay.transform.localPosition = new Vector3(0.0f, 0.0f, offset);
-		overlay.transform.localScale = Vector3.one;
-		
-		overlay.AddComponent<MeshFilter>();
-		var renderer = overlay.AddComponent<MeshRenderer>();
-		
-		renderer.sharedMaterial = new Material(Shader.Find(shader));
-		renderer.sharedMaterial.SetColor("_Color", color);
-		renderer.sharedMaterial.SetColor("_TintColor", color);
-
-		return overlay;
-	}
-	
-	private GameObject PrepareOverlay(string name, Color color, string shader, int layer)
-	{
-		GameObject overlay = GetOverlay(OutlineName);
-		if (overlay == null)
-		{
-			overlay = CreateOverlay(name, color, shader, layer);
-		}
-		return overlay;
-	}
-	
-	private void DestroyOverlay(string name)
-	{
-		GameObject overlay = GetOverlay(name);
-		if (overlay != null)
-		{
-			//Log("Destroying " + overlay.name);
-			DestroyImmediate(overlay);
 		}
 	}
 	

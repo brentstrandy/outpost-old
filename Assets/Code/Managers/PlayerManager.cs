@@ -19,15 +19,19 @@ public class PlayerManager : MonoBehaviour
 	public string Name { get; private set; }
 	private LoadOut GameLoadOut;
 	private double LastTowerPlacementTime;
-	// Selected Tower to build
+
+	// Tower Placement
 	private TowerData PlacementTowerData;
 	public GameObject PlacementTowerPrefab;
+
+	// Tower Selection
+	//private HexCoord SelectedTower;
 	
 	private Dictionary<string, string> LevelProgress;
 	
 	private int PlayerColorIndex;
 	
-	// Componentes
+	// Components
 	PhotonView ObjPhotonView;
 	
 	public void Start()
@@ -89,64 +93,116 @@ public class PlayerManager : MonoBehaviour
 	
 	public void Update()
 	{
-		// TO DO: Do not perform this action if the player has clicked a button, tower, or any other object besides a blank Hex tile
+		// TODO: Consider moving all of this to the InputManager
+
+		// TODO: Do not perform this action if the player has clicked a button, tower, or any other object besides a blank Hex tile
 		// Check for player input (mouse click)
-		if(Input.GetMouseButtonDown(0))
+
+		if (GameManager.Instance != null && GameManager.Instance.GameRunning)
 		{
-			// Check to see if a tower has been selected by the player to be placed
-			if(PlacementTowerData != null)
+			var terrain = GameManager.Instance.TerrainMesh;
+
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			HexCoord coord;
+
+			// Test to see if the player's click intersected with the Terrain (HexMesh)
+			if (terrain.IntersectRay(ray, out hit, out coord) && terrain.InPlacementRange(coord))
 			{
-				// Ensure towers cannot be repeatedly placed every frame
-				if(Time.time - LastTowerPlacementTime > 1)
+				if (Input.GetMouseButtonDown(0))
 				{
+					bool existing = GameManager.Instance.TowerManager.HasTower(coord);
 
-					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-					RaycastHit hit;
-					HexCoord coord;
-
-					var terrainMesh = GameManager.Instance.TerrainMesh;
-					if (terrainMesh != null)
+					// Check to see if a tower has been selected by the player for placement
+					if (PlacementTowerData != null)
 					{
-						// Test to see if the player's click intersected with the Terrain (HexMesh)
-						if (terrainMesh.IntersectRay(ray, out hit, out coord) && terrainMesh.InPlacementRange(coord))
+						// Make sure that there isn't an existing tower on the plot
+						if (!existing)
 						{
-							// Make sure the player has enough money to place the tower
-							if(this.Money >= PlacementTowerData.InstallCost)
+							// Ensure towers cannot be repeatedly placed every frame
+							if (Time.time - LastTowerPlacementTime > 1)
 							{
-								LastTowerPlacementTime = Time.time;
-								
-								// Charge the player for building the tower
-								this.Money -= PlacementTowerData.InstallCost;
-
-								// Calculate the tower placement based on the clicked coordinate
-								var position = terrainMesh.IntersectPosition((Vector3)coord.Position());
-
-								// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
-								ObjPhotonView.RPC ("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, position, SessionManager.Instance.AllocateNewViewID());
-							}
-							else
-							{
-								// This currently does not work. My intent is to display this message alongside the place where the player clicks
-								NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+								// Make sure the player has enough money to place the tower
+								if (this.Money >= PlacementTowerData.InstallCost)
+								{
+									// FIXME: Tenatively place the tower but be prepared to roll back the change if the
+									//        master reports a conflict with another player's tower placement at the same
+									//        location at the same time
+									LastTowerPlacementTime = Time.time;
+									
+									// Charge the player for building the tower
+									this.Money -= PlacementTowerData.InstallCost;
+									
+									// Calculate the tower placement based on the clicked coordinate
+									//var position = terrain.IntersectPosition((Vector3)coord.Position());
+									
+									// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
+									ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, coord, SessionManager.Instance.AllocateNewViewID());
+								}
+								else
+								{
+									// This currently does not work. My intent is to display this message alongside the place where the player clicks
+									NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+								}
 							}
 						}
 					}
+					// Check to see if the user clicked an existing tower
+					else if (existing)
+					{
+						// Mouse click on existing tower
+						Select(coord);
+
+						// Don't display a highlight when we need to display a selection
+						//RemoveHighlight();
+					}
+					else
+					{
+						// Mouse click on non-tower location
+						RemoveSelection();
+					}
+				}
+				else
+				{
+					// Mouseover in placement area
+					Highlight(coord);
+				}
+			}
+			else
+			{
+				// Mouseover outside of placement area
+				RemoveHighlight();
+				if (Input.GetMouseButtonDown(0))
+				{
+					// Mouse click outside of placement area
+					RemoveSelection();
 				}
 			}
 		}
 		
 		// Always keep the player locator GameObject in front of the camera. The GameObject has a PhotonView attached to it for the RadarManager
 		// to know which quadrant all players are located in.
-		if(PlayerLocator)
+		if (PlayerLocator)
 		{
 			PlayerLocator.transform.position = Camera.main.transform.position + (Camera.main.transform.forward * 10);
 			PlayerLocator.transform.position = new Vector3(PlayerLocator.transform.position.x, PlayerLocator.transform.position.y, 0);
 		}
 	}
 	
+	#region Player Tower Interface
 	[PunRPC]
-	private void SpawnTowerAcrossNetwork(string displayName, Vector3 position, int viewID, PhotonMessageInfo info)
+	private void SpawnTowerAcrossNetwork(string displayName, HexCoord coord, int viewID, PhotonMessageInfo info)
 	{
+		// TODO: Coordinate tower spawning when two players build a tower in the same position at the same time.
+		// TODO: Sanitize displayName if necessary. For example, make sure it matches against a white list. Also, if it contained "../blah", what would be the effect?
+
+		if (GameManager.Instance.TowerManager.HasTower(coord))
+		{
+			LogError("Tower construction conflict! Potential inconsistent game state.");
+		}
+
+		var position = GameManager.Instance.TerrainMesh.IntersectPosition((Vector3)coord.Position());
+
 		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
 		var rotation = Quaternion.LookRotation(new Vector3(position.x, position.y, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
 		
@@ -165,6 +221,66 @@ public class PlayerManager : MonoBehaviour
 		Destroy(PlacementTowerPrefab);
 		PlacementTowerPrefab = null;
 	}
+
+	private void Highlight(HexCoord coord)
+	{
+		var terrain = GameManager.Instance.TerrainMesh;
+		var overlay = terrain.Overlays[(int)TerrainOverlays.Highlight][PhotonNetwork.player.ID];
+
+		overlay.Update(coord);
+		overlay.Color = PlayerColors.colors[PlayerColorIndex];
+		overlay.Show();
+		
+		// Show the selected tower (if applicable)
+		SetShellTowerPosition(terrain.IntersectPosition((Vector3)coord.Position()));//coord.Position());
+	}
+	
+	private void RemoveHighlight()
+	{
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Highlight][PhotonNetwork.player.ID];
+		overlay.Hide();
+	}
+	
+	private void Select(HexCoord coord)
+	{
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
+
+		overlay.Update(coord);
+		overlay.Color = PlayerColors.colors[PlayerColorIndex];
+		overlay.Show();
+
+		// Tell all other players that this player has selected a tower
+		ObjPhotonView.RPC("SelectTowerAcrossNetwork", PhotonTargets.Others, coord);
+	}
+	
+	[PunRPC]
+	private void SelectTowerAcrossNetwork(HexCoord coord, PhotonMessageInfo info)
+	{
+		Log(info.sender.name + " selects " + coord.ToString());
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][info.sender.ID];
+
+		if (coord == default(HexCoord))
+		{
+			overlay.Hide();
+		}
+		else
+		{
+			overlay.Update(coord);
+			overlay.Color = PlayerColors.colors[(int)info.sender.customProperties["PlayerColorIndex"]];
+			overlay.Show();
+		}
+	}
+	
+	private void RemoveSelection()
+	{
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
+
+		overlay.Hide();
+		
+		// Tell all other players that this player has deselected a tower
+		ObjPhotonView.RPC("SelectTowerAcrossNetwork", PhotonTargets.Others, default(HexCoord));
+	}
+	#endregion Player Tower Interface
 	
 	public bool LevelComplete(string levelDisplayName)
 	{

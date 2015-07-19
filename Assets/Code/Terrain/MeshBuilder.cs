@@ -16,8 +16,8 @@ public class MeshBuilder
 	{
 		DeduplicationCount = 0;
 		Vertices = new List<Vector3>();
-		SubMeshes = new List<List<int>>();
 		UV = new List<Vector2>();
+		SubMeshes = new List<List<int>>();
 		VertexLookup = new Dictionary<Vector3, int>();
 		UVLookup = new Dictionary<Vector3, Vector2>();
 		AddSubMesh();
@@ -67,6 +67,17 @@ public class MeshBuilder
 		mesh.RecalculateBounds();
 		TangentSolver.Solve2(mesh);
 		return mesh;
+	}
+
+	public void Clear()
+	{
+		DeduplicationCount = 0;
+		Vertices.Clear();
+		UV.Clear();
+		SubMeshes.Clear();
+		VertexLookup.Clear();
+		UVLookup.Clear();
+		AddSubMesh();
 	}
 
 	public string Summary()

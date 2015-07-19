@@ -12,7 +12,7 @@ namespace Settworks.Hexagons {
 	/// When converting to and from Unity coordinates, the length of a hexagon side is 1 unit.
 	/// </remarks>
 	[Serializable]
-	public struct HexCoord {
+	public struct HexCoord : IComparer<HexCoord>, IComparable {
 
 		public enum Layout : byte {
 			Horizontal,
@@ -60,6 +60,34 @@ namespace Settworks.Hexagons {
 		/// </remarks>
 		public int O {
 			get { return q + (r>>1); }
+		}
+
+		public int CompareTo(object obj)
+		{
+			if (obj == null)
+			{
+				return 1;
+			}
+
+			if (!(obj is HexCoord))
+			{
+				throw new ArgumentException("Object is not a HexCoord");
+			}
+
+			return Compare(this, (HexCoord)obj);
+		}
+
+		public int Compare(HexCoord x, HexCoord y)
+		{
+			if (x.q != y.q)
+			{
+				return x.q.CompareTo(y.q);
+			}
+			else if (x.r != y.r)
+			{
+				return x.r.CompareTo(y.r);
+			}
+			return 0;
 		}
 
 		/// <summary>

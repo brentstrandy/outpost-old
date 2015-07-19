@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 	{
 		get
 		{
-			if(instance == null)
+			if (instance == null)
 			{
 				instance = GameObject.FindObjectOfType<GameManager>();
 			}
@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
 	void Awake()
 	{
 		instance = this;
+		PhotonSerializer.Register();
 	}
 	#endregion
 	
