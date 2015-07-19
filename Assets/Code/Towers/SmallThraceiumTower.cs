@@ -22,6 +22,18 @@ public class SmallThraceiumTower : Tower
 		base.Update();
 	}
 
+	#region Special Effects
+	public override void InstantiateFire()
+	{
+		// Instantiate prefab for firing a shot
+		if (FiringEffect)
+		{
+			GameObject effect = Instantiate(FiringEffect, EmissionPoint.transform.position, EmissionPoint.transform.rotation) as GameObject;
+			effect.GetComponent<LaserFire>().Target = TargetedEnemy.transform;
+		}
+	}
+	#endregion Special Effects
+
 	#region MessageHandling
 	protected override void Log(string message)
 	{

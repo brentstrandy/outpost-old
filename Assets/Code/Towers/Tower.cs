@@ -18,6 +18,7 @@ public class Tower : MonoBehaviour
 	protected bool CanMove = false;
 	
 	public GameObject TurretPivot;
+	public GameObject EmissionPoint;
 
 	// Components
 	public HealthBarController HealthBar;
@@ -219,9 +220,9 @@ public class Tower : MonoBehaviour
 		TargetedEnemy.TakeDamage(TowerAttributes.BallisticDamage, TowerAttributes.ThraceiumDamage);
 		// Reset timer for tracking when to fire next
 		TimeLastShotFired = Time.time;
-		// Instantiate prefab for firing a shot
-		if(FiringEffect)
-			Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+
+		InstantiateFire();
+		InstantiateExplosion(); // TODO: Delay?
 
 		PlayerAnalytics.Instance.BallisticDamage += TowerAttributes.BallisticDamage;
 		PlayerAnalytics.Instance.ThraceiumDamage += TowerAttributes.ThraceiumDamage;
@@ -348,6 +349,34 @@ public class Tower : MonoBehaviour
 			}
 			
 			yield return 0;
+		}
+	}
+	#endregion
+
+	#region Special Effects
+	public virtual void InstantiateFire()
+	{
+		// Instantiate prefab for firing a shot
+		if (FiringEffect)
+		{
+			GameObject effect;
+			if (EmissionPoint)
+			{
+				effect = Instantiate(FiringEffect, EmissionPoint.transform.position, EmissionPoint.transform.rotation) as GameObject;
+			}
+			else
+			{
+				effect = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
+			}
+			effect.transform.LookAt(TargetedEnemy.gameObject.transform.position);
+		}
+	}
+
+	public virtual void InstantiateExplosion()
+	{
+		if (ExplodingEffect)
+		{
+			Instantiate(ExplodingEffect, TargetedEnemy.transform.position, TargetedEnemy.transform.rotation);
 		}
 	}
 	#endregion
