@@ -20,6 +20,21 @@ public class TowerData
     public float RateOfFire;
     public float Cooldown;
 	public float Range;
+	public float AdjustedRange
+	{
+		get
+		{
+			// Note from J.D.S 2015-07-20:
+			// This is used as a scaling factor for the tower range rings.
+			// I don't know why everything beyond size 1 is cut in half.
+			if (Range <= 1.0f)
+			{
+				return Range;
+			}
+
+			return 1.0f + ((Range - 1.0f) * 0.5f);
+		}
+	}
 	public float BallisticDamage;
     public float ThraceiumDamage;
 	public float BallisticDefense;

@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour
 	public GameObject PlacementTowerPrefab;
 
 	// Tower Selection
-	//private HexCoord SelectedTower;
+	public HexCoord SelectedTowerCoord { get; private set; }
 	
 	private Dictionary<string, string> LevelProgress;
 	
@@ -249,6 +249,26 @@ public class PlayerManager : MonoBehaviour
 		overlay.Color = PlayerColors.colors[PlayerColorIndex];
 		overlay.Show();
 
+		// Deselect the old tower
+		if (SelectedTowerCoord != coord)
+		{
+			GameObject previousTower;
+			if (GameManager.Instance.TowerManager.TryGetTower(SelectedTowerCoord, out previousTower))
+			{
+				previousTower.GetComponent<Tower>().OnDeselect();
+			}
+		}
+
+		// Update state
+		SelectedTowerCoord = coord;
+
+		// Select the new tower
+		GameObject selectedTower;
+		if (GameManager.Instance.TowerManager.TryGetTower(coord, out selectedTower))
+		{
+			selectedTower.GetComponent<Tower>().OnSelect();
+		}
+
 		// Tell all other players that this player has selected a tower
 		ObjPhotonView.RPC("SelectTowerAcrossNetwork", PhotonTargets.Others, coord);
 	}
@@ -276,6 +296,16 @@ public class PlayerManager : MonoBehaviour
 		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
 
 		overlay.Hide();
+		
+		// Deselect the old tower
+		GameObject selectedTower;
+		if (GameManager.Instance.TowerManager.TryGetTower(SelectedTowerCoord, out selectedTower))
+		{
+			selectedTower.GetComponent<Tower>().OnDeselect();
+		}
+
+		// Update state
+		SelectedTowerCoord = default(HexCoord);
 		
 		// Tell all other players that this player has deselected a tower
 		ObjPhotonView.RPC("SelectTowerAcrossNetwork", PhotonTargets.Others, default(HexCoord));
@@ -343,14 +373,8 @@ public class PlayerManager : MonoBehaviour
 		// Load the shell prefab to show
 		PlacementTowerPrefab = Instantiate(Resources.Load("Towers/" + towerData.PrefabName + "_Shell"), Vector3.zero, rotation) as GameObject;
 
-		float range;
-		if(PlacementTowerData.Range > 1)
-			range = 1 + ((PlacementTowerData.Range - 1) / 2);
-		else
-			range = PlacementTowerData.Range;
-
 		// Set the range based on player prefab
-		PlacementTowerPrefab.GetComponentInChildren<SpriteRenderer>().transform.localScale *= range;
+		PlacementTowerPrefab.GetComponentInChildren<SpriteRenderer>().transform.localScale *= towerData.AdjustedRange;
 	}
 
 	public void SetShellTowerPosition(Vector3 newPosition)

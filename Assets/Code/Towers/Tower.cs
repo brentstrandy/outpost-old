@@ -19,6 +19,7 @@ public class Tower : MonoBehaviour
 	
 	public GameObject TurretPivot;
 	public GameObject EmissionPoint;
+	public GameObject TowerRing;
 
 	// Components
 	public HealthBarController HealthBar;
@@ -48,6 +49,21 @@ public class Tower : MonoBehaviour
 
 		// Track the newly added tower in the TowerManager
 		GameManager.Instance.TowerManager.AddActiveTower(this);
+		
+		if (TowerRing != null)
+		{
+			TowerRing.transform.localScale *= TowerAttributes.AdjustedRange;
+
+			bool selected = (PlayerManager.Instance.SelectedTowerCoord == hexLocation.location);
+			if (selected)
+			{
+				OnSelect();
+			}
+			else
+			{
+				OnDeselect();
+			}
+		}
 	}
 
 	/// <summary>
@@ -380,7 +396,27 @@ public class Tower : MonoBehaviour
 		}
 	}
 	#endregion
-	
+
+	#region UI
+	public virtual void OnSelect()
+	{
+		//Log("Selected Tower");
+		if (TowerRing != null)
+		{
+			TowerRing.SetActive(true);
+		}
+	}
+
+	public virtual void OnDeselect()
+	{
+		//Log("Deselected Tower");
+		if (TowerRing != null)
+		{
+			TowerRing.SetActive(false);
+		}
+	}
+	#endregion UI
+
 	#region MESSAGE HANDLING
 	protected virtual void Log(string message)
 	{
