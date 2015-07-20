@@ -106,7 +106,15 @@ public class EMPOrb : MonoBehaviour
 			// Check to see if the Orb has reached its life span
 			if (duration > ExplosionDuration)
 			{
-				Destroy(this.gameObject);
+				var collider = GetComponent<SphereCollider>();
+				if (collider != null && collider.radius > 0.01f)
+				{
+					collider.radius = 0.0f;
+				}
+				else
+				{
+					Destroy(this.gameObject);
+				}
 			}
 		}
 	}
