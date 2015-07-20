@@ -26,6 +26,8 @@ public class HexMesh : MonoBehaviour
 	public float HighlightWidth = 0.1f;
 	public Color HighlightColor = Color.red;
 
+	public HashSet<HexCoord> Impassable = new HashSet<HexCoord>();
+
 	public HexMeshOverlaySet Overlays;
 
 	// Use this for initialization
@@ -231,6 +233,11 @@ public class HexMesh : MonoBehaviour
 				yield return coord;
 			}
 		}
+	}
+
+	public bool IsImpassable(HexCoord coord)
+	{
+		return Impassable.Contains(coord);
 	}
 	
 	private HexMeshBuilder CreateOverlayBuilder(float lineWidth)

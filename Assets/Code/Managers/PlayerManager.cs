@@ -119,30 +119,33 @@ public class PlayerManager : MonoBehaviour
 						// Make sure that there isn't an existing tower on the plot
 						if (!existing)
 						{
-							// Ensure towers cannot be repeatedly placed every frame
-							if (Time.time - LastTowerPlacementTime > 1)
+							if (!GameManager.Instance.TerrainMesh.IsImpassable(coord))
 							{
-								// Make sure the player has enough money to place the tower
-								if (this.Money >= PlacementTowerData.InstallCost)
+								// Ensure towers cannot be repeatedly placed every frame
+								if (Time.time - LastTowerPlacementTime > 1)
 								{
-									// FIXME: Tenatively place the tower but be prepared to roll back the change if the
-									//        master reports a conflict with another player's tower placement at the same
-									//        location at the same time
-									LastTowerPlacementTime = Time.time;
-									
-									// Charge the player for building the tower
-									this.Money -= PlacementTowerData.InstallCost;
-									
-									// Calculate the tower placement based on the clicked coordinate
-									//var position = terrain.IntersectPosition((Vector3)coord.Position());
-									
-									// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
-									ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, coord, SessionManager.Instance.AllocateNewViewID());
-								}
-								else
-								{
-									// This currently does not work. My intent is to display this message alongside the place where the player clicks
-									NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+									// Make sure the player has enough money to place the tower
+									if (this.Money >= PlacementTowerData.InstallCost)
+									{
+										// FIXME: Tenatively place the tower but be prepared to roll back the change if the
+										//        master reports a conflict with another player's tower placement at the same
+										//        location at the same time
+										LastTowerPlacementTime = Time.time;
+										
+										// Charge the player for building the tower
+										this.Money -= PlacementTowerData.InstallCost;
+										
+										// Calculate the tower placement based on the clicked coordinate
+										//var position = terrain.IntersectPosition((Vector3)coord.Position());
+										
+										// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
+										ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, coord, SessionManager.Instance.AllocateNewViewID());
+									}
+									else
+									{
+										// This currently does not work. My intent is to display this message alongside the place where the player clicks
+										NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+									}
 								}
 							}
 						}
