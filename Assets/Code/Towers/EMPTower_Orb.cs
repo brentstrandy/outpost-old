@@ -4,54 +4,104 @@ using System.Collections.Generic;
 
 public class EMPTower_Orb : MonoBehaviour
 {
-    public bool ShowDebugLogs = true;
+	public Transform Target;
+
+	public bool ShowDebugLogs = true;
+	public float ProjectileSpeed = 8.0f;
+	public float ExplosionSize = 3.0f;
+	public float ExplosionDuration = 1.0f;
+	public float DistortionDissipationStart = 0.6f;
 
 	private readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
-	private Vector3 TargetPosition;
 	private bool HitTarget = false;
 	private float StartTime;
-	private float MaxSize;
-	private float Speed;
-	private float Duration;
+	private float StartDistortion;
 
-	public void SetData(Vector3 targetPosition, float speed, float size, float duration)
+	public float ExplosionSpeed
 	{
-		TargetPosition = targetPosition;
-		this.transform.LookAt(targetPosition, Up);
-		Speed = speed;
-		MaxSize = size;
-		Duration = duration;
+		get
+		{
+			return ExplosionSize / ExplosionDuration;
+		}
+	}
+
+	public void SetData(float projectileSpeed, float explosionSize, float explosionDuration)
+	{
+		ProjectileSpeed = projectileSpeed;
+		ExplosionSize = explosionSize;
+		ExplosionDuration = explosionDuration;
 
 		//gameObject.GetComponent<Renderer>().material.SetColor("", PlayerManager.Instance.
 	}
 
 	// Update is called once per frame
-	void Update ()
+	void Update()
 	{
 		// Don't deal damage while flying through the air
-		if(!HitTarget)
+		if (!HitTarget)
 		{
 			// Check to see if the orb hit its target location
-			if(Vector3.Distance(this.transform.position, TargetPosition) <= 1)
+			if (Vector3.Distance(this.transform.position, Target.position) <= 0.1f)
 			{
 				// Expand the EMP and have it sit
 				HitTarget = true;
 				StartTime = Time.time;
+
+				var material = GetComponent<MeshRenderer>().material;
+				if (material != null)
+				{
+					StartDistortion = material.GetInt("_BumpAmt");
+				}
+
+				var particles = GetComponent<ParticleSystem>();
+				if (particles != null && !particles.isPlaying)
+				{
+					particles.Play();
+				}
 			}
 			else
 			{
-				this.transform.position += (this.transform.forward * Speed * Time.deltaTime);
+				float distanceTraveled = ProjectileSpeed * Time.deltaTime;
+				if (Vector3.Distance(this.transform.position, Target.position) < distanceTraveled)
+				{
+					// Stop at the target so that we don't go past it and fail to come within the contact threshold
+					// FIXME: What if the target also moves in the same frame, but after this projectile does?
+					this.transform.position = Target.position;
+				}
+				else
+				{
+					// Follow the target
+					this.transform.LookAt(Target.position, Up);
+					this.transform.position += this.transform.forward * distanceTraveled;
+				}
 			}
 		}
 		else
 		{
 			// EMP shot explodes when it hits the target
-			if(this.transform.localScale.magnitude <= MaxSize)
-				this.transform.localScale += (new Vector3(4, 4, 4) * Time.deltaTime);
+			this.transform.localScale += Vector3.one * ExplosionSpeed * Time.deltaTime;
+
+			float duration = Time.time - StartTime;
+			float completed = duration / ExplosionDuration;
+
+			// Dissipate the distortion effect linearly after we're through a certain amount of the effect.
+			if (completed > DistortionDissipationStart)
+			{
+				float dissipation = (completed - DistortionDissipationStart) / (1.0f - DistortionDissipationStart);
+				float distortion = Mathf.Lerp(StartDistortion, 0, dissipation);
+
+				var material = GetComponent<MeshRenderer>().material;
+				if (material != null)
+				{
+					material.SetInt("_BumpAmt", (int)distortion);
+				}
+			}
 
 			// Check to see if the Orb has reached its life span
-			if(Time.time - StartTime > Duration)
+			if (duration > ExplosionDuration)
+			{
 				Destroy(this.gameObject);
+			}
 		}
 	}
 
@@ -63,7 +113,7 @@ public class EMPTower_Orb : MonoBehaviour
             // Only enact EMP effects when the EMP shot explodes
             if (HitTarget)
             {
-                // Only effect Enemies
+                // Only affect Enemies
                 if (other.tag == "Enemy")
                 {
                     other.gameObject.GetComponent<Enemy>().Stunned(true);
@@ -80,7 +130,7 @@ public class EMPTower_Orb : MonoBehaviour
             // Only enact EMP effects when the EMP shot explodes
             if (HitTarget)
             {
-                // Only effect Enemies
+                // Only affect Enemies
                 if (other.tag == "Enemy")
                 {
                     // Set how long the enemy will be stunned once it exits the sphere.
