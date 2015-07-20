@@ -112,7 +112,8 @@ public class GameManager : MonoBehaviour
 		if(GameRunning)
 		{
 			// TO DO: This should not be checked every update loop. It can probably just be checked every 1-2 seconds
-			EndGameCheck();
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+				EndGameCheck();
 		}
 	}
 	
@@ -178,7 +179,8 @@ public class GameManager : MonoBehaviour
 		else if(ObjMiningFacility.Health <= 0)
 			EndGame_Loss();
 	}
-	
+
+	#region RPC CALLS
 	/// <summary>
 	/// Spawn's Enemy on all client machines.
 	/// An PunRPC option is needed in order to set the Enemy's default data AFTER being created
@@ -198,6 +200,39 @@ public class GameManager : MonoBehaviour
 		// The Prefab doesn't contain the correct default data. Set the Enemy's default data now
 		newEnemy.GetComponent<Enemy>().SetEnemyData(GameDataManager.Instance.FindEnemyDataByDisplayName(displayName));
 	}
+
+	[PunRPC]
+	private void EndGame_VictoryAcrossNetwork()
+	{
+		Victory = true;
+		GameRunning = false;
+		MenuManager.Instance.ShowVictoryMenu();
+		
+		// Save player progress (won level)
+		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, true, 10);
+		
+		PlayerAnalytics.Instance.GameLength = Time.time - LevelStartTime;
+		PlayerAnalytics.Instance.LastLevelReached = CurrentLevelData.LevelID;
+		// DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
+		//SendAnalytics()
+		//ResetLevelAnalytics();
+	}
+
+	[PunRPC]
+	private void EndGame_LossAcrossNetwork()
+	{
+		Victory = false;
+		GameRunning = false;
+		MenuManager.Instance.ShowLossMenu();
+		
+		// Save player progress (lost level)
+		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, false, 10);
+		
+		// DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
+		//SendAnalytics();
+		//ResetLevelAnalytics();
+	}
+	#endregion
 	
 	/// <summary>
 	/// Calculates the starting position of an enemy based on a given angle
@@ -217,18 +252,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void EndGame_Victory()
 	{
-		Victory = true;
-		GameRunning = false;
-		MenuManager.Instance.ShowVictoryMenu();
-
-		// Save player progress (won level)
-		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, true, 10);
-
-        PlayerAnalytics.Instance.GameLength = Time.time - LevelStartTime;
-        PlayerAnalytics.Instance.LastLevelReached = CurrentLevelData.LevelID;
-        // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
-        //SendAnalytics()
-        //ResetLevelAnalytics();
+		ObjPhotonView.RPC ("EndGame_VictoryAcrossNetwork", PhotonTargets.All, null);
 	}
 	
 	/// <summary>
@@ -236,16 +260,8 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void EndGame_Loss()
 	{
-		Victory = false;
-		GameRunning = false;
-		MenuManager.Instance.ShowLossMenu();
-
-		// Save player progress (lost level)
-		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, false, 10);
-
-        // DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
-        //SendAnalytics();
-        //ResetLevelAnalytics();
+		Log ("Ending game");
+		ObjPhotonView.RPC ("EndGame_LossAcrossNetwork", PhotonTargets.All, null);
 	}
 	
     // DO NOT activate until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
