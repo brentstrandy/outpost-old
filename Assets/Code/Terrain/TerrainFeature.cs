@@ -23,5 +23,7 @@ public class TerrainFeature : MonoBehaviour
 				}
 			}
 		}
+
+		// TODO: Adjust Z axis position so that the feature sits on the ground?
 	}
 }
