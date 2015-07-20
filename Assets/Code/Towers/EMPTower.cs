@@ -29,8 +29,8 @@ public class EMPTower : Tower
 		// Instantiate prefab for firing an orb
 		GameObject go = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
 		// Instantiate the orb
-		go.GetComponent<EMPTower_Orb>().Target = TargetedEnemy.transform;
-		//go.GetComponent<EMPTower_Orb>().SetData(3, 8, 3);
+		go.GetComponent<EMPOrb>().Target = TargetedEnemy.transform;
+		//go.GetComponent<EMPOrb>().SetData(3, 8, 3);
 	}
 
 	#region MessageHandling

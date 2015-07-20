@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class EMPTower_Orb : MonoBehaviour
+public class EMPOrb : MonoBehaviour
 {
 	public Transform Target;
 
