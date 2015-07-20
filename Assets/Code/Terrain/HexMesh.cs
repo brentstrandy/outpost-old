@@ -116,7 +116,7 @@ public class HexMesh : MonoBehaviour
 			Overlays.Clear();
 		}
 
-		Overlays.Add((int)TerrainOverlays.Outline, "TerrainOutline", "Particles/Additive", CreateOverlayBuilder(OutlineWidth));
+		Overlays.Add((int)TerrainOverlays.Outline, "TerrainOutline", "Standard", CreateOverlayBuilder(OutlineWidth));
 		Overlays.Add((int)TerrainOverlays.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth));
 		Overlays.Add((int)TerrainOverlays.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
 	}

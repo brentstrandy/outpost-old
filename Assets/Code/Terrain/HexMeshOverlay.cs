@@ -65,6 +65,7 @@ public class HexMeshOverlay
 			set
 			{
 				var material = Instance.GetComponent<MeshRenderer>().material;
+				material.SetColor("_MainTex", value);
 				material.SetColor("_Color", value);
 				material.SetColor("_TintColor", value);
 			}
