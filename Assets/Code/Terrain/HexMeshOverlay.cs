@@ -59,12 +59,12 @@ public class HexMeshOverlay
 		{
 			get
 			{
-				var material = Instance.GetComponent<MeshRenderer>().sharedMaterial;
+				var material = Instance.GetComponent<MeshRenderer>().material;
 				return material.GetColor("_Color");
 			}
 			set
 			{
-				var material = Instance.GetComponent<MeshRenderer>().sharedMaterial;
+				var material = Instance.GetComponent<MeshRenderer>().material;
 				material.SetColor("_Color", value);
 				material.SetColor("_TintColor", value);
 			}
