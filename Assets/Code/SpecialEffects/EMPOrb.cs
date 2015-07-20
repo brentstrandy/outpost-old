@@ -58,6 +58,12 @@ public class EMPOrb : MonoBehaviour
 				{
 					particles.Play();
 				}
+
+				var collider = GetComponent<SphereCollider>();
+				if (collider != null)
+				{
+					collider.enabled = true;
+				}
 			}
 			else
 			{
