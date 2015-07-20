@@ -58,6 +58,21 @@ public class LandDrone : Enemy
 		// Stop sending network updates for this object - it is dead
 		ObjPhotonView.ObservedComponents.Clear();
 	}
+	
+	#region Special Effects
+	public override void InstantiateFire()
+	{
+		// Instantiate prefab for firing a shot
+		if (FiringEffect)
+		{
+			GameObject effect = Instantiate(FiringEffect, EmissionPoint.transform.position, EmissionPoint.transform.rotation) as GameObject;
+			if (TargetedObjectToAttack != null)
+			{
+				effect.GetComponent<LaserFire>().Target = TargetedObjectToAttack.transform;
+			}
+		}
+	}
+	#endregion Special Effects
 
 	#region MessageHandling
 	protected override void Log(string message)

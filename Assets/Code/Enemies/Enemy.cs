@@ -24,23 +24,24 @@ public class Enemy : MonoBehaviour
 	
 	protected Quadrant CurrentQuadrant;
 	
-	protected Vector2 TargetHex;
-	public Vector3 Target
+	protected Vector2 DestinationHex;
+	public Vector3 Destination
 	{
 		get
 		{
-			var target = (Vector3)TargetHex;
+			var destination = (Vector3)DestinationHex;
 			if (GameManager.Instance.TerrainMesh != null )
 			{
-				target = GameManager.Instance.TerrainMesh.IntersectPosition(target, EnemyAttributes.HoverDistance);
+				destination = GameManager.Instance.TerrainMesh.IntersectPosition(destination, EnemyAttributes.HoverDistance);
 			}
-			return target;
+			return destination;
 		}
 	}
 
 	// Components
 	public HealthBarController HealthBar;
 	public GameObject TurretPivot;
+	public GameObject EmissionPoint;
 	protected PhotonView ObjPhotonView;
 	protected Pathfinder ObjPathfinder = null;
 	protected HexLocation ObjHexLocation = null;
@@ -113,7 +114,7 @@ public class Enemy : MonoBehaviour
 			ObjHexLocation.gridScale = 1;
 			ObjHexLocation.ApplyPosition();
 
-			TargetHex = ObjPathfinder.Next().Position();
+			DestinationHex = ObjPathfinder.Next().Position();
 		}
 		else
 		{
@@ -169,14 +170,14 @@ public class Enemy : MonoBehaviour
 					if(ObjPathfinder.Next() != ObjHexLocation.location)
 					{
 						// Check to see if the pathfinder is targetting a new hex in its path
-						if(TargetHex != ObjPathfinder.Next().Position())
+						if(DestinationHex != ObjPathfinder.Next().Position())
 						{
 							// Tell all players (including the MASTER CLIENT) that there is a new target hex
 							ObjPhotonView.RPC("UpdateEnemyTargetHex", PhotonTargets.All, ObjPathfinder.Next().Position());
 						}
 
 						// Slerp the Enemy's rotation to look at the new Hex location
-						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(Target - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
+						transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(Destination - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
 
 						// The enemy's current velocity is always the speed (during this pathfinding) - it does not use acceleration
 						CurVelocity = transform.forward * EnemyAttributes.Speed;
@@ -204,7 +205,7 @@ public class Enemy : MonoBehaviour
 				// Use pathfinding to predict movement
 				if(ObjPathfinder != null)
 				{
-					transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(Target - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
+					transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation(Destination - transform.position, Up), Time.deltaTime * EnemyAttributes.TurningSpeed );
 
 					// The enemy's current velocity is always the speed (during this pathfinding)
 					CurVelocity = transform.forward * EnemyAttributes.Speed;
@@ -356,9 +357,9 @@ public class Enemy : MonoBehaviour
 
 		// Reset timer for tracking when to fire next
 		TimeLastShotFired = Time.time;
-		// Instantiate prefab for firing a shot
-		if(FiringEffect)
-			Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+		
+		InstantiateFire();
+		InstantiateExplosion(); // TODO: Delay?
 	}
 
 	/// <summary>
@@ -396,7 +397,7 @@ public class Enemy : MonoBehaviour
 	[PunRPC]
 	protected void UpdateEnemyTargetHex(Vector2 newTargetHex)
 	{
-		TargetHex = newTargetHex;
+		DestinationHex = newTargetHex;
 	}
 
     /// <summary>
@@ -526,6 +527,37 @@ public class Enemy : MonoBehaviour
             }
 			
 			yield return 0;
+		}
+	}
+	#endregion
+	
+	#region Special Effects
+	public virtual void InstantiateFire()
+	{
+		// Instantiate prefab for firing a shot
+		if (FiringEffect)
+		{
+			GameObject effect;
+			if (EmissionPoint)
+			{
+				effect = Instantiate(FiringEffect, EmissionPoint.transform.position, EmissionPoint.transform.rotation) as GameObject;
+			}
+			else
+			{
+				effect = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
+			}
+			if (TargetedObjectToAttack != null)
+			{
+				effect.transform.LookAt(TargetedObjectToAttack.transform.position);
+			}
+		}
+	}
+	
+	public virtual void InstantiateExplosion()
+	{
+		if (ExplodingEffect && TargetedObjectToAttack)
+		{
+			Instantiate(ExplodingEffect, TargetedObjectToAttack.transform.position, TargetedObjectToAttack.transform.rotation);
 		}
 	}
 	#endregion
