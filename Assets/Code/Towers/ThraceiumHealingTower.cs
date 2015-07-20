@@ -46,7 +46,7 @@ public class ThraceiumHealingTower : Tower
 
 	}
 
-	protected virtual void OnTriggerStay(Collider other)
+	protected override void OnTriggerStay(Collider other)
 	{
 		if(ReadyToHeal)
 		{
