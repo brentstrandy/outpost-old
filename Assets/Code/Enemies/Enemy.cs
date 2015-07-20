@@ -407,7 +407,6 @@ public class Enemy : MonoBehaviour
     public virtual void StunnedAcrossNetwork(bool isStunned)
     {
         IsStunned = isStunned;
-        Log("StunnedAcrossNetwork(bool)");
     }
 
     /// <summary>
@@ -418,7 +417,6 @@ public class Enemy : MonoBehaviour
     {
         IsStunned = true; // redundancy
         StunEndTime = Time.time + stunDuration;
-        Log("StunnedAcrossNetwork(float)");
     }
 	#endregion
 

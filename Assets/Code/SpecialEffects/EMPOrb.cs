@@ -149,8 +149,6 @@ public class EMPOrb : MonoBehaviour
                 {
                     // Set how long the enemy will be stunned once it exits the sphere.
                     other.gameObject.GetComponent<Enemy>().Stunned(3f);
-                    
-                    Log("OnTriggerExit()");
                 }
             }
         }
