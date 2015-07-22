@@ -139,6 +139,9 @@ public class GameManager : MonoBehaviour
 		// We can now tell the NotificationManager to start showing notifications based on the previously loaded spawn data.
 		if(LevelNotificationDataManager != null)
 			StartCoroutine(NotificationManager.Instance.DisplayLevelNotifications(LevelNotificationDataManager.DataList));
+
+        // Initializes player stats for Analytics.
+        AnalyticsManager.Instance.InitializePlayerAnalytics();
 	}
 	
 	public void OnLevelWasLoaded(int level)
@@ -210,12 +213,10 @@ public class GameManager : MonoBehaviour
 		
 		// Save player progress (won level)
 		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, true, 10);
-		
-		PlayerAnalytics.Instance.GameLength = Time.time - LevelStartTime;
-		PlayerAnalytics.Instance.LastLevelReached = CurrentLevelData.LevelID;
-		// DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
+
+        // Analytics Manager
+        SaveAnalytics();
 		//SendAnalytics()
-		//ResetLevelAnalytics();
 	}
 
 	[PunRPC]
@@ -227,10 +228,11 @@ public class GameManager : MonoBehaviour
 		
 		// Save player progress (lost level)
 		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, false, 10);
-		
-		// DO NOT call SendAnalytics() until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
+
+        // Analytics Manager
+
+        SaveAnalytics();
 		//SendAnalytics();
-		//ResetLevelAnalytics();
 	}
 	#endregion
 	
@@ -263,31 +265,57 @@ public class GameManager : MonoBehaviour
 		Log ("Ending game");
 		ObjPhotonView.RPC ("EndGame_LossAcrossNetwork", PhotonTargets.All, null);
 	}
-	
-    // DO NOT activate until this message is gone. It will flood our analytics with unnecessary and unremovable data =(. Gracias!
-    private void SendAnalytics()
+
+    /// <summary>
+    /// Save the level's analytics.
+    /// </summary>
+    private void SaveAnalytics()
     {
-        //PlayerAnalytics.Instance.SendLevelStats();
-        //PlayerAnalytics.Instance.ResetLevelStats();
+        // All players save their personal analytics.
+        AnalyticsManager.Instance.SavePlayerAnalytics();
+
+        // If master client, save level anyltics.
+        if (AnalyticsManager.Instance.IsMaster)
+            AnalyticsManager.Instance.SaveSessionAnalytics();
     }
 
-    // Reset the PlayerAnalytics relevant to the ending of a game
+    /// <summary>
+    /// Send the level's analytics.
+    /// </summary>
+    private void SendAnalytics()
+    {
+        // Each player sends their personal analytics.
+        //AnalyticsManager.Instance.SendPlayerAnalytics();
+
+        // If master client, send level anyltics.
+        if (AnalyticsManager.Instance.IsMaster)
+        {
+            //AnalyticsManager.Instance.SendLevelAnalytics();
+            
+            //ResetLevelAnalytics();
+        }
+    }
+
+    /// <summary>
+    /// Reset the AnalyticsManager relevant to the ending of a game
+    /// </summary>
     private void ResetLevelAnalytics()
     {
-        PlayerAnalytics.Instance.ResetLevelStats();
+        AnalyticsManager.Instance.ResetLevelAnalytics();
     }
 
 	#region EVENTS
 	private void OnSwitchMaster(PhotonPlayer player)
 	{
-		// TODO -- Analytics -- indicate who the master client is (they will send the global data for the game)
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+            AnalyticsManager.Instance.IsMaster = true;
 	}
-	
+
 	private void OnPlayerLeft(PhotonPlayer player)
 	{
-        PlayerAnalytics.Instance.PlayerCountChanged = true;
-	}
-	
+        AnalyticsManager.Instance.PlayerCountChanged = true;
+    }
+
 	private void OnCameraQuadrantChanged(string direction)
 	{
 		Quadrant newQuadrant = Quadrant.North;
@@ -324,7 +352,7 @@ public class GameManager : MonoBehaviour
 		
 		return quadrant;
 	}
-	
+
 	private Quadrant GetNextCounterClockwiseQuadrant()
 	{
 		Quadrant quadrant = PlayerManager.Instance.CurrentQuadrant;

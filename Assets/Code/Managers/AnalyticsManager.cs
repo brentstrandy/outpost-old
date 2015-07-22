@@ -9,10 +9,21 @@ using System.Collections.Generic;
 /// A collection of analytics for the player and game
 /// Owner: John Fitzgerald
 /// </summary>
-public class PlayerAnalytics : MonoBehaviour
+public class AnalyticsManager : MonoBehaviour
 {
-    private static PlayerAnalytics instance;
+    private static AnalyticsManager instance;
     public bool ShowDebugLogs = true;
+
+    // Send all the level stats to the Unity Analaytics server.
+    // *************************************************
+    //http://docs.unity3d.com/Manual/UnityAnalyticsCustomAttributes51.html
+    // *************************************************
+    //                      RULES
+    // Limit 10 paramters per "CustomEvent",
+    // Limit 500 characters for the dictionary content,
+    // Limit 100 "CustomEvent"s per hour (per user),
+    // Only strings and booleans are categorizable.
+    // *************************************************
 
     /// <summary>
     ///         GENERAL RULES:
@@ -34,11 +45,12 @@ public class PlayerAnalytics : MonoBehaviour
 
     //[PLAYER]
     public string PlayerName;//Name derived from (Player.Instance.Name)
-    public float PlayerIncome;//Avg total income per player
+    public float PlayerMoney;//Total income per player
+    public float PlayerMoney_Average;//Average of all the players' income
     public bool IsMaster = false;//Indicate if the player is the master client (they will send the global data)
 
     //[LEVEL]
-    public int LastLevelReached = 1;//Avg last level reached.
+    public int LastLevelReached = 0;//Avg last level reached.
     public int PlayerCount;//Playercount at the beginning of a level.
     public bool PlayerCountChanged;//indicates if the player count has changed since the beginning of a level.
     //public int CurrentLevelNumber;//Copy of LevelID?
@@ -53,19 +65,19 @@ public class PlayerAnalytics : MonoBehaviour
     //public List<float> totalThraceiumDamage;//Avg total thracium damage
 
     //[TOWERS]
-    // TODO: change to an array
+    // TODO -- change to an array
     public int NumberBuilt_Tower;//# of towers built for each type
     public float DPS_Tower;//Avg DPS for each tower
     public float LifeSpan_Tower;//Avg lifespan for each tower
     public float DistanceFromCenter_Tower;//Avg distance from center for each tower type
     public float DistanceFromTower_Tower;//Avg distance from other tower
-    //TODO
+    //TODO --
     //&[]Percentage of time the towers are on () (SINGLE)
-    //TODO
+    //TODO --
     //ADD A HEAT MAP (or collect data to create one -- "Unity Heat Map Tool")
 
     //[ENEMIES]
-    // TODO: change to an array
+    // TODO -- change to an array
     public int NumberOfSpawns_Enemy;//# of spawns for each enemy type
     public float TotalDamage_Enemy;//Total damage for each enemy type
     public float DPS_Enemy;//Avg DPS for each enemy type
@@ -80,13 +92,13 @@ public class PlayerAnalytics : MonoBehaviour
     /// Singleton - There can only be one
     /// </summary>
     /// <value>The instance.</value>
-    public static PlayerAnalytics Instance
+    public static AnalyticsManager Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = GameObject.FindObjectOfType<PlayerAnalytics>();
+                instance = GameObject.FindObjectOfType<AnalyticsManager>();
             }
 
             return instance;
@@ -99,8 +111,10 @@ public class PlayerAnalytics : MonoBehaviour
     }
     #endregion
 
-    #region TODO (FITZGERALD)
-    // Used for TowerResult()
+    #region TODO -- (FITZGERALD)
+    /// <summary>
+    /// Used for TowerResult()
+    /// </summary>
     private struct TowerAnalytics
     {
         //public TowerAnalytics()
@@ -109,7 +123,9 @@ public class PlayerAnalytics : MonoBehaviour
         //}
     }
 
-    // Used for EnemyResult()
+    /// <summary>
+    /// Used for EnemyResult()
+    /// </summary>
     private struct EnemyAnalytics
     {
         //public EnemyAnalytics()
@@ -119,100 +135,127 @@ public class PlayerAnalytics : MonoBehaviour
     }
     #endregion
 
-    // Called at the beginning of each level
-    public void InitializePlayerStats()
+    #region PUBLIC FUNCTIONS
+    /// <summary>
+    /// Called at the beginning of each level
+    /// </summary>
+    public void InitializePlayerAnalytics()
     {
         PlayerName =  PlayerManager.Instance.Name;
 
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
             IsMaster = true;
     }
-
-    // Send all the level stats to the Unity Analaytics server.
-    // *************************************************
-    //http://docs.unity3d.com/Manual/UnityAnalyticsCustomAttributes51.html
-    // *************************************************
-    //                      RULES
-    // Limit 10 paramters per "CustomEvent",
-    // Limit 500 characters for the dictionary content,
-    // Limit 100 "CustomEvent"s per hour (per user),
-    // Only strings and booleans are categorizable.
-    // *************************************************
-    public void SendLevelStats()
+    
+    /// <summary>
+    /// Save player analytics (called at end of game).
+    /// </summary>
+    public void SavePlayerAnalytics()
     {
-        LevelID = GameManager.Instance.CurrentLevelData.LevelID;//GetCurrentLevelNumber();
+        PlayerMoney = PlayerManager.Instance.Money;
+    }
+
+    /// <summary>
+    /// Player stats sent at the end of a game.
+    /// </summary>
+    public void SendPlayerAnalytics()
+    {
+        PlayerAnalytics_Send();
+    }
+
+    /// <summary>
+    /// Save session analytics.
+    /// </summary>
+    public void SaveSessionAnalytics()
+    {
+        GameLength = Time.time - GameManager.Instance.LevelStartTime;
+        LevelID = GameManager.Instance.CurrentLevelData.LevelID;
+        LastLevelReached = GameManager.Instance.CurrentLevelData.LevelID;
         
-        // TODO -- indicate that the player count changed at some point during the game
-        if (PlayerCountChanged)
-        {
-            //changes in GameManager.Instace.OnPlayerLeft()
-        }
-        else
-            PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
+        PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
+        //if (PlayerCountChanged)
+        //{
+        //    //changes in GameManager.Instace.OnPlayerLeft()
+        //}
+        //else
+        //    PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
+
+        // TODO -- Analytics -- discard Analytics because player count changed, or create subgroup of "player dropped" data (refer to Justin).
+        //if (AnalyticsManager.Instance.PlayerCountChanged)
+
+        // TODO -- average all of the players' money
+        //AnalyticsManager.Instance.PLayerIncome_Average =;
 
         // TODO -- figure out which variables to store (dependent on if they're ALL or SINGLE)
         //TowerAnalytics towarAnalytics = new TowerAnalytics();
         //EnemyAnalytics enemyAnalytics = new EnemyAnalytics();
-
-        // TODO: should this get called when the player loses? Seems like a waste to send at the end of every game.
-        LevelResult();
-        DamageResult();
-
-        #region TODO: everything in this region
-        //TowerResult();
-        //EnemyResult();
-        //MoneyResult();//changed to PlayerStats()
-        //MiscellaneousResult();
-        #endregion
     }
 
-    // 
-    public void SendPlayerStats()
+    /// <summary>
+    /// Public call to send session analytics.
+    /// </summary>
+    public void SendSessionAnalytics()
     {
-        PlayerResult();
+        LevelAnalytics_Send();
+        DamageAnalytics_Send();
+        TowerAnalytics_Send();
+        DamageAnalytics_Send();
+        MiscellaneousAnalytics_Send();
+        InitialAnalytics_Send();
     }
+    #endregion
 
-    // Resets all variables (used for a soft restart)
-    public void ResetEverything()
-    {
-        ResetLevelStats();
-        ResetPlayerStats();
-
-        LastLevelReached = 1;
-    }
-
-    // Resets variables that accumulate in a single level
-    public void ResetLevelStats()
+    #region RESET ANALYTICS
+    /// <summary>
+    /// Resets variables that accumulate in a single level
+    /// </summary>
+    public void ResetLevelAnalytics()
     {
         BallisticDamage = 0;
         ThraceiumDamage = 0;
         GameLength = 0;
         PlayerCount = 0;
         PlayerCountChanged = false;
+        LastLevelReached = 1;
     }
-    
-    // Resets variables that the only pertain to the Player
-    public void ResetPlayerStats()
+
+    /// <summary>
+    /// Resets variables that the only pertain to the Player 
+    /// </summary>
+    public void ResetPlayerAnalytics()
     {
         // TODO -- account for the possibility the player changes his/her name?
-        PlayerIncome = 0;
+        PlayerMoney = 0;
         IsMaster = false;
     }
 
-    // [PLAYER] Player's stats
-    private void PlayerResult()
+    /// <summary>
+    /// Resets all variables (used for a soft restart)
+    /// </summary>
+    public void ResetAllAnalytics()
     {
-        PlayerIncome = PlayerManager.Instance.Money; // Amount of money at the end of the match
+        ResetLevelAnalytics();
+        ResetPlayerAnalytics();
+    }
+    #endregion
 
+    #region SEND ANALYTICS
+    /// <summary>
+    /// [PLAYER] Player's stats
+    /// </summary>
+    private void PlayerAnalytics_Send()
+    {
         Analytics.CustomEvent("PlayerStats", new Dictionary<string, object>
         {
-            {"PlayerIncome", PlayerIncome},
-            {"PlayerName", PlayerManager.Instance.Name}
+            {"PlayerName", PlayerManager.Instance.Name},
+            {"PlayerIncome", PlayerMoney}
         });
     }
 
-    // [LEVEL] Player's last level reached and the amount of players participating.
-    private void LevelResult()
+    /// <summary>
+    /// [LEVEL] Player's last level reached and the amount of players participating.
+    /// </summary>
+    private void LevelAnalytics_Send()
     {
         Analytics.CustomEvent("LastLevelReached_Event", new Dictionary<string, object>
         {
@@ -225,8 +268,10 @@ public class PlayerAnalytics : MonoBehaviour
         });
     }
 
-    // [DAMAGE] Level's total ballistic and thraceium damage dealt by player.
-    private void DamageResult()
+    /// <summary>
+    /// [DAMAGE] Level's total ballistic and thraceium damage dealt by player.
+    /// </summary>
+    private void DamageAnalytics_Send()
     {
         Analytics.CustomEvent("TotalLevelDamage_Event", new Dictionary<string, object>
         {
@@ -237,9 +282,19 @@ public class PlayerAnalytics : MonoBehaviour
         });
     }
 
-    #region TODO (FITZGERALD)
+    /// <summary>
+    /// Optional stats for Analytics.
+    /// </summary>
+    private void InitialAnalytics_Send()
+    {
+        //Analytics.SetUserBirthYear(1986);
+        //Analytics.SetUserGender(0);
+        //Analytics.SetUserId("ID Number");
+    }
+
+    #region TODO -- (FITZGERALD)
     // [TOWERS] 
-    private void TowerResult()
+    private void TowerAnalytics_Send()
     {
         Analytics.CustomEvent("TowerData_Event", new Dictionary<string, object>
         {
@@ -252,7 +307,7 @@ public class PlayerAnalytics : MonoBehaviour
     }
 
     // [ENEMIES] 
-    private void EnemyResult()
+    private void EnemyAnalytics_Send()
     {
         Analytics.CustomEvent("EnemyData_Event", new Dictionary<string, object>
         {
@@ -263,18 +318,9 @@ public class PlayerAnalytics : MonoBehaviour
         });
     }
 
-    //// [MONEY] 
-    //private void MoneyResult()
-    //{
-    //    Analytics.CustomEvent("MoneyData_Event", new Dictionary<string, object>
-    //    {
-    //        {"PlayerIncome", PlayerIncome}
-    //    });
-    //}
-
-    // TODO: Fix naming for these variables ("Miscellaneous" will not work)
+    // TODO -- Fix naming for these variables ("Miscellaneous" will not work)
     // [MISCELLANEOUS] 
-    private void MiscellaneousResult()
+    private void MiscellaneousAnalytics_Send()
     {
         Analytics.CustomEvent("Miscellaneous_Event", new Dictionary<string, object>
         {
@@ -284,43 +330,20 @@ public class PlayerAnalytics : MonoBehaviour
     }
     #endregion
 
-    // Optional stats for game.
-    private void SendInitialStats()
-    {
-        //Analytics.SetUserBirthYear(1986);
-        //Analytics.SetUserGender(0);
-        //Analytics.SetUserId("ID Number");
-    }
 
-    //// Determines the player's current level number based on the level's Display Name (must contain a digit).
-    //private int GetCurrentLevelNumber()
-    //{
-    //    int tempLevelNumber;
-    //    string tempLevelName = GameManager.Instance.CurrentLevelData.DisplayName;
-
-    //    tempLevelName = tempLevelName.Substring(tempLevelName.IndexOf(" ") + 1); ;
-    //    bool validNumber = Int32.TryParse(tempLevelName, out tempLevelNumber);
-
-    //    if (validNumber)
-    //        return tempLevelNumber;
-    //    else
-    //    {
-    //        LogError("Invalid Level Number");
-    //        return 0;
-    //    }
-    //}
+    #endregion
 
     #region MessageHandling
     protected void Log(string message)
     {
         if (ShowDebugLogs)
-            Debug.Log("[PlayerAnalytics] " + message);
+            Debug.Log("[AnalyticsManager] " + message);
     }
 
     protected void LogError(string message)
     {
         if (ShowDebugLogs)
-            Debug.LogError("[PlayerAnalytics] " + message);
+            Debug.LogError("[AnalyticsManager] " + message);
     }
     #endregion
 }

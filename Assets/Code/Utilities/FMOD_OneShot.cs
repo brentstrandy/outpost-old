@@ -18,7 +18,7 @@ public class FMOD_OneShot : MonoBehaviour
 
     public void Play_OneShot()
     {
-        // TODO: simultaenous calls to same prefab cause audio cut off -- find work around
+        // TODO -- simultaenous calls to same prefab cause audio cut off -- find work around
         FMOD_StudioSystem.instance.PlayOneShot("event:/" + FMODEventName, Position);
     }
 

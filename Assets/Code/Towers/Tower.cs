@@ -240,8 +240,8 @@ public class Tower : MonoBehaviour
 		InstantiateFire();
 		InstantiateExplosion(); // TODO: Delay?
 
-		PlayerAnalytics.Instance.BallisticDamage += TowerAttributes.BallisticDamage;
-		PlayerAnalytics.Instance.ThraceiumDamage += TowerAttributes.ThraceiumDamage;
+		AnalyticsManager.Instance.BallisticDamage += TowerAttributes.BallisticDamage;
+		AnalyticsManager.Instance.ThraceiumDamage += TowerAttributes.ThraceiumDamage;
 	}
 
 	/// <summary>
