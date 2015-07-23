@@ -323,7 +323,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// </summary>
 	private void RefreshRoomDetails()
 	{
-		RoomTitle_GUIText.GetComponent<Text>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
+		RoomTitle_GUIText.GetComponent<Text>().text = SessionManager.Instance.GetCurrentRoomInfo().name.Substring(0, SessionManager.Instance.GetCurrentRoomInfo().name.IndexOf("("));;
 	}
 
 	/// <summary>

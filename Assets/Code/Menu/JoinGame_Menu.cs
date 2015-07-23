@@ -80,11 +80,11 @@ public class JoinGame_Menu : MonoBehaviour
 		{
 			// Instantiate row for each room and add it as a child of the JoinGame UI Panel
 			GameObject obj = Instantiate(RoomDetailsGUI_Prefab) as GameObject;
-			obj.GetComponentInChildren<Text>().text = room.name;
-			obj.GetComponent<Button>().onClick.AddListener(() => JoinRoom_Click(obj.GetComponentInChildren<Text>().text));
+			obj.GetComponentInChildren<Text>().text = room.name.Substring(0, room.name.IndexOf("("));
+			obj.GetComponent<Button>().onClick.AddListener(delegate { JoinRoom_Click(room.name); });
 			obj.transform.SetParent(this.transform);
 			obj.transform.localScale = new Vector3(1, 1, 1);
-			obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -70 + (-35 * index));
+			obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100 + (-35 * index));
 			obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
 			obj.transform.rotation = new Quaternion(0, 0, 0, 0);
 
@@ -113,8 +113,7 @@ public class JoinGame_Menu : MonoBehaviour
 	
 	protected void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[JoinGame_Menu] " + message);
+		Debug.LogError("[JoinGame_Menu] " + message);
 	}
 	#endregion
 }
