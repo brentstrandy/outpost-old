@@ -38,12 +38,6 @@ public class NotificationData
 		Position = position;
 	}
 
-	public NotificationData(string empty)
-	{
-		NotificationTitle = "";
-		NotificationText = "";
-	}
-
     #region MessageHandling
     protected void Log(string message)
     {

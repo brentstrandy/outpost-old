@@ -308,7 +308,10 @@ public class Tower : MonoBehaviour
 		// Instantiate a prefab to show the tower exploding
 		if(ExplodingEffect)
 			Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
-		
+
+		// Inform the player that a tower has been destroyed
+		NotificationManager.Instance.DisplayNotification(new NotificationData("Tower Destroyed", this.TowerAttributes.DisplayName + " was destroyed", "QuickInfo"));
+
 		// Tell the enemy manager this enemy is being destroyed
 		GameManager.Instance.TowerManager.RemoveActiveTower(this);
 
