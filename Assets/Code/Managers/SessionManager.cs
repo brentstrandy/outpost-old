@@ -263,6 +263,15 @@ public class SessionManager : MonoBehaviour
 	{
 		PhotonNetwork.Destroy(obj);
 	}
+
+	/// <summary>
+	/// Closes the connection of a player - KICK/BOOT player from the room. Only the Master Client can do this
+	/// </summary>
+	/// <param name="player">Player.</param>
+	public void KickPlayer(PhotonPlayer player)
+	{
+		PhotonNetwork.CloseConnection(player);
+	}
 	#endregion
 
 	#region INFORMATION

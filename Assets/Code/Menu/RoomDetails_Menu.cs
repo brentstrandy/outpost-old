@@ -53,6 +53,7 @@ public class RoomDetails_Menu : MonoBehaviour
 		// so that they are not triggered erroneously)
 		SessionManager.Instance.OnSMPlayerJoinedRoom += PlayerJoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerLeftRoom += PlayerLeftRoom_Event;
+		SessionManager.Instance.OnSMLeftRoom += KickedFromRoom_Event;
 		
 		// Immediately refresh the player name list to show the host
 		RefreshPlayerNames();
@@ -191,6 +192,11 @@ public class RoomDetails_Menu : MonoBehaviour
 		// Update whether or not the start button is enabled based on the current number of players in the room
 		RefreshStartGameButton();
     }
+
+	public void KickPlayerButton_Click(PhotonPlayer player)
+	{
+		SessionManager.Instance.KickPlayer(player);
+	}
 	#endregion
 	
 	#region EVENTS
@@ -227,6 +233,16 @@ public class RoomDetails_Menu : MonoBehaviour
 		
 		// Update whether or not the start button is enabled based on the current number of players in the room
 		RefreshStartGameButton();
+	}
+
+	/// <summary>
+	/// Event Listener that is triggered when the player is kicked from the room
+	/// This can only happen to clients
+	/// </summary>
+	private void KickedFromRoom_Event()
+	{
+		// Tell the MenuManager to transition back to the main menu
+		MenuManager.Instance.ShowMainMenu();
 	}
 	#endregion
 
@@ -293,13 +309,31 @@ public class RoomDetails_Menu : MonoBehaviour
 		{
 			if(playerList.Length > i)
 			{
-				PlayerName_GUIText[i].GetComponent<Text>().text = playerList[i].name;
-				//PlayerName_GUIText[i].GetComponent<Text>().material.color = PlayerColors.colors[(int)playerList[i].customProperties["PlayerColorIndex"]];
+				// Create a local variable or else the foreach "AddListener" will use a reference to the PhotonPLayer's last reference
+				// and will not use unique PhotonPlayers for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)
+				PhotonPlayer pp = playerList[i];
+				PlayerName_GUIText[i].GetComponent<Text>().text = pp.name;
+
+				// Master Client can kick players
+				if(SessionManager.Instance.GetPlayerInfo().isMasterClient && pp.name != PlayerManager.Instance.Name)
+				{
+					// Need to use "GetChild" because the Child's Component has been set to inactive and is not searchable with "GetComponentInChildren"
+					PlayerName_GUIText[i].transform.GetChild(0).gameObject.SetActive(true);
+					PlayerName_GUIText[i].GetComponentInChildren<Button>().onClick.AddListener(delegate { KickPlayerButton_Click(pp); });
+				}
+				else
+				{
+					// Need to use "GetChild" because the Child's Component has been set to inactive and is not searchable with "GetComponentInChildren"
+					// Need to activate the child so that the listeners can be removed (new listeners will be added when the GO is activated
+					PlayerName_GUIText[i].transform.GetChild(0).gameObject.SetActive(true);
+					PlayerName_GUIText[i].GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+					PlayerName_GUIText[i].transform.GetChild(0).gameObject.SetActive(false);
+				}
 			}
 			else
 			{
 				PlayerName_GUIText[i].GetComponent<Text>().text = "<OPEN>";
-				//PlayerName_GUIText[i].GetComponent<Text>().material.color = Color.White;
+				PlayerName_GUIText[i].transform.GetChild(0).gameObject.SetActive(false);
 			}
 		}
 	}
