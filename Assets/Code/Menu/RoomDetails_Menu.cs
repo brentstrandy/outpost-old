@@ -9,7 +9,7 @@ public class RoomDetails_Menu : MonoBehaviour
 
 	// Handles to GUI objects
 	public GameObject[] PlayerName_GUIText;
-	public GameObject RoomTitle_GUIInput;
+	public GameObject RoomTitle_GUIText;
 	public GameObject Chat_GUIText;
 	public GameObject SendChat_GUIInput;
 	public GameObject StartGame_GUIButton;
@@ -62,20 +62,18 @@ public class RoomDetails_Menu : MonoBehaviour
 		
 		// Add Level Buttons for each Level (this needs to be done before the tower buttons because the towers depend on the LevelData)
 		InitiateLevelButtons();
-		
-		// Add Tower Butttons for each Tower
-		RefreshTowerButtons();
+
+		// The towers are automatically refreshed when the level buttons are initiated
+		//RefreshTowerButtons();
 		
 		// See if the player is currently the room owner or just joining
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			RoomTitle_GUIInput.GetComponent<InputField>().enabled = true;
 			StartGame_GUIButton.SetActive(true);
 			SessionManager.Instance.SetRoomVisibility(true);
 		}
 		else
 		{
-			RoomTitle_GUIInput.GetComponent<InputField>().enabled = false;
 			StartGame_GUIButton.SetActive(false);
 		}
 	}
@@ -123,14 +121,6 @@ public class RoomDetails_Menu : MonoBehaviour
 		MenuManager.Instance.ShowMainMenu();
 	}
 
-	// I don't think I want this (Brent Strandy 2/19/15)
-	public void RoomTitle_AfterUpdate()
-	{
-		// Set the custom properties of a room
-		//Room.SetCustomProperties(Hashtable propertiesToSet);
-		SessionManager.Instance.GetCurrentRoomInfo().name = RoomTitle_GUIInput.GetComponent<InputField>().text;
-	}
-
 	/// <summary>
 	/// Used by the GUI system to send a chat message to all clients when the Send button is pressed
 	/// </summary>
@@ -153,11 +143,13 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// <param name="towerData">Tower data.</param>
 	public void TowerButton_Click(GameObject towerButton, TowerData towerData)
 	{
-		// If the toggle was turned off, then remove it from the Loadout
-		if(towerButton.GetComponent<Toggle>().isOn == false)
+		if(towerButton.GetComponent<TowerButton>().Selected)
 		{
 			SelectedTowerButtonList.Remove(towerButton);
 			TowerLoadoutData.Remove(towerData);
+
+			// Tell the button to unselect itself
+			towerButton.GetComponent<TowerButton>().UnselectTower();
 		}
 		else
 		{
@@ -165,38 +157,39 @@ public class RoomDetails_Menu : MonoBehaviour
 			SelectedTowerButtonList.Add(towerButton);
 			TowerLoadoutData.Add(towerData);
 
-			//if(SelectedTowerButtonList.Count > LevelLoadoutData.MaxTowersPerPlayer)
-			//{
-				// Untoggle the last selected tower (This will trigger the event to call this function again)
-			//	SelectedTowerButtonList[0].GetComponent<Toggle>().isOn = false;
-			//}
+			// Tell the button to select itself
+			towerButton.GetComponent<TowerButton>().SelectTower();
 		}
 	}
 
     /// <summary>
     /// Click event called when the player selects a level within this menu
     /// </summary>	
-    public void LevelButton_Click(GameObject levelButton, LevelData levelData)
+    //public void LevelButton_Click(GameObject levelButton, LevelData levelData)
+	private void LevelButton_Click(GameObject levelButton, LevelData levelData)
     {
-		// Whenever the toggle is TRUE that means the toggle has JUST been changed to true.
-		if(levelButton.GetComponent<Toggle>().isOn == true)
-		{
-			// Tell all other clients that a new level has been selected
-			ObjPhotonView.RPC("NewLevelSelected", PhotonTargets.Others, levelData.DisplayName);
+		// Unselect the previous level (if there was a previously selected level)
+		if(LevelLoadoutSelection != null)
+			LevelLoadoutSelection.GetComponent<LevelButton>().UnselectLevel();
 
-            // Sets level to be loaded
-            LevelLoadoutData = levelData;
-            LevelSelected = true;
+		// Updates currently selected level
+		LevelLoadoutSelection = levelButton;
 
-			// Updates currently toggled-on button
-			LevelLoadoutSelection = levelButton;
+		// Tell the button to select itself
+		LevelLoadoutSelection.GetComponent<LevelButton>().SelectLevel();
 
-			// Update the available Towers to choose from
-			RefreshTowerButtons();
+		// Tell all other clients that a new level has been selected
+		ObjPhotonView.RPC("NewLevelSelected", PhotonTargets.Others, levelData.DisplayName);
 
-			// Update whether or not the start button is enabled based on the current number of players in the room
-			RefreshStartGameButton();
-        }
+		// Sets level to be loaded
+		LevelLoadoutData = levelData;
+		LevelSelected = true;
+
+		// Update the available Towers to choose from
+		RefreshTowerButtons();
+		
+		// Update whether or not the start button is enabled based on the current number of players in the room
+		RefreshStartGameButton();
     }
 	#endregion
 	
@@ -267,6 +260,7 @@ public class RoomDetails_Menu : MonoBehaviour
 
 		// Refresh the list of Towers regardless if LevelData can be found. The tower buttons will handle missing data
 		LevelLoadoutData = levelData;
+
 		RefreshTowerButtons();
 	}
 
@@ -329,7 +323,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	/// </summary>
 	private void RefreshRoomDetails()
 	{
-		RoomTitle_GUIInput.GetComponent<InputField>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
+		RoomTitle_GUIText.GetComponent<Text>().text = SessionManager.Instance.GetCurrentRoomInfo().name;
 	}
 
 	/// <summary>
@@ -370,6 +364,7 @@ public class RoomDetails_Menu : MonoBehaviour
 		// Delete all previously created buttons (and their associated data
 		foreach(GameObject button in TowerButtonList)
 			Destroy (button);
+
 		TowerButtonList.Clear();
 		SelectedTowerButtonList.Clear();
 		TowerLoadoutData.Clear();
@@ -384,19 +379,15 @@ public class RoomDetails_Menu : MonoBehaviour
 					// Create a local variable or else the foreach "AddListener" will use a reference to the foreach towerdata's last reference
 					// and will not use unique towerData's for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)
 					TowerData td = towerData;
+
 					// Instantiate a button for each tower
+					GameObject obj = Instantiate(Resources.Load("GUI/GUI_TowerDetails")) as GameObject;
 
-					GameObject obj = Instantiate(Resources.Load("GUI_TowerDetails")) as GameObject;
-                    
-                    //remove " Tower" from end of towerDisplayName (helps with GUI spacing)
-                    int stringIndex = towerData.DisplayName.IndexOf(" Tower");
-                    string displayName = stringIndex != -1 ? towerData.DisplayName.Remove(stringIndex) : towerData.DisplayName;
-
-                    obj.GetComponentInChildren<Text>().text = displayName + " ($" + towerData.InstallCost.ToString() + ")";
-					obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate{TowerButton_Click(obj, td);});
+					obj.GetComponent<TowerButton>().SetTowerData(td);
+					obj.GetComponent<Button>().onClick.AddListener(delegate { TowerButton_Click(obj, td); });
 					obj.transform.SetParent(this.transform);
 					obj.transform.localScale = new Vector3(1, 1, 1);
-					obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(180 + (110 * index), 50);
+					obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0 + (128 * index), 200);
 					obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
 					obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
 					obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
@@ -407,9 +398,7 @@ public class RoomDetails_Menu : MonoBehaviour
 
 					// Select the first X towers by default
 					if(index < LevelLoadoutData.MaxTowersPerPlayer)
-						obj.GetComponent<Toggle>().isOn = true;
-					else
-						obj.GetComponent<Toggle>().isOn = false;
+						TowerButton_Click(obj, td);
 
 					index++;
 				}
@@ -430,43 +419,29 @@ public class RoomDetails_Menu : MonoBehaviour
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
 			int index = 0;
-			string levelDescription = "";
 			bool previousLevelComplete = true;
-			
-			// Create a toggle group to grop all the toggles and automatically enforce only one selection
-			GameObject toggleGroup = new GameObject();
-			toggleGroup.AddComponent<ToggleGroup>();
-			toggleGroup.GetComponent<ToggleGroup>().allowSwitchOff = true;
 			
 			foreach (LevelData levelData in GameDataManager.Instance.LevelDataManager.DataList)
 			{
 				LevelData ld = levelData;
 
-				// instantiate a button for each level
-				GameObject obj = Instantiate(Resources.Load("GUI_LevelDetails")) as GameObject;
-				if(levelData.MinimumPlayers == 1 && levelData.MaximumPlayers == 1)
-					levelDescription = levelData.DisplayName + "\n[1 Player]";
-				else if(levelData.MinimumPlayers == levelData.MaximumPlayers)
-					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " Players]";
-				else
-					levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
-
-				if(PlayerManager.Instance.LevelScore(levelData.DisplayName) != 0)
-					levelDescription += "\n[Score: " + PlayerManager.Instance.LevelScore(levelData.DisplayName) + "]";
-				else
-					levelDescription += "\n[Not Played]";
-
-				obj.GetComponentInChildren<Text>().text = levelDescription;
-				obj.GetComponent<Toggle>().onValueChanged.AddListener(delegate { LevelButton_Click(obj, ld); });
+				GameObject obj = Instantiate(Resources.Load("GUI/GUI_LevelDetails")) as GameObject;
+				obj.GetComponent<LevelButton>().SetLevelData(ld);
+				obj.GetComponent<Button>().onClick.AddListener(delegate { LevelButton_Click(obj, ld); });
 				obj.transform.SetParent(this.transform);
 				obj.transform.localScale = new Vector3(1, 1, 1);
-				obj.GetComponent<Toggle>().group = toggleGroup.GetComponent<ToggleGroup>();
-				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 + (70 * index), 60);
+				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0 + (128 * index), 360);
 				obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
 				obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
 				obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
 				obj.transform.rotation = new Quaternion(0, 0, 0, 0);
 
+				if(index == 0)
+					LevelButton_Click(obj, ld);
+
+				index++;
+
+				/*
 				//if(previousLevelComplete)
 				//	obj.SetActive(true);
 				//else
@@ -480,8 +455,7 @@ public class RoomDetails_Menu : MonoBehaviour
 					previousLevelComplete = true;
 				else
 					previousLevelComplete = false;
-
-				index++;
+				*/
 			}
 		}
     }
@@ -495,8 +469,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	
 	protected void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[RoomDetails_Menu] " + message);
+		Debug.LogError("[RoomDetails_Menu] " + message);
 	}
 	#endregion
 }
