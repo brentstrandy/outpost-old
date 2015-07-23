@@ -54,29 +54,9 @@ public class RoomDetails_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMPlayerJoinedRoom += PlayerJoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerLeftRoom += PlayerLeftRoom_Event;
 		SessionManager.Instance.OnSMLeftRoom += KickedFromRoom_Event;
+		SessionManager.Instance.OnSMSwitchMaster += MasterClientSwitched_Event;
 		
-		// Immediately refresh the player name list to show the host
-		RefreshPlayerNames();
-		
-		// Immediately refresh the room details
-		RefreshRoomDetails();
-		
-		// Add Level Buttons for each Level (this needs to be done before the tower buttons because the towers depend on the LevelData)
-		InitiateLevelButtons();
-
-		// The towers are automatically refreshed when the level buttons are initiated
-		//RefreshTowerButtons();
-		
-		// See if the player is currently the room owner or just joining
-		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-		{
-			StartGame_GUIButton.SetActive(true);
-			SessionManager.Instance.SetRoomVisibility(true);
-		}
-		else
-		{
-			StartGame_GUIButton.SetActive(false);
-		}
+		Initialize();
 	}
 
 	/// <summary>
@@ -87,9 +67,34 @@ public class RoomDetails_Menu : MonoBehaviour
 		// Remove listeners for all applicable events (these listeners are added again when the menu is shown)
 		SessionManager.Instance.OnSMPlayerJoinedRoom -= PlayerJoinedRoom_Event;
 		SessionManager.Instance.OnSMPlayerLeftRoom -= PlayerLeftRoom_Event;
+		SessionManager.Instance.OnSMLeftRoom -= KickedFromRoom_Event;
 
 		// Clear chat history so the next room will start with a clear chat area
 		Chat_GUIText.GetComponent<Text>().text = "";
+	}
+
+	private void Initialize()
+	{
+		// See if the player is currently the room owner or just joining
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			StartGame_GUIButton.SetActive(true);
+			SessionManager.Instance.SetRoomVisibility(true);
+		}
+		else
+			StartGame_GUIButton.SetActive(false);
+
+		// Immediately refresh the player name list to show the host
+		RefreshPlayerNames();
+		
+		// Immediately refresh the room details
+		RefreshRoomDetails();
+		
+		// Add Level Buttons for each Level (this needs to be done before the tower buttons because the towers depend on the LevelData)
+		InitiateLevelButtons();
+		
+		// The towers are automatically refreshed when the level buttons are initiated
+		//RefreshTowerButtons();
 	}
 	
 	#region ON CLICK
@@ -227,7 +232,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void PlayerLeftRoom_Event(PhotonPlayer player)
 	{
 		// Unassign color given to the player
-		UnassignColor((int)player.customProperties["PlayerColorIndex"]);
+		//UnassignColor((int)player.customProperties["PlayerColorIndex"]);
 		
 		RefreshPlayerNames();
 		
@@ -243,6 +248,15 @@ public class RoomDetails_Menu : MonoBehaviour
 	{
 		// Tell the MenuManager to transition back to the main menu
 		MenuManager.Instance.ShowMainMenu();
+	}
+
+	private void MasterClientSwitched_Event(PhotonPlayer newMasterClient)
+	{
+		// Check to see if the client is the new master client
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			Initialize();
+		}
 	}
 	#endregion
 
