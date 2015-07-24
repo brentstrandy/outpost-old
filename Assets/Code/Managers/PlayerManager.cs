@@ -413,6 +413,7 @@ public class PlayerManager : MonoBehaviour
 	{
 		GameLoadOut = null;
 		Money = 0.0f;
+		Destroy(PlayerLocator);
 	}
 	
 	public void SetPlayerName(string name)

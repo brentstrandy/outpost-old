@@ -262,7 +262,6 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void EndGame_Loss()
 	{
-		Log ("Ending game");
 		ObjPhotonView.RPC ("EndGame_LossAcrossNetwork", PhotonTargets.All, null);
 	}
 
@@ -367,6 +366,14 @@ public class GameManager : MonoBehaviour
 			quadrant = Quadrant.South;
 		
 		return quadrant;
+	}
+
+	private void OnDestroy()
+	{
+		// Remove all references to delegate events that were created for this script
+		SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
+		SessionManager.Instance.OnSMPlayerLeftRoom -= OnPlayerLeft;
+		InputManager.Instance.OnQuadrantRotate -= OnCameraQuadrantChanged;
 	}
 	
 	#region MessageHandling
