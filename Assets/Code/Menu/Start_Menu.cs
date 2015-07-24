@@ -24,6 +24,15 @@ public class Start_Menu : MonoBehaviour
 		// Select the input field
 		InputField.GetComponent<InputField>().Select();
 
+		// Only show the option of using LOCAL vs SERVER data if run through the editor
+#if UNITY_EDITOR
+		DataLocationButton.SetActive(true);
+		DataLocationText.SetActive(true);
+#else
+		DataLocationButton.SetActive(false);
+		DataLocationText.SetActive(false);
+#endif
+
 		// TODO: Display a waiting animation to show something is happening
 	}
 	

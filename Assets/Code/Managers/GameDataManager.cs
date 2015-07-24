@@ -38,28 +38,19 @@ public class GameDataManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		DataLocation = "Local";
-
 		// Instantiate data class for storing all tower data
 		TowerDataManager = new DataManager<TowerData>();
-		TowerDataManager.LoadDataFromLocal("TowerData.xml");
-		// Run coroutine to download TowerData from server (This coroutine cannot be called from the DataManager because
-		// it must be called from a MonoBehavior class)
-		//StartCoroutine(TowerDataMngr.LoadDataFromServer("TowerData.xml"));
-
 		// Instantiate data class for storing all enemy data
 		EnemyDataManager = new DataManager<EnemyData>();
-		EnemyDataManager.LoadDataFromLocal("EnemyData.xml");
-		// Run coroutine to download EnemyData from server (This coroutine cannot be called from the DataManager because
-		// it must be called from a MonoBehavior class)
-		//StartCoroutine(EnemyDataMngr.LoadDataFromServer());
-
 		// Instantiate data class for storing all level data
 		LevelDataManager = new DataManager<LevelData>();
-		LevelDataManager.LoadDataFromLocal("LevelData.xml");
-		// Run coroutine to download LevelData from server (This coroutine cannot be called from the DataManager because
-		// it must be called from a MonoBehavior class)
-		//StartCoroutine(LevelDataMngr.LoadDataFromServer());
+
+		// Set to local when starting in the Unity Editor
+#if UNITY_EDITOR
+		SwitchToLocalData();
+#else
+		SwitchToServerData();
+#endif
 	}
 
 	public void SwitchToServerData()
