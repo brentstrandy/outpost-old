@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Settworks.Hexagons;
 
 [ExecuteInEditMode]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class HexMesh : MonoBehaviour
 {
 
@@ -35,21 +36,6 @@ public class HexMesh : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		if (GetComponent<MeshFilter>() == null)
-		{
-			gameObject.AddComponent<MeshFilter>();
-		}
-		
-		if (GetComponent<MeshRenderer>() == null)
-		{
-			gameObject.AddComponent<MeshRenderer>();
-		}
-		
-		if (GetComponent<MeshCollider>() == null)
-		{
-			gameObject.AddComponent<MeshCollider>();
-		}
-
 		gameObject.layer = LayerMask.NameToLayer("Terrain");
 
 		CreateOverlays();
@@ -239,6 +225,12 @@ public class HexMesh : MonoBehaviour
 		// TODO: Consider moving this to the facility object
 		int distance = HexCoord.Distance(HexCoord.origin, coord);
 		return distance >= FacilityRadius && distance <= PeripheralRadius;
+	}
+	
+	public bool OutsidePlacementRange(HexCoord coord)
+	{
+		// TODO: Consider moving this to the facility object
+		return !InPlacementRange(coord);
 	}
 
 	private IEnumerable<HexCoord> WithinPlacementRange()
