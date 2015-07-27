@@ -109,6 +109,7 @@ public class HexMesh : MonoBehaviour
 		Overlays.Add((int)TerrainOverlays.Outline, "TerrainOutline", "Standard", CreateOverlayBuilder(OutlineWidth));
 		Overlays.Add((int)TerrainOverlays.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth));
 		Overlays.Add((int)TerrainOverlays.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
+		Overlays.Add((int)TerrainOverlays.Pathfinding, "TerrainPathfinding", "Standard", CreateOverlayBuilder(HighlightWidth));
 	}
 	
 	private void UpdateMesh()
