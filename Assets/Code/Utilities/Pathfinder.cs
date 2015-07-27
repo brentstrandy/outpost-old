@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Settworks.Hexagons;
 
 [RequireComponent(typeof(HexLocation))]
@@ -9,6 +11,7 @@ public class Pathfinder : MonoBehaviour
 	public delegate void PathfindingFailureHandler();
 
 	public bool ShowDebugLogs = false;
+	public bool ShowPath = false;
 
 	[SerializeField]
 	public bool AvoidTowers;
@@ -34,6 +37,7 @@ public class Pathfinder : MonoBehaviour
 
 	protected HexLocation ObjHexLocation;
 	protected int SolvedTowerState = 0;
+	protected HexMeshOverlay.Entry Overlay;
 
 	public virtual void Awake()
 	{
@@ -41,10 +45,14 @@ public class Pathfinder : MonoBehaviour
 	}
 
 	// Use this for initialization
-	public virtual void Start ()
+	public virtual void OnDestroy()
 	{
+		if (ShowPath || Selection.activeGameObject == gameObject)
+		{
+			RemovePathOverlay();
+		}
 	}
-	
+
 	// Update is called once per frame
 	public virtual void Update()
 	{
@@ -58,6 +66,15 @@ public class Pathfinder : MonoBehaviour
 				Solve();
 			}
 		}
+
+		// If this object is clicked in the editor, updating the overlay immediately instead
+		// of waiting for the next run of the solver
+		bool isSelected = Selection.activeGameObject == gameObject;
+		bool isPathed = Overlay != null;
+		if (isSelected != isPathed)
+		{
+			UpdatePathOverlay();
+		}
 	}
 	
 	public virtual void FixedUpdate()
@@ -68,38 +85,46 @@ public class Pathfinder : MonoBehaviour
 	public bool Solve()
 	{
 		HexCoord origin = ObjHexLocation.location;
+		bool success = false;
 
 		// If we're configured to avoid tower coverage, make an attempt to find a path that avoids both obstacles and tower coverage
 		if (AvoidTowerCoverage && HexKit.Path(out Path, origin, Target, IsObstacleOrTowerCoverage))
 		{
-			Log("Solved: " + PathToString() + " Origin: " + origin + " Target: " + Target);
-			return true;
+			success = true;
 		}
-		
 		// If we're configured to avoid towers, make an attempt to find a path that avoids both obstacles and towers
-		if (AvoidTowerCoverage && HexKit.Path(out Path, origin, Target, IsObstacleOrTower))
+		else if (AvoidTowers && HexKit.Path(out Path, origin, Target, IsObstacleOrTower))
 		{
-			Log("Solved: " + PathToString() + " Origin: " + origin + " Target: " + Target);
-			return true;
+			success = true;
+		}
+		// If all else fails, attempt to find a path that at least avoids obstacles
+		else if (HexKit.Path(out Path, origin, Target, IsObstacle))
+		{
+			success = true;
 		}
 
-		// If all else fails, attempt to find a path that at least avoids obstacles
-		if (HexKit.Path(out Path, origin, Target, IsObstacle))
+		// Log success/failure
+		if (success)
 		{
-			if (HexKit.Path(out Path, ObjHexLocation.location, Target, IsObstacle))
+			Log("Solved: " + PathToString() + " Origin: " + origin + " Target: " + Target);
+		}
+		else
+		{
+			Log("No Solution");
+		}
+
+		// Update our pathfinding overlay
+		UpdatePathOverlay();
+
+		if (success)
+		{
+			if (OnPathfindingFailure != null)
 			{
-				Log("Solved: " + PathToString() + " Origin: " + origin + " Target: " + Target);
-				return true;
+				OnPathfindingFailure();
 			}
 		}
-		
-		Log("No Solution");
 
-		if (OnPathfindingFailure != null)
-		{
-			OnPathfindingFailure();
-		}
-		return false;
+		return success;
 	}
 	
 	public bool IsObstacle(HexCoord coord)
@@ -182,6 +207,45 @@ public class Pathfinder : MonoBehaviour
 		else
 		{
 			return location;
+		}
+	}
+
+	public void UpdatePathOverlay()
+	{
+		if (ShowPath || Selection.activeGameObject == gameObject)
+		{
+			if (Overlay == null)
+			{
+				AddPathOverlay();
+			}
+			Overlay.Update(EnumeratePath());
+		}
+		else if (Overlay != null)
+		{
+			RemovePathOverlay();
+		}
+	}
+	
+	public void AddPathOverlay()
+	{
+		int id = gameObject.GetInstanceID();
+		Overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding][id];
+		Overlay.Color = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), 1.0f);
+		Overlay.Show();
+	}
+	
+	public void RemovePathOverlay()
+	{
+		int id = gameObject.GetInstanceID();
+		GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding].Remove(id);
+		Overlay = null;
+	}
+
+	public IEnumerable<HexCoord> EnumeratePath()
+	{
+		foreach (var node in Path)
+		{
+			yield return node.Location;
 		}
 	}
 
