@@ -42,7 +42,7 @@ public class HexMeshOverlay
 	public class Entry
 	{
 		private GameObject Instance;
-		private IEnumerable<HexCoord> Coords;
+		private List<HexCoord> Coords;
 		private HexMeshBuilder Builder;
 
 		private static IEnumerable<HexCoord> EmptyCoordinateSet()
@@ -89,7 +89,7 @@ public class HexMeshOverlay
 
 			// Prepare the new instance
 			Instance = new GameObject(name);
-			Coords = EmptyCoordinateSet();
+			Coords = new List<HexCoord>();
 			Builder = builder;
 			
 			Instance.layer = LayerMask.NameToLayer("TransparentFX");
@@ -124,13 +124,14 @@ public class HexMeshOverlay
 		
 		public void Update(IEnumerable<HexCoord> coords)
 		{
-			if (Coords.Compare(coords) != 0)
+			if ((Coords as IEnumerable<HexCoord>).Compare(coords) != 0)
 			{
-				Coords = coords;
+				Coords.Clear();
 				
 				Builder.Clear();
 				foreach (var coord in coords)
 				{
+					Coords.Add(coord);
 					Builder.AddHexagon(coord);
 				}
 				Instance.GetComponent<MeshFilter>().mesh = Builder.Build();
