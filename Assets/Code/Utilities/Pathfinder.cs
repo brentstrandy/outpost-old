@@ -67,11 +67,11 @@ public class Pathfinder : MonoBehaviour
 			}
 		}
 
-		// If this object is clicked in the editor, updating the overlay immediately instead
-		// of waiting for the next run of the solver
-		bool isSelected = Selection.activeGameObject == gameObject;
-		bool isPathed = Overlay != null;
-		if (isSelected != isPathed)
+		// If the state of the pathfinder overlay has changed, update the overlay
+		// immediately instead of waiting for the next run of the solver
+		bool wantsPath = ShowPath || Selection.activeGameObject == gameObject;
+		bool hasPath = Overlay != null;
+		if (wantsPath != hasPath)
 		{
 			UpdatePathOverlay();
 		}
