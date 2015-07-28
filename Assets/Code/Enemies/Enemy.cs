@@ -4,7 +4,7 @@ using Settworks.Hexagons;
 using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour 
-{	
+{
     public bool ShowDebugLogs = true;
 	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
@@ -103,6 +103,7 @@ public class Enemy : MonoBehaviour
 
 			// By default, avoid towers
 			ObjPathfinder.AvoidTowers = true;
+			ObjPathfinder.OnPathfindingFailure = OnPathfindingFailure;
 
 			if(gameObject.GetComponent<HexLocation>() == null)
 				ObjHexLocation = gameObject.AddComponent<HexLocation>();
@@ -147,6 +148,11 @@ public class Enemy : MonoBehaviour
 		gameObject.GetComponent<Renderer>().material.color = EnemyAttributes.HighlightColor;
 	}
 	#endregion
+
+	public virtual void OnPathfindingFailure()
+	{
+		// TODO: Target the nearest tower?
+	}
 
 	public virtual void Update()
 	{
@@ -231,6 +237,10 @@ public class Enemy : MonoBehaviour
 	#region IDENTIFYING TARGETS
 	public virtual void OnTriggerStay(Collider other)
 	{
+		// FIXME (JDS 2015-07-25): This runs every frame for every enemy in range of a tower or the mining facility.
+		//                         It has the potential to flood the network and suck bandwidth needlessly.
+		//                         Why aren't the Enter/Exit functions sufficient?
+
 		// Only Target enemies if this is the Master Client
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{

@@ -2,6 +2,7 @@
 using System.Collections;
 using Settworks.Hexagons;
 
+[RequireComponent(typeof(HexLocation))]
 public class TerrainFeature : MonoBehaviour
 {
 	public bool Impassable = true;

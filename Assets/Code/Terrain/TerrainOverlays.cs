@@ -5,5 +5,6 @@ public enum TerrainOverlays : int
 {
 	Outline,
 	Highlight,
-	Selection
+	Selection,
+	Pathfinding
 }

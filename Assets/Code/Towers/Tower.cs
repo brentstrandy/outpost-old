@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using Settworks.Hexagons;
 
+[RequireComponent(typeof(HexLocation))]
 public class Tower : MonoBehaviour
 {
 	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
@@ -24,6 +28,7 @@ public class Tower : MonoBehaviour
 	// Components
 	public HealthBarController HealthBar;
 	protected PhotonView ObjPhotonView;
+	protected HexLocation ObjHexLocation;
 	// Effects
 	public GameObject FiringEffect;
 	public GameObject ExplodingEffect;
@@ -31,7 +36,7 @@ public class Tower : MonoBehaviour
 	#region INITIALIZE
 	public void Awake()
 	{
-
+		ObjHexLocation = GetComponent<HexLocation>();
     }
 
 	// Use this for initialization
@@ -41,11 +46,7 @@ public class Tower : MonoBehaviour
 		TimeLastShotFired = 0;
 
 		// Update the hex coordinate to reflect the spawned position
-		var hexLocation = GetComponent<HexLocation>();
-		if (hexLocation != null)
-		{
-			hexLocation.ApplyPosition();
-		}
+		ObjHexLocation.ApplyPosition();
 
 		// Track the newly added tower in the TowerManager
 		GameManager.Instance.TowerManager.AddActiveTower(this);
@@ -54,7 +55,7 @@ public class Tower : MonoBehaviour
 		{
 			TowerRing.transform.localScale *= TowerAttributes.AdjustedRange;
 
-			bool selected = (PlayerManager.Instance.SelectedTowerCoord == hexLocation.location);
+			bool selected = (PlayerManager.Instance.SelectedTowerCoord == ObjHexLocation.location);
 			if (selected)
 			{
 				OnSelect();
@@ -70,7 +71,7 @@ public class Tower : MonoBehaviour
 	/// Sets the tower's properties based on TowerData
 	/// </summary>
 	/// <param name="towerData">Tower data</param>
-	public void SetTowerData(TowerData towerData, Color playerColor)
+	public virtual void SetTowerData(TowerData towerData, Color playerColor)
 	{
 		TowerAttributes = towerData;
 		Health = TowerAttributes.MaxHealth;
@@ -92,6 +93,9 @@ public class Tower : MonoBehaviour
 			go.GetComponent<SphereCollider>().radius = TowerAttributes.Range * 2;
 			go.transform.parent = this.transform;
 			go.transform.localPosition = Vector3.zero;
+
+			// Also inform the tower manager of our coverage area
+			GameManager.Instance.TowerManager.AddCoverage(this);
 		}
 
 		foreach(Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
@@ -132,6 +136,20 @@ public class Tower : MonoBehaviour
 	public bool HasFullHealth()
 	{
 		return Health >= TowerAttributes.MaxHealth;
+	}
+
+	public virtual IEnumerable<HexCoord> Coverage()
+	{
+		HexCoord origin = ObjHexLocation.location;
+		int approxHexRange = (int)(TowerAttributes.Range * 2.0f);
+		Predicate<HexCoord> obstacles = (HexCoord coord) => { return true; };
+		foreach (var node in HexKit.Spread(origin, approxHexRange, obstacles))
+		{
+			if (HexCoord.Distance(origin, node.Location) <= TowerAttributes.Range)
+			{
+				yield return node.Location;
+			}
+		}
 	}
 
 	/// <summary>
@@ -312,8 +330,14 @@ public class Tower : MonoBehaviour
 		// Inform the player that a tower has been destroyed
 		NotificationManager.Instance.DisplayNotification(new NotificationData("Tower Destroyed", this.TowerAttributes.DisplayName + " was destroyed", "QuickInfo"));
 
-		// Tell the enemy manager this enemy is being destroyed
+		// Tell the tower manager this tower is being destroyed
 		GameManager.Instance.TowerManager.RemoveActiveTower(this);
+		
+		// Tell the tower manager to remove our coverage area
+		if (TowerAttributes.Range > 0)
+		{
+			GameManager.Instance.TowerManager.RemoveCoverage(this);
+		}
 
 		// The GameObject must be destroyed or else the enemy will stay instantiated
 		Destroy (this.gameObject);
