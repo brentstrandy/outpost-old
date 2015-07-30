@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,7 +49,7 @@ public class Pathfinder : MonoBehaviour
 	// Use this for initialization
 	public virtual void OnDestroy()
 	{
-		if (ShowPath || Selection.activeGameObject == gameObject)
+		if (ShouldShowPath())
 		{
 			RemovePathOverlay();
 		}
@@ -69,9 +71,8 @@ public class Pathfinder : MonoBehaviour
 
 		// If the state of the pathfinder overlay has changed, update the overlay
 		// immediately instead of waiting for the next run of the solver
-		bool wantsPath = ShowPath || Selection.activeGameObject == gameObject;
 		bool hasPath = Overlay != null;
-		if (wantsPath != hasPath)
+		if (ShouldShowPath() != hasPath)
 		{
 			UpdatePathOverlay();
 		}
@@ -212,7 +213,7 @@ public class Pathfinder : MonoBehaviour
 
 	public void UpdatePathOverlay()
 	{
-		if (ShowPath || Selection.activeGameObject == gameObject)
+		if (ShouldShowPath())
 		{
 			if (Overlay == null)
 			{
@@ -266,6 +267,23 @@ public class Pathfinder : MonoBehaviour
 			output += Path[i].Location.ToString();
 		}
 		return output;
+	}
+
+	protected virtual bool ShouldShowPath()
+	{
+		if (ShowPath)
+		{
+			return true;
+		}
+
+		#if UNITY_EDITOR
+		if (Selection.activeGameObject == gameObject)
+		{
+			return true;
+		}
+		#endif
+
+		return false;
 	}
 	
 	#region MessageHandling
