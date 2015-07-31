@@ -37,8 +37,10 @@ public class EMPOrb : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		// TODO: When the target dies before the EMP orb reaches it, continue on to the last known location and then explode
+
 		// Don't deal damage while flying through the air
-		if (!HitTarget)
+		if (!HitTarget && Target)
 		{
 			// Check to see if the orb hit its target location
 			if (Vector3.Distance(this.transform.position, Target.position) <= 0.1f)
