@@ -111,10 +111,10 @@ public class PlayerManager : MonoBehaviour
 			switch (Mode)
 			{
 			case PlayerMode.Selection:
-				UpdateSelection(overTerrain, coord);
+				SelectionModeUpdate(overTerrain, coord);
 				break;
 			case PlayerMode.Placement:
-				UpdatePlacement(overTerrain, coord);
+				PlacementModeUpdate(overTerrain, coord);
 				break;
 			}
 
@@ -130,7 +130,7 @@ public class PlayerManager : MonoBehaviour
 	}
 
 	#region Mode-based User Interface Handling
-	protected void UpdateSelection(bool overTerrain, HexCoord coord)
+	protected void SelectionModeUpdate(bool overTerrain, HexCoord coord)
 	{
 		// Right-click removes selection
 		if (Input.GetMouseButtonDown(1))
@@ -163,7 +163,7 @@ public class PlayerManager : MonoBehaviour
 		}
 	}
 	
-	protected void UpdatePlacement(bool overTerrain, HexCoord coord)
+	protected void PlacementModeUpdate(bool overTerrain, HexCoord coord)
 	{
 		// No tower selection when we're in placement mode
 		RemoveSelection();
@@ -179,7 +179,7 @@ public class PlayerManager : MonoBehaviour
 				Destroy(PlacementTowerPrefab);
 				PlacementTowerPrefab = null;
 			}
-			UpdateSelection(overTerrain, coord);
+			SelectionModeUpdate(overTerrain, coord);
 			return;
 		}
 
