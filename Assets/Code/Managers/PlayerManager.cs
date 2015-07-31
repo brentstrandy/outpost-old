@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	public float Money { get; private set; }
 	public Quadrant CurrentQuadrant;
+	public PlayerMode Mode;
 	
 	private GameObject PlayerLocator;
 	public string Name { get; private set; }
@@ -37,6 +38,8 @@ public class PlayerManager : MonoBehaviour
 	public void Start()
 	{
 		Money = 0.0f;
+		Mode = PlayerMode.Selection;
+		SelectedTowerCoord = default(HexCoord);
 		PlacementTowerData = null;
 		LastTowerPlacementTime = Time.time;
 		
@@ -95,9 +98,6 @@ public class PlayerManager : MonoBehaviour
 	{
 		// TODO: Consider moving all of this to the InputManager
 
-		// TODO: Do not perform this action if the player has clicked a button, tower, or any other object besides a blank Hex tile
-		// Check for player input (mouse click)
-
 		if (GameManager.Instance != null && GameManager.Instance.GameRunning)
 		{
 			var terrain = GameManager.Instance.TerrainMesh;
@@ -106,81 +106,18 @@ public class PlayerManager : MonoBehaviour
 			RaycastHit hit;
 			HexCoord coord;
 
-			// Test to see if the player's click intersected with the Terrain (HexMesh)
-			if (terrain.IntersectRay(ray, out hit, out coord) && terrain.InPlacementRange(coord))
-			{
-				if (Input.GetMouseButtonDown(0))
-				{
-					bool existing = GameManager.Instance.TowerManager.HasTower(coord);
+			bool overTerrain = terrain.IntersectRay(ray, out hit, out coord);
 
-					// Check to see if a tower has been selected by the player for placement
-					if (PlacementTowerData != null)
-					{
-						// Make sure that there isn't an existing tower on the plot
-						if (!existing)
-						{
-							if (!GameManager.Instance.TerrainMesh.IsImpassable(coord))
-							{
-								// Ensure towers cannot be repeatedly placed every frame
-								if (Time.time - LastTowerPlacementTime > 1)
-								{
-									// Make sure the player has enough money to place the tower
-									if (this.Money >= PlacementTowerData.InstallCost)
-									{
-										// FIXME: Tenatively place the tower but be prepared to roll back the change if the
-										//        master reports a conflict with another player's tower placement at the same
-										//        location at the same time
-										LastTowerPlacementTime = Time.time;
-										
-										// Charge the player for building the tower
-										this.Money -= PlacementTowerData.InstallCost;
-										
-										// Calculate the tower placement based on the clicked coordinate
-										//var position = terrain.IntersectPosition((Vector3)coord.Position());
-										
-										// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
-										ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, coord, SessionManager.Instance.AllocateNewViewID());
-									}
-									else
-									{
-										// This currently does not work. My intent is to display this message alongside the place where the player clicks
-										NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
-									}
-								}
-							}
-						}
-					}
-					// Check to see if the user clicked an existing tower
-					else if (existing)
-					{
-						// Mouse click on existing tower
-						Select(coord);
-
-						// Don't display a highlight when we need to display a selection
-						//RemoveHighlight();
-					}
-					else
-					{
-						// Mouse click on non-tower location
-						RemoveSelection();
-					}
-				}
-				else
-				{
-					// Mouseover in placement area
-					Highlight(coord);
-				}
-			}
-			else
+			switch (Mode)
 			{
-				// Mouseover outside of placement area
-				RemoveHighlight();
-				if (Input.GetMouseButtonDown(0))
-				{
-					// Mouse click outside of placement area
-					RemoveSelection();
-				}
+			case PlayerMode.Selection:
+				UpdateSelection(overTerrain, coord);
+				break;
+			case PlayerMode.Placement:
+				UpdatePlacement(overTerrain, coord);
+				break;
 			}
+
 		}
 		
 		// Always keep the player locator GameObject in front of the camera. The GameObject has a PhotonView attached to it for the RadarManager
@@ -191,38 +128,156 @@ public class PlayerManager : MonoBehaviour
 			PlayerLocator.transform.position = new Vector3(PlayerLocator.transform.position.x, PlayerLocator.transform.position.y, 0);
 		}
 	}
-	
-	#region Player Tower Interface
-	[PunRPC]
-	private void SpawnTowerAcrossNetwork(string displayName, HexCoord coord, int viewID, PhotonMessageInfo info)
-	{
-		// TODO: Coordinate tower spawning when two players build a tower in the same position at the same time.
-		// TODO: Sanitize displayName if necessary. For example, make sure it matches against a white list. Also, if it contained "../blah", what would be the effect?
 
-		if (GameManager.Instance.TowerManager.HasTower(coord))
+	#region Mode-based User Interface Handling
+	protected void UpdateSelection(bool overTerrain, HexCoord coord)
+	{
+		// Right-click removes selection
+		if (Input.GetMouseButtonDown(1))
 		{
-			LogError("Tower construction conflict! Potential inconsistent game state.");
+			RemoveSelection();
+		}
+		// Left-click selects
+		else if (Input.GetMouseButton(0))
+		{
+			if (overTerrain && CanSelect(coord))
+			{
+				// Mouse click on existing tower
+				Select(coord);
+			}
+			else
+			{
+				// Mouse click outside of placement area
+				RemoveSelection();
+			}
 		}
 
-		var position = GameManager.Instance.TerrainMesh.IntersectPosition((Vector3)coord.Position());
+		// Update highlight
+		if (overTerrain && CanHighlight(coord))
+		{
+			Highlight(coord);
+		}
+		else
+		{
+			RemoveHighlight();
+		}
+	}
+	
+	protected void UpdatePlacement(bool overTerrain, HexCoord coord)
+	{
+		// No tower selection when we're in placement mode
+		RemoveSelection();
 
-		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
-		var rotation = Quaternion.LookRotation(new Vector3(position.x, position.y, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
+		// Right-click cancels placement mode
+		if (Input.GetMouseButtonDown(1))
+		{
+			// TODO: Move mode selection into its own function that worries about mode cleanup details
+			Mode = PlayerMode.Selection;
+			// Destroy the shell prefab
+			if (PlacementTowerPrefab != null)
+			{
+				Destroy(PlacementTowerPrefab);
+				PlacementTowerPrefab = null;
+			}
+			UpdateSelection(overTerrain, coord);
+			return;
+		}
+
+		// Is the player attempting to place a tower?
+		if (Input.GetMouseButton(0))
+		{
+			// Is it a legal placement?
+			if (overTerrain && CanBuild(PlacementTowerData, coord))
+			{
+				// FIXME: Tenatively place the tower but be prepared to roll back the change if the
+				//        master reports a conflict with another player's tower placement at the same
+				//        location at the same time
+				LastTowerPlacementTime = Time.time;
+				
+				// Charge the player for building the tower
+				this.Money -= PlacementTowerData.InstallCost;
+				
+				// Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
+				// TODO: Move to a two-phase system, where the master confirms success before the tower is considered built?
+				ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, coord, SessionManager.Instance.AllocateNewViewID());
+			}
+			else
+			{
+				// Display a notification if the player is out of money
+				// FIXME: This code is repeated in CanBuildTower. Modify CanBuildTower to return a reason for the failure?
+				if (this.Money < PlacementTowerData.InstallCost)
+				{
+					// This currently does not work. My intent is to display this message alongside the place where the player clicks
+					NotificationManager.Instance.DisplayNotification(new NotificationData("", "Insufficient Funds", "InsufficientFunds", 0, Input.mousePosition));
+				}
+			}
+		}
 		
-		// Instantiate a new Enemy
-		GameObject newTower = Instantiate(Resources.Load("Towers/" + GameDataManager.Instance.FindTowerPrefabByDisplayName(displayName)), position, rotation) as GameObject;
-		// Add a PhotonView to the Tower
-		newTower.AddComponent<PhotonView>();
-		// Set Tower's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
-		newTower.GetComponent<PhotonView>().viewID = viewID;
-		// The Prefab doesn't contain the correct default data. Set the Tower's default data now
-		newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), PlayerColors.colors[(int)info.sender.customProperties["PlayerColorIndex"]]);
+		// Update highlight
+		if (overTerrain && CanHighlight(coord))
+		{
+			Highlight(coord);
+		}
+		else
+		{
+			RemoveHighlight();
+		}
+	}
+	#endregion
 
-		// Deselect the selected tower (force the user to select a new one)
-		PlacementTowerData = null;
-		// Destroy the shell prefab
-		Destroy(PlacementTowerPrefab);
-		PlacementTowerPrefab = null;
+	#region Coordinate Highlight
+	/// <summary>
+	/// Determines whether the player can highlight the specified coord in the current PlayerMode.
+	/// </summary>
+	/// <returns><c>true</c> if the player can highlight the specified coord; otherwise, <c>false</c>.</returns>
+	/// <param name="coord">Coordinate to evaluate.</param>
+	protected bool CanHighlight(HexCoord coord)
+	{
+		// Is the game initialized?
+		if (GameManager.Instance == null)
+		{
+			return false;
+		}
+		
+		// Is the game running?
+		if (!GameManager.Instance.GameRunning)
+		{
+			return false;
+		}
+		
+		// Is the coordinate within the placement range of our facility?
+		if (!GameManager.Instance.TerrainMesh.InPlacementRange(coord))
+		{
+			return false;
+		}
+		
+		// Is the terrain impassable?
+		if (GameManager.Instance.TerrainMesh.IsImpassable(coord))
+		{
+			return false;
+		}
+		
+		// Selection Mode
+		if (Mode == PlayerMode.Selection)
+		{
+			// Is the coordinate already selected?
+			if (coord == SelectedTowerCoord)
+			{
+				// TODO: Decide whether the selection overlay should really have priority over the highlight overlay
+				return false;
+			}
+		}
+		// Placement Mode
+		else if (Mode == PlayerMode.Placement)
+		{
+			// Is there an existing tower?
+			if (GameManager.Instance.TowerManager.HasTower(coord))
+			{
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	private void Highlight(HexCoord coord)
@@ -233,9 +288,12 @@ public class PlayerManager : MonoBehaviour
 		overlay.Update(coord);
 		overlay.Color = PlayerColors.colors[PlayerColorIndex];
 		overlay.Show();
-		
-		// Show the selected tower (if applicable)
-		SetShellTowerPosition(terrain.IntersectPosition((Vector3)coord.Position()));//coord.Position());
+
+		if (Mode == PlayerMode.Placement)
+		{
+			// Show the selected tower (if applicable)
+			SetShellTowerPosition(terrain.IntersectPosition((Vector3)coord.Position()));//coord.Position());
+		}
 	}
 	
 	private void RemoveHighlight()
@@ -243,9 +301,59 @@ public class PlayerManager : MonoBehaviour
 		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Highlight][PhotonNetwork.player.ID];
 		overlay.Hide();
 	}
-	
+	#endregion
+
+	#region Tower Selection
+	/// <summary>
+	/// Determines whether the player can select a tower at the specified coord.
+	/// </summary>
+	/// <returns><c>true</c> if the player can select a tower at the specified coord; otherwise, <c>false</c>.</returns>
+	/// <param name="coord">Coordinate to evaluate.</param>
+	protected bool CanSelect(HexCoord coord)
+	{
+		// Is the game initialized?
+		if (GameManager.Instance == null)
+		{
+			return false;
+		}
+		
+		// Is the game running?
+		if (!GameManager.Instance.GameRunning)
+		{
+			return false;
+		}
+
+		// Are we in a suitable PlayerMode?
+		if (Mode != PlayerMode.Selection)
+		{
+			return false;
+		}
+		
+		// Is there an existing tower?
+		if (!GameManager.Instance.TowerManager.HasTower(coord))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
 	private void Select(HexCoord coord)
 	{
+		// Check if this is actually a deselection
+		if (coord == default(HexCoord))
+		{
+			RemoveSelection();
+			return;
+		}
+
+		// Check if this coordinate is already selected
+		if (coord == SelectedTowerCoord)
+		{
+			// Don't do extra work or spam the network
+			return;
+		}
+
 		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
 
 		overlay.Update(coord);
@@ -276,6 +384,33 @@ public class PlayerManager : MonoBehaviour
 		ObjPhotonView.RPC("SelectTowerAcrossNetwork", PhotonTargets.Others, coord);
 	}
 	
+	private void RemoveSelection()
+	{
+		// Check if we actually have a selection
+		if (SelectedTowerCoord == default(HexCoord))
+		{
+			// Don't do extra work or spam the network
+			return;
+		}
+
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
+		
+		overlay.Hide();
+		
+		// Deselect the old tower
+		GameObject selectedTower;
+		if (GameManager.Instance.TowerManager.TryGetTower(SelectedTowerCoord, out selectedTower))
+		{
+			selectedTower.GetComponent<Tower>().OnDeselect();
+		}
+		
+		// Update state
+		SelectedTowerCoord = default(HexCoord);
+		
+		// Tell all other players that this player has deselected a tower
+		ObjPhotonView.RPC("SelectTowerAcrossNetwork", PhotonTargets.Others, default(HexCoord));
+	}
+	
 	[PunRPC]
 	private void SelectTowerAcrossNetwork(HexCoord coord, PhotonMessageInfo info)
 	{
@@ -293,27 +428,138 @@ public class PlayerManager : MonoBehaviour
 			overlay.Show();
 		}
 	}
-	
-	private void RemoveSelection()
+	#endregion
+
+	#region Tower Placement
+	/// <summary>
+	/// Determines whether the player can build the specified tower at the given coord.
+	/// </summary>
+	/// <returns><c>true</c> if the player can build the specified tower coord at the given coord; otherwise, <c>false</c>.</returns>
+	/// <param name="tower">TowerData of the tower to evaluate.</param>
+	/// <param name="coord">Coordinate of the tower to evaluate.</param>
+	protected bool CanBuild(TowerData tower, HexCoord coord)
 	{
-		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
-
-		overlay.Hide();
-		
-		// Deselect the old tower
-		GameObject selectedTower;
-		if (GameManager.Instance.TowerManager.TryGetTower(SelectedTowerCoord, out selectedTower))
+		// Has tower data been provided?
+		if (tower == null)
 		{
-			selectedTower.GetComponent<Tower>().OnDeselect();
+			// TODO: Consider throwing an error instead of simply returning false
+			return false;
 		}
-
-		// Update state
-		SelectedTowerCoord = default(HexCoord);
 		
-		// Tell all other players that this player has deselected a tower
-		ObjPhotonView.RPC("SelectTowerAcrossNetwork", PhotonTargets.Others, default(HexCoord));
+		// Is the game initialized?
+		if (GameManager.Instance == null)
+		{
+			return false;
+		}
+		
+		// Is the game running?
+		if (!GameManager.Instance.GameRunning)
+		{
+			return false;
+		}
+		
+		// Is the coordinate within the placement range of our facility?
+		if (!GameManager.Instance.TerrainMesh.InPlacementRange(coord))
+		{
+			return false;
+		}
+		
+		// Is the terrain impassable?
+		if (GameManager.Instance.TerrainMesh.IsImpassable(coord))
+		{
+			return false;
+		}
+		
+		// Is there an existing tower?
+		if (GameManager.Instance.TowerManager.HasTower(coord))
+		{
+			return false;
+		}
+		
+		// Has enough time passed since the last placement?
+		// Towers cannot be repeatedly placed every frame
+		if (Time.time - LastTowerPlacementTime <= 1.0f)
+		{
+			return false;
+		}
+		
+		// Does the player have enough money to place the tower?
+		if (this.Money < PlacementTowerData.InstallCost)
+		{
+			return false;
+		}
+		
+		return true;
 	}
-	#endregion Player Tower Interface
+
+	public void TowerSelectedForPlacement(TowerData towerData)
+	{
+		// Save the tower data
+		PlacementTowerData = towerData;
+		
+		// Update the mode
+		Mode = PlayerMode.Placement;
+		
+		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
+		var rotation = Quaternion.LookRotation(new Vector3(10, 10, 0), new Vector3(0.0f, 0.0f, -1.0f));
+		
+		// Remove the old prefab (if applicable)
+		if (PlacementTowerPrefab != null)
+			Destroy(PlacementTowerPrefab);
+		
+		// Load the shell prefab to show
+		PlacementTowerPrefab = Instantiate(Resources.Load("Towers/" + towerData.PrefabName + "_Shell"), Vector3.zero, rotation) as GameObject;
+		
+		// Set the range based on player prefab
+		PlacementTowerPrefab.GetComponentInChildren<SpriteRenderer>().transform.localScale *= towerData.AdjustedRange;
+	}
+	
+	public void SetShellTowerPosition(Vector3 newPosition)
+	{
+		// Only place the tower if a tower has been selected
+		if (PlacementTowerPrefab != null)
+		{
+			PlacementTowerPrefab.transform.position = newPosition;
+		}
+	}
+	
+	[PunRPC]
+	private void SpawnTowerAcrossNetwork(string displayName, HexCoord coord, int viewID, PhotonMessageInfo info)
+	{
+		// TODO: Coordinate tower spawning when two players build a tower in the same position at the same time.
+		// TODO: Sanitize displayName if necessary. For example, make sure it matches against a white list. Also, if it contained "../blah", what would be the effect?
+		
+		if (GameManager.Instance.TowerManager.HasTower(coord))
+		{
+			LogError("Tower construction conflict! Potential inconsistent game state.");
+		}
+		
+		var position = GameManager.Instance.TerrainMesh.IntersectPosition((Vector3)coord.Position());
+		
+		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
+		var rotation = Quaternion.LookRotation(new Vector3(position.x, position.y, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
+		
+		// Instantiate a new Enemy
+		GameObject newTower = Instantiate(Resources.Load("Towers/" + GameDataManager.Instance.FindTowerPrefabByDisplayName(displayName)), position, rotation) as GameObject;
+		// Add a PhotonView to the Tower
+		newTower.AddComponent<PhotonView>();
+		// Set Tower's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
+		newTower.GetComponent<PhotonView>().viewID = viewID;
+		// The Prefab doesn't contain the correct default data. Set the Tower's default data now
+		newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), PlayerColors.colors[(int)info.sender.customProperties["PlayerColorIndex"]]);
+		
+		if (info.sender.isLocal)
+		{
+			// Change the player mode
+			Mode = PlayerMode.Selection;
+			// Deselect the selected tower (force the user to select a new one)
+			PlacementTowerData = null;
+			// Destroy the shell prefab
+			Destroy(PlacementTowerPrefab);
+			PlacementTowerPrefab = null;
+		}
+	}
+	#endregion
 	
 	public bool LevelComplete(string levelDisplayName)
 	{
@@ -360,33 +606,6 @@ public class PlayerManager : MonoBehaviour
 			LevelProgress.Add(levelDisplayName, complete.ToString() + "~" + score.ToString());
 
 		PlayerPrefs.Save();
-	}
-	
-	public void TowerSelectedForPlacement(TowerData towerData)
-	{
-		PlacementTowerData = towerData;
-
-		// Create a "Look" quaternion that considers the Z axis to be "up" and that faces away from the base
-		var rotation = Quaternion.LookRotation(new Vector3(10, 10, 0), new Vector3(0.0f, 0.0f, -1.0f));
-
-		// Remove the old prefab (if applicable)
-		if(PlacementTowerPrefab != null)
-			Destroy(PlacementTowerPrefab);
-
-		// Load the shell prefab to show
-		PlacementTowerPrefab = Instantiate(Resources.Load("Towers/" + towerData.PrefabName + "_Shell"), Vector3.zero, rotation) as GameObject;
-
-		// Set the range based on player prefab
-		PlacementTowerPrefab.GetComponentInChildren<SpriteRenderer>().transform.localScale *= towerData.AdjustedRange;
-	}
-
-	public void SetShellTowerPosition(Vector3 newPosition)
-	{
-		// Only place the tower if a tower has been selected
-		if(PlacementTowerPrefab != null)
-		{
-			PlacementTowerPrefab.transform.position = newPosition;
-		}
 	}
 	
 	public List<TowerData> GetGameLoadOutTowers()
