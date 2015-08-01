@@ -13,11 +13,15 @@ public class HexMesh : MonoBehaviour
 	//public bool GenerateNoise = true;
 	public Texture2D HeightMap;
 	public float HeightScale = 5.0f;
+	public float AttenuationMultiplier = 0.0f;
+	public float AttenuationExponent = 0.0f;
+	public HexMeshAttentuationStyle AttenuationStyle;
 	public bool ShowDebugLogs = true;
 	public bool FlatShaded = true;
 	public HexMeshSurfaceStyle SurfaceStyle;
 	[Range(0.0f,1.0f)]
 	public float SurfaceStyleInterpolation = 1.0f;
+	public bool SurfaceStyleAttenuation = false;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
 	public int FacilityRadius = 5;
@@ -139,7 +143,7 @@ public class HexMesh : MonoBehaviour
 			Vector2 c = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
 			Vector2 uv = tex(c);
 			float h = height(uv);
-			Vector3 p = new Vector3(c.x, c.y, h);
+			float z = h;
 
 			if (i >= 6)
 			{
@@ -147,7 +151,7 @@ public class HexMesh : MonoBehaviour
 				{
 				case HexMeshSurfaceStyle.FlatCenter:
 					float center = height(tex(hex.Position()));
-					p.z = Mathf.Lerp(h, center, SurfaceStyleInterpolation);
+					z = Mathf.Lerp(h, center, SurfaceStyleInterpolation);
 					break;
 				case HexMeshSurfaceStyle.FlatCentroid:
 					float centroid = 0.0f;
@@ -157,7 +161,7 @@ public class HexMesh : MonoBehaviour
 						centroid += height(tex(sc));
 					}
 					centroid *= 0.166666666667f; // Divide by six
-					p.z = Mathf.Lerp(h, centroid, SurfaceStyleInterpolation);
+					z = Mathf.Lerp(h, centroid, SurfaceStyleInterpolation);
 					break;
 				case HexMeshSurfaceStyle.Oblique:
 					// Loosely fit plane based an a sampling of three corners
@@ -172,18 +176,25 @@ public class HexMesh : MonoBehaviour
 					
 					// Prepare a ray from p that fires straight down toward the plane
 					// The offset is here to be sure we always start on the correct side of the plane (otherwise the raycast will fail)
-					Ray ray = new Ray(new Vector3(p.x, p.y, p.z - 100.0f), Vector3.forward);
+					Ray ray = new Ray(new Vector3(c.x, c.y, h - 100.0f), Vector3.forward);
 					
 					// Raycast the ray against the loosely fit plane, and then use the intersection as our point
 					float distance;
 					if (plane.Raycast(ray, out distance))
 					{
 						float intersection = ray.GetPoint(distance).z;
-						p.z = Mathf.Lerp(h, intersection, SurfaceStyleInterpolation);
+						z = Mathf.Lerp(h, intersection, SurfaceStyleInterpolation);
 					}
 					break;
 				}
 			}
+
+			if (SurfaceStyleAttenuation)
+			{
+				z = Mathf.Lerp(z, h, GetAttenuationFactor(uv));
+			}
+
+			Vector3 p = new Vector3(c.x, c.y, z);
 
 			return new HexMeshBuilder.Node(p, uv);
 		};
@@ -288,7 +299,42 @@ public class HexMesh : MonoBehaviour
 		}
 		
 		//Log("Using HeightMap");
-		return (Vector2 uv) => HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale * -HeightScale;
+		return (Vector2 uv) => {
+			// Fetch the value from the height map
+			float result = HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale;
+
+			// Apply the height scale (inverted because up is in negative Z)
+			result *= -HeightScale;
+
+			// Apply the attenuation factor
+			result *= 1.0f + GetAttenuationFactor(uv);
+
+			return result;
+		};
+	}
+
+	private float GetAttenuationFactor(Vector2 uv)
+	{
+		// Translate and scale to the coodinate space between (-1,-1) and (1,1)
+		Vector2 offset = new Vector2(0.5f, 0.5f);
+		Vector2 scale = new Vector2(2.0f, 2.0f);
+
+		Vector2 pos = Vector2.Scale(uv - offset, scale);
+		
+		// Calculate attenuation value
+		float attenuationValue = 0.0f;
+		switch (AttenuationStyle)
+		{
+		case HexMeshAttentuationStyle.DistanceFromCenter:
+			attenuationValue = pos.magnitude;
+			break;
+		case HexMeshAttentuationStyle.DistanceFromEdge:
+			attenuationValue = Mathf.Max(Mathf.Abs(pos.x), Mathf.Abs(pos.y));
+			break;
+		}
+		
+		// Calculate attenuation factor
+		return AttenuationMultiplier * Mathf.Pow(attenuationValue, AttenuationExponent);
 	}
 	
 	private Func<Vector2, Vector2> GetUVPredicate()
