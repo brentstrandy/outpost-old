@@ -20,7 +20,7 @@
   <LevelData>
     <LevelID>2</LevelID>
     <DisplayName>Better With Friends</DisplayName>
-    <SceneName>Level1</SceneName>
+    <SceneName>Level2</SceneName>
     <EnemySpawnFilename>BetterWithFriends</EnemySpawnFilename>
     <NotificationFilename />
     <Description>Defending this Outpost should not be done alone.</Description>
