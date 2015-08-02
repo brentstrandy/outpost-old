@@ -33,6 +33,8 @@ public class HexMesh : MonoBehaviour
 	public float HighlightWidth = 0.1f;
 	public Color HighlightColor = Color.red;
 
+	public int Revision { get; private set; }
+
 	public HashSet<HexCoord> Impassable = new HashSet<HexCoord>();
 
 	public HexMeshOverlaySet Overlays;
@@ -121,6 +123,7 @@ public class HexMesh : MonoBehaviour
 		var mesh = BuildBaseMesh();
 		GetComponent<MeshFilter>().sharedMesh = mesh;
 		GetComponent<MeshCollider>().sharedMesh = mesh;
+		Revision = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 	}
 	
 	private void UpdateOutlines()
