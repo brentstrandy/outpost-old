@@ -29,7 +29,7 @@ public class Tower : MonoBehaviour
 	public HealthBarController HealthBar;
 	protected PhotonView ObjPhotonView;
 	protected HexLocation ObjHexLocation;
-	protected Animation ObjAnimation;
+	protected Animator ObjAnimator;
 	// Effects
 	public GameObject FiringEffect;
 	public GameObject ExplodingEffect;
@@ -38,7 +38,7 @@ public class Tower : MonoBehaviour
 	public void Awake()
 	{
 		ObjHexLocation = GetComponent<HexLocation>();
-		ObjAnimation = GetComponent<Animation>();
+		ObjAnimator = GetComponent<Animator>();
     }
 
 	// Use this for initialization
@@ -161,7 +161,6 @@ public class Tower : MonoBehaviour
 	/// </summary>
 	public void OnBuildAnimFinished()
 	{
-		Log ("Build done");
 		CanFire = true;
 		CanMove = true;
 	}
@@ -259,16 +258,9 @@ public class Tower : MonoBehaviour
 		TargetedEnemy.TakeDamage(TowerAttributes.BallisticDamage, TowerAttributes.ThraceiumDamage);
 
 		// Tell the tower Animator the tower has fired
-		//ObjAnimation.SetTrigger("Shot Fired");
-		AnimationState fire = ObjAnimation["Heleur_STT_Fire"];
-		AnimationState cooldown = ObjAnimation["Heleur_STT_Cooldown"];
-		fire.layer = 1;
-		fire.enabled = true;
-		fire.weight = 0.5f;
-		cooldown.layer = 1;
-		cooldown.enabled = true;
-		cooldown.weight = 0.5f;
-		//cooldown.speed = (1 / TowerAttributes.RateOfFire);
+		ObjAnimator.SetTrigger("Shot Fired");
+		ObjAnimator.speed = TowerAttributes.RateOfFire;
+		Log ("Speed: " + ObjAnimator.speed.ToString());
 
 		// Reset timer for tracking when to fire next
 		TimeLastShotFired = Time.time;
