@@ -29,6 +29,7 @@ public class Tower : MonoBehaviour
 	public HealthBarController HealthBar;
 	protected PhotonView ObjPhotonView;
 	protected HexLocation ObjHexLocation;
+	protected Animation ObjAnimation;
 	// Effects
 	public GameObject FiringEffect;
 	public GameObject ExplodingEffect;
@@ -37,6 +38,7 @@ public class Tower : MonoBehaviour
 	public void Awake()
 	{
 		ObjHexLocation = GetComponent<HexLocation>();
+		ObjAnimation = GetComponent<Animation>();
     }
 
 	// Use this for initialization
@@ -77,7 +79,7 @@ public class Tower : MonoBehaviour
 		Health = TowerAttributes.MaxHealth;
 
 		// Set the speed at which this tower is built
-		this.GetComponent<Animation>()[TowerAttributes.PrefabName + "_Build"].speed = (1 / TowerAttributes.StartupTime);
+		//this.GetComponent<Animation>()[TowerAttributes.PrefabName + "_Build"].speed = (1 / TowerAttributes.StartupTime);
 
 		ObjPhotonView = PhotonView.Get(this);
 		NetworkViewID = ObjPhotonView.viewID;
@@ -125,7 +127,9 @@ public class Tower : MonoBehaviour
 		{
 			// Have the tower's pivot point look at the targeted enemy
 			if(TurretPivot)
+			{
 				TurretPivot.transform.rotation = Quaternion.Slerp( TurretPivot.transform.rotation, Quaternion.LookRotation(TargetedEnemy.transform.position - TurretPivot.transform.position, Up), Time.deltaTime * TowerAttributes.TrackingSpeed );
+			}
 		}
 	}
 
@@ -155,8 +159,9 @@ public class Tower : MonoBehaviour
 	/// <summary>
 	/// Used by the animation system. Called when the Startup Animation Finishes
 	/// </summary>
-	public void OnStartupAnimFinished()
+	public void OnBuildAnimFinished()
 	{
+		Log ("Build done");
 		CanFire = true;
 		CanMove = true;
 	}
@@ -187,7 +192,7 @@ public class Tower : MonoBehaviour
 			// Check to see if the enemy has died
 			else if(TargetedEnemy.tag == "Dead Enemy")
 			{
-				// Tell all other clients that 
+				// Tell all other clients that this tower is no longer targeting the dead enemy
 				ObjPhotonView.RPC("TargetNewEnemy", PhotonTargets.Others, -1);
 				
 				TargetedEnemy = null;
@@ -252,6 +257,19 @@ public class Tower : MonoBehaviour
 	{
 		// Tell enemy to take damage
 		TargetedEnemy.TakeDamage(TowerAttributes.BallisticDamage, TowerAttributes.ThraceiumDamage);
+
+		// Tell the tower Animator the tower has fired
+		//ObjAnimation.SetTrigger("Shot Fired");
+		AnimationState fire = ObjAnimation["Heleur_STT_Fire"];
+		AnimationState cooldown = ObjAnimation["Heleur_STT_Cooldown"];
+		fire.layer = 1;
+		fire.enabled = true;
+		fire.weight = 0.5f;
+		cooldown.layer = 1;
+		cooldown.enabled = true;
+		cooldown.weight = 0.5f;
+		//cooldown.speed = (1 / TowerAttributes.RateOfFire);
+
 		// Reset timer for tracking when to fire next
 		TimeLastShotFired = Time.time;
 

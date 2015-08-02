@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
+    <LevelID>2</LevelID>
+    <DisplayName>Better With Friends</DisplayName>
+    <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>BetterWithFriends</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Defending this Outpost should not be done alone.</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
+    <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>0.4</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <LevelID>4</LevelID>
+    <DisplayName>BetterWithFriends_2</DisplayName>
+    <SceneName>Level1</SceneName>
+    <EnemySpawnFilename>BetterWithFriends_2</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Figure it out!</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>5</MaximumPlayers>
+    <AvailableQuadrants>North, West, South, East</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
     <LevelID>1</LevelID>
     <DisplayName>Establishing Roots</DisplayName>
     <SceneName>Level1</SceneName>
@@ -18,25 +52,8 @@
     <MiningFacilityHealth>50</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <LevelID>2</LevelID>
-    <DisplayName>Better With Friends</DisplayName>
-    <SceneName>Level2</SceneName>
-    <EnemySpawnFilename>BetterWithFriends</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>Defending this Outpost should not be done alone.</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>8</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
-    <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>.4</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <LevelID>5</LevelID>
-    <DisplayName>Level 5</DisplayName>
+    <LevelID>3</LevelID>
+    <DisplayName>Level 3</DisplayName>
     <SceneName>Level1</SceneName>
     <EnemySpawnFilename>Level5</EnemySpawnFilename>
     <NotificationFilename />
