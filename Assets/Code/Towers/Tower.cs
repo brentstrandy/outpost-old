@@ -53,6 +53,12 @@ public class Tower : MonoBehaviour
 		// Track the newly added tower in the TowerManager
 		GameManager.Instance.TowerManager.AddActiveTower(this);
 		
+		// If this tower has range attack, inform the tower manager of our coverage area
+		if(TowerAttributes.Range > 0)
+		{
+			GameManager.Instance.TowerManager.AddCoverage(this);
+		}
+
 		if (TowerRing != null)
 		{
 			TowerRing.transform.localScale *= TowerAttributes.AdjustedRange;
@@ -92,12 +98,9 @@ public class Tower : MonoBehaviour
 		{
 			GameObject go = new GameObject("Awareness", typeof(SphereCollider) );
 			go.GetComponent<SphereCollider>().isTrigger = true;
-			go.GetComponent<SphereCollider>().radius = TowerAttributes.Range * 2;
+			go.GetComponent<SphereCollider>().radius = TowerAttributes.Range * 2; // Question from Josh: Why are we multiplying by 2 here?
 			go.transform.parent = this.transform;
 			go.transform.localPosition = Vector3.zero;
-
-			// Also inform the tower manager of our coverage area
-			GameManager.Instance.TowerManager.AddCoverage(this);
 		}
 
 		foreach(Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
@@ -145,11 +148,12 @@ public class Tower : MonoBehaviour
 	public virtual IEnumerable<HexCoord> Coverage()
 	{
 		HexCoord origin = ObjHexLocation.location;
-		int approxHexRange = (int)(TowerAttributes.Range * 2.0f);
-		Predicate<HexCoord> obstacles = (HexCoord coord) => { return true; };
+		int approxHexRange = (int)(TowerAttributes.Range * 3.0f);
+		Predicate<HexCoord> obstacles = (HexCoord coord) => { return false; };
+		float range = TowerAttributes.Range * 2.0f + 1.0f; // Double range to match sphere collider and then add radius
 		foreach (var node in HexKit.Spread(origin, approxHexRange, obstacles))
 		{
-			if (HexCoord.Distance(origin, node.Location) <= TowerAttributes.Range)
+			if (Vector2.Distance(origin.Position(), node.Location.Position()) <= range)
 			{
 				yield return node.Location;
 			}
