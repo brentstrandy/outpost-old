@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 using System.Collections;
 using System.Collections.Generic;
 using Settworks.Hexagons;
@@ -102,6 +103,8 @@ public class HexMeshOverlay
 			var renderer = Instance.AddComponent<MeshRenderer>();
 			
 			renderer.sharedMaterial = new Material(shader);
+			renderer.shadowCastingMode = ShadowCastingMode.Off;
+			renderer.receiveShadows = false;
 			renderer.enabled = false;
 
 			Color = Color.grey;
