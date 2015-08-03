@@ -8,6 +8,26 @@ using Settworks.Hexagons;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class HexMesh : MonoBehaviour
 {
+	private struct NeighborCorner
+	{
+		public int Neighbor;
+		public int Corner;
+
+		public NeighborCorner(int neighbor, int corner)
+		{
+			Neighbor = neighbor;
+			Corner = corner;
+		}
+	}
+
+	private static NeighborCorner[][] NeighborCorners = new NeighborCorner[][] {
+		new NeighborCorner[]{ new NeighborCorner(1, 4), new NeighborCorner(0, 2)},
+		new NeighborCorner[]{ new NeighborCorner(2, 5), new NeighborCorner(1, 3)},
+		new NeighborCorner[]{ new NeighborCorner(3, 0), new NeighborCorner(2, 4)},
+		new NeighborCorner[]{ new NeighborCorner(4, 1), new NeighborCorner(3, 5)},
+		new NeighborCorner[]{ new NeighborCorner(5, 2), new NeighborCorner(4, 0)},
+		new NeighborCorner[]{ new NeighborCorner(0, 3), new NeighborCorner(5, 1)},
+	};
 
 	// Properties adjustable in the inspector
 	//public bool GenerateNoise = true;
@@ -22,6 +42,9 @@ public class HexMesh : MonoBehaviour
 	[Range(0.0f,1.0f)]
 	public float SurfaceStyleInterpolation = 1.0f;
 	public bool SurfaceStyleAttenuation = false;
+	public HexMeshNeighborStyle NeighborStyle;
+	[Range(0.0f,1.0f)]
+	public float NeighborStyleInterpolation = 0.0f;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
 	public int FacilityRadius = 5;
@@ -138,82 +161,22 @@ public class HexMesh : MonoBehaviour
 	{
 		float outer = 1.0f;
 		float inner = 1.0f - DetailWidth;
-		
 		var height = GetHeightPredicate();
 		var tex = GetUVPredicate();
 		
 		HexMeshBuilder.NodeDelegate predicate = (HexCoord hex, int i) => {
-			Vector2 c = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
-			Vector2 uv = tex(c);
-			float h = height(uv);
-			float z = h;
-
-			if (i >= 6)
-			{
-				switch (SurfaceStyle)
-				{
-				case HexMeshSurfaceStyle.FlatCenter:
-					float center = height(tex(hex.Position()));
-					z = Mathf.Lerp(h, center, SurfaceStyleInterpolation);
-					break;
-				case HexMeshSurfaceStyle.FlatCentroid:
-					float centroid = 0.0f;
-					for (int s=0; s < 6; s++)
-					{
-						Vector2 sc = HexCoord.CornerVector(s) * inner + hex.Position();
-						centroid += height(tex(sc));
-					}
-					centroid *= 0.166666666667f; // Divide by six
-					z = Mathf.Lerp(h, centroid, SurfaceStyleInterpolation);
-					break;
-				case HexMeshSurfaceStyle.Oblique:
-					// Loosely fit plane based an a sampling of three corners
-					Plane plane = new Plane();
-					Vector2 c0 = HexCoord.CornerVector(0) * inner + hex.Position();
-					Vector2 c2 = HexCoord.CornerVector(2) * inner + hex.Position();
-					Vector2 c4 = HexCoord.CornerVector(4) * inner + hex.Position();
-					Vector3 p0 = new Vector3(c0.x, c0.y, height(tex(c0)));
-					Vector3 p2 = new Vector3(c2.x, c2.y, height(tex(c2)));
-					Vector3 p4 = new Vector3(c4.x, c4.y, height(tex(c4)));
-					plane.Set3Points(p4, p2, p0);
-					
-					// Prepare a ray from p that fires straight down toward the plane
-					// The offset is here to be sure we always start on the correct side of the plane (otherwise the raycast will fail)
-					Ray ray = new Ray(new Vector3(c.x, c.y, h - 100.0f), Vector3.forward);
-					
-					// Raycast the ray against the loosely fit plane, and then use the intersection as our point
-					float distance;
-					if (plane.Raycast(ray, out distance))
-					{
-						float intersection = ray.GetPoint(distance).z;
-						z = Mathf.Lerp(h, intersection, SurfaceStyleInterpolation);
-					}
-					break;
-				}
-			}
-
-			if (SurfaceStyleAttenuation)
-			{
-				z = Mathf.Lerp(z, h, GetAttenuationFactor(uv));
-			}
-
-			Vector3 p = new Vector3(c.x, c.y, z);
-
-			return new HexMeshBuilder.Node(p, uv);
+			return CalculateNode(height, tex, outer, inner, hex, i);
 		};
 		
 		var bounds = GetHexBounds();
 		var builder = new HexMeshBuilder();
 		builder.FlatShaded = FlatShaded;
-		
-		// Note: Corner 0 is at the upper right, others proceed counterclockwise.
-		
 		builder.SetPredicate(predicate);
 		builder.SetTriangles(new int[] {
 			0,6,7,		7,1,0,		1,7,8,		8,2,1,		2,8,9,		9,3,2,
 			3,9,10,		10,4,3,		4,10,11,	11,5,4,		5,11,6,		6,0,5,
 			6,11,7,		7,11,8,		8,11,10,	10,9,8
-				/*
+			/*
 			0,1,6,		6,1,7,		1,2,7,		7,2,8,		2,3,8,		8,3,9,
 			3,4,9,		9,4,10,		4,5,10,		10,5,11,	5,0,11,		11,0,6,
 			6,7,9,		9,7,8,		11,6,10,	10,6,9
@@ -274,12 +237,15 @@ public class HexMesh : MonoBehaviour
 		var height = GetHeightPredicate();
 		var tex = GetUVPredicate();
 		
-		HexMeshBuilder.NodeDelegate predicate = (HexCoord c, int i) => {
-			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + c.Position();
+		HexMeshBuilder.NodeDelegate predicate = (HexCoord hex, int i) => {
+			//return CalculateNode(height, tex, hex, outer, inner, i);
+
+			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
 			Vector2 uv = tex(pos);
 			//float h = (i < 6) ? height(uv) : height(tex(c.Position()));
 			float h = height(uv);
 			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, h), uv);
+
 		};
 		
 		var builder = new HexMeshBuilder();
@@ -345,6 +311,110 @@ public class HexMesh : MonoBehaviour
 		Vector2 scale = new Vector2(1.0f / (float)GridWidth, 1.0f / (float)GridHeight);
 		Vector2 offset = new Vector2(0.5f, 0.5f);
 		return (Vector2 uv) => Vector2.Scale(uv, scale) + offset;
+	}
+
+	protected HexMeshBuilder.Node CalculateNode(Func<Vector2, float> height, Func<Vector2, Vector2> tex, float outer, float inner, HexCoord hex, int i)
+	{
+		// Note: Corner 0 is at the upper right, others proceed counterclockwise.
+		Vector2 c = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
+		Vector2 uv = tex(c);
+		float h = height(uv);
+		float z = h;
+		
+		if (i < 6)
+		{
+			// Exterior vertex
+			if (NeighborStyleInterpolation > 0.0f)
+			{
+				// Take samples from the neighbors
+				List<float> samples = new List<float>(3);
+				{
+					samples.Add(CalculateNode(height, tex, outer, inner, hex, i+6).vertex.z);
+					foreach (var nc in NeighborCorners[i])
+					{
+						samples.Add(CalculateNode(height, tex, outer, inner, hex.Neighbor(nc.Neighbor), nc.Corner + 6).vertex.z);
+					}
+				}
+
+				switch (NeighborStyle)
+				{
+				case HexMeshNeighborStyle.Average:
+					// Interpolate exterior corners with the average height of their interior neighbors
+					z = 0.0f;
+					foreach (float sample in samples)
+					{
+						z += sample;
+					}
+					z *= 0.333333333f; // Divide by 3 to take the average
+					break;
+				case HexMeshNeighborStyle.Median:
+					samples.Sort();
+					z = samples[1];
+					break;
+				case HexMeshNeighborStyle.Min:
+					z = Mathf.Min(samples.ToArray());
+					break;
+				case HexMeshNeighborStyle.Max:
+					z = Mathf.Max(samples.ToArray());
+					break;
+				}
+
+				z = Mathf.Lerp(h, z, NeighborStyleInterpolation);
+			}
+		}
+		else
+		{
+			// Interior vertex
+			switch (SurfaceStyle)
+			{
+			case HexMeshSurfaceStyle.FlatCenter:
+				float center = height(tex(hex.Position()));
+				z = Mathf.Lerp(h, center, SurfaceStyleInterpolation);
+				break;
+			case HexMeshSurfaceStyle.FlatCentroid:
+				float centroid = 0.0f;
+				for (int s=0; s < 6; s++)
+				{
+					Vector2 sc = HexCoord.CornerVector(s) * inner + hex.Position();
+					centroid += height(tex(sc));
+				}
+				centroid *= 0.166666666667f; // Divide by six
+				z = Mathf.Lerp(h, centroid, SurfaceStyleInterpolation);
+				break;
+			case HexMeshSurfaceStyle.Oblique:
+				// Loosely fit plane based an a sampling of three corners
+				Plane plane = new Plane();
+				Vector2 c0 = HexCoord.CornerVector(0) * inner + hex.Position();
+				Vector2 c2 = HexCoord.CornerVector(2) * inner + hex.Position();
+				Vector2 c4 = HexCoord.CornerVector(4) * inner + hex.Position();
+				Vector3 p0 = new Vector3(c0.x, c0.y, height(tex(c0)));
+				Vector3 p2 = new Vector3(c2.x, c2.y, height(tex(c2)));
+				Vector3 p4 = new Vector3(c4.x, c4.y, height(tex(c4)));
+				plane.Set3Points(p4, p2, p0);
+				
+				// Prepare a ray from p that fires straight down toward the plane
+				// The offset is here to be sure we always start on the correct side of the plane (otherwise the raycast will fail)
+				Ray ray = new Ray(new Vector3(c.x, c.y, h - 100.0f), Vector3.forward);
+				
+				// Raycast the ray against the loosely fit plane, and then use the intersection as our point
+				float distance;
+				if (plane.Raycast(ray, out distance))
+				{
+					float intersection = ray.GetPoint(distance).z;
+					z = Mathf.Lerp(h, intersection, SurfaceStyleInterpolation);
+				}
+				break;
+			}
+			
+			if (SurfaceStyleAttenuation)
+			{
+				z = Mathf.Lerp(z, h, GetAttenuationFactor(uv));
+			}
+		}
+		
+		Vector3 p = new Vector3(c.x, c.y, z);
+		
+		return new HexMeshBuilder.Node(p, uv);
 	}
 
 	/*
