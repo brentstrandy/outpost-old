@@ -44,7 +44,7 @@ public class HexMesh : MonoBehaviour
 	public bool SurfaceStyleAttenuation = false;
 	public HexMeshNeighborStyle NeighborStyle;
 	[Range(0.0f,1.0f)]
-	public float NeighborStyleInterpolation = 0.0f;
+	public float NeighborStyleInterpolation = 1.0f;
 	public int GridWidth = 5;
 	public int GridHeight = 5;
 	public int FacilityRadius = 5;
