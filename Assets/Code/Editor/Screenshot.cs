@@ -28,7 +28,7 @@ public class Screenshot : Editor
 			}
 			//
 			//Capture();
-			string file = string.Format("{0}/Screenshot {1}.png", path, System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"));
+			string file = string.Format("{0}/Screenshot {1}.png", path, System.DateTime.Now.ToString("yyyyMMddTHHmmss"));
 			Application.CaptureScreenshot(file, 4);
 			//Debug.Log("Screenshot Taken. Located in 'Screenshots' folder of Outpost (not visible in Unity)");
 			Debug.Log(string.Format("Saving screenshot to: {0}", file));
