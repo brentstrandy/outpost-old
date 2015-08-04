@@ -165,7 +165,7 @@ public class HexMesh : MonoBehaviour
 		var tex = GetUVPredicate();
 		
 		HexMeshBuilder.NodeDelegate predicate = (HexCoord hex, int i) => {
-			return CalculateNode(height, tex, outer, inner, hex, i);
+			return CalculateBaseMeshNode(height, tex, outer, inner, hex, i);
 		};
 		
 		var bounds = GetHexBounds();
@@ -230,22 +230,14 @@ public class HexMesh : MonoBehaviour
 	
 	private HexMeshBuilder CreateOverlayBuilder(float lineWidth)
 	{
-		float offset = lineWidth * 0.5f;
-		float outer = 1.0f + offset;
-		float inner = 1.0f - offset;
+		float outer = 1.0f;
+		float inner = 1.0f - DetailWidth;
 		
 		var height = GetHeightPredicate();
 		var tex = GetUVPredicate();
 		
 		HexMeshBuilder.NodeDelegate predicate = (HexCoord hex, int i) => {
-			//return CalculateNode(height, tex, hex, outer, inner, i);
-
-			Vector2 pos = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
-			Vector2 uv = tex(pos);
-			//float h = (i < 6) ? height(uv) : height(tex(c.Position()));
-			float h = height(uv);
-			return new HexMeshBuilder.Node(new Vector3(pos.x, pos.y, h), uv);
-
+			return CalculateOutlineMeshNode(height, tex, lineWidth, outer, inner, hex, i);
 		};
 		
 		var builder = new HexMeshBuilder();
@@ -312,8 +304,29 @@ public class HexMesh : MonoBehaviour
 		Vector2 offset = new Vector2(0.5f, 0.5f);
 		return (Vector2 uv) => Vector2.Scale(uv, scale) + offset;
 	}
+	
+	protected HexMeshBuilder.Node CalculateOutlineMeshNode(Func<Vector2, float> height, Func<Vector2, Vector2> tex, float width, float outer, float inner, HexCoord hex, int i)
+	{
+		if (i < 6)
+		{
+			// Exterior vertex
+			return CalculateBaseMeshNode(height, tex, outer, inner, hex, i);
+		}
+		else
+		{
+			// Interior vertex
+			Vector3 v1 = CalculateBaseMeshNode(height, tex, outer, inner, hex, i - 6).vertex;
+			Vector3 v2 = CalculateBaseMeshNode(height, tex, outer, inner, hex, i).vertex;
 
-	protected HexMeshBuilder.Node CalculateNode(Func<Vector2, float> height, Func<Vector2, Vector2> tex, float outer, float inner, HexCoord hex, int i)
+			// Fire a ray from the exterior vertex toward the interior vertex, and then sample a point between them at a distance of a the desired width
+			Vector3 p = new Ray(v1, v2 - v1).GetPoint(width);
+			Vector2 uv = tex(p);
+
+			return new HexMeshBuilder.Node(p, uv);
+		}
+	}
+
+	protected HexMeshBuilder.Node CalculateBaseMeshNode(Func<Vector2, float> height, Func<Vector2, Vector2> tex, float outer, float inner, HexCoord hex, int i)
 	{
 		// Note: Corner 0 is at the upper right, others proceed counterclockwise.
 		Vector2 c = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
@@ -329,10 +342,10 @@ public class HexMesh : MonoBehaviour
 				// Take samples from the neighbors
 				List<float> samples = new List<float>(3);
 				{
-					samples.Add(CalculateNode(height, tex, outer, inner, hex, i+6).vertex.z);
+					samples.Add(CalculateBaseMeshNode(height, tex, outer, inner, hex, i+6).vertex.z);
 					foreach (var nc in NeighborCorners[i])
 					{
-						samples.Add(CalculateNode(height, tex, outer, inner, hex.Neighbor(nc.Neighbor), nc.Corner + 6).vertex.z);
+						samples.Add(CalculateBaseMeshNode(height, tex, outer, inner, hex.Neighbor(nc.Neighbor), nc.Corner + 6).vertex.z);
 					}
 				}
 
@@ -416,45 +429,6 @@ public class HexMesh : MonoBehaviour
 		
 		return new HexMeshBuilder.Node(p, uv);
 	}
-
-	/*
-	private void ApplyNoise(int gridWidth, int gridHeight, Vector3[] vertices)
-	{
-		int numHexagonColumnsA = (gridWidth + 1) / 2;
-		int numHexagonColumnsB = (gridWidth - 1) / 2;
-
-		for (int r = 0; r < gridHeight; r++)
-		{
-			int numHexagonColumns = r % 2 == 0 ? numHexagonColumnsA : numHexagonColumnsB; // The number of columns varies depending on whether the row index is even or odd
-			for (int c = 0; c < numHexagonColumns; c++)
-			{
-				float baseline = (float)(r * c) * 0.001f;
-				float variation = 0.8f;
-				float target = baseline * baseline + UnityEngine.Random.Range(0.0f, variation);
-				float neighbor = 0.0f;
-				for (int p = 0; p < 7; p++)
-				{
-					int index = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
-					neighbor = Mathf.Max(neighbor, vertices[index].z);
-				}
-				float hexDiff = neighbor - target;
-				target += hexDiff * 0.5f;
-				for (int p = 0; p < 7; p++)
-				{
-					int index = GetHexagonIndex(gridWidth, gridHeight, r, c, p);
-					float vertexDiff = p > 0 ? vertices[index].z - target : 0.0f;
-					vertices[index].z = target + vertexDiff * 0.5f;
-				}
-			}
-		}
-	}
-	*/
-
-	/*
-	public void Apply(HexMap map)
-	{
-	}
-	*/
 
 	#region MessageHandling
 	protected void Log(string message)
