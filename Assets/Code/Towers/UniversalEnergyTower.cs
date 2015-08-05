@@ -11,8 +11,6 @@ public class UniversalEnergyTower : Tower
 		// Load default attributes from TowerData
 		//TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("UniversalEnergyTower");
 
-		TimeLastShotFired = Time.time;
-
 		// Universal Energy Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 	}

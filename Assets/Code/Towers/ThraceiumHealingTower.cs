@@ -4,35 +4,25 @@ using System.Collections.Generic;
 
 public class ThraceiumHealingTower : Tower
 {
-	private bool ReadyToHeal = false;
+	private bool ReadyToHeal = true;
 	public GameObject HealingEffect;
 
 	// Use this for initialization
 	public override void Start()
 	{
 		base.Start();
-
-		//EnemyCircleCollider = this.GetComponent<SphereCollider>();
-
-		//EnemyCircleCollider.radius = TowerAttributes.Range;
 	}
-	
-	// Update is called once per frame
+
 	public override void Update()
+	{
+		// Do nothing
+	}
+
+	public override void OnCooldownAnimFinished()
 	{
 		// Only perform the act of healing if this is the Master Client
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-		{
-			// Only check to see if the tower is ready to heal again when it is not ready to heal
-			if(ReadyToHeal == false)
-			{
-				// Only heal if tower is ready to heal
-				if(Time.time - TimeLastShotFired >= (1 / TowerAttributes.RateOfFire))
-				{
-					ReadyToHeal = true;
-				}
-			}
-		}
+			ReadyToHeal = true;
 	}
 	
 	#region IDENTIFYING TARGETS
@@ -48,16 +38,21 @@ public class ThraceiumHealingTower : Tower
 
 	protected override void OnTriggerStay(Collider other)
 	{
-		if(ReadyToHeal)
+		// Only perform the act of healing if this is the Master Client
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			if(other.tag == "Tower")
+			// Only heal when the tower is ready to heal
+			if(ReadyToHeal)
 			{
-				// Check to see if the tower needs to be healed
-				if(!other.GetComponent<Tower>().HasFullHealth())
+				if(other.tag == "Tower")
 				{
-					ReadyToHeal = false;
-					// Tell all clients to heal the tower
-					ObjPhotonView.RPC("HealAcrossNetwork", PhotonTargets.All, other.GetComponent<Tower>().NetworkViewID);
+					// Check to see if the tower needs to be healed
+					if(!other.GetComponent<Tower>().HasFullHealth())
+					{
+						ReadyToHeal = false;
+						// Tell all clients to heal the tower
+						ObjPhotonView.RPC("HealAcrossNetwork", PhotonTargets.All, other.GetComponent<Tower>().NetworkViewID);
+					}
 				}
 			}
 		}
@@ -73,10 +68,14 @@ public class ThraceiumHealingTower : Tower
 	{
 		Tower tower = GameManager.Instance.TowerManager.FindTowerByID(viewID);
 
+		// Tell the tower Animator the tower has fired
+		ObjAnimator.SetTrigger("Shot Fired");
+
 		// Heal the tower
 		tower.Heal(5.0f);
-		// Reset timer for tracking when to heal next
-		TimeLastShotFired = Time.time;
+
+		// After healing, this tower cannot heal again until it has finished its cooldown
+		ReadyToHeal = false;
 
 		// Instantiate prefab for healing
 		if(HealingEffect)

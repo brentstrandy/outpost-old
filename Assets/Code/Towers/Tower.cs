@@ -17,8 +17,8 @@ public class Tower : MonoBehaviour
 	public int NetworkViewID { get; protected set; }
 
 	protected Enemy TargetedEnemy = null;
-	protected float TimeLastShotFired;
 	protected bool CanFire = false;
+	protected bool ReadyToFire = true;
 	protected bool CanMove = false;
 	
 	public GameObject TurretPivot;
@@ -44,9 +44,6 @@ public class Tower : MonoBehaviour
 	// Use this for initialization
 	public virtual void Start () 
 	{
-		// Allow the first bullet to be fired immediately after the tower is instantiated
-		TimeLastShotFired = 0;
-
 		// Update the hex coordinate to reflect the spawned position
 		ObjHexLocation.ApplyPosition();
 
@@ -115,6 +112,8 @@ public class Tower : MonoBehaviour
 			}
 		}
 
+		// Initiate animation playback speeds based on Tower Attributes
+		ObjAnimator.SetFloat("Cooldown Playback Speed", TowerAttributes.RateOfFire);
 
 		// Only initialize the health bar if it is used for this enemy
 		if(HealthBar)
@@ -163,10 +162,15 @@ public class Tower : MonoBehaviour
 	/// <summary>
 	/// Used by the animation system. Called when the Startup Animation Finishes
 	/// </summary>
-	public void OnBuildAnimFinished()
+	public virtual void OnBuildAnimFinished()
 	{
 		CanFire = true;
 		CanMove = true;
+	}
+
+	public virtual void OnCooldownAnimFinished()
+	{
+		ReadyToFire = true;
 	}
 
 	#region IDENTIFYING TARGETS
@@ -263,11 +267,9 @@ public class Tower : MonoBehaviour
 
 		// Tell the tower Animator the tower has fired
 		ObjAnimator.SetTrigger("Shot Fired");
-		ObjAnimator.speed = TowerAttributes.RateOfFire;
-		Log ("Speed: " + ObjAnimator.speed.ToString());
 
-		// Reset timer for tracking when to fire next
-		TimeLastShotFired = Time.time;
+		// After the tower fires it loses the ability to fire again until after a cooldown period
+		ReadyToFire = false;
 
 		InstantiateFire();
 		InstantiateExplosion(); // TODO: Delay?
@@ -392,7 +394,7 @@ public class Tower : MonoBehaviour
 					if(TargetedEnemy != null)
 					{
 						// Only fire if tower is ready to fire
-						if(Time.time - TimeLastShotFired >= (1 / TowerAttributes.RateOfFire))
+						if(ReadyToFire)
 						{
 							// Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
 							if(TurretPivot == null || Vector3.Angle(TurretPivot.transform.forward, TargetedEnemy.transform.position - TurretPivot.transform.position) <= 8)

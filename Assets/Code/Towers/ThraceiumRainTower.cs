@@ -11,8 +11,6 @@ public class ThraceiumRainTower : Tower
 		// Load default attributes from TowerData
 		//TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("ThraceiumRainTower");
 
-		TimeLastShotFired = Time.time;
-
 		// Thraceium Rain Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 	}
