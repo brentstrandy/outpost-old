@@ -30,6 +30,12 @@ public class SmallThraceiumTower : Tower
 		{
 			GameObject effect = Instantiate(FiringEffect, EmissionPoint.transform.position, EmissionPoint.transform.rotation) as GameObject;
 			effect.GetComponent<LaserFire>().Target = TargetedEnemy.transform;
+
+			// TO DO: Instead of instantiating a new prefab all the time just use one prefab and reset it after each use
+			// Set the color of the laser effect
+			effect.GetComponent<Light>().color = PlayerColor;
+			effect.GetComponent<LineRenderer>().material.SetColor("_Color", PlayerColor);
+			effect.GetComponent<LineRenderer>().material.SetColor("_EmissionColor", PlayerColor);
 		}
 	}
 	#endregion Special Effects

@@ -16,6 +16,7 @@ public class Tower : MonoBehaviour
 	public float Health { get; protected set; }
 	public int NetworkViewID { get; protected set; }
 
+	public Color PlayerColor { get; private set; }
 	protected Enemy TargetedEnemy = null;
 	protected bool CanFire = false;
 	protected bool ReadyToFire = true;
@@ -80,6 +81,7 @@ public class Tower : MonoBehaviour
 	{
 		TowerAttributes = towerData;
 		Health = TowerAttributes.MaxHealth;
+		PlayerColor = playerColor;
 
 		// Set the speed at which this tower is built
 		//this.GetComponent<Animation>()[TowerAttributes.PrefabName + "_Build"].speed = (1 / TowerAttributes.StartupTime);
@@ -106,8 +108,8 @@ public class Tower : MonoBehaviour
 			{
 				if(material.name.Contains("PlayerColorMaterial"))
 				{
-					material.SetColor("_Color", playerColor);
-					material.SetColor("_EmissionColor", playerColor);
+					material.SetColor("_Color", PlayerColor);
+					material.SetColor("_EmissionColor", PlayerColor);
 				}
 			}
 		}
