@@ -52,7 +52,8 @@ public class MainMenu_Menu : MonoBehaviour
     {
         // TO DO: Ask the user if they're sure they want to leave
 
-        SessionManager.Instance.LeaveRoom();
+		// Disconnect the player from Photon
+        SessionManager.Instance.Disconnect();
 
         // Tell the MenuManager to transition back
         MenuManager.Instance.ShowStartMenu();

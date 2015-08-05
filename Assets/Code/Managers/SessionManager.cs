@@ -272,6 +272,14 @@ public class SessionManager : MonoBehaviour
 	{
 		PhotonNetwork.CloseConnection(player);
 	}
+
+	/// <summary>
+	/// Disconnect the player from Photon
+	/// </summary>
+	public void Disconnect()
+	{
+		PhotonNetwork.Disconnect();
+	}
 	#endregion
 
 	#region INFORMATION
