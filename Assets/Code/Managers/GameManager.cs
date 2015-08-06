@@ -194,14 +194,18 @@ public class GameManager : MonoBehaviour
 	[PunRPC]
 	private void SpawnEnemyAcrossNetwork(string displayName, int startAngle, int viewID)
 	{
+		// Look up the enemy's data
+		EnemyData data = GameDataManager.Instance.FindEnemyDataByDisplayName(displayName);
+		// Calculate the enemy's position
+		Vector3 pos = TerrainMesh.IntersectPosition(AngleToPosition(startAngle), data.HoverDistance);
 		// Instantiate a new Enemy
-		GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.FindEnemyPrefabNameByDisplayName(displayName)), AngleToPosition(startAngle), Quaternion.identity) as GameObject;
+		GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.FindEnemyPrefabNameByDisplayName(displayName)), pos, Quaternion.identity) as GameObject;
 		// Add a PhotonView to the Enemy
 		newEnemy.AddComponent<PhotonView>();
 		// Set Enemy's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
 		newEnemy.GetComponent<PhotonView>().viewID = viewID;
 		// The Prefab doesn't contain the correct default data. Set the Enemy's default data now
-		newEnemy.GetComponent<Enemy>().SetEnemyData(GameDataManager.Instance.FindEnemyDataByDisplayName(displayName));
+		newEnemy.GetComponent<Enemy>().SetEnemyData(data);
 	}
 
 	[PunRPC]
