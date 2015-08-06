@@ -38,7 +38,10 @@ public class HeavySpeeder : Enemy
 	protected override void DieAcrossNetwork()
 	{
 		Rigidbody rb = this.GetComponent<Rigidbody>();
-		
+
+		// Convert Trigger into a Collider
+		this.GetComponent<BoxCollider>().isTrigger = false;
+
 		rb.constraints = RigidbodyConstraints.None;
 		// TO DO: Fix this - Brent lost the original code and now he is too dumb to make it work again
 		Vector3 temp = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z - 2);
