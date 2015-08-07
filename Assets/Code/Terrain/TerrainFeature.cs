@@ -13,22 +13,23 @@ public class TerrainFeature : MonoBehaviour
 	Vector3 _pos;
 	int _terrainRevision;
 
-	// Use this for initialization
-	#if !UNITY_EDITOR
 	void Start()
 	{
-		var hexLocation = GetComponent<HexLocation>();
-		hexLocation.ApplyPosition();
-		if (Impassable)
+		if (Application.isPlaying)
 		{
-			var terrain = GameManager.Instance.TerrainMesh;
-			foreach (var coord in HexKit.WithinRange(hexLocation.location, Radius - 1))
+			var hexLocation = GetComponent<HexLocation>();
+			hexLocation.ApplyPosition();
+			if (Impassable)
 			{
-				terrain.Impassable.Add(coord);
+				var terrain = GetTerrain();
+				foreach (var coord in HexKit.WithinRange(hexLocation.location, Radius - 1))
+				{
+					Debug.Log("Adding " + coord.ToString() + " to impassable list on account of impassable terrain feature.");
+					terrain.Impassable.Add(coord);
+				}
 			}
 		}
 	}
-	#endif
 
 	void Update()
 	{
