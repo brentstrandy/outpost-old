@@ -18,6 +18,8 @@ public class Screenshot : Editor
 
 	public override void OnInspectorGUI()
 	{
+		base.OnInspectorGUI();
+
 		if (GUILayout.Button("Take Screenshot"))
 		{
 			string path = "Screenshots";
