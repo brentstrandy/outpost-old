@@ -109,7 +109,6 @@ public class SessionManager : MonoBehaviour
 	/// </summary>
 	public void StartSession(bool autoJoinLobby = true)
 	{
-		// By default, do not join a lobby
 		PhotonNetwork.autoJoinLobby = autoJoinLobby;
 		// By default, do not clean up GameObjects when a players disconnects
 		PhotonNetwork.autoCleanUpPlayerObjects = false;
@@ -117,6 +116,9 @@ public class SessionManager : MonoBehaviour
 		// Only connect if the player is not already connected
 		if(!PhotonNetwork.connected)
 			PhotonNetwork.ConnectUsingSettings("v1.0");
+
+		PhotonNetwork.player.name = name;
+		PlayerManager.Instance.SetPlayerName(name);
 	}
 
 	/// <summary>
@@ -129,11 +131,12 @@ public class SessionManager : MonoBehaviour
 			PhotonNetwork.Disconnect();
 	}
 
-	public void AuthenticatePlayer(string name)
+	public void AuthenticatePlayer(string name, string password)
 	{
-		// TO DO: Actually authenticate the player
-		PhotonNetwork.player.name = name;
-		PlayerManager.Instance.SetPlayerName(name);
+		PhotonNetwork.AuthValues = new AuthenticationValues();
+		PhotonNetwork.AuthValues.AuthType = CustomAuthenticationType.Custom;
+		PhotonNetwork.AuthValues.AddAuthParameter("username", name);
+		PhotonNetwork.AuthValues.AddAuthParameter("password", password);
 	}
 
 	/// <summary>

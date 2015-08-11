@@ -7,7 +7,8 @@ public class Start_Menu : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
 
-	public GameObject InputField;
+	public GameObject UsernameField;
+	public GameObject PasswordField;
 	public GameObject StartButton;
 	public GameObject CannotConnectText;
 	public GameObject RetryButton;
@@ -22,7 +23,7 @@ public class Start_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMConnectionFail += ConnectionFailed_Event;
 
 		// Select the input field
-		InputField.GetComponent<InputField>().Select();
+		UsernameField.GetComponent<InputField>().Select();
 
 		// Only show the option of using LOCAL vs SERVER data if run through the editor
 #if UNITY_EDITOR
@@ -47,7 +48,7 @@ public class Start_Menu : MonoBehaviour
 	public void Start_Click()
 	{
 		// Tell the SessionManager the name of the user logging in
-		SessionManager.Instance.AuthenticatePlayer(InputField.GetComponentInChildren<Text>().text);
+		SessionManager.Instance.AuthenticatePlayer(UsernameField.GetComponentInChildren<Text>().text, PasswordField.GetComponentInChildren<Text>().text);
 
 		// Tell the SessionManager to start a new session with the player's credentials
 		SessionManager.Instance.StartSession();
@@ -91,7 +92,7 @@ public class Start_Menu : MonoBehaviour
 
 	private void ConnectionFailed_Event(DisconnectCause cause)
 	{
-		InputField.SetActive(false);
+		UsernameField.SetActive(false);
 		StartButton.SetActive(false);
 		CannotConnectText.SetActive(true);
 		RetryButton.SetActive(true);
