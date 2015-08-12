@@ -72,7 +72,7 @@ public class HexMesh : MonoBehaviour
 		UpdateOutlines();
 	}
 	
-	public Vector3 IntersectPosition(Vector3 pos, float distance = 0f)
+	public Vector3 IntersectPosition(Vector3 pos, float offset = 0f)
 	{
 		// TODO: Translate pos into local coordinates?
 		RaycastHit hit;
@@ -81,9 +81,19 @@ public class HexMesh : MonoBehaviour
 		var down = new Vector3(0f, 0f, 1.0f); // Fire the ray down toward the mesh
 		if (IntersectRay(new Ray(pos, down), out hit, out coord))
 		{
-			return new Vector3(hit.point.x, hit.point.y, hit.point.z - distance); // Note: Up is negative Z
+			return new Vector3(hit.point.x, hit.point.y, hit.point.z - offset); // Note: Up is negative Z
 		}
 		return pos;
+	}
+	
+	public Vector3 Sample(HexCoord coord, SamplingAlgorithm x, SamplingAlgorithm y, SamplingAlgorithm z)
+	{
+		return GetBaseMeshVerticesForHexCoord(coord, 0, 11).Sample(x, y, z);
+	}
+	
+	public float SampleZ(HexCoord coord, SamplingAlgorithm alg)
+	{
+		return GetBaseMeshVerticesForHexCoord(coord, 0, 11).SampleZ(alg);
 	}
 	
 	public bool IntersectRay(Ray ray, out RaycastHit hit, out HexCoord coord)
@@ -104,6 +114,19 @@ public class HexMesh : MonoBehaviour
 		}
 		coord = default(HexCoord);
 		return false;
+	}
+	
+	public IEnumerable<Vector3> GetBaseMeshVerticesForHexCoord(HexCoord coord, int start=0, int end=5)
+	{
+		float outer = 1.0f;
+		float inner = 1.0f - DetailWidth;
+		var height = GetHeightPredicate();
+		var tex = GetUVPredicate();
+		
+		for (int i=start; i < end; i++)
+		{
+			yield return CalculateBaseMeshNode(height, tex, outer, inner, coord, i).vertex;
+		}
 	}
 
 	public void ApplyProperties()

@@ -9,8 +9,21 @@ public class TerrainFeature : MonoBehaviour
 {
 	public bool Impassable = true;
 	public int Radius = 1;
+	public TerrainPinningMode TerrainPinning
+	{
+		get
+		{
+			return _terrainPinning;
+		}
+		set
+		{
+			_terrainPinning = value;
+			UpdatePosition();
+		}
+	}
 
 	Vector3 _pos;
+	TerrainPinningMode _terrainPinning = TerrainPinningMode.Min;
 	int _terrainRevision;
 
 	void Start()
@@ -49,7 +62,23 @@ public class TerrainFeature : MonoBehaviour
 		var terrain = GetTerrain();
 		if (terrain != null)
 		{
-			transform.position = terrain.IntersectPosition(transform.position);
+			switch (TerrainPinning)
+			{
+			case TerrainPinningMode.Intersection:
+				transform.position = terrain.IntersectPosition(transform.position);
+				break;
+			case TerrainPinningMode.Mean:
+				transform.position = new Vector3(transform.position.x, transform.position.y, terrain.SampleZ(HexCoord.AtPosition(transform.position), SamplingAlgorithm.Mean));
+				break;
+			case TerrainPinningMode.Min:
+				// This is intentionally inverted to accomodate the negative z axis pointing up
+				transform.position = new Vector3(transform.position.x, transform.position.y, terrain.SampleZ(HexCoord.AtPosition(transform.position), SamplingAlgorithm.Max));
+				break;
+			case TerrainPinningMode.Max:
+				// This is intentionally inverted to accomodate the negative z axis pointing up
+				transform.position = new Vector3(transform.position.x, transform.position.y, terrain.SampleZ(HexCoord.AtPosition(transform.position), SamplingAlgorithm.Min));
+				break;
+			}
 			_terrainRevision = terrain.Revision;
 		}
 		_pos = transform.localPosition;
