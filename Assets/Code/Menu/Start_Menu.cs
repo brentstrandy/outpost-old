@@ -11,6 +11,7 @@ public class Start_Menu : MonoBehaviour
 	public GameObject PasswordField;
 	public GameObject StartButton;
 	public GameObject CannotConnectText;
+	public GameObject InvalidAuthText;
 	public GameObject RetryButton;
 	public GameObject OfflineButton;
 	public GameObject DataLocationButton;
@@ -21,9 +22,16 @@ public class Start_Menu : MonoBehaviour
 		// Establish listeners for all applicable events
 		SessionManager.Instance.OnSMConnected += Connected_Event;
 		SessionManager.Instance.OnSMConnectionFail += ConnectionFailed_Event;
+		SessionManager.Instance.onSMAuthenticationFail += AuthenticationFailed_Event;
 
-		// Select the input field
-		UsernameField.GetComponent<InputField>().Select();
+		// Automatically set the username if someone has already logged in before
+		if(PlayerPrefs.HasKey("Username"))
+		{
+			UsernameField.GetComponent<InputField>().text = PlayerPrefs.GetString("Username");
+			PasswordField.GetComponent<InputField>().Select();
+		}
+		else
+			UsernameField.GetComponent<InputField>().Select();
 
 		// Only show the option of using LOCAL vs SERVER data if run through the editor
 #if UNITY_EDITOR
@@ -47,8 +55,11 @@ public class Start_Menu : MonoBehaviour
 	#region OnClick
 	public void Start_Click()
 	{
+		// Hide error message text so that it only appears after invalid authentication
+		InvalidAuthText.SetActive(false);
+
 		// Tell the SessionManager the name of the user logging in
-		SessionManager.Instance.AuthenticatePlayer(UsernameField.GetComponentInChildren<Text>().text, PasswordField.GetComponentInChildren<Text>().text);
+		SessionManager.Instance.AuthenticatePlayer(UsernameField.GetComponentInChildren<Text>().text, PasswordField.GetComponent<InputField>().text);
 
 		// Tell the SessionManager to start a new session with the player's credentials
 		SessionManager.Instance.StartSession();
@@ -87,7 +98,20 @@ public class Start_Menu : MonoBehaviour
 	#region Events
 	private void Connected_Event()
 	{
+		// Delete the password so that it cannot be used later
+		PasswordField.GetComponent<InputField>().text = "";
+
+		// Save the player's username to use the next time they login
+		PlayerPrefs.SetString("Username", UsernameField.GetComponentInChildren<Text>().text);
+
+		// Transition to show the main menu
 		MenuManager.Instance.ShowMainMenu();
+	}
+
+	private void AuthenticationFailed_Event(string message)
+	{
+		InvalidAuthText.SetActive(true);
+		PasswordField.GetComponent<InputField>().Select();
 	}
 
 	private void ConnectionFailed_Event(DisconnectCause cause)

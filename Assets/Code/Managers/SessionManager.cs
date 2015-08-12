@@ -16,6 +16,7 @@ public class SessionManager : MonoBehaviour
 	public delegate void SessionManagerActionFailure(DisconnectCause cause);
 	public delegate void SessionManagerActionRoomFailure(object[] codeAndMsg);
 	public delegate void SessionManagerActionPlayer(PhotonPlayer player);
+	public delegate void SessionManagerActionAuthFailed(string message);
 
 	/// <summary>
 	/// Called when authenticated (if applicable) and connected to network services
@@ -61,6 +62,10 @@ public class SessionManager : MonoBehaviour
 	/// Called when connection to the network services fails
 	/// </summary>
 	public event SessionManagerActionFailure OnSMConnectionFail;
+	/// <summary>
+	/// Called when the player's login authentication failed
+	/// </summary>
+	public event SessionManagerActionAuthFailed onSMAuthenticationFail;
 	/// <summary>
 	/// Called when the room fails to create
 	/// </summary>
@@ -461,11 +466,11 @@ public class SessionManager : MonoBehaviour
 	/// <param name="debugMessage">Debug message.</param>
 	private void OnCustomAuthenticationFailed(string debugMessage)
 	{
-		this.LogError("Custom authentication failed: " + debugMessage);
+		this.Log("Custom authentication failed: " + debugMessage);
 
 		// Call delegate event linked to this action
-		if(OnSMDisconnected != null)
-			OnSMDisconnected();
+		if(onSMAuthenticationFail != null)
+			onSMAuthenticationFail(debugMessage);
 	}
 	#endregion
 
