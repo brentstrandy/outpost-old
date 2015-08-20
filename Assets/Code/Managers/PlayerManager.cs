@@ -49,6 +49,7 @@ public class PlayerManager : MonoBehaviour
 
 		// The player needs to know when connection has been made to the server so that it can set its data
 		SessionManager.Instance.OnSMConnected += Connected_Event;
+		SessionManager.Instance.OnSMDisconnected += Disconnected_Event;
 
 		ObjPhotonView = PhotonView.Get(this);
 	}
@@ -77,6 +78,7 @@ public class PlayerManager : MonoBehaviour
 	}
 	#endregion
 
+	#region EVENTS
 	private void Connected_Event()
 	{
 		int userID;
@@ -87,6 +89,13 @@ public class PlayerManager : MonoBehaviour
 		// Set player level progress data based on the userID (aquired when logging into Diadem's server)
 		StartCoroutine(LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php?playerID=" + PlayerID.ToString()));
 	}
+
+	private void Disconnected_Event()
+	{
+		PlayerID = -1;
+		LevelProgressDataManager.ClearData();
+	}
+	#endregion
 
 	public void SetGameLoadOut(LoadOut loadOut)
 	{
@@ -562,8 +571,13 @@ public class PlayerManager : MonoBehaviour
 
 	public void SaveLevelProgress(int levelID, int score, bool complete)
 	{
+		// Save a local copy of the player's progress so that they can keep playing the game and see the progress
+		LevelProgressDataManager.DataList.Add(new LevelProgressData(levelID, score, complete));
+
 		// Call web service that saves the player's progress
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?playerID=" + PlayerID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + score.ToString() + "&complete=" + complete.ToString());
+
+		Log ("Level Progress Saved");
 	}
 	
 	public List<TowerData> GetGameLoadOutTowers()

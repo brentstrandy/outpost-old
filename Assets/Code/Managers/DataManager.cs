@@ -14,8 +14,7 @@ public class DataManager<T>
 	/// </summary>
 	/// <value>The data list.</value>
 	public List<T> DataList { get; private set; }
-
-
+	
 	public DataManager()
 	{
 		FinishedLoadingData = false;
@@ -23,10 +22,13 @@ public class DataManager<T>
 		// Instantiate lists to save the data
 		DataList = new List<T>();
 	}
-	
+
+	/// <summary>
+	/// Method used to load XML from a local location
+	/// </summary>
+	/// <param name="filename">Filename.</param>
 	public void LoadDataFromLocal(string filename)
 	{
-		//location of level specific XML spawn data
 		string levelDataXMLPath = Application.streamingAssetsPath + "/" + filename;
 
 		if (File.Exists(levelDataXMLPath))
@@ -69,7 +71,7 @@ public class DataManager<T>
 	}
 	
 	/// <summary>
-	/// Total number of Levels
+	/// Total number of data items
 	/// </summary>
 	/// <returns>Total Count</returns>
 	public int Count()
@@ -78,7 +80,7 @@ public class DataManager<T>
 	}
 
 	/// <summary>
-	/// Clears all currently loaded LevelData
+	/// Clears all currently loaded data items
 	/// </summary>
 	public void ClearData()
 	{

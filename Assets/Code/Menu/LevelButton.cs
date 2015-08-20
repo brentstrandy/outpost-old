@@ -31,11 +31,12 @@ public class LevelButton : MonoBehaviour
 			levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " Players]";
 		else
 			levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
-		
-		//(PlayerManager.Instance.LevelScore(levelData.DisplayName) != 0)
-		//	levelDescription += "\n[Score: " + PlayerManager.Instance.LevelScore(levelData.DisplayName) + "]";
-		//else
-		//	levelDescription += "\n[Not Played]";
+
+		LevelProgressData lpd = PlayerManager.Instance.LevelProgressDataManager.DataList.Find(x => x.LevelID == levelData.LevelID);
+		if(lpd != null)
+			levelDescription += "\n[Score: " + lpd.Score.ToString() + "]";
+		else
+			levelDescription += "\n[Not Played]";
 
 		LevelText.GetComponent<Text>().text = levelDescription;
 	}
