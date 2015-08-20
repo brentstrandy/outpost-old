@@ -17,7 +17,7 @@ using System.Linq;
 public static class XMLParser<T>
 {
     static bool ShowDebugLogs = false;
-    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata"};
+    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata", "levelprogressdata"};
 
 
     #region LIST DE/SERIALIZERS
@@ -383,8 +383,7 @@ public static class XMLParser<T>
 
     public static void LogError(string message)
     {
-        if (ShowDebugLogs)
-            Debug.LogError("[XMLParser] " + message);
+    	Debug.LogError("[XMLParser] " + message);
     }
     #endregion
 }

@@ -1155,6 +1155,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             case OperationCode.Authenticate:
                 {
                     // PeerState oldState = this.State;
+					if (operationResponse.Parameters.ContainsKey(ParameterCode.UserId))
+					{
+						this.CustomAuthenticationValues.UserId = operationResponse.Parameters[ParameterCode.UserId] as string;
+					}
 
                     if (operationResponse.ReturnCode != 0)
                     {

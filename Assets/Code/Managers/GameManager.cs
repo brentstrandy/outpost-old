@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviour
 		MenuManager.Instance.ShowVictoryMenu();
 		
 		// Save player progress (won level)
-		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, true, 10);
+		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, 0, true);
 
         // Analytics Manager
         SaveAnalytics();
@@ -231,7 +231,7 @@ public class GameManager : MonoBehaviour
 		MenuManager.Instance.ShowLossMenu();
 		
 		// Save player progress (lost level)
-		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.DisplayName, false, 10);
+		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, 0, false);
 
         // Analytics Manager
 

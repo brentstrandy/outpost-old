@@ -10,14 +10,17 @@ using Settworks.Hexagons;
 public class PlayerManager : MonoBehaviour
 {
 	private static PlayerManager instance;
-	
 	public bool ShowDebugLogs = true;
+
+	public DataManager<LevelProgressData> LevelProgressDataManager { get; private set; }
+
+	public int PlayerID { get; private set; }
+	public string Name { get; private set; }
 	public float Money { get; private set; }
 	public Quadrant CurrentQuadrant;
 	public PlayerMode Mode;
 	
 	private GameObject PlayerLocator;
-	public string Name { get; private set; }
 	private LoadOut GameLoadOut;
 	private double LastTowerPlacementTime;
 
@@ -27,9 +30,7 @@ public class PlayerManager : MonoBehaviour
 
 	// Tower Selection
 	public HexCoord SelectedTowerCoord { get; private set; }
-	
-	private Dictionary<string, string> LevelProgress;
-	
+
 	private int PlayerColorIndex;
 	
 	// Components
@@ -37,32 +38,19 @@ public class PlayerManager : MonoBehaviour
 	
 	public void Start()
 	{
+		PlayerID = -1;
 		Money = 0.0f;
 		Mode = PlayerMode.Selection;
 		SelectedTowerCoord = default(HexCoord);
 		PlacementTowerData = null;
 		LastTowerPlacementTime = Time.time;
 		
-		LevelProgress = new Dictionary<string, string>();
-		
-		ObjPhotonView = PhotonView.Get(this);
-		
-		// Loop through all known levels and load the player's progress from PlayerPrefs
-		foreach(LevelData levelData in GameDataManager.Instance.LevelDataManager.DataList)
-		{
-			// If the level progress has been saved, retrieve it
-			if(PlayerPrefs.HasKey(levelData.DisplayName))
-				LevelProgress.Add(levelData.DisplayName, PlayerPrefs.GetString(levelData.DisplayName));
-			else
-			{
-				// If no level progress is saved in PlayerPrefs, add it to the PlayerPrefs and load it into the game as zero progress
-				PlayerPrefs.SetString(levelData.DisplayName, "false~0");
-				LevelProgress.Add(levelData.DisplayName, "false~0");
-			}
-		}
+		LevelProgressDataManager = new DataManager<LevelProgressData>();
 
-		// Save any updates to the PlayerPrefs for safe measure (this action is also done on Application.Quit)
-		PlayerPrefs.Save();
+		// The player needs to know when connection has been made to the server so that it can set its data
+		SessionManager.Instance.OnSMConnected += Connected_Event;
+
+		ObjPhotonView = PhotonView.Get(this);
 	}
 
 	#region INSTANCE (SINGLETON)
@@ -88,7 +76,18 @@ public class PlayerManager : MonoBehaviour
 		instance = this;
 	}
 	#endregion
-	
+
+	private void Connected_Event()
+	{
+		int userID;
+		int.TryParse(PhotonNetwork.AuthValues.UserId, out userID);
+
+		PlayerID = userID;
+
+		// Set player level progress data based on the userID (aquired when logging into Diadem's server)
+		StartCoroutine(LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php?playerID=" + PlayerID.ToString()));
+	}
+
 	public void SetGameLoadOut(LoadOut loadOut)
 	{
 		GameLoadOut = loadOut;
@@ -560,52 +559,11 @@ public class PlayerManager : MonoBehaviour
 		}
 	}
 	#endregion
-	
-	public bool LevelComplete(string levelDisplayName)
-	{
-		string details;
-		string[] detailsSplit;
-		bool playedLevel = false;
-		
-		// Try to find the level details within the dictionary
-		if(LevelProgress.TryGetValue(levelDisplayName, out details))
-		{
-			detailsSplit = details.Split('~');
-			if(detailsSplit[0] == "True")
-				playedLevel = true;
-		}
 
-		return playedLevel;
-	}
-	
-	public int LevelScore(string levelDisplayName)
+	public void SaveLevelProgress(int levelID, int score, bool complete)
 	{
-		string details;
-		string[] detailsSplit;
-		int score = 0;
-		
-		// Try to find the level details within the dictionary
-		if(LevelProgress.TryGetValue(levelDisplayName, out details))
-		{
-			detailsSplit = details.Split('~');
-			int.TryParse(detailsSplit[1], out score);
-		}
-		
-		return score;
-	}
-	
-	public void SaveLevelProgress(string levelDisplayName, bool complete, int score)
-	{
-		// Save progress on the level to the player prefs
-		PlayerPrefs.SetString(levelDisplayName, complete.ToString() + "~" + score.ToString());
-
-		// Save progress locally
-		if(LevelProgress.ContainsKey(levelDisplayName))
-			LevelProgress[levelDisplayName] = complete.ToString() + "~" + score.ToString();
-		else
-			LevelProgress.Add(levelDisplayName, complete.ToString() + "~" + score.ToString());
-
-		PlayerPrefs.Save();
+		// Call web service that saves the player's progress
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?playerID=" + PlayerID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + score.ToString() + "&complete=" + complete.ToString());
 	}
 	
 	public List<TowerData> GetGameLoadOutTowers()

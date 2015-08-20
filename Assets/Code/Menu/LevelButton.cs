@@ -32,10 +32,10 @@ public class LevelButton : MonoBehaviour
 		else
 			levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
 		
-		if(PlayerManager.Instance.LevelScore(levelData.DisplayName) != 0)
-			levelDescription += "\n[Score: " + PlayerManager.Instance.LevelScore(levelData.DisplayName) + "]";
-		else
-			levelDescription += "\n[Not Played]";
+		//(PlayerManager.Instance.LevelScore(levelData.DisplayName) != 0)
+		//	levelDescription += "\n[Score: " + PlayerManager.Instance.LevelScore(levelData.DisplayName) + "]";
+		//else
+		//	levelDescription += "\n[Not Played]";
 
 		LevelText.GetComponent<Text>().text = levelDescription;
 	}
