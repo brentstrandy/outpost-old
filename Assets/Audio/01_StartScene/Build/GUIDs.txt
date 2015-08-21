@@ -8,7 +8,8 @@
 {08eb7176-b6b1-4b6c-914e-fa42ec86f272} event:/SmallThraceiumTower/SmallThraceiumFire
 {e7a4712b-707a-47f6-9b9c-9f26ad9af425} bus:/
 {3d69b9e0-5ab0-495c-8514-30d04341e1b1} bus:/Reverb
-{ccc759a1-9146-47bd-9a08-43ef8526370c} bank:/Ambience
-{c430db1f-5e91-45af-a232-4bb3e734836c} bank:/Master Bank
-{3787ac68-7dc1-4ece-a837-4b210c4919c5} bank:/Enemies
+{def31c5a-1643-4591-a401-705dbfc0c8c7} vca:/Master Volume
 {f12a6c9e-4338-4728-8159-f044029e8819} bank:/Towers
+{c430db1f-5e91-45af-a232-4bb3e734836c} bank:/Master Bank
+{ccc759a1-9146-47bd-9a08-43ef8526370c} bank:/Ambience
+{3787ac68-7dc1-4ece-a837-4b210c4919c5} bank:/Enemies
