@@ -17,7 +17,7 @@ using System.Linq;
 public static class XMLParser<T>
 {
     static bool ShowDebugLogs = false;
-    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata", "levelprogressdata"};
+    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata", "levelprogressdata", "accountdata"};
 
 
     #region LIST DE/SERIALIZERS
@@ -94,7 +94,7 @@ public static class XMLParser<T>
         classList = (List<T>)deserializer.Deserialize(reader);
         reader.Close();
 
-        Log("Deserialized");
+        Log("Deserialized (SERVER): " + typeof(T).ToString());
 
         return classList;
     }
@@ -111,7 +111,7 @@ public static class XMLParser<T>
 
 		reader.Close();
 		
-		Log("Deserialized: " + filename);
+		Log("Deserialized (LOCAL): " + filename);
 		
 		return classList;
 	}

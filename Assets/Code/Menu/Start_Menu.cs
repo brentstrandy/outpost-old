@@ -101,6 +101,9 @@ public class Start_Menu : MonoBehaviour
 		// Delete the password so that it cannot be used later
 		PasswordField.GetComponent<InputField>().text = "";
 
+		// Set the player's name for all to see
+		SessionManager.Instance.GetPlayerInfo().name = UsernameField.GetComponentInChildren<Text>().text;
+
 		// Save the player's username to use the next time they login
 		PlayerPrefs.SetString("Username", UsernameField.GetComponentInChildren<Text>().text);
 

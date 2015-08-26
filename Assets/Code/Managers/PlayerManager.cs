@@ -13,9 +13,43 @@ public class PlayerManager : MonoBehaviour
 	public bool ShowDebugLogs = true;
 
 	public DataManager<LevelProgressData> LevelProgressDataManager { get; private set; }
+	public DataManager<AccountData> AccountDataManager { get; private set; }
 
-	public int PlayerID { get; private set; }
-	public string Name { get; private set; }
+	public int PlayerID
+	{ 
+		get
+		{
+			if(AccountDataManager.DataList.Count > 0)
+				return AccountDataManager.DataList[0].AccountID;
+			else
+				return -1;
+		}
+		private set {}
+	}
+
+	public string Username
+	{
+		get
+		{
+			if(AccountDataManager.DataList.Count > 0)
+				return AccountDataManager.DataList[0].Username;
+			else
+				return "";
+		}
+		private set {}
+	}
+
+	public string Email
+	{
+		get
+		{
+			if(AccountDataManager.DataList.Count > 0)
+				return AccountDataManager.DataList[0].Email;
+			else
+				return "";
+		}
+		private set {}
+	}
 	public float Money { get; private set; }
 	public Quadrant CurrentQuadrant;
 	public PlayerMode Mode;
@@ -46,6 +80,7 @@ public class PlayerManager : MonoBehaviour
 		LastTowerPlacementTime = Time.time;
 		
 		LevelProgressDataManager = new DataManager<LevelProgressData>();
+		AccountDataManager = new DataManager<AccountData>();
 
 		// The player needs to know when connection has been made to the server so that it can set its data
 		SessionManager.Instance.OnSMConnected += Connected_Event;
@@ -79,20 +114,27 @@ public class PlayerManager : MonoBehaviour
 	#endregion
 
 	#region EVENTS
+	/// <summary>
+	/// Called when the game connects to the network. The player is instantiated with the login credentials
+	/// </summary>
 	private void Connected_Event()
 	{
 		int userID;
 		int.TryParse(PhotonNetwork.AuthValues.UserId, out userID);
 
-		PlayerID = userID;
+		//PlayerID = userID;
+		//Username = SessionManager.Instance.GetPlayerInfo().name;
 
-		// Set player level progress data based on the userID (aquired when logging into Diadem's server)
+		// Load player level progress data based on the userID (aquired when logging into Diadem's server)
 		StartCoroutine(LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php?playerID=" + PlayerID.ToString()));
+
+		// Load player account details
+		StartCoroutine(AccountDataManager.LoadDataFromServer("PlayerData_AccountData.php?playerID=" + userID.ToString()));
 	}
 
 	private void Disconnected_Event()
 	{
-		PlayerID = -1;
+		AccountDataManager.ClearData();
 		LevelProgressDataManager.ClearData();
 	}
 	#endregion
@@ -125,7 +167,6 @@ public class PlayerManager : MonoBehaviour
 				PlacementModeUpdate(overTerrain, coord);
 				break;
 			}
-
 		}
 		
 		// Always keep the player locator GameObject in front of the camera. The GameObject has a PhotonView attached to it for the RadarManager
@@ -579,7 +620,7 @@ public class PlayerManager : MonoBehaviour
 
 		Log ("Level Progress Saved");
 	}
-	
+
 	public List<TowerData> GetGameLoadOutTowers()
 	{
 		List<TowerData> towerNames = new List<TowerData>();
@@ -606,12 +647,7 @@ public class PlayerManager : MonoBehaviour
 		Money = 0.0f;
 		Destroy(PlayerLocator);
 	}
-	
-	public void SetPlayerName(string name)
-	{
-		Name = name;
-	}
-	
+
 	public void OnLevelWasLoaded(int level)
 	{
 		// All levels MUST begin with a defined prefix for this to work properly
@@ -619,7 +655,7 @@ public class PlayerManager : MonoBehaviour
 		{
 			// Instantiate a player locator point that is used for the allies' Radar
 			PlayerLocator = SessionManager.Instance.InstantiateObject("PlayerLocator",  new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-			PlayerLocator.name = Name;
+			PlayerLocator.name = Username;
 		}
 	}
 	

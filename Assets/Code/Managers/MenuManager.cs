@@ -25,6 +25,7 @@ public class MenuManager : MonoBehaviour
 	public GameObject JoinGamePanel;
 	public GameObject MatchmakingGamePanel;
 	public GameObject MainSettingsPanel;
+	public GameObject AccountPanel;
 	public GameObject AudioSettingsPanel;
 	public GameObject VideoSettingsPanel;
 	public GameObject ControlSettingsPanel;
@@ -129,6 +130,11 @@ public class MenuManager : MonoBehaviour
 	public void ShowSettingsMenu()
 	{
 		SetCurrentMenuPanel(MainSettingsPanel);
+	}
+
+	public void ShowAccountMenu()
+	{
+		SetCurrentMenuPanel(AccountPanel);
 	}
 	
 	public void ShowAudioSettingsMenu()

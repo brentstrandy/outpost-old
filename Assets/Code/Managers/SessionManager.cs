@@ -121,9 +121,6 @@ public class SessionManager : MonoBehaviour
 		// Only connect if the player is not already connected
 		if(!PhotonNetwork.connected)
 			PhotonNetwork.ConnectUsingSettings("v1.0");
-
-		PhotonNetwork.player.name = name;
-		PlayerManager.Instance.SetPlayerName(name);
 	}
 
 	/// <summary>

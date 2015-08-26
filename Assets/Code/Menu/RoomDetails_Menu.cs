@@ -329,7 +329,7 @@ public class RoomDetails_Menu : MonoBehaviour
 				PlayerName_GUIText[i].GetComponent<Text>().text = pp.name;
 
 				// Master Client can kick players
-				if(SessionManager.Instance.GetPlayerInfo().isMasterClient && pp.name != PlayerManager.Instance.Name)
+				if(SessionManager.Instance.GetPlayerInfo().isMasterClient && pp.name != PlayerManager.Instance.Username)
 				{
 					// Need to use "GetChild" because the Child's Component has been set to inactive and is not searchable with "GetComponentInChildren"
 					PlayerName_GUIText[i].transform.GetChild(0).gameObject.SetActive(true);

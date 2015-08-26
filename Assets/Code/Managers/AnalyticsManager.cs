@@ -141,7 +141,7 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     public void InitializePlayerAnalytics()
     {
-        PlayerName =  PlayerManager.Instance.Name;
+        PlayerName =  PlayerManager.Instance.Username;
 
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
             IsMaster = true;
@@ -247,7 +247,7 @@ public class AnalyticsManager : MonoBehaviour
     {
         Analytics.CustomEvent("PlayerStats", new Dictionary<string, object>
         {
-            {"PlayerName", PlayerManager.Instance.Name},
+            {"PlayerName", PlayerManager.Instance.Username},
             {"PlayerIncome", PlayerMoney}
         });
     }
@@ -264,7 +264,7 @@ public class AnalyticsManager : MonoBehaviour
             {"GameLength", GameLength},
             {"LevelName", GameManager.Instance.CurrentLevelData.SceneName},
             {"LevelID", LevelID},
-            {"PlayerName", PlayerManager.Instance.Name}
+            {"PlayerName", PlayerManager.Instance.Username}
         });
     }
 
