@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour
 	public DataManager<LevelProgressData> LevelProgressDataManager { get; private set; }
 	public DataManager<AccountData> AccountDataManager { get; private set; }
 
-	public int PlayerID
+	public int AccountID
 	{ 
 		get
 		{
@@ -72,7 +72,7 @@ public class PlayerManager : MonoBehaviour
 	
 	public void Start()
 	{
-		PlayerID = -1;
+		AccountID = -1;
 		Money = 0.0f;
 		Mode = PlayerMode.Selection;
 		SelectedTowerCoord = default(HexCoord);
@@ -126,10 +126,10 @@ public class PlayerManager : MonoBehaviour
 		//Username = SessionManager.Instance.GetPlayerInfo().name;
 
 		// Load player level progress data based on the userID (aquired when logging into Diadem's server)
-		StartCoroutine(LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php?playerID=" + PlayerID.ToString()));
+		StartCoroutine(LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php?accountID=" + AccountID.ToString()));
 
 		// Load player account details
-		StartCoroutine(AccountDataManager.LoadDataFromServer("PlayerData_AccountData.php?playerID=" + userID.ToString()));
+		StartCoroutine(AccountDataManager.LoadDataFromServer("PlayerData_AccountData.php?accountID=" + userID.ToString()));
 	}
 
 	private void Disconnected_Event()
@@ -616,7 +616,7 @@ public class PlayerManager : MonoBehaviour
 		LevelProgressDataManager.DataList.Add(new LevelProgressData(levelID, score, complete));
 
 		// Call web service that saves the player's progress
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?playerID=" + PlayerID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + score.ToString() + "&complete=" + complete.ToString());
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?accountID=" + AccountID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + score.ToString() + "&complete=" + complete.ToString());
 
 		Log ("Level Progress Saved");
 	}

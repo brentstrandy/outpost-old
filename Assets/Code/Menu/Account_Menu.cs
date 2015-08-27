@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -90,7 +90,7 @@ public class Account_Menu : MonoBehaviour
 	private IEnumerator ChangePassword(string newPassword)
 	{
 		Log ("Resetting Password");
-		WWW www = new WWW("http://www.diademstudios.com/accounts/DBResetPassword.php?playerID=" + PlayerManager.Instance.PlayerID.ToString() + "&password=" + newPassword);
+		WWW www = new WWW("http://www.diademstudios.com/accounts/DBResetPassword.php?accountID=" + PlayerManager.Instance.AccountID.ToString() + "&password=" + newPassword);
 
 		while(!www.isDone)
 		{
@@ -120,7 +120,7 @@ public class Account_Menu : MonoBehaviour
 	private IEnumerator UpdateAccount(string email, string username)
 	{
 		Log ("Updating Account Details");
-		WWW www = new WWW("http://www.diademstudios.com/accounts/DBUpdateAccount.php?playerID=" + PlayerManager.Instance.PlayerID.ToString() + "&email=" + email + "&username=" + username);
+		WWW www = new WWW("http://www.diademstudios.com/accounts/DBUpdateAccount.php?acountID=" + PlayerManager.Instance.AccountID.ToString() + "&email=" + email + "&username=" + username);
 		
 		while(!www.isDone)
 		{
