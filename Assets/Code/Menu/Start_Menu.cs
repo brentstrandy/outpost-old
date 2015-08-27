@@ -136,8 +136,7 @@ public class Start_Menu : MonoBehaviour
 	
 	protected void LogError(string message)
 	{
-		if(ShowDebugLogs)
-			Debug.LogError("[Start_Menu] " + message);
+		Debug.LogError("[Start_Menu] " + message);
 	}
 	#endregion
 }

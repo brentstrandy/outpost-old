@@ -19,6 +19,7 @@ public class MenuManager : MonoBehaviour
 	public LevelData CurrentLevelData { get; private set; }
 	
 	// Menu Panels
+	public GameObject SplashPanel;
 	public GameObject StartMenuPanel;
 	public GameObject MainMenuPanel;
 	public GameObject RoomDetailsPanel;
@@ -66,7 +67,7 @@ public class MenuManager : MonoBehaviour
 		CurrentLevelData = null;
 		
 		// Set the current menu panel as the start menu
-		SetCurrentMenuPanel(StartMenuPanel);
+		SetCurrentMenuPanel(SplashPanel);
 		
 		// Track events in order to react to Session Manager events as they happen
 		SessionManager.Instance.OnSMConnectionFail += DisconnectedFromNetwork;
