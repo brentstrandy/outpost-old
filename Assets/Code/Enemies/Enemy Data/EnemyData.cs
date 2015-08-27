@@ -12,6 +12,7 @@ public class EnemyData
 	// Enemy Details
 	public string DisplayName;
 	public string PrefabName;
+    public int EnemyID;
 	public PathFindingType PathFinding;
 	public Color HighlightColor;
 	public bool AttackTowers;
@@ -35,30 +36,6 @@ public class EnemyData
     public bool ShowDebugLogs = true;
 
 	public EnemyData() { }
-	
-    public EnemyData(EnemyData obj)
-    {
-        DisplayName = obj.DisplayName;
-		PrefabName = obj.PrefabName;
-		PathFinding = obj.PathFinding;
-		HighlightColor = obj.HighlightColor;
-		AttackTowers = obj.AttackTowers;
-		AttackMiningFacility = obj.AttackMiningFacility;
-		AttackWhileMoving = obj.AttackWhileMoving;
-	
-	    // Enemy Stats
-	    MaxHealth = obj.MaxHealth;
-	    RateOfFire = obj.RateOfFire;
-	    Acceleration = obj.Acceleration;
-	    Speed = obj.Speed;
-		Range = obj.Range;
-		HoverDistance = obj.HoverDistance;
-		BallisticDamage = obj.BallisticDamage;
-		ThraceiumDamage = obj.ThraceiumDamage;
-	    BallisticDefense = obj.BallisticDefense;
-        ThraceiumDefense = obj.ThraceiumDefense;
-		TurningSpeed = obj.TurningSpeed;
-    }
 	
     /// <summary>
     /// Used for creating a new Enemy in the Unity Inspector

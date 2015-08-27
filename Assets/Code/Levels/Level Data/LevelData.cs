@@ -10,9 +10,9 @@ using System.Xml.Serialization;
 public class LevelData 
 {
 	// Level Details
-	public int LevelID;
 	public string DisplayName;
 	public string SceneName;
+    public int LevelID;
 	public string EnemySpawnFilename;
 	public string NotificationFilename;
 	public string Description;
@@ -31,26 +31,6 @@ public class LevelData
 	public bool ShowDebugLogs = true;
 	
 	public LevelData() { }
-	
-	public LevelData(LevelData obj)
-	{
-		LevelID = obj.LevelID;
-		DisplayName = obj.DisplayName;
-		SceneName = obj.SceneName;
-		EnemySpawnFilename = obj.EnemySpawnFilename;
-		NotificationFilename = obj.NotificationFilename;
-		Description = obj.Description;
-		MinimumPlayers = obj.MinimumPlayers;
-		MaximumPlayers = obj.MaximumPlayers;
-		AvailableQuadrants = obj.AvailableQuadrants;
-		StartingQuadrant = obj.StartingQuadrant;
-		AvailableTowers = obj.AvailableTowers;
-		MaxTowersPerPlayer = obj.MaxTowersPerPlayer;
-		// Mining Facility Details
-		StartingMoney = obj.StartingMoney;
-		IncomePerSecond = obj.IncomePerSecond;
-		MiningFacilityHealth = obj.MiningFacilityHealth;
-	}
 
     public LevelData(string displayName, string sceneName, int levelID)
 	{
