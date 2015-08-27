@@ -1,17 +1,17 @@
 using UnityEngine;
-using System;
-using System.Collections;
+//using System;
+//using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using System.Xml;
+//using System.Security.Cryptography;
+//using System.Text;
+//using System.Xml;
 using System.Xml.Serialization;
 using System.Linq;
 
 /// <summary>
 /// Generic de/serializer used to save and load XML files.
-/// Owner: John Fitzgerald
+/// Owner: John Fitzgerald & Brent Strandy
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public static class XMLParser<T>
@@ -117,6 +117,8 @@ public static class XMLParser<T>
 	}
     #endregion
 
+    #region FOR POTENTIAL FUTURE USE (ENCRYPTION)
+    /*
     #region NON-LIST DE/SERIALIZERS
     /// <summary>
     /// Serialize a class to an XML file.
@@ -372,6 +374,8 @@ public static class XMLParser<T>
         byte[] result = cTransform.TransformFinalBlock(toEncrypt, 0, toEncrypt.Length);
         return UTF8Encoding.UTF8.GetString(result);
     }
+    #endregion
+    */
     #endregion
 
     #region MessageHandling

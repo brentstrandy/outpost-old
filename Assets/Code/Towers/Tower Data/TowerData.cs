@@ -14,6 +14,7 @@ public class TowerData
     // DisplayName must come first in class so it replaces element tag in Inspector
 	public string DisplayName;
     public string PrefabName;
+    public int TowerID;
 
 	// Tower Stats
 	public int MaxHealth;
@@ -49,24 +50,6 @@ public class TowerData
     public bool ShowDebugLogs = true;
 
 	public TowerData() { }
-
-    //public TowerData(TowerData obj)
-    //{
-    //    DisplayName = obj.DisplayName;
-    //    PrefabName = obj.PrefabName;
-    //    Health = obj.Health;
-    //    PlayerCount = obj.PlayerCount;
-    //    RateOfFire = obj.RateOfFire;
-    //    Cooldown = obj.Cooldown;
-    //    Range = obj.Range;
-    //    ThraceiumDamage = obj.ThraceiumDamage;
-    //    BallisticDamage = obj.BallisticDamage;
-    //    TransitionTime = obj.TransitionTime;
-    //    InstallCost = obj.InstallCost;
-    //    MaintenanceCost = obj.MaintenanceCost;
-    //    StartupTime = obj.StartupTime;
-    //    TrackingSpeed = obj.TrackingSpeed;
-    //}
 
     public TowerData(string blank)
     {

@@ -217,9 +217,9 @@ public class GameManager : MonoBehaviour
 		
 		// Save player progress (won level)
 		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, 0, true);
-
-        // Analytics Manager
+    
         SaveAnalytics();
+    
 		//SendAnalytics()
 	}
 
@@ -233,10 +233,9 @@ public class GameManager : MonoBehaviour
 		// Save player progress (lost level)
 		PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, 0, false);
 
-        // Analytics Manager
-
         SaveAnalytics();
-		//SendAnalytics();
+
+        //SendAnalytics()
 	}
 	#endregion
 	
@@ -278,7 +277,7 @@ public class GameManager : MonoBehaviour
         AnalyticsManager.Instance.SavePlayerAnalytics();
 
         // If master client, save level anyltics.
-        if (AnalyticsManager.Instance.IsMaster)
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
             AnalyticsManager.Instance.SaveSessionAnalytics();
     }
 
@@ -289,9 +288,10 @@ public class GameManager : MonoBehaviour
     {
         // Each player sends their personal analytics.
         //AnalyticsManager.Instance.SendPlayerAnalytics();
+        //ResetPlayerAnalytics()
 
-        // If master client, send level anyltics.
-        if (AnalyticsManager.Instance.IsMaster)
+        // If the user is the master client and the number of players haven't changed, send and reset the level anyltics.
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient && AnalyticsManager.Instance.PlayerCountChanged == false)
         {
             //AnalyticsManager.Instance.SendLevelAnalytics();
             
@@ -300,7 +300,15 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Reset the AnalyticsManager relevant to the ending of a game
+    /// Reset the AnalyticsManager relevant to the ending of a player's game.
+    /// </summary>
+    private void ResetPlayerAnalytics()
+    {
+        AnalyticsManager.Instance.ResetPlayerAnalytics();
+    }
+
+    /// <summary>
+    /// Reset the AnalyticsManager relevant to the ending of a game.
     /// </summary>
     private void ResetLevelAnalytics()
     {
