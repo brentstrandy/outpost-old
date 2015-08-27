@@ -28,64 +28,63 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     ///         GENERAL RULES:
     /// 1) Only send CustomEvents at the end of a match.
+    /// 2) Explanation of shorthand
+    ///     a) (MASTER): sent by master client
+    ///     b) (ALL): sent by all clients
+    /// 
     /// 
     ///         TASK AT HAND:
-    /// 1) For sending global ("ALL") data: only send data from client if they are the master client.
-    /// 2) Prioritize variables based on Justin's Asana ordering ([H]igh or [L]ow).
-    /// 3) Create the averages on the user side to avoid sending so many events to the server.
-    /// 4) Figure out if I need to send the Player's name for every CustomEvent, or just once upfront:
+    /// 1) For sending global "(MASTER)" data: only send data from master client.
+    /// 2) Compute most averages on the user side to avoid sending so many events to the server.
+    /// 3) Figure out if I need to send the Player's name for every CustomEvent, or just once upfront:
     ///    this will be used to categorize all of the user's data.
-    /// 
-    ///         NEW VARIABLES:
-    /// 1) &[]Percentage of time the enemies are on () (ALL)
-    /// 2) &[]Find the amount of damage for each enemy to tower (ALL)
-    /// 3) &[]Use user's name to categorize their data (SINGLE)
-    /// 4) Win percentage for each level for each # of players (ALL)
     /// </summary>
 
     //[PLAYER]
-    public string PlayerName;//Name derived from (Player.Instance.Name)
-    public float PlayerMoney;//Total income per player
-    public float PlayerMoney_Average;//Average of all the players' income
-    public bool IsMaster = false;//Indicate if the player is the master client (they will send the global data)
+    public string PlayerName;//Name derived from (Player.Instance.Name) (ALL)
+    public float PlayerMoney;//Total income per player (ALL & MASTER)
+    public bool IsMaster = false;//Indicate if the player is the master client (they will send the global data) (MASTER)
+
+    // TODO -- (FITZGERALD) create universal way for Outpost to know which Enemies and Towers are available.
+    //[AVAILABLE ENEMIES AND TOWERS]
+    public List<string> EnemyTypes;
+    public List<string> TowerTypes;
 
     //[LEVEL]
-    public int LastLevelReached = 0;//Avg last level reached.
-    public int PlayerCount;//Playercount at the beginning of a level.
-    public bool PlayerCountChanged;//indicates if the player count has changed since the beginning of a level.
-    //public int CurrentLevelNumber;//Copy of LevelID?
-    public float GameLength;//Length of time the user plays the level (from game start to loss/win)
-    public int LevelID;//ID number of level
+    // public float WinPercent_Level; // Win percentage for each level for each # of players (ALL)
+    public int LastLevelReached = 0;//Avg last level reached. (ALL)
+    public int PlayerCount;//Playercount at the beginning of a level. (ALL & MASTER)
+    public bool PlayerCountChanged;//Indicates if the player count has changed since the beginning of a level (ALL & MASTER)
+    public float GameLength;//Length of time the user plays the level (from game start to loss/win) (MASTER)
+    public int LevelID;//ID number of level (MASTER)
 
     //[DAMAGE]
-    public float BallisticDamage;//Accumulated in a single level
-    public float ThraceiumDamage;//Accumulated in a seingle level
-    // Redundant if we send data at the end of each level
-    //public List<float> totalBallisticDamage;//Avg total ballistic damage
-    //public List<float> totalThraceiumDamage;//Avg total thracium damage
+    public float BallisticDamage;//Accumulated in a single level (ALL & MASTER)
+    public float ThraceiumDamage;//Accumulated in a seingle level (ALL & MASTER)
 
     //[TOWERS]
-    // TODO -- change to an array
-    public int NumberBuilt_Tower;//# of towers built for each type
-    public float DPS_Tower;//Avg DPS for each tower
-    public float LifeSpan_Tower;//Avg lifespan for each tower
-    public float DistanceFromCenter_Tower;//Avg distance from center for each tower type
-    public float DistanceFromTower_Tower;//Avg distance from other tower
-    //TODO --
-    //&[]Percentage of time the towers are on () (SINGLE)
-    //TODO --
-    //ADD A HEAT MAP (or collect data to create one -- "Unity Heat Map Tool")
+    Dictionary <string, int> NumberBuilt_Tower;
+    //public int[] NumberBuilt_Tower;//# of towers built for each type (ALL & MASTER)
+    Dictionary <string, float> DPS_Tower;
+    //public float[] DPS_Tower;//Avg DPS for each tower (ALL & MASTER)
+    Dictionary <string, float> DistanceFromCenter_Tower;
+    //public float[] DistanceFromCenter_Tower;//Avg distance from center for each tower type (ALL & MASTER)
+    Dictionary <string, float> DistanceFromTower_Tower;
+    //public float[][] DistanceFromTower_Tower;//Avg distance from other tower (ALL & MASTER)
+    Dictionary <string, float> LifeSpan_Tower;
+    //public float[] LifeSpan_Tower;//Avg lifespan for each tower (ALL & MASTER)
 
     //[ENEMIES]
-    // TODO -- change to an array
-    public int NumberOfSpawns_Enemy;//# of spawns for each enemy type
-    public float TotalDamage_Enemy;//Total damage for each enemy type
-    public float DPS_Enemy;//Avg DPS for each enemy type
-    public float LifeSpan_Enemy;//Avg lifespan for each enemy type
+    public int[] NumberOfSpawns_Enemy;//# of spawns for each enemy type (This is controlled by us -- do we need to track it?) (ALL & MASTER)
+    public float[] TotalDamage_Enemy;//Total damage for each enemy type (ALL & MASTER)
+    public float[] DPS_Enemy;//Avg DPS for each enemy type (ALL & MASTER)
+    public float[] LifeSpan_Enemy;//Avg lifespan for each enemy type that is destroyed (ALL & MASTER)
+    public float[] DamageToTower_Enemy;// Find the amount of damage for each enemy to tower (ALL & MASTER)
+    public float[] ActiveTime_Enemy;//Percentage of time that each of the enemies are active (ALL)
 
     //[MISCELLANEOUS]
-    public int StolenThraceium;//Avg thraceium stolen per player
-    public int NumberOfBarriers;//Avg # of barriers placed per player
+    public int StolenThraceium;//Avg thraceium stolen per player ()
+    public int NumberOfBarriers;//Avg # of barriers placed per player ()
 
     #region INSTANCE (SINGLETON)
     /// <summary>
@@ -142,9 +141,28 @@ public class AnalyticsManager : MonoBehaviour
     public void InitializePlayerAnalytics()
     {
         PlayerName =  PlayerManager.Instance.Username;
+        PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
+
+
+
+        //EnemyTypes = new List<string>(GameManager.Instance.);
+        TowerTypes = new List<string>();
+
+        // Create list of available enemies and towers
+        foreach (EnemyData enemy in GameDataManager.Instance.EnemyDataManager.DataList)
+            EnemyTypes.Add(enemy.DisplayName);
+
+        // Use LevelData availableTowers
+        foreach (TowerData tower in GameDataManager.Instance.TowerDataManager.DataList)
+            TowerTypes.Add(tower.DisplayName);
+
+
+
 
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
             IsMaster = true;
+        }
     }
     
     /// <summary>
@@ -172,7 +190,6 @@ public class AnalyticsManager : MonoBehaviour
         LevelID = GameManager.Instance.CurrentLevelData.LevelID;
         LastLevelReached = GameManager.Instance.CurrentLevelData.LevelID;
         
-        PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
         //if (PlayerCountChanged)
         //{
         //    //changes in GameManager.Instace.OnPlayerLeft()
