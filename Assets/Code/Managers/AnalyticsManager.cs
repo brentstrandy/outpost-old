@@ -197,13 +197,13 @@ public class AnalyticsManager : MonoBehaviour
         //else
         //    PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
 
-        // TODO -- Analytics -- discard Analytics because player count changed, or create subgroup of "player dropped" data (refer to Justin).
+        // TODO -- (FITZGERALD) -- Analytics -- discard Analytics because player count changed, or create subgroup of "player dropped" data (refer to Justin).
         //if (AnalyticsManager.Instance.PlayerCountChanged)
 
-        // TODO -- average all of the players' money
+        // TODO -- (FITZGERALD) -- average all of the players' money
         //AnalyticsManager.Instance.PLayerIncome_Average =;
 
-        // TODO -- figure out which variables to store (dependent on if they're ALL or SINGLE)
+        // TODO -- (FITZGERALD) -- figure out which variables to store (dependent on if they're ALL or SINGLE)
         //TowerAnalytics towarAnalytics = new TowerAnalytics();
         //EnemyAnalytics enemyAnalytics = new EnemyAnalytics();
     }
@@ -241,7 +241,7 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     public void ResetPlayerAnalytics()
     {
-        // TODO -- account for the possibility the player changes his/her name?
+        // TODO -- (FITZGERALD) -- account for the possibility the player changes his/her name?
         PlayerMoney = 0;
         IsMaster = false;
     }
@@ -335,7 +335,7 @@ public class AnalyticsManager : MonoBehaviour
         });
     }
 
-    // TODO -- Fix naming for these variables ("Miscellaneous" will not work)
+    // TODO -- (FITZGERALD) -- Fix naming for these variables ("Miscellaneous" will not work)
     // [MISCELLANEOUS] 
     private void MiscellaneousAnalytics_Send()
     {

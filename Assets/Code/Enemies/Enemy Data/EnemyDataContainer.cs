@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 /// </summary>
 public class EnemyDataContainer : MonoBehaviour
 {
-    // FITZGERALD: hide when custom inspector is done
+    // TODO -- (FITZGERALD) hide when custom inspector is done
     //[HideInInspector]
     [XmlArray("Enemies"), XmlArrayItem(typeof(EnemyData), ElementName = "Enemy")]
     public List<EnemyData> EnemyDataList;
