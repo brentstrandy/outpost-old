@@ -31,6 +31,7 @@ public class EnemyData
 	public float BallisticDefense;
 	public float ThraceiumDefense;
 	public float TurningSpeed;
+	public int ScoreValue;
 
     [HideInInspector] [XmlIgnore]
     public bool ShowDebugLogs = true;

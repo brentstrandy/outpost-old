@@ -11,6 +11,7 @@ public class InGame_Menu : MonoBehaviour
 	public List<GameObject> TowerButtons;
 	public GameObject MoneyText;
 	public GameObject OutpostHealthText;
+	public GameObject ScoreText;
 	public GameObject DirectionText;
 
 	private bool FinishedLoadingLevel = false;
@@ -61,6 +62,7 @@ public class InGame_Menu : MonoBehaviour
 				// Display how much money the player current has
 				MoneyText.GetComponent<Text>().text = "Money: " + Mathf.FloorToInt(PlayerManager.Instance.Money).ToString();
 				OutpostHealthText.GetComponent<Text>().text = "Health: " + GameManager.Instance.ObjMiningFacility.Health.ToString();
+				ScoreText.GetComponent<Text>().text = "Score: " + PlayerManager.Instance.Score.ToString();
 			}
 		}
 	}

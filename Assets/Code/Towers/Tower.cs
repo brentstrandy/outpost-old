@@ -10,6 +10,7 @@ public class Tower : MonoBehaviour
 	protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
 	public bool ShowDebugLogs = true;
+	public PhotonPlayer Owner { get; protected set; }
 
 	// Tower Attributes/Details/Data
 	public TowerData TowerAttributes;
@@ -77,11 +78,12 @@ public class Tower : MonoBehaviour
 	/// Sets the tower's properties based on TowerData
 	/// </summary>
 	/// <param name="towerData">Tower data</param>
-	public virtual void SetTowerData(TowerData towerData, Color playerColor)
+	public virtual void SetTowerData(TowerData towerData, PhotonPlayer owner)
 	{
 		TowerAttributes = towerData;
+		Owner = owner;
 		Health = TowerAttributes.MaxHealth;
-		PlayerColor = playerColor;
+		PlayerColor = PlayerColors.colors[(int)Owner.customProperties["PlayerColorIndex"]];
 
 		// Set the speed at which this tower is built
 		//this.GetComponent<Animation>()[TowerAttributes.PrefabName + "_Build"].speed = (1 / TowerAttributes.StartupTime);
@@ -102,6 +104,7 @@ public class Tower : MonoBehaviour
 			go.transform.localPosition = Vector3.zero;
 		}
 
+		// Set the player's color on any material titled "PlayerColorMaterial"
 		foreach(Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
 		{
 			foreach(Material material in renderer.materials)
@@ -117,7 +120,7 @@ public class Tower : MonoBehaviour
 		// Initiate animation playback speeds based on Tower Attributes
 		ObjAnimator.SetFloat("Cooldown Playback Speed", TowerAttributes.RateOfFire);
 
-		// Only initialize the health bar if it is used for this enemy
+		// Only initialize the health bar if it is used for this tower
 		if(HealthBar)
 			HealthBar.InitializeBars(TowerAttributes.MaxHealth);
 	}
@@ -264,8 +267,9 @@ public class Tower : MonoBehaviour
 	[PunRPC]
 	protected virtual void FireAcrossNetwork()
 	{
-		// Tell enemy to take damage
-		TargetedEnemy.TakeDamage(TowerAttributes.BallisticDamage, TowerAttributes.ThraceiumDamage);
+		// Tell enemy to take damage (only the Master Client can do this)
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			TargetedEnemy.TakeDamage(TowerAttributes.BallisticDamage, TowerAttributes.ThraceiumDamage, Owner);
 
 		// Tell the tower Animator the tower has fired
 		ObjAnimator.SetTrigger("Shot Fired");
@@ -276,6 +280,8 @@ public class Tower : MonoBehaviour
 		InstantiateFire();
 		InstantiateExplosion(); // TODO: Delay?
 
+		// TO DO: FITZGERALD - Technically the towers don't 100% damage the enemy. The enemy can have defensive capabilities that reduce the tower's damage.
+		// I think this analytic should be tracked in the "TakeDamage" for an Enemy. Thoughts?
 		AnalyticsManager.Instance.BallisticDamage += TowerAttributes.BallisticDamage;
 		AnalyticsManager.Instance.ThraceiumDamage += TowerAttributes.ThraceiumDamage;
 	}

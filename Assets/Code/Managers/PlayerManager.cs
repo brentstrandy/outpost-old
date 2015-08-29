@@ -50,7 +50,10 @@ public class PlayerManager : MonoBehaviour
 		}
 		private set {}
 	}
+
+	public int Score { get; private set; }
 	public float Money { get; private set; }
+	public int KillCount { get; private set; }
 	public Quadrant CurrentQuadrant;
 	public PlayerMode Mode;
 	
@@ -591,8 +594,8 @@ public class PlayerManager : MonoBehaviour
 		// Set Tower's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
 		newTower.GetComponent<PhotonView>().viewID = viewID;
 		// The Prefab doesn't contain the correct default data. Set the Tower's default data now
-		newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), PlayerColors.colors[(int)info.sender.customProperties["PlayerColorIndex"]]);
-		
+		newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), info.sender);
+
 		if (info.sender.isLocal)
 		{
 			// Change the player mode
@@ -606,13 +609,41 @@ public class PlayerManager : MonoBehaviour
 	}
 	#endregion
 
-	public void SaveLevelProgress(int levelID, int score, bool complete)
+	public void InformPlayerOfDamagedEnemy(PhotonPlayer player, string enemyName, float thraceiumDamage, float ballisticDamage, bool kill)
+	{
+		ObjPhotonView.RPC("EnemyDamaged", player, enemyName, thraceiumDamage, ballisticDamage, kill);
+	}
+
+	[PunRPC]
+	public void EnemyDamaged(string enemyName, float thraceiumDamage, float ballisticDamage, bool kill)
+	{
+		// TO DO: Track the amount of thraceium and ballistic damage dealt by the player
+		
+		if(kill)
+		{
+			// Increase player's score
+			Score += GameDataManager.Instance.FindEnemyDataByDisplayName(enemyName).ScoreValue;
+			// Tell the player they made a kill
+			NotificationManager.Instance.DisplayNotification(new NotificationData("Enemy Killed", "Enemy Killed", "QuickInfo"));
+			// Track the number of kills
+			KillCount++;
+		}
+	}
+
+	public IEnumerator SaveLevelProgress(int levelID, bool complete)
 	{
 		// Save a local copy of the player's progress so that they can keep playing the game and see the progress
-		LevelProgressDataManager.DataList.Add(new LevelProgressData(levelID, score, complete));
+		LevelProgressDataManager.DataList.Add(new LevelProgressData(levelID, Score, complete));
+
+		Log ("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?accountID=" + AccountID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + Score.ToString() + "&complete=" + complete.ToString());
 
 		// Call web service that saves the player's progress
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?accountID=" + AccountID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + score.ToString() + "&complete=" + complete.ToString());
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?accountID=" + AccountID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + Score.ToString() + "&complete=" + complete.ToString());
+
+		while(!www.isDone)
+		{
+			yield return 0;
+		}
 
 		Log ("Level Progress Saved");
 	}

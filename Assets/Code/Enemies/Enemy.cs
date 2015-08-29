@@ -431,25 +431,33 @@ public class Enemy : MonoBehaviour
 	#endregion
 
 	#region TAKE DAMAGE / DIE / STUN
-	public virtual void TakeDamage(float ballisticsDamage, float thraceiumDamage)
+	public virtual void TakeDamage(float ballisticsDamage, float thraceiumDamage, PhotonPlayer towerOwner)
 	{
 		// Only the master client dictates how to handle damage
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
-			// Take damage from Ballistics and Thraceium
-			Health -= (ballisticsDamage * (1 - EnemyAttributes.BallisticDefense));
-			Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
-			Health = Mathf.Max(Health, 0);
-			
-			// Only update the Health Bar if there is one to update
-			if(HealthBar)
-				HealthBar.UpdateHealthBar(Health);
-			
-			// Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
-			if (Health <= 0)
-				ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
-			else
-				ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticsDamage, thraceiumDamage);
+			// Make sure the enemy isn't already dead. 
+			///  Is this really needed? - BS 8/28/15
+			if(Health >= 0)
+			{
+				// Take damage from Ballistics and Thraceium
+				Health -= (ballisticsDamage * (1 - EnemyAttributes.BallisticDefense));
+				Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
+				Health = Mathf.Max(Health, 0);
+				
+				// Only update the Health Bar if there is one to update
+				if(HealthBar)
+					HealthBar.UpdateHealthBar(Health);
+
+				// Tell the player whose tower made the shot that it was a hit!
+				PlayerManager.Instance.InformPlayerOfDamagedEnemy(towerOwner, EnemyAttributes.DisplayName, thraceiumDamage, ballisticsDamage, Health <= 0);
+
+				// Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
+				if (Health <= 0)
+					ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
+				else
+					ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticsDamage, thraceiumDamage);
+			}
 		}
 	}
 	

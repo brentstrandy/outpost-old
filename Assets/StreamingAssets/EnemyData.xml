@@ -3,6 +3,7 @@
   <EnemyData>
     <DisplayName>Drone</DisplayName>
     <PrefabName>Drone</PrefabName>
+    <EnemyID>0</EnemyID>
     <PathFinding>TrackEnemy_IgnorePath</PathFinding>
     <HighlightColor>
       <r>0</r>
@@ -24,10 +25,12 @@
     <BallisticDefense>0</BallisticDefense>
     <ThraceiumDefense>0</ThraceiumDefense>
     <TurningSpeed>8</TurningSpeed>
+    <ScoreValue>1</ScoreValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
     <PrefabName>Heavy Speeder</PrefabName>
+    <EnemyID>0</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0</r>
@@ -49,10 +52,12 @@
     <BallisticDefense>0.5</BallisticDefense>
     <ThraceiumDefense>0.5</ThraceiumDefense>
     <TurningSpeed>1</TurningSpeed>
+    <ScoreValue>10</ScoreValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Intense Heavy Speeder</DisplayName>
     <PrefabName>Heavy Speeder</PrefabName>
+    <EnemyID>0</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0.08207182</r>
@@ -74,10 +79,12 @@
     <BallisticDefense>0.5</BallisticDefense>
     <ThraceiumDefense>0.5</ThraceiumDefense>
     <TurningSpeed>1</TurningSpeed>
+    <ScoreValue>10</ScoreValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Intense Light Speeder</DisplayName>
     <PrefabName>Light Speeder</PrefabName>
+    <EnemyID>0</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0.8352942</r>
@@ -99,10 +106,12 @@
     <BallisticDefense>0.2</BallisticDefense>
     <ThraceiumDefense>0.2</ThraceiumDefense>
     <TurningSpeed>3</TurningSpeed>
+    <ScoreValue>5</ScoreValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Land Drone</DisplayName>
     <PrefabName>Land Drone</PrefabName>
+    <EnemyID>0</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0.647058845</r>
@@ -124,10 +133,12 @@
     <BallisticDefense>0</BallisticDefense>
     <ThraceiumDefense>0</ThraceiumDefense>
     <TurningSpeed>4</TurningSpeed>
+    <ScoreValue>1</ScoreValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Light Speeder</DisplayName>
     <PrefabName>Light Speeder</PrefabName>
+    <EnemyID>0</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0</r>
@@ -149,5 +160,6 @@
     <BallisticDefense>0.2</BallisticDefense>
     <ThraceiumDefense>0.2</ThraceiumDefense>
     <TurningSpeed>3</TurningSpeed>
+    <ScoreValue>5</ScoreValue>
   </EnemyData>
 </ArrayOfEnemyData>
