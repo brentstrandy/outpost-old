@@ -2,6 +2,7 @@ using UnityEngine;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class DataManager<T>
 {
@@ -85,6 +86,11 @@ public class DataManager<T>
 	public void ClearData()
 	{
 		DataList.Clear();
+	}
+
+	public void SortDataList()
+	{
+		DataList.Sort();
 	}
 	
 	#region MessageHandling

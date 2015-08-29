@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 /// Owner: Brent Strandy
 /// </summary>
 [Serializable]
-public class LevelData 
+public class LevelData : IComparable<LevelData>
 {
 	// Level Details
 	public string DisplayName;
@@ -47,7 +47,17 @@ public class LevelData
 		DisplayName = "";
 		SceneName = "";
 	}
-	
+
+	public int CompareTo(LevelData ld)
+	{
+		if (this.LevelID < ld.LevelID)
+			return -1;
+		else if(this.LevelID == ld.LevelID)
+			return 0;
+		else
+			return 1;
+	}
+
 	#region MessageHandling
 	protected void Log(string message)
 	{
