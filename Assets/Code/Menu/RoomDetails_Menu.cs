@@ -463,7 +463,7 @@ public class RoomDetails_Menu : MonoBehaviour
 
 	private void InitiateLevelButtons()
 	{
-		// Only initiate Level buttos if this is the MASTER CLIENT
+		// Only initiate Level buttons if this is the MASTER CLIENT
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
 			int index = 0;

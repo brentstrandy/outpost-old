@@ -72,7 +72,6 @@ public class PlayerManager : MonoBehaviour
 	
 	public void Start()
 	{
-		AccountID = -1;
 		Money = 0.0f;
 		Mode = PlayerMode.Selection;
 		SelectedTowerCoord = default(HexCoord);
@@ -122,11 +121,8 @@ public class PlayerManager : MonoBehaviour
 		int userID;
 		int.TryParse(PhotonNetwork.AuthValues.UserId, out userID);
 
-		//PlayerID = userID;
-		//Username = SessionManager.Instance.GetPlayerInfo().name;
-
 		// Load player level progress data based on the userID (aquired when logging into Diadem's server)
-		StartCoroutine(LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php?accountID=" + AccountID.ToString()));
+		StartCoroutine(LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php?accountID=" + userID.ToString()));
 
 		// Load player account details
 		StartCoroutine(AccountDataManager.LoadDataFromServer("PlayerData_AccountData.php?accountID=" + userID.ToString()));
