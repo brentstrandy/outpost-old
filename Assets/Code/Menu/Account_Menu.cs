@@ -119,8 +119,7 @@ public class Account_Menu : MonoBehaviour
 	/// <param name="username">Username</param>
 	private IEnumerator UpdateAccount(string email, string username)
 	{
-		Log ("Updating Account Details");
-		WWW www = new WWW("http://www.diademstudios.com/accounts/DBUpdateAccount.php?acountID=" + PlayerManager.Instance.AccountID.ToString() + "&email=" + email + "&username=" + username);
+		WWW www = new WWW("http://www.diademstudios.com/accounts/DBUpdateAccount.php?accountID=" + PlayerManager.Instance.AccountID.ToString() + "&email=" + email + "&username=" + username);
 		
 		while(!www.isDone)
 		{
@@ -130,12 +129,12 @@ public class Account_Menu : MonoBehaviour
 		// Test for a failure to update the password and tell the user
 		if(www.text == "Passed")
 		{
-			NotificationManager.Instance.DisplayNotification(new NotificationData("Success!", "Saved Password", "Success", 0, new Vector3(0, 0, 0)));
+			NotificationManager.Instance.DisplayNotification(new NotificationData("Success!", "Updated Account Details", "Success", 0, new Vector3(0, 0, 0)));
 			Log ("Account Details Updated");
 		}
 		else
 		{
-			NotificationManager.Instance.DisplayNotification(new NotificationData("Error", "An error occurred when trying to save your new password.", "Error", 0, new Vector3(0, 0, 0)));
+			NotificationManager.Instance.DisplayNotification(new NotificationData("Error", "An error occurred when trying to update your account details.", "Error", 0, new Vector3(0, 0, 0)));
 			LogError("Error Updating Account Details");
 		}
 	}
