@@ -468,7 +468,10 @@ public class RoomDetails_Menu : MonoBehaviour
 		{
 			int index = 0;
 			bool previousLevelComplete = true;
-			
+
+			// First, order levels by ID
+			GameDataManager.Instance.LevelDataManager.SortDataList();
+
 			foreach (LevelData levelData in GameDataManager.Instance.LevelDataManager.DataList)
 			{
 				LevelData ld = levelData;

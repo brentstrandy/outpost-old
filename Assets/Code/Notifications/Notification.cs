@@ -7,6 +7,9 @@ public class Notification : MonoBehaviour
 	public bool ShowDebugLogs = true;
 	public float TimeToDestroy = 5;
 
+	public GameObject HeaderText;
+	public GameObject BodyText;
+
 	protected NotificationData NotificationAttributes;
 	protected float StartTime;
 
@@ -20,14 +23,10 @@ public class Notification : MonoBehaviour
 	{
 		NotificationAttributes = notificationData;
 
-		// Set the notification's Header and Body text (where applicable)
-		foreach(Text textObj in gameObject.GetComponentsInChildren<Text>())
-		{
-			if(textObj.name == "Header Text")
-				textObj.text = NotificationAttributes.NotificationTitle;
-			else if(textObj.name == "Body Text")
-				textObj.text = NotificationAttributes.NotificationText;
-		}
+		if(HeaderText != null)
+			HeaderText.GetComponentInChildren<Text>().text = NotificationAttributes.NotificationTitle;
+		if(BodyText != null)
+			BodyText.GetComponentInChildren<Text>().text = NotificationAttributes.NotificationText;
 
 		// Set the position of the notification if applicable
 		if(notificationData.Position != default(Vector3))
@@ -40,7 +39,8 @@ public class Notification : MonoBehaviour
 	// Update is called once per frame
 	public virtual void Update ()
 	{
-	
+		if(Time.time - StartTime >= TimeToDestroy)
+			Destroy(this.gameObject);
 	}
 
 	#region MessageHandling

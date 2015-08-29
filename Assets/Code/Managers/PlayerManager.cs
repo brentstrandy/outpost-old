@@ -624,7 +624,7 @@ public class PlayerManager : MonoBehaviour
 			// Increase player's score
 			Score += GameDataManager.Instance.FindEnemyDataByDisplayName(enemyName).ScoreValue;
 			// Tell the player they made a kill
-			NotificationManager.Instance.DisplayNotification(new NotificationData("Enemy Killed", "Enemy Killed", "QuickInfo"));
+			NotificationManager.Instance.DisplayNotification(new NotificationData("", "Killed " + enemyName + "  +" + GameDataManager.Instance.FindEnemyDataByDisplayName(enemyName).ScoreValue.ToString(), "QuickInfo"));
 			// Track the number of kills
 			KillCount++;
 		}
@@ -635,8 +635,6 @@ public class PlayerManager : MonoBehaviour
 		// Save a local copy of the player's progress so that they can keep playing the game and see the progress
 		LevelProgressDataManager.DataList.Add(new LevelProgressData(levelID, Score, complete));
 
-		Log ("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?accountID=" + AccountID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + Score.ToString() + "&complete=" + complete.ToString());
-
 		// Call web service that saves the player's progress
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?accountID=" + AccountID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + Score.ToString() + "&complete=" + complete.ToString());
 
@@ -645,7 +643,7 @@ public class PlayerManager : MonoBehaviour
 			yield return 0;
 		}
 
-		Log ("Level Progress Saved");
+		Log ("Level Progress Saved to Server");
 	}
 
 	public List<TowerData> GetGameLoadOutTowers()
