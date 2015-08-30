@@ -352,7 +352,7 @@ public class Tower : MonoBehaviour
 			Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 
 		// Inform the player that a tower has been destroyed
-		NotificationManager.Instance.DisplayNotification(new NotificationData("Tower Destroyed", this.TowerAttributes.DisplayName + " was destroyed", "QuickInfo"));
+		NotificationManager.Instance.DisplayNotification(new NotificationData("", Owner.name + " lost a tower (" + this.TowerAttributes.DisplayName + ")", "QuickInfo"));
 
 		// Tell the tower manager this tower is being destroyed
 		GameManager.Instance.TowerManager.RemoveActiveTower(this);

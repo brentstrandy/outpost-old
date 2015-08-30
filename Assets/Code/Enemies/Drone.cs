@@ -20,7 +20,6 @@ public class Drone : Enemy
 		// Start the Drone off the ground
 		this.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position, 0.1f);
 
-		Debug.Break();
 		// TO DO: Implement the loading of EnemyData via XML before uncommenting
 		// Load default attributes from EnemyData
 		//EnemyData enemyData = GameDataManager.Instance.EnemyDataMngr.FindEnemyDataByPrefabName("Drone");
