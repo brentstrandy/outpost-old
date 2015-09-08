@@ -2,7 +2,10 @@
 using System;
 using System.Collections;
 
-// TODO -- (FITZGERALD) Cannot add a generic class to GameObjects. Make PopUpController non-hardcoded dynamic (like XMLParser).
+/// <summary>
+/// Displays heal and damage numbers above GameObjects.
+/// Owner: John Fitzgerald
+/// </summary>
 public class PopUpController : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
@@ -13,10 +16,12 @@ public class PopUpController : MonoBehaviour
     GameObject PopUp;
 
     public int AmountToDisplay;
-    //public float DisplayLength;
-    public float TimeToDelete;
+    public float DisplayLength;
+    public float DeleteTime;
+
     public float XAxisOffSet;
     public float YAxisOffSet;
+    public float ZAxisOffSet;
     public float FallDirection;
 
     public Vector3 PopUp_Position;
@@ -30,73 +35,64 @@ public class PopUpController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            PopUp.transform.rotation = MainCamera.transform.rotation;
+        // Change in y-axis
+        //YAxisOffSet -= 0f;
+        // Change in x-axis (TODO -- (FITZGERALD) needs tweaking as enemies are rarely ever static)
+        //XAxisOffSet = FallDirection == 0 ? 0.1f : -0.1f;
+        ZAxisOffSet += 0.08f;
+        // Numbers will fall "down" and to the side
+        PopUp.transform.position = new Vector3(XAxisOffSet, YAxisOffSet, ZAxisOffSet);
 
-            // Change in y-axis
-            YAxisOffSet -= 0.08f;
-            // Change in x-axis (needs tweaking as enemies are rarely ever static)
-            XAxisOffSet = FallDirection == 0 ? 0.1f : -0.4f;
-            
-            PopUp.transform.position = new Vector3(ObjectOfEffect.transform.position.x, YAxisOffSet, ObjectOfEffect.transform.position.z);
-
-            if (TimeToDelete < Time.time)
-                Destroy(PopUp);
+        if (DeleteTime <= Time.time || ObjectOfEffect == null)
+            Destroy(PopUp);
     }
 
-    public void InitializePopUp(GameObject popUp, GameObject objectOfEffect, float displayLength, float popUpValue)
+    public void InitializePopUp(GameObject popUp, GameObject objectOfEffect, float displayLength, float popUpValue, Type type)
     {
-        Type type = objectOfEffect.GetComponent<MonoBehaviour>().GetType();
+        popUp.transform.parent = objectOfEffect.transform;
 
         PopUp = popUp;
         ObjectOfEffect = objectOfEffect;
-        AmountToDisplay = (int)popUpValue;
-        //DisplayLength = displayLength;
 
-        TimeToDelete = Time.time + displayLength;
+        AmountToDisplay = (int)popUpValue;
+        DisplayLength = displayLength;
+        DeleteTime = Time.time + DisplayLength;
+
         XAxisOffSet = popUp.transform.position.x;
         YAxisOffSet = popUp.transform.position.y;
+        ZAxisOffSet = popUp.transform.position.z;
         FallDirection = UnityEngine.Random.Range(0, 1);
 
         PopUp_Position = popUp.transform.position;
-
         _TextMesh = PopUp.GetComponentInChildren<TextMesh>();
 
-        //Vector3 objectOfEffect_Pos = ObjectOfEffect.transform.position;
-        ////PopUp_Position = new Vector3(objectOfEffect_Pos.x, objectOfEffect_Pos.y, objectOfEffect_Pos.z - 2f);
-        ////PopUp.transform.position = PopUp_Position;
-
-        //// PopUp position is random within a range
-        //float _x = UnityEngine.Random.Range(objectOfEffect_Pos.x - 0.1f, objectOfEffect_Pos.x + 0.1f);
-        //float _y = UnityEngine.Random.Range(objectOfEffect_Pos.y - 0.1f, objectOfEffect_Pos.y + 0.1f);
-        ////float _z = UnityEngine.Random.Range(objectOfEffect_Pos.z - 1.9f, objectOfEffect_Pos.z - 2.1f);
-        //float _z = UnityEngine.Random.Range(objectOfEffect_Pos.z - 0.1f, objectOfEffect_Pos.z + 0.1f);
-        ////float _z = objectOfEffect_Pos.z -3f;
-        //_y = objectOfEffect_Pos.y - 0.3f;
-
-        //PopUp_Position = new Vector3(_x, _y, _z);
-
-        //PopUp.transform.position = PopUp_Position;
-
-        if (type.IsSubclassOf(typeof(Enemy)) || type.IsSubclassOf(typeof(Tower)))
-        {
-            //Debug.LogError("Type:" + type.ToString());
-            DisplayDamageDealt();
-        }
-        else if (type.IsSubclassOf(typeof(ThraceiumHealingTower)))
-        {
-            //Debug.LogError("Type:" + type.ToString());
-            DisplayHealthGained();
-        }
-        else
-            Debug.LogError("Type is not correctly instantiated.");
-
+        Display(type);
+        // Delete's the PopUp numbers after the alloted DisplayLength
         //DeletePopUp();
+    }
+
+    private void Display(Type type)
+    {
+        // A display function will be called depending on the Type's base class
+        if (type == typeof(ThraceiumHealingTower))
+            DisplayHealthGained();
+        else if (type == typeof(Enemy) || type == typeof(Tower))
+            DisplayDamageDealt();
+        else
+            LogError("Type is not correctly instantiated.");
     }
 
     private void DisplayDamageDealt()
     {
         _TextMesh.color = Color.red;
         _TextMesh.text = AmountToDisplay.ToString();
+    }
+
+    // TODO -- (FITZGERALD) make it so damage is shown on the camera of each player, regardless of the quadrant they're in
+    private void DisplayDamageDealt_MiningFacility()
+    {
+        //_TextMesh.color = Color.red;
+        //_TextMesh.text = AmountToDisplay.ToString();
     }
 
     private void DisplayHealthGained()
@@ -107,7 +103,6 @@ public class PopUpController : MonoBehaviour
         _TextMesh.text = amountToDisplay;
     }
 
-    // Doesn't work as intended. Using Update() instead.
     //private void DeletePopUp()
     //{
     //    Destroy(PopUp, DisplayLength);
@@ -117,18 +112,18 @@ public class PopUpController : MonoBehaviour
     private void Log(string message)
     {
         if (ShowDebugLogs)
-            Debug.Log("[DamagePopUp] " + message);
+            Debug.Log("[PopUpController] " + message);
     }
 
     private void LogError(string message)
     {
-        Debug.LogError("[DamagePopUp] " + message);
+        Debug.LogError("[PopUpController] " + message);
     }
 
     private void LogWarning(string message)
     {
         if (ShowDebugLogs)
-            Debug.LogWarning("[DamagePopUp] " + message);
+            Debug.LogWarning("[PopUpController] " + message);
     }
     #endregion
 }

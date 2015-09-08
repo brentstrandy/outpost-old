@@ -6,6 +6,7 @@ public class ThraceiumHealingTower : Tower
 {
 	private bool ReadyToHeal = true;
 	public GameObject HealingEffect;
+    private float HealAmount = 5.0f;
 
 	// Use this for initialization
 	public override void Start()
@@ -72,7 +73,10 @@ public class ThraceiumHealingTower : Tower
 		ObjAnimator.SetTrigger("Shot Fired");
 
 		// Heal the tower
-		tower.Heal(5.0f);
+		tower.Heal(HealAmount);
+
+        // Display health gained above target
+        tower.ShowPopUpHeal(HealAmount);
 
 		// After healing, this tower cannot heal again until it has finished its cooldown
 		ReadyToHeal = false;

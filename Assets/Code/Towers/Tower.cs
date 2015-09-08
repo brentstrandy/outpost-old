@@ -302,6 +302,9 @@ public class Tower : MonoBehaviour
 		// Only update the Health Bar if there is one to update
 		if(HealthBar)
 			HealthBar.UpdateHealthBar(Health);
+
+        // Display health taken above target
+        ShowPopUpDamage(ballisticDamage + thraceiumDamage);
 	}
 	
 	/// <summary>
@@ -333,7 +336,10 @@ public class Tower : MonoBehaviour
 			// Only update the Health Bar if there is one to update
 			if(HealthBar)
 				HealthBar.UpdateHealthBar(Health);
-			
+
+            // Display health taken above target
+            ShowPopUpDamage(ballisticDamage + thraceiumDamage);
+
 			// Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
 			if (Health <= 0)
 				ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
@@ -341,6 +347,22 @@ public class Tower : MonoBehaviour
 				ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticDamage, thraceiumDamage);
 		}
 	}
+
+    /// <summary>
+    /// Display damage taken above the enemy
+    /// </summary>
+    public void ShowPopUpDamage(float totalDamage)
+    {
+        PopUp<Tower> popUp = new PopUp<Tower>(this.gameObject, totalDamage, 0.5f);
+    }
+
+    /// <summary>
+    /// Display health gained above the tower
+    /// </summary>
+    public void ShowPopUpHeal(float totalHeal)
+    {
+        PopUp<ThraceiumHealingTower> popUp = new PopUp<ThraceiumHealingTower>(this.gameObject, totalHeal, 0.5f);
+    }
 
 	/// <summary>
 	/// Destroy the Tower from all areas of the game
@@ -376,11 +398,13 @@ public class Tower : MonoBehaviour
 		// Only allow the tower to be healed to its max health
 		Health = Mathf.Min(Health + healAmount, TowerAttributes.MaxHealth);
 
+        //// Display health gained above target
+        //ShowPopUpHeal(healAmount);
+
 		// Only update the Health Bar if there is one to update
 		if(HealthBar)
 			HealthBar.UpdateHealthBar(Health);
 	}
-
 	#endregion
 
 	#region ATTACKING

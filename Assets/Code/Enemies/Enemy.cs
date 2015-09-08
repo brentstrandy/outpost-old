@@ -389,8 +389,8 @@ public class Enemy : MonoBehaviour
 		if(HealthBar)
 			HealthBar.UpdateHealthBar(Health);
 
-        //Debug.LogError("TakeDamageAcrossNetowrk() RPC");
-        //ShowPopUpDamage(ballisticDamage + thraceiumDamage);
+        // Display damage taken above the enemy
+        ShowPopUpDamage(ballisticDamage + thraceiumDamage);
 	}
 	
 	/// <summary>
@@ -436,9 +436,6 @@ public class Enemy : MonoBehaviour
 	#region TAKE DAMAGE / DIE / STUN
 	public virtual void TakeDamage(float ballisticDamage, float thraceiumDamage, PhotonPlayer towerOwner)
     {
-        // TODO -- (FITZGERALD) Single-player player isn't master client?
-        ShowPopUpDamage(ballisticDamage + thraceiumDamage);
-
         // Only the master client dictates how to handle damage
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
@@ -454,6 +451,9 @@ public class Enemy : MonoBehaviour
                 // Only update the Health Bar if there is one to update
                 if (HealthBar)
                     HealthBar.UpdateHealthBar(Health);
+
+                // Display damage taken above the enemy
+                ShowPopUpDamage(ballisticDamage + thraceiumDamage);
 
                 // Tell the player whose tower made the shot that it was a hit!
                 PlayerManager.Instance.InformPlayerOfDamagedEnemy(towerOwner, EnemyAttributes.DisplayName, thraceiumDamage, ballisticDamage, Health <= 0);
@@ -472,23 +472,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void ShowPopUpDamage(float totalDamage)
     {
-        // How long the numbers will display above the enemy
-        float displayLength = 0.5f;
-
-        // Parent GameObject position
-        Vector3 parent_Pos = this.gameObject.transform.position;
-
-        // PopUp position is random within a range
-        float[] pos = {0, 0, 0};
-        for (int i = 0; i < 2; i++)
-            pos[i] = UnityEngine.Random.Range(-0.1f, 0.1f);
-        Vector3 PopUp_Pos = new Vector3(parent_Pos.x + pos[0], parent_Pos.y + pos[1] +1f, parent_Pos.z + pos[2]);
-
-        // Instantiate the PopUp prefab and add the PopUpController script to it
-        GameObject damageDealtPopUp = Instantiate(Resources.Load("Utilities/PopUp"), PopUp_Pos, Camera.main.transform.rotation) as GameObject;
-        PopUpController popUpController_Script = damageDealtPopUp.AddComponent<PopUpController>();
-
-        popUpController_Script.InitializePopUp(damageDealtPopUp, this.gameObject, displayLength, totalDamage);
+        PopUp<Enemy> popUp = new PopUp<Enemy>(this.gameObject, totalDamage, 0.5f);
     }
 
 	/// <summary>
