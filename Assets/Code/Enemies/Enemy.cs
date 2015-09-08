@@ -388,6 +388,9 @@ public class Enemy : MonoBehaviour
 		// Only update the Health Bar if there is one to update
 		if(HealthBar)
 			HealthBar.UpdateHealthBar(Health);
+
+        //Debug.LogError("TakeDamageAcrossNetowrk() RPC");
+        //ShowPopUpDamage(ballisticDamage + thraceiumDamage);
 	}
 	
 	/// <summary>
@@ -431,36 +434,63 @@ public class Enemy : MonoBehaviour
 	#endregion
 
 	#region TAKE DAMAGE / DIE / STUN
-	public virtual void TakeDamage(float ballisticsDamage, float thraceiumDamage, PhotonPlayer towerOwner)
-	{
-		// Only the master client dictates how to handle damage
-		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-		{
-			// Make sure the enemy isn't already dead. 
-			///  Is this really needed? - BS 8/28/15
-			if(Health >= 0)
-			{
-				// Take damage from Ballistics and Thraceium
-				Health -= (ballisticsDamage * (1 - EnemyAttributes.BallisticDefense));
-				Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
-				Health = Mathf.Max(Health, 0);
-				
-				// Only update the Health Bar if there is one to update
-				if(HealthBar)
-					HealthBar.UpdateHealthBar(Health);
+	public virtual void TakeDamage(float ballisticDamage, float thraceiumDamage, PhotonPlayer towerOwner)
+    {
+        // TODO -- (FITZGERALD) Single-player player isn't master client?
+        ShowPopUpDamage(ballisticDamage + thraceiumDamage);
 
-				// Tell the player whose tower made the shot that it was a hit!
-				PlayerManager.Instance.InformPlayerOfDamagedEnemy(towerOwner, EnemyAttributes.DisplayName, thraceiumDamage, ballisticsDamage, Health <= 0);
+        // Only the master client dictates how to handle damage
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
+            // Make sure the enemy isn't already dead. 
+            ///  Is this really needed? - BS 8/28/15
+            if (Health >= 0)
+            {
+                // Take damage from Ballistics and Thraceium
+                Health -= (ballisticDamage * (1 - EnemyAttributes.BallisticDefense));
+                Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
+                Health = Mathf.Max(Health, 0);
 
-				// Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
-				if (Health <= 0)
-					ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
-				else
-					ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticsDamage, thraceiumDamage);
-			}
-		}
-	}
-	
+                // Only update the Health Bar if there is one to update
+                if (HealthBar)
+                    HealthBar.UpdateHealthBar(Health);
+
+                // Tell the player whose tower made the shot that it was a hit!
+                PlayerManager.Instance.InformPlayerOfDamagedEnemy(towerOwner, EnemyAttributes.DisplayName, thraceiumDamage, ballisticDamage, Health <= 0);
+
+                // Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
+                if (Health <= 0)
+                    ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
+                else
+                    ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticDamage, thraceiumDamage);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Display damage taken above the enemy
+    /// </summary>
+    public void ShowPopUpDamage(float totalDamage)
+    {
+        // How long the numbers will display above the enemy
+        float displayLength = 0.5f;
+
+        // Parent GameObject position
+        Vector3 parent_Pos = this.gameObject.transform.position;
+
+        // PopUp position is random within a range
+        float[] pos = {0, 0, 0};
+        for (int i = 0; i < 2; i++)
+            pos[i] = UnityEngine.Random.Range(-0.1f, 0.1f);
+        Vector3 PopUp_Pos = new Vector3(parent_Pos.x + pos[0], parent_Pos.y + pos[1] +1f, parent_Pos.z + pos[2]);
+
+        // Instantiate the PopUp prefab and add the PopUpController script to it
+        GameObject damageDealtPopUp = Instantiate(Resources.Load("Utilities/PopUp"), PopUp_Pos, Camera.main.transform.rotation) as GameObject;
+        PopUpController popUpController_Script = damageDealtPopUp.AddComponent<PopUpController>();
+
+        popUpController_Script.InitializePopUp(damageDealtPopUp, this.gameObject, displayLength, totalDamage);
+    }
+
 	/// <summary>
 	/// Forces the Enemy to die regardless of how much health is left
 	/// </summary>

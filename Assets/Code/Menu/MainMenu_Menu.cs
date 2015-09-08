@@ -64,10 +64,53 @@ public class MainMenu_Menu : MonoBehaviour
         // Tell the MenuManager to transition back
         MenuManager.Instance.ShowStartMenu();
     }
-	#endregion
-	
-	#region Events
-	private void RoomCreated_Event()
+
+    #region Used for QuickStart (development mode)
+    public void QuickStart_Click()
+    {
+        #if UNITY_EDITOR
+        //LevelData levelData = GameDataManager.Instance.FindLevelDataByDisplayName("Establishing Roots");
+        //List<TowerData> availableTowers = {Small Thraceium Tower, EMP Tower};
+        //LoadOut towers = new LoadOut();
+
+        //SessionManager.Instance.CreateRoom("Room of " + PlayerManager.Instance.Username + "(" + System.Guid.NewGuid().ToString() + ")", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 1 }, TypedLobby.Default);
+        
+        //PhotonView ObjPhotonView = PhotonView.Get(this);
+
+        ////SessionManager.Instance.SetRoomVisibility(true);
+
+        ////if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        //    //SessionManager.Instance.SetRoomVisibility(false);
+        //// Tell all the clients to load the level
+        //ObjPhotonView.RPC("LoadLevel", PhotonTargets.All, null);
+
+        //LoadLevel();
+        #endif
+
+        LogError("John is lazy. Will get a quick start working later. 9/7/15");
+    }
+
+    ///// <summary>
+    ///// PunRPC call to tell the client to start loading the level
+    ///// </summary>
+    //[PunRPC]
+    //private void LoadLevel()
+    //{
+    //    int playerColorIndex = Random.Range(0, 8);
+    //    SessionManager.Instance.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", playerColorIndex } });
+
+    //    // Record the Loadouts chosen by the player
+    //    PlayerManager.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
+
+    //    // Start the game
+    //    MenuManager.Instance.ShowStartGame(LevelLoadoutData);
+    //}
+    #endregion
+
+    #endregion
+
+    #region Events
+    private void RoomCreated_Event()
 	{
 		// Tell the MenuManager to transition to the newly created room
 		MenuManager.Instance.ShowRoomDetailsMenu();
