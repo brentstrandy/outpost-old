@@ -294,11 +294,18 @@ public class Tower : MonoBehaviour
 	[PunRPC]
 	protected virtual void TakeDamageAcrossNetwork(float ballisticDamage, float thraceiumDamage)
 	{
-		// Take damage from Ballistics and Thraceium
-		Health -= (ballisticDamage * (1 - TowerAttributes.BallisticDefense));
-		Health -= (thraceiumDamage * (1 - TowerAttributes.ThraceiumDefense));
-		Health = Mathf.Max(Health, 0);
-		
+        // Damage dealt after defense is calculated
+        float bDamageWithDefense = (ballisticDamage * (1 - TowerAttributes.BallisticDefense));
+        float tDamageWithDefense = (thraceiumDamage * (1 - TowerAttributes.ThraceiumDefense));
+
+        // Take damage from Ballistics and Thraceium
+        Health -= bDamageWithDefense;
+        Health -= tDamageWithDefense;
+        Health = Mathf.Max(Health, 0);
+
+        AnalyticsManager.Instance.BallisticDamage += bDamageWithDefense;
+        AnalyticsManager.Instance.ThraceiumDamage += tDamageWithDefense;
+
 		// Only update the Health Bar if there is one to update
 		if(HealthBar)
 			HealthBar.UpdateHealthBar(Health);
@@ -328,11 +335,18 @@ public class Tower : MonoBehaviour
 		// Only the master client dictates how to handle damage
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
 		{
+            // Damage dealt after defense is calculated
+            float bDamageWithDefense = (ballisticDamage * (1 - TowerAttributes.BallisticDefense));
+            float tDamageWithDefense = (thraceiumDamage * (1 - TowerAttributes.ThraceiumDefense));
+
 			// Take damage from Ballistics and Thraceium
-			Health -= (ballisticDamage * (1 - TowerAttributes.BallisticDefense));
-			Health -= (thraceiumDamage * (1 - TowerAttributes.ThraceiumDefense));
+			Health -= bDamageWithDefense;
+			Health -= tDamageWithDefense;
 			Health = Mathf.Max(Health, 0);
-			
+
+            AnalyticsManager.Instance.BallisticDamage += bDamageWithDefense;
+            AnalyticsManager.Instance.ThraceiumDamage += tDamageWithDefense;
+
 			// Only update the Health Bar if there is one to update
 			if(HealthBar)
 				HealthBar.UpdateHealthBar(Health);
