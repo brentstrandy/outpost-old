@@ -18,6 +18,8 @@ public class PopUpController : MonoBehaviour
     public int AmountToDisplay;
     public float DisplayLength;
     public float DeleteTime;
+    public float FadeSpeed = 3;
+    public float FloatSpeed = ;
 
     public float XAxisOffSet;
     public float YAxisOffSet;
@@ -35,13 +37,24 @@ public class PopUpController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Change in y-axis
-        //YAxisOffSet -= 0f;
-        // Change in x-axis (TODO -- (FITZGERALD) needs tweaking as enemies are rarely ever static)
-        //XAxisOffSet = FallDirection == 0 ? 0.1f : -0.1f;
-        ZAxisOffSet += 0.08f;
+        Color currentColor = GetComponent<TextMesh>().color;
+        Vector3 position = transform.position;
+
+        // fade the color of numbers over time
+        currentColor.a = Mathf.Lerp(currentColor.a, 0, Time.deltaTime * FadeSpeed);
+        GetComponent<TextMesh>().color = currentColor;
+
+        // the numbers appear drop
+        position.z = Mathf.Lerp(position.z, position.z + 0.8f, Time.deltaTime * FloatSpeed);
+        PopUp.transform.position = position;
+
+        //if (currentColor.a < 0.5f)
+        //    PopUp.SetActive(false);
+
+        //ZAxisOffSet += 0.08f;
+
         // Numbers will fall "down" and to the side
-        PopUp.transform.position = new Vector3(XAxisOffSet, YAxisOffSet, ZAxisOffSet);
+        //PopUp.transform.position = new Vector3(XAxisOffSet, YAxisOffSet, ZAxisOffSet);
 
         if (DeleteTime <= Time.time || ObjectOfEffect == null)
             Destroy(PopUp);

@@ -11,6 +11,8 @@ public class PopUp<T>
 {
     public bool ShowDebugLogs = true;
 
+    private string popUpLocation = "Utilities/PopUp";
+
     private GameObject PopUpDisplay;
     private GameObject ObjectOfEffect;
 
@@ -45,9 +47,9 @@ public class PopUp<T>
     private void InstantiatePopUpPrefab()
     {
         // Instantiate the PopUp prefab and add the PopUpController script to it
-        PopUpDisplay = ScriptableObject.Instantiate(Resources.Load("Utilities/PopUp"), PopUp_Pos, Camera.main.transform.rotation) as GameObject;
-        
-        //PopUpDisplay = Instantiate(Resources.Load("Utilities/PopUp")) as GameObject;
+        PopUpDisplay = ScriptableObject.Instantiate(Resources.Load(popUpLocation), PopUp_Pos, Camera.main.transform.rotation) as GameObject;
+
+        //PopUpDisplay = Instantiate(Resources.Load(popUpLocation)) as GameObject;
         //PopUpDisplay.transform.position = PopUp_Pos;
         //PopUpDisplay.transform.rotation = Camera.main.transform.rotation;
     }

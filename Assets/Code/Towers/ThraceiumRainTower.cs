@@ -14,12 +14,23 @@ public class ThraceiumRainTower : Tower
 		// Thraceium Rain Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 	}
-	
-	// Update is called once per frame
-	public override void Update()
-	{
-		base.Update();
-	}
+
+    /// <summary>
+    /// RPC call to tell players to fire a shot. Thraceium Rain tower is unique in that is launches an orb and does not
+    /// do immediate direct damage to an enemy
+    /// </summary>
+    [PunRPC]
+    protected override void FireAcrossNetwork()
+    {
+        // After the tower fires it loses the ability to fire again until after a cooldown period
+        ReadyToFire = false;
+        // Tell the tower Animator the tower has fired
+        ObjAnimator.SetTrigger("Shot Fired");
+        // Instantiate prefab for firing an orb
+        GameObject go = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
+        // Instantiate the orb
+        go.GetComponent<ThraceiumRainOrb>().Target = TargetedEnemy.transform;
+    }
 
 	#region MessageHandling
 	protected override void Log(string message)
