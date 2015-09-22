@@ -10,21 +10,25 @@ public class PopUpController : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
 
+    private string PopUpHolderName = "PopUpHolder";
+    private string PopUpHolderLocation;
+
     private Camera MainCamera;
 
     GameObject ObjectOfEffect;
     GameObject PopUp;
+    GameObject PopUpHolder;
 
     public int AmountToDisplay;
-    public float DisplayLength;
     public float DeleteTime;
-    public float FadeSpeed = 3;
-    public float FloatSpeed = ;
 
-    public float XAxisOffSet;
-    public float YAxisOffSet;
-    public float ZAxisOffSet;
-    public float FallDirection;
+    public float FadeSpeed = 4f;
+    public float FloatSpeed = 2f;
+
+    //public float XAxisOffSet;
+    //public float YAxisOffSet;
+    //public float ZAxisOffSet;
+    //public float FallDirection;
 
     public Vector3 PopUp_Position;
     public TextMesh _TextMesh;
@@ -52,7 +56,6 @@ public class PopUpController : MonoBehaviour
         //    PopUp.SetActive(false);
 
         //ZAxisOffSet += 0.08f;
-
         // Numbers will fall "down" and to the side
         //PopUp.transform.position = new Vector3(XAxisOffSet, YAxisOffSet, ZAxisOffSet);
 
@@ -62,24 +65,32 @@ public class PopUpController : MonoBehaviour
 
     public void InitializePopUp(GameObject popUp, GameObject objectOfEffect, float displayLength, float popUpValue, Type type)
     {
-        popUp.transform.parent = objectOfEffect.transform;
+        PopUpHolderLocation = "Utilities/" + PopUpHolderName;
 
         PopUp = popUp;
         ObjectOfEffect = objectOfEffect;
 
         AmountToDisplay = (int)popUpValue;
-        DisplayLength = displayLength;
-        DeleteTime = Time.time + DisplayLength;
+        DeleteTime = Time.time + displayLength;
 
-        XAxisOffSet = popUp.transform.position.x;
-        YAxisOffSet = popUp.transform.position.y;
-        ZAxisOffSet = popUp.transform.position.z;
-        FallDirection = UnityEngine.Random.Range(0, 1);
+        //XAxisOffSet = PopUp.transform.position.x;
+        //YAxisOffSet = PopUp.transform.position.y;
+        //ZAxisOffSet = PopUp.transform.position.z;
+        //FallDirection = UnityEngine.Random.Range(0, 1);
 
-        PopUp_Position = popUp.transform.position;
+        PopUpHolder = GameObject.FindGameObjectWithTag("PopUpHolder");
+
+        // Set parent to PopUpHolder -- create PopUpHolder in scene if not found
+        if (!PopUpHolder)
+            PopUpHolder = ScriptableObject.Instantiate(Resources.Load(PopUpHolderLocation)) as GameObject;
+        PopUp.transform.parent = PopUpHolder.transform;
+
+        // Set initial position to enemy
+        PopUp_Position = PopUp.transform.position;
         _TextMesh = PopUp.GetComponentInChildren<TextMesh>();
 
         Display(type);
+
         // Delete's the PopUp numbers after the alloted DisplayLength
         //DeletePopUp();
     }
