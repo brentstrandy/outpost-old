@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
-    <LevelID>2</LevelID>
-    <DisplayName>Better With Friends</DisplayName>
+    <DisplayName>Scout Cycle</DisplayName>
     <SceneName>Level1</SceneName>
-    <EnemySpawnFilename>BetterWithFriends</EnemySpawnFilename>
+    <LevelID>2</LevelID>
+    <EnemySpawnFilename>ScoutCycle</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>Defending this Outpost should not be done alone.</Description>
+    <Description>Scouts who cycle together stay together</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
-    <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>0.4</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <LevelID>4</LevelID>
     <DisplayName>BetterWithFriends_2</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>4</LevelID>
     <EnemySpawnFilename>BetterWithFriends_2</EnemySpawnFilename>
     <NotificationFilename />
     <Description>Figure it out!</Description>
@@ -35,9 +35,9 @@
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <LevelID>1</LevelID>
     <DisplayName>Establishing Roots</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>1</LevelID>
     <EnemySpawnFilename>1_EstablishingRoots</EnemySpawnFilename>
     <NotificationFilename>1_Notifications</NotificationFilename>
     <Description>We've set up a Mining Facility on a remote planet. Protect it!</Description>
@@ -52,9 +52,9 @@
     <MiningFacilityHealth>50</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <LevelID>3</LevelID>
     <DisplayName>Level 3</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>3</LevelID>
     <EnemySpawnFilename>Level5</EnemySpawnFilename>
     <NotificationFilename />
     <Description>Join a team and take down these terrible mean enemies</Description>
