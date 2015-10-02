@@ -1,39 +1,5 @@
-<?xml version="1.0" encoding="us-ascii"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <LevelData>
-    <DisplayName>Scout Cycle</DisplayName>
-    <SceneName>Level1</SceneName>
-    <LevelID>2</LevelID>
-    <EnemySpawnFilename>ScoutCycle</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>Scouts who cycle together stay together</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>8</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
-    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>0.4</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <DisplayName>BetterWithFriends_2</DisplayName>
-    <SceneName>Level1</SceneName>
-    <LevelID>4</LevelID>
-    <EnemySpawnFilename>BetterWithFriends_2</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>Figure it out!</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>5</MaximumPlayers>
-    <AvailableQuadrants>North, West, South, East</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
-    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
   <LevelData>
     <DisplayName>Establishing Roots</DisplayName>
     <SceneName>Level1</SceneName>
@@ -52,6 +18,23 @@
     <MiningFacilityHealth>50</MiningFacilityHealth>
   </LevelData>
   <LevelData>
+    <DisplayName>Scout Cycle</DisplayName>
+    <SceneName>Level1</SceneName>
+    <LevelID>2</LevelID>
+    <EnemySpawnFilename>ScoutCycle</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Scouts who cycle together stay together</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>52</StartingMoney>
+    <IncomePerSecond>1.1</IncomePerSecond>
+    <MiningFacilityHealth>700</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
     <DisplayName>Level 3</DisplayName>
     <SceneName>Level1</SceneName>
     <LevelID>3</LevelID>
@@ -64,6 +47,23 @@
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <DisplayName>BetterWithFriends_2</DisplayName>
+    <SceneName>Level1</SceneName>
+    <LevelID>4</LevelID>
+    <EnemySpawnFilename>BetterWithFriends_2</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Figure it out!</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>5</MaximumPlayers>
+    <AvailableQuadrants>North, West, South, East</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
