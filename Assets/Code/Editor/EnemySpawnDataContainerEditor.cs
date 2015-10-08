@@ -1,10 +1,9 @@
-using UnityEngine;
-using UnityEditor;
-using UnityEditorInternal;
-using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using UnityEditor;
+using UnityEditorInternal;
+using UnityEngine;
 
 /// <summary>
 /// Inspector button(s) to save/edit level's spawn data from XML.
@@ -14,14 +13,14 @@ using System.Collections.Generic;
 /// </summary>
 [ExecuteInEditMode]
 [CustomEditor(typeof(EnemySpawnDataContainer))]
-public class EnemySpawnDataContainerEditor : Editor 
+public class EnemySpawnDataContainerEditor : Editor
 {
     public bool ShowDebugLogs = true;
 
     private EnemySpawnDataContainer MyScript;
     private ReorderableList ReorderList;
     private string XMLPath;
- 
+
     private void OnEnable()
     {
         XMLPath = Application.streamingAssetsPath + "/" + "Level1" + ".xml"; // FITZGERALD: can't use Application.loadedLevelName in the editor (find way to be dynamic)
@@ -56,7 +55,7 @@ public class EnemySpawnDataContainerEditor : Editor
         DeletionPrompt();
         //DefaultAddEnemy();
         DropDownList();
-    } 
+    }
 
     public override void OnInspectorGUI()
     {
@@ -65,8 +64,8 @@ public class EnemySpawnDataContainerEditor : Editor
         ReorderList.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
 
-		GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
-		GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
+        GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
+        GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
         // "Save Data" button at bottom of Inspector window
         if (IsListLoaded())
             SaveToXML_Button();
@@ -91,7 +90,7 @@ public class EnemySpawnDataContainerEditor : Editor
         }
         else
             return false;
-   }
+    }
 
     /// <summary>
     /// Displays ReorderableList in inspector
@@ -114,8 +113,8 @@ public class EnemySpawnDataContainerEditor : Editor
             EditorGUI.PropertyField(new Rect(rect.x + 190, rect.y, 30, EditorGUIUtility.singleLineHeight),
                                              element.FindPropertyRelative("StartAngle"), GUIContent.none);
 
-			EditorGUI.PropertyField(new Rect(rect.x + 230, rect.y, 30, EditorGUIUtility.singleLineHeight),
-			                        element.FindPropertyRelative("PlayerCount"), GUIContent.none);
+            EditorGUI.PropertyField(new Rect(rect.x + 230, rect.y, 30, EditorGUIUtility.singleLineHeight),
+                                    element.FindPropertyRelative("PlayerCount"), GUIContent.none);
         };
     }
 
@@ -164,7 +163,7 @@ public class EnemySpawnDataContainerEditor : Editor
             element.FindPropertyRelative("EnemyName").stringValue = "LightSpeeder";
             element.FindPropertyRelative("StartTime").floatValue = 0;
             element.FindPropertyRelative("StartAngle").floatValue = 0;
-			element.FindPropertyRelative("PlayerCount").floatValue = 1;
+            element.FindPropertyRelative("PlayerCount").floatValue = 1;
         };
     }
 
@@ -187,10 +186,11 @@ public class EnemySpawnDataContainerEditor : Editor
                 string path = AssetDatabase.GUIDToAssetPath(enemy);
                 // add enemy to menu choices
                 menu.AddItem(new GUIContent("Enemy Type/" + Path.GetFileNameWithoutExtension(path)), false, ClickHandler,
-                             new EnemyCreationParams() { AssetPath = path, EnemyName = path, HighlightColor = new Color(10, 10,10) });
+                             new EnemyCreationParams() { AssetPath = path, EnemyName = path, HighlightColor = new Color(10, 10, 10) });
             }
 
             #region for other menus (Boss enemy vs Normal enemy)
+
             //guids = AssetDatabase.FindAssets("", new[] { "Assets/Prefabs/Bosses" });
             //foreach (var guid in guids)
             //{
@@ -199,7 +199,8 @@ public class EnemySpawnDataContainerEditor : Editor
             //    false, ClickHandler,
             //    new WaveCreationParams() { Type = EnemySpawnData.EnemyType.Boss, Path = path });
             //}
-            #endregion
+
+            #endregion for other menus (Boss enemy vs Normal enemy)
 
             menu.ShowAsContext();
         };
@@ -209,32 +210,32 @@ public class EnemySpawnDataContainerEditor : Editor
     /// Click handler for ReorderableList's add button
     /// </summary>
     /// <param name="target"></param>
-    private void ClickHandler(object target) 
+    private void ClickHandler(object target)
     {
         var data = (EnemyCreationParams)target;
         var index = ReorderList.serializedProperty.arraySize;
-        
+
         // Increase ReorderableList array size for the new Enemy
         ReorderList.serializedProperty.arraySize++;
         ReorderList.index = index;
-        
+
         // The new Enemy added by user
         var element = ReorderList.serializedProperty.GetArrayElementAtIndex(index);
 
         // EnemyName
         element.FindPropertyRelative("EnemyName").stringValue = data.EnemyName;
 
-		element.FindPropertyRelative("PrefabName").stringValue = data.PrefabName;
+        element.FindPropertyRelative("PrefabName").stringValue = data.PrefabName;
 
         // StartTime
         element.FindPropertyRelative("StartTime").floatValue = 60f;
-       
+
         // StartAngle (increment from last angle in ReorderableList?)
         element.FindPropertyRelative("StartAngle").intValue = 360;
 
-		// Color
-		element.FindPropertyRelative("HighlightColor").colorValue = new Color(10, 10, 10);
-        
+        // Color
+        element.FindPropertyRelative("HighlightColor").colorValue = new Color(10, 10, 10);
+
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -245,7 +246,8 @@ public class EnemySpawnDataContainerEditor : Editor
     {
         public string AssetPath; // if we want to load from Assets folder
         private string _EnemyName;
-        public string EnemyName 
+
+        public string EnemyName
         {
             get { return _EnemyName; }
             set
@@ -256,8 +258,9 @@ public class EnemySpawnDataContainerEditor : Editor
                     _EnemyName = "*unkown*";
             }
         }
-		public string PrefabName;
-		public Color HighlightColor;
+
+        public string PrefabName;
+        public Color HighlightColor;
     }
 
     /// <summary>
@@ -268,7 +271,7 @@ public class EnemySpawnDataContainerEditor : Editor
         if (MyScript.EnemySpawnDataList != null)
         {
             MyScript.EnemySpawnDataList = MyScript.EnemySpawnDataList.OrderBy(o => o.StartTime).ToList();
-        }    
+        }
     }
 
     /// <summary>
@@ -277,8 +280,8 @@ public class EnemySpawnDataContainerEditor : Editor
     /// <returns></returns>
     private List<EnemySpawnData> LoadFromXML_Local()
     {
-		// Sort by StartTime and PlayerCount before loading
-		return XMLParser<EnemySpawnData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.StartTime).ThenBy(o => o.PlayerCount).ToList();
+        // Sort by StartTime and PlayerCount before loading
+        return XMLParser<EnemySpawnData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.StartTime).ThenBy(o => o.PlayerCount).ToList();
     }
 
     /// <summary>
@@ -313,6 +316,7 @@ public class EnemySpawnDataContainerEditor : Editor
     }
 
     #region MessageHandling
+
     protected void Log(string message)
     {
         if (ShowDebugLogs)
@@ -324,5 +328,6 @@ public class EnemySpawnDataContainerEditor : Editor
         if (ShowDebugLogs)
             Debug.LogError("[EnemySpawnDataContainerEditor] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

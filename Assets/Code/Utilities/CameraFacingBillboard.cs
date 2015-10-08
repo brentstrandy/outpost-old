@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CameraFacingBillboard : MonoBehaviour
-{	
-	private Camera MainCamera;
+{
+    private Camera MainCamera;
 
-	void Start()
-	{
-		MainCamera = Camera.main;
-	}
+    private void Start()
+    {
+        MainCamera = Camera.main;
+    }
 
-	void Update()
-	{
-		transform.rotation = MainCamera.transform.rotation;
-	}
+    private void Update()
+    {
+        transform.rotation = MainCamera.transform.rotation;
+    }
 }

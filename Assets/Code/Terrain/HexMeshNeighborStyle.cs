@@ -1,11 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public enum HexMeshNeighborStyle : int
+﻿public enum HexMeshNeighborStyle : int
 {
-	Natural,
-	Average,
-	Median,
-	Min,
-	Max
+    Natural,
+    Average,
+    Median,
+    Min,
+    Max
 }

@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class FMOD_OneShot : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
 
-	public string FMODEventName = "";
-	public Vector3 Position;
+    public string FMODEventName = "";
+    public Vector3 Position;
 
-	// Use this for initialization
-	void Start ()
-	{
-		Position = this.transform.position;
+    // Use this for initialization
+    private void Start()
+    {
+        Position = this.transform.position;
 
         Play_OneShot();
-	}
+    }
 
     public void Play_OneShot()
     {
@@ -23,6 +22,7 @@ public class FMOD_OneShot : MonoBehaviour
     }
 
     #region Message Handling
+
     protected virtual void Log(string message)
     {
         if (ShowDebugLogs)
@@ -34,5 +34,6 @@ public class FMOD_OneShot : MonoBehaviour
         if (ShowDebugLogs)
             Debug.LogError("[FMOD_OneShot] " + message);
     }
-    #endregion
+
+    #endregion Message Handling
 }

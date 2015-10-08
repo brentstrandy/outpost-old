@@ -1,55 +1,53 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 
 public class MainMenu_Menu : MonoBehaviour
 {
-	public bool ShowDebugLogs = true;
-	
-	private void OnEnable()
-	{
-		// Establish listeners for all applicable events
-		SessionManager.Instance.OnSMCreatedRoom += RoomCreated_Event;
-		SessionManager.Instance.OnSMCreateRoomFail += CreateRoomFail_Event;
-	}
-	
-	private void OnDisable()
-	{
-		// Remove listeners for all applicable events
-		SessionManager.Instance.OnSMCreatedRoom -= RoomCreated_Event;
-		SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFail_Event;
-	}
-	
-	#region OnClick
-	public void CreateGame_Click()
-	{
-		SessionManager.Instance.CreateRoom("Room of " + PlayerManager.Instance.Username + "(" + System.Guid.NewGuid().ToString() + ")", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 8 }, TypedLobby.Default);
-	}
-	
-	public void JoinGame_Click()
-	{
-		// Tell the MenuManager to transition to the Join Game menu
-		MenuManager.Instance.ShowJoinGameMenu();
-	}
-	
-	public void MatchmakingGame_Click()
-	{
-		// Tell the MenuManager to transition to the MatchMaking menu
-		MenuManager.Instance.ShowMatchmakingGameMenu();
-	}
-	
-	public void Settings_Click()
-	{
-		// Tell the MenuManager to transition to Settings menu
-		MenuManager.Instance.ShowSettingsMenu();
-	}
+    public bool ShowDebugLogs = true;
 
-	public void Account_Click()
-	{
-		// Tell the MenuManager to transition to Account menu
-		MenuManager.Instance.ShowAccountMenu();
-	}
+    private void OnEnable()
+    {
+        // Establish listeners for all applicable events
+        SessionManager.Instance.OnSMCreatedRoom += RoomCreated_Event;
+        SessionManager.Instance.OnSMCreateRoomFail += CreateRoomFail_Event;
+    }
+
+    private void OnDisable()
+    {
+        // Remove listeners for all applicable events
+        SessionManager.Instance.OnSMCreatedRoom -= RoomCreated_Event;
+        SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFail_Event;
+    }
+
+    #region OnClick
+
+    public void CreateGame_Click()
+    {
+        SessionManager.Instance.CreateRoom("Room of " + PlayerManager.Instance.Username + "(" + System.Guid.NewGuid().ToString() + ")", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 8 }, TypedLobby.Default);
+    }
+
+    public void JoinGame_Click()
+    {
+        // Tell the MenuManager to transition to the Join Game menu
+        MenuManager.Instance.ShowJoinGameMenu();
+    }
+
+    public void MatchmakingGame_Click()
+    {
+        // Tell the MenuManager to transition to the MatchMaking menu
+        MenuManager.Instance.ShowMatchmakingGameMenu();
+    }
+
+    public void Settings_Click()
+    {
+        // Tell the MenuManager to transition to Settings menu
+        MenuManager.Instance.ShowSettingsMenu();
+    }
+
+    public void Account_Click()
+    {
+        // Tell the MenuManager to transition to Account menu
+        MenuManager.Instance.ShowAccountMenu();
+    }
 
     /// <summary>
     /// Used by the GUI system to go leave the room when the Back button is pressed
@@ -58,7 +56,7 @@ public class MainMenu_Menu : MonoBehaviour
     {
         // TO DO: Ask the user if they're sure they want to leave
 
-		// Disconnect the player from Photon
+        // Disconnect the player from Photon
         SessionManager.Instance.Disconnect();
 
         // Tell the MenuManager to transition back
@@ -66,15 +64,16 @@ public class MainMenu_Menu : MonoBehaviour
     }
 
     #region Used for QuickStart (development mode)
+
     public void QuickStart_Click()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         //LevelData levelData = GameDataManager.Instance.FindLevelDataByDisplayName("Establishing Roots");
         //List<TowerData> availableTowers = {Small Thraceium Tower, EMP Tower};
         //LoadOut towers = new LoadOut();
 
         //SessionManager.Instance.CreateRoom("Room of " + PlayerManager.Instance.Username + "(" + System.Guid.NewGuid().ToString() + ")", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 1 }, TypedLobby.Default);
-        
+
         //PhotonView ObjPhotonView = PhotonView.Get(this);
 
         ////SessionManager.Instance.SetRoomVisibility(true);
@@ -85,7 +84,7 @@ public class MainMenu_Menu : MonoBehaviour
         //ObjPhotonView.RPC("LoadLevel", PhotonTargets.All, null);
 
         //LoadLevel();
-        #endif
+#endif
 
         LogError("John is lazy. Will get a quick start working later. 9/7/15");
     }
@@ -105,36 +104,41 @@ public class MainMenu_Menu : MonoBehaviour
     //    // Start the game
     //    MenuManager.Instance.ShowStartGame(LevelLoadoutData);
     //}
-    #endregion
 
-    #endregion
+    #endregion Used for QuickStart (development mode)
+
+    #endregion OnClick
 
     #region Events
+
     private void RoomCreated_Event()
-	{
-		// Tell the MenuManager to transition to the newly created room
-		MenuManager.Instance.ShowRoomDetailsMenu();
-	}
-	
-	private void CreateRoomFail_Event(object[] codeAndMsg)
-	{
-		this.LogError("Failed to Create Room");
-		// TODO: Display an error messages that says room could not be created
-		MenuManager.Instance.ShowRoomDetailsMenu();
-	}
-	#endregion
-	
-	#region MessageHandling
-	protected void Log(string message)
-	{
-		if(ShowDebugLogs)
-			Debug.Log("[MainMenu_Menu] " + message);
-	}
-	
-	protected void LogError(string message)
-	{
-		if(ShowDebugLogs)
-			Debug.LogError("[MainMenu_Menu] " + message);
-	}
-	#endregion
+    {
+        // Tell the MenuManager to transition to the newly created room
+        MenuManager.Instance.ShowRoomDetailsMenu();
+    }
+
+    private void CreateRoomFail_Event(object[] codeAndMsg)
+    {
+        this.LogError("Failed to Create Room");
+        // TODO: Display an error messages that says room could not be created
+        MenuManager.Instance.ShowRoomDetailsMenu();
+    }
+
+    #endregion Events
+
+    #region MessageHandling
+
+    protected void Log(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.Log("[MainMenu_Menu] " + message);
+    }
+
+    protected void LogError(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.LogError("[MainMenu_Menu] " + message);
+    }
+
+    #endregion MessageHandling
 }

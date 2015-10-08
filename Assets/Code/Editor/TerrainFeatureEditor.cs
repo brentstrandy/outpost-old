@@ -1,19 +1,17 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEditor;
+﻿using UnityEditor;
 
 [CustomEditor(typeof(TerrainFeature))]
 public class TerrainFeatureEditor : Editor
 {
-	public override void OnInspectorGUI()
-	{
-		DrawDefaultInspector();
-		
-		if (target.GetType() == typeof(TerrainFeature))
-		{
-			TerrainFeature feature = (TerrainFeature)target;
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
 
-			feature.TerrainPinning = (TerrainPinningMode)EditorGUILayout.EnumPopup("Terrain Pinning", feature.TerrainPinning);
-		}
-	}
+        if (target.GetType() == typeof(TerrainFeature))
+        {
+            TerrainFeature feature = (TerrainFeature)target;
+
+            feature.TerrainPinning = (TerrainPinningMode)EditorGUILayout.EnumPopup("Terrain Pinning", feature.TerrainPinning);
+        }
+    }
 }

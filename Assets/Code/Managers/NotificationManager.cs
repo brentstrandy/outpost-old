@@ -1,7 +1,7 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Manages and displays all notifications to player
@@ -9,122 +9,126 @@ using System.Linq;
 /// </summary>
 public class NotificationManager : MonoBehaviour
 {
-	private static NotificationManager instance;
+    private static NotificationManager instance;
 
-	public bool ShowDebugLogs = true;
-	public bool FinishedSpawning { get; private set; }
+    public bool ShowDebugLogs = true;
+    public bool FinishedSpawning { get; private set; }
 
-	private List<NotificationData> LevelNotificationList;
-	private float StartTime;
-	private PhotonView ObjPhotonView;
+    private List<NotificationData> LevelNotificationList;
+    private float StartTime;
+    private PhotonView ObjPhotonView;
 
-	#region INSTANCE (SINGLETON)
-	/// <summary>
-	/// Singleton - There can only be one
-	/// </summary>
-	/// <value>The instance.</value>
-	public static NotificationManager Instance
-	{
-		get
-		{
-			if(instance == null)
-			{
-				instance = GameObject.FindObjectOfType<NotificationManager>();
-			}
+    #region INSTANCE (SINGLETON)
 
-			return instance;
-		}
-	}
+    /// <summary>
+    /// Singleton - There can only be one
+    /// </summary>
+    /// <value>The instance.</value>
+    public static NotificationManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = GameObject.FindObjectOfType<NotificationManager>();
+            }
 
-	void Awake()
-	{
-		instance = this;
-	}
-	#endregion
+            return instance;
+        }
+    }
 
-	// Use this for initialization
-	void Start ()
-	{
-		// Store a reference to the PhotonView
-		ObjPhotonView = PhotonView.Get(this);
+    private void Awake()
+    {
+        instance = this;
+    }
 
-		FinishedSpawning = false;
-	}
+    #endregion INSTANCE (SINGLETON)
 
-	public void DisplayNotification(NotificationData notificationData)
-	{
-		GameObject newNotification = Instantiate(Resources.Load("Notifications/" + notificationData.NotificationType), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+    // Use this for initialization
+    private void Start()
+    {
+        // Store a reference to the PhotonView
+        ObjPhotonView = PhotonView.Get(this);
 
-		// Load the notification's details in order to display correctly
-		newNotification.GetComponent<Notification>().SetNotificationData(notificationData);
-	}
+        FinishedSpawning = false;
+    }
 
-	public IEnumerator DisplayLevelNotifications(List<NotificationData> levelNotificationList)
-	{
-		LevelNotificationList = levelNotificationList;
+    public void DisplayNotification(NotificationData notificationData)
+    {
+        GameObject newNotification = Instantiate(Resources.Load("Notifications/" + notificationData.NotificationType), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
-		SortListByStartTime();
+        // Load the notification's details in order to display correctly
+        newNotification.GetComponent<Notification>().SetNotificationData(notificationData);
+    }
 
-		// Remember when displaying started in order to display future notifications at the right time
-		StartTime = Time.time;
+    public IEnumerator DisplayLevelNotifications(List<NotificationData> levelNotificationList)
+    {
+        LevelNotificationList = levelNotificationList;
 
-		// Loop until there are no notifications left to display
-		while(LevelNotificationList.Count != 0 && GameManager.Instance.GameRunning)
-		{
-			// Check to see if the next notification display time has passed. If so, display the notification
-			if(GetNextDisplayTime() <= (Time.time - this.StartTime))
-				DisplayNotification(DisplayNext());
+        SortListByStartTime();
 
-			// TO DO: Tell the coroutine to run when the next notification is ready to be displayed
-			yield return 0;
-		}
+        // Remember when displaying started in order to display future notifications at the right time
+        StartTime = Time.time;
 
-		StartTime = -1;
+        // Loop until there are no notifications left to display
+        while (LevelNotificationList.Count != 0 && GameManager.Instance.GameRunning)
+        {
+            // Check to see if the next notification display time has passed. If so, display the notification
+            if (GetNextDisplayTime() <= (Time.time - this.StartTime))
+                DisplayNotification(DisplayNext());
 
-		// Spawning is complete
-		FinishedSpawning = true;
-	}
+            // TO DO: Tell the coroutine to run when the next notification is ready to be displayed
+            yield return 0;
+        }
 
-	public float GetNextDisplayTime()
-	{
-		float startTime = -1;
+        StartTime = -1;
 
-		if(LevelNotificationList.Count > 0)
-			startTime = LevelNotificationList[0].StartTime;
+        // Spawning is complete
+        FinishedSpawning = true;
+    }
 
-		return startTime;
-	}
+    public float GetNextDisplayTime()
+    {
+        float startTime = -1;
 
-	private NotificationData DisplayNext()
-	{
-		NotificationData notification = null;
+        if (LevelNotificationList.Count > 0)
+            startTime = LevelNotificationList[0].StartTime;
 
-		if(LevelNotificationList.Count > 0)
-		{
-			notification = LevelNotificationList[0];
-			LevelNotificationList.RemoveAt(0);
-		}
+        return startTime;
+    }
 
-		return notification;
-	}
+    private NotificationData DisplayNext()
+    {
+        NotificationData notification = null;
 
-	private void SortListByStartTime()
-	{
-		if (LevelNotificationList != null)
-			LevelNotificationList = LevelNotificationList.OrderBy(o => o.StartTime).ToList();
-	}
+        if (LevelNotificationList.Count > 0)
+        {
+            notification = LevelNotificationList[0];
+            LevelNotificationList.RemoveAt(0);
+        }
 
-	#region MessageHandling
-	protected void Log(string message)
-	{
-		if(ShowDebugLogs)
-			Debug.Log("[NotificationManager] " + message);
-	}
-	
-	protected void LogError(string message)
-	{
-		if(ShowDebugLogs)
-			Debug.LogError("[NotificationManager] " + message);
-	}
-	#endregion
+        return notification;
+    }
+
+    private void SortListByStartTime()
+    {
+        if (LevelNotificationList != null)
+            LevelNotificationList = LevelNotificationList.OrderBy(o => o.StartTime).ToList();
+    }
+
+    #region MessageHandling
+
+    protected void Log(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.Log("[NotificationManager] " + message);
+    }
+
+    protected void LogError(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.LogError("[NotificationManager] " + message);
+    }
+
+    #endregion MessageHandling
 }

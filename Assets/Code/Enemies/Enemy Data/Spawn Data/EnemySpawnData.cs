@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Xml.Serialization;
+using UnityEngine;
 
 /// <summary>
 /// Enemy spawn data used to place enemies in the level.
@@ -11,32 +11,37 @@ public class EnemySpawnData
 {
     // EnemyName must come first in class so it replaces element tag in Inspector
     public string EnemyName;
+
     public float StartTime;
     public int StartAngle;
-	public int PlayerCount;
+    public int PlayerCount;
 
-    [HideInInspector] [XmlIgnore]
+    [HideInInspector]
+    [XmlIgnore]
     public bool ShowDebugLogs = true;
 
-	public EnemySpawnData() { }
+    public EnemySpawnData()
+    {
+    }
 
-	public EnemySpawnData(EnemySpawnData obj)
+    public EnemySpawnData(EnemySpawnData obj)
     {
         EnemyName = obj.EnemyName;
         StartTime = obj.StartTime;
         StartAngle = obj.StartAngle;
-		PlayerCount = obj.PlayerCount;
+        PlayerCount = obj.PlayerCount;
     }
 
-	public EnemySpawnData(string enemyName, float startTime, int startAngle, int playerCount)
+    public EnemySpawnData(string enemyName, float startTime, int startAngle, int playerCount)
     {
         EnemyName = enemyName;
         StartTime = startTime;
         StartAngle = startAngle;
-		PlayerCount = playerCount;
+        PlayerCount = playerCount;
     }
 
     #region MessageHandling
+
     protected void Log(string message)
     {
         if (ShowDebugLogs)
@@ -48,5 +53,6 @@ public class EnemySpawnData
         if (ShowDebugLogs)
             Debug.LogError("[EnemySpawnData] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

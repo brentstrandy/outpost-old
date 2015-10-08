@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEditor;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// Inspector button(s) to save/load/create enemy data from XML.
@@ -32,9 +32,9 @@ public class EnemyDataContainerEditor : Editor
 
         if (IsListLoaded())
         {
-			GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
-			GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
-			EditorGUILayout.Space();
+            GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
+            GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
+            EditorGUILayout.Space();
             NewItem_Button();
             EditorGUILayout.Space();
             SaveToXML_Button();
@@ -43,7 +43,7 @@ public class EnemyDataContainerEditor : Editor
         EditorGUILayout.Space();
 
         LoadFromXML_Button();
-		LoadFromXML_Server_Button();
+        LoadFromXML_Server_Button();
     }
 
     private bool IsListLoaded()
@@ -88,26 +88,25 @@ public class EnemyDataContainerEditor : Editor
         }
     }
 
-	private List<EnemyData> LoadFromXML_Server()
-	{
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData.xml");
-		string myXML;
-		
-		while(!www.isDone)
-		{
-			
-		}
-		
-		myXML = www.text;
+    private List<EnemyData> LoadFromXML_Server()
+    {
+        WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData.xml");
+        string myXML;
 
-		// Sort by StartTime and PlayerCount before loading
-		return XMLParser<EnemyData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
-	}
+        while (!www.isDone)
+        {
+        }
 
-	/*private List<EnemyData> LoadFromXML_Server()
-	{
-		return XMLParser<EnemyData>.XMLDeserializer_Data(
-	}*/
+        myXML = www.text;
+
+        // Sort by StartTime and PlayerCount before loading
+        return XMLParser<EnemyData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
+    }
+
+    /*private List<EnemyData> LoadFromXML_Server()
+    {
+        return XMLParser<EnemyData>.XMLDeserializer_Data(
+    }*/
 
     /// <summary>
     /// Saves current Inspector List to XML.
@@ -121,27 +120,27 @@ public class EnemyDataContainerEditor : Editor
         }
     }
 
-	private void SaveToXML_Server_Button()
-	{
-		/*
-		// Create a form object for sending high score data to the server
-		var form = new WWWForm();
-		
-		// The score
-		form.AddField( "data", MyScript.EnemyDataList );
-		
-		// Create a download object
-		var download = new WWW( "www.diademstudios.com/EnemyData.xml", form );
-		
-		// Wait until the download is done
-		yield download;
-		
-		if(download.error)
-			LogError("Error submitting XML: " + download.error);
-		else
-			Log("XML data was saved to server");
-		*/
-	}
+    private void SaveToXML_Server_Button()
+    {
+        /*
+        // Create a form object for sending high score data to the server
+        var form = new WWWForm();
+
+        // The score
+        form.AddField( "data", MyScript.EnemyDataList );
+
+        // Create a download object
+        var download = new WWW( "www.diademstudios.com/EnemyData.xml", form );
+
+        // Wait until the download is done
+        yield download;
+
+        if(download.error)
+            LogError("Error submitting XML: " + download.error);
+        else
+            Log("XML data was saved to server");
+        */
+    }
 
     /// <summary>
     /// Load from Enemy Data XML.
@@ -161,24 +160,25 @@ public class EnemyDataContainerEditor : Editor
         }
     }
 
-	private void LoadFromXML_Server_Button()
-	{
-		if (GUILayout.Button("Load SERVER Data"))
-		{
-			if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD data from the SERVER?", "Yes", "No"))
-			{
-				if (Application.isPlaying)
-					EditorUtility.DisplayDialog("Nope.", "Data cannot be loaded form the SERVER during runtime.", "OK");
-				else
-				{
-					MyScript.EnemyDataList.Clear();
-					MyScript.EnemyDataList = LoadFromXML_Server();
-				}
-			}
-		}
-	}
+    private void LoadFromXML_Server_Button()
+    {
+        if (GUILayout.Button("Load SERVER Data"))
+        {
+            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD data from the SERVER?", "Yes", "No"))
+            {
+                if (Application.isPlaying)
+                    EditorUtility.DisplayDialog("Nope.", "Data cannot be loaded form the SERVER during runtime.", "OK");
+                else
+                {
+                    MyScript.EnemyDataList.Clear();
+                    MyScript.EnemyDataList = LoadFromXML_Server();
+                }
+            }
+        }
+    }
 
     #region MessageHandling
+
     protected void Log(string message)
     {
         if (ShowDebugLogs)
@@ -190,5 +190,6 @@ public class EnemyDataContainerEditor : Editor
         if (ShowDebugLogs)
             Debug.LogError("[EnemyDataContainerEditor] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

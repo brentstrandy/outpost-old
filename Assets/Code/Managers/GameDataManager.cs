@@ -1,119 +1,120 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GameDataManager : MonoBehaviour
 {
-	private static GameDataManager instance;
+    private static GameDataManager instance;
 
-	public string DataLocation { get; private set; }
+    public string DataLocation { get; private set; }
 
-	public DataManager<TowerData> TowerDataManager { get; private set; }
-	public DataManager<EnemyData> EnemyDataManager { get; private set; }
-	public DataManager<LevelData> LevelDataManager { get; private set; }
+    public DataManager<TowerData> TowerDataManager { get; private set; }
+    public DataManager<EnemyData> EnemyDataManager { get; private set; }
+    public DataManager<LevelData> LevelDataManager { get; private set; }
 
-	#region INSTANCE (SINGLETON)
-	/// <summary>
-	/// Singleton - There can only be one
-	/// </summary>
-	/// <value>The instance.</value>
-	public static GameDataManager Instance
-	{
-		get
-		{
-			if(instance == null)
-			{
-				instance = GameObject.FindObjectOfType<GameDataManager>();
-			}
-			
-			return instance;
-		}
-	}
+    #region INSTANCE (SINGLETON)
 
-	void Awake()
-	{
-		instance = this;
-	}
-	#endregion
+    /// <summary>
+    /// Singleton - There can only be one
+    /// </summary>
+    /// <value>The instance.</value>
+    public static GameDataManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = GameObject.FindObjectOfType<GameDataManager>();
+            }
 
-	// Use this for initialization
-	void Start ()
-	{
-		// Instantiate data class for storing all tower data
-		TowerDataManager = new DataManager<TowerData>();
-		// Instantiate data class for storing all enemy data
-		EnemyDataManager = new DataManager<EnemyData>();
-		// Instantiate data class for storing all level data
-		LevelDataManager = new DataManager<LevelData>();
+            return instance;
+        }
+    }
 
-		// Set to local when starting in the Unity Editor
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    #endregion INSTANCE (SINGLETON)
+
+    // Use this for initialization
+    private void Start()
+    {
+        // Instantiate data class for storing all tower data
+        TowerDataManager = new DataManager<TowerData>();
+        // Instantiate data class for storing all enemy data
+        EnemyDataManager = new DataManager<EnemyData>();
+        // Instantiate data class for storing all level data
+        LevelDataManager = new DataManager<LevelData>();
+
+        // Set to local when starting in the Unity Editor
 #if UNITY_EDITOR
-		SwitchToLocalData();
+        SwitchToLocalData();
 #else
 		SwitchToServerData();
 #endif
-	}
+    }
 
-	public void SwitchToServerData()
-	{
-		DataLocation = "Server";
+    public void SwitchToServerData()
+    {
+        DataLocation = "Server";
 
-		// Clear all data
-		TowerDataManager.ClearData();
-		EnemyDataManager.ClearData();
-		LevelDataManager.ClearData();
+        // Clear all data
+        TowerDataManager.ClearData();
+        EnemyDataManager.ClearData();
+        LevelDataManager.ClearData();
 
-		// Run coroutine to download TowerData from server (This coroutine cannot be called from the DataManager because
-		// it must be called from a MonoBehavior class)
-		StartCoroutine(TowerDataManager.LoadDataFromServer("TowerData.xml"));
-		// Run coroutine to download EnemyData from server (This coroutine cannot be called from the DataManager because
-		// it must be called from a MonoBehavior class)
-		StartCoroutine(EnemyDataManager.LoadDataFromServer("EnemyData.xml"));
-		// Run coroutine to download LevelData from server (This coroutine cannot be called from the DataManager because
-		// it must be called from a MonoBehavior class)
-		StartCoroutine(LevelDataManager.LoadDataFromServer("LevelData.xml"));
-	}
+        // Run coroutine to download TowerData from server (This coroutine cannot be called from the DataManager because
+        // it must be called from a MonoBehavior class)
+        StartCoroutine(TowerDataManager.LoadDataFromServer("TowerData.xml"));
+        // Run coroutine to download EnemyData from server (This coroutine cannot be called from the DataManager because
+        // it must be called from a MonoBehavior class)
+        StartCoroutine(EnemyDataManager.LoadDataFromServer("EnemyData.xml"));
+        // Run coroutine to download LevelData from server (This coroutine cannot be called from the DataManager because
+        // it must be called from a MonoBehavior class)
+        StartCoroutine(LevelDataManager.LoadDataFromServer("LevelData.xml"));
+    }
 
-	public void SwitchToLocalData()
-	{
-		DataLocation = "Local";
+    public void SwitchToLocalData()
+    {
+        DataLocation = "Local";
 
-		// Clear all data
-		TowerDataManager.ClearData();
-		EnemyDataManager.ClearData();
-		LevelDataManager.ClearData();
+        // Clear all data
+        TowerDataManager.ClearData();
+        EnemyDataManager.ClearData();
+        LevelDataManager.ClearData();
 
-		TowerDataManager.LoadDataFromLocal("TowerData.xml");
-		EnemyDataManager.LoadDataFromLocal("EnemyData.xml");
-		LevelDataManager.LoadDataFromLocal("LevelData.xml");
-	}
+        TowerDataManager.LoadDataFromLocal("TowerData.xml");
+        EnemyDataManager.LoadDataFromLocal("EnemyData.xml");
+        LevelDataManager.LoadDataFromLocal("LevelData.xml");
+    }
 
-	public TowerData FindTowerDataByDisplayName(string displayName)
-	{
-		return TowerDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
-	}
+    public TowerData FindTowerDataByDisplayName(string displayName)
+    {
+        return TowerDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
+    }
 
-	public string FindTowerPrefabByDisplayName(string displayName)
-	{
-		return TowerDataManager.DataList.Find(x => x.DisplayName.Equals(displayName)).PrefabName;
-	}
+    public string FindTowerPrefabByDisplayName(string displayName)
+    {
+        return TowerDataManager.DataList.Find(x => x.DisplayName.Equals(displayName)).PrefabName;
+    }
 
-	public EnemyData FindEnemyDataByDisplayName(string displayName)
-	{
-		return EnemyDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
-	}
+    public EnemyData FindEnemyDataByDisplayName(string displayName)
+    {
+        return EnemyDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
+    }
 
-	public string FindEnemyPrefabNameByDisplayName(string displayName)
-	{
-		return EnemyDataManager.DataList.Find(x => x.DisplayName.Equals(displayName)).PrefabName;
-	}
+    public string FindEnemyPrefabNameByDisplayName(string displayName)
+    {
+        return EnemyDataManager.DataList.Find(x => x.DisplayName.Equals(displayName)).PrefabName;
+    }
 
-	public LevelData FindLevelDataByDisplayName(string displayName)
-	{
-		return LevelDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
-	}
+    public LevelData FindLevelDataByDisplayName(string displayName)
+    {
+        return LevelDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
+    }
 
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 }

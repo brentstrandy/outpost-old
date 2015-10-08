@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-//using System.Collections;
+﻿//using System.Collections;
 //using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine;
 
 /// <summary>
 /// "Dummy" container class to display a List of the game's tower data in the inspector.

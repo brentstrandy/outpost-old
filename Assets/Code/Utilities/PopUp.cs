@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
 
 /// <summary>
 /// Helps create the prefab for the PopUpController.cs class (two classes are necessary since generic (<T>)
@@ -38,7 +36,7 @@ public class PopUp<T>
     private void SetPopUp_Position()
     {
         // PopUp position is random within a range.
-        float[] pos = {0, 0, 0};
+        float[] pos = { 0, 0, 0 };
         for (int i = 0; i < 2; i++)
             pos[i] = UnityEngine.Random.Range(-0.2f, 0.2f);
 
@@ -64,6 +62,7 @@ public class PopUp<T>
     }
 
     #region MessageHandling
+
     private void Log(string message)
     {
         if (ShowDebugLogs)
@@ -80,5 +79,6 @@ public class PopUp<T>
         if (ShowDebugLogs)
             Debug.LogWarning("[PopUp<T>] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

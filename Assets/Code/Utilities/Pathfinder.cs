@@ -1,302 +1,305 @@
 ﻿using UnityEngine;
+
 #if UNITY_EDITOR
+
 using UnityEditor;
+
 #endif
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using Settworks.Hexagons;
 
 [RequireComponent(typeof(HexLocation))]
 public class Pathfinder : MonoBehaviour
 {
-	public delegate void PathfindingFailureHandler();
+    public delegate void PathfindingFailureHandler();
 
-	public bool ShowDebugLogs = false;
-	public bool ShowPath = false;
+    public bool ShowDebugLogs = false;
+    public bool ShowPath = false;
 
-	[SerializeField]
-	public bool AvoidTowers;
-	
-	[SerializeField]
-	public bool AvoidTowerCoverage;
+    [SerializeField]
+    public bool AvoidTowers;
 
-	[SerializeField]
-	public bool AvoidEnemies;
+    [SerializeField]
+    public bool AvoidTowerCoverage;
 
-	[SerializeField]
-	public HexCoord Target;
-	
-	[SerializeField]
-	public int MaxDistanceFromTarget = 24;
-	
-	[SerializeField]
-	public int MaxDistanceFromLocation = 24;
+    [SerializeField]
+    public bool AvoidEnemies;
 
-	public HexPathNode[] Path;
+    [SerializeField]
+    public HexCoord Target;
 
-	public PathfindingFailureHandler OnPathfindingFailure;
+    [SerializeField]
+    public int MaxDistanceFromTarget = 24;
 
-	protected HexLocation ObjHexLocation;
-	protected int SolvedTowerState = 0;
-	protected HexMeshOverlay.Entry Overlay;
+    [SerializeField]
+    public int MaxDistanceFromLocation = 24;
 
-	public virtual void Awake()
-	{
-		ObjHexLocation = GetComponent<HexLocation>();
-	}
+    public HexPathNode[] Path;
 
-	// Use this for initialization
-	public virtual void OnDestroy()
-	{
-		if (ShouldShowPath())
-		{
-			RemovePathOverlay();
-		}
-	}
+    public PathfindingFailureHandler OnPathfindingFailure;
 
-	// Update is called once per frame
-	public virtual void Update()
-	{
-		if (AvoidTowers || AvoidTowerCoverage)
-		{
-			int towerState = GameManager.Instance.TowerManager.State;
-			if (SolvedTowerState != towerState)
-			{
-				SolvedTowerState = towerState;
-				Log("Solving after tower change");
-				Solve();
-			}
-		}
+    protected HexLocation ObjHexLocation;
+    protected int SolvedTowerState = 0;
+    protected HexMeshOverlay.Entry Overlay;
 
-		// If the state of the pathfinder overlay has changed, update the overlay
-		// immediately instead of waiting for the next run of the solver
-		bool hasPath = Overlay != null;
-		if (ShouldShowPath() != hasPath)
-		{
-			UpdatePathOverlay();
-		}
-	}
-	
-	public virtual void FixedUpdate()
-	{
-		
-	}
-	
-	public bool Solve()
-	{
-		HexCoord origin = ObjHexLocation.location;
-		bool success = false;
+    public virtual void Awake()
+    {
+        ObjHexLocation = GetComponent<HexLocation>();
+    }
 
-		// If we're configured to avoid tower coverage, make an attempt to find a path that avoids both obstacles and tower coverage
-		if (AvoidTowerCoverage && HexKit.Path(out Path, origin, Target, IsObstacleOrTowerCoverage))
-		{
-			success = true;
-		}
-		// If we're configured to avoid towers, make an attempt to find a path that avoids both obstacles and towers
-		else if (AvoidTowers && HexKit.Path(out Path, origin, Target, IsObstacleOrTower))
-		{
-			success = true;
-		}
-		// If all else fails, attempt to find a path that at least avoids obstacles
-		else if (HexKit.Path(out Path, origin, Target, IsObstacle))
-		{
-			success = true;
-		}
+    // Use this for initialization
+    public virtual void OnDestroy()
+    {
+        if (ShouldShowPath())
+        {
+            RemovePathOverlay();
+        }
+    }
 
-		// Log success/failure
-		if (success)
-		{
-			Log("Solved: " + PathToString() + " Origin: " + origin + " Target: " + Target);
-		}
-		else
-		{
-			Log("No Solution");
-		}
+    // Update is called once per frame
+    public virtual void Update()
+    {
+        if (AvoidTowers || AvoidTowerCoverage)
+        {
+            int towerState = GameManager.Instance.TowerManager.State;
+            if (SolvedTowerState != towerState)
+            {
+                SolvedTowerState = towerState;
+                Log("Solving after tower change");
+                Solve();
+            }
+        }
 
-		// Update our pathfinding overlay
-		UpdatePathOverlay();
+        // If the state of the pathfinder overlay has changed, update the overlay
+        // immediately instead of waiting for the next run of the solver
+        bool hasPath = Overlay != null;
+        if (ShouldShowPath() != hasPath)
+        {
+            UpdatePathOverlay();
+        }
+    }
 
-		if (success)
-		{
-			if (OnPathfindingFailure != null)
-			{
-				OnPathfindingFailure();
-			}
-		}
+    public virtual void FixedUpdate()
+    {
+    }
 
-		return success;
-	}
-	
-	public bool IsObstacle(HexCoord coord)
-	{
-		if (HexCoord.Distance(ObjHexLocation.location, coord) > MaxDistanceFromLocation)
-		{
-			return true;
-		}
-		
-		if (HexCoord.Distance(coord, Target) > MaxDistanceFromTarget)
-		{
-			return true;
-		}
-		
-		if (GameManager.Instance.TerrainMesh.IsImpassable(coord))
-		{
-			return true;
-		}
+    public bool Solve()
+    {
+        HexCoord origin = ObjHexLocation.location;
+        bool success = false;
 
-		return false;
-	}
-	
-	public bool IsObstacleOrTower(HexCoord coord)
-	{
-		if (IsObstacle(coord))
-		{
-			return true;
-		}
+        // If we're configured to avoid tower coverage, make an attempt to find a path that avoids both obstacles and tower coverage
+        if (AvoidTowerCoverage && HexKit.Path(out Path, origin, Target, IsObstacleOrTowerCoverage))
+        {
+            success = true;
+        }
+        // If we're configured to avoid towers, make an attempt to find a path that avoids both obstacles and towers
+        else if (AvoidTowers && HexKit.Path(out Path, origin, Target, IsObstacleOrTower))
+        {
+            success = true;
+        }
+        // If all else fails, attempt to find a path that at least avoids obstacles
+        else if (HexKit.Path(out Path, origin, Target, IsObstacle))
+        {
+            success = true;
+        }
 
-		if (GameManager.Instance.TowerManager.HasTower(coord))
-		{
-			return true;
-		}
+        // Log success/failure
+        if (success)
+        {
+            Log("Solved: " + PathToString() + " Origin: " + origin + " Target: " + Target);
+        }
+        else
+        {
+            Log("No Solution");
+        }
 
-		return false;
-	}
+        // Update our pathfinding overlay
+        UpdatePathOverlay();
 
-	public bool IsObstacleOrTowerCoverage(HexCoord coord)
-	{
-		if (AvoidTowers)
-		{
-			if (IsObstacleOrTower(coord))
-			{
-				return true;
-			}
-		}
-		else
-		{
-			if (IsObstacle(coord))
-			{
-				return true;
-			}
-		}
-		
-		if (GameManager.Instance.TowerManager.Coverage(coord) > 0)
-		{
-			return true;
-		}
+        if (success)
+        {
+            if (OnPathfindingFailure != null)
+            {
+                OnPathfindingFailure();
+            }
+        }
 
-		return false;
-	}
+        return success;
+    }
 
-	public HexCoord Next()
-	{
-		var location = ObjHexLocation.location;
-		if (location == Target)
-		{
-			return location;
-		}
+    public bool IsObstacle(HexCoord coord)
+    {
+        if (HexCoord.Distance(ObjHexLocation.location, coord) > MaxDistanceFromLocation)
+        {
+            return true;
+        }
 
-		if (Path == null || Path.Length == 0 || Path[0].Location == location)
-		{
-			Solve();
-		}
+        if (HexCoord.Distance(coord, Target) > MaxDistanceFromTarget)
+        {
+            return true;
+        }
 
-		if (Path != null && Path.Length > 0)
-		{
-			return Path[0].Location;
-		}
-		else
-		{
-			return location;
-		}
-	}
+        if (GameManager.Instance.TerrainMesh.IsImpassable(coord))
+        {
+            return true;
+        }
 
-	public void UpdatePathOverlay()
-	{
-		if (ShouldShowPath())
-		{
-			if (Overlay == null)
-			{
-				AddPathOverlay();
-			}
-			Overlay.Update(EnumeratePath());
-		}
-		else if (Overlay != null)
-		{
-			RemovePathOverlay();
-		}
-	}
-	
-	public void AddPathOverlay()
-	{
-		int id = gameObject.GetInstanceID();
-		Overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding][id];
-		Overlay.Color = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), 1.0f);
-		Overlay.Show();
-	}
-	
-	public void RemovePathOverlay()
-	{
-		int id = gameObject.GetInstanceID();
-		GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding].Remove(id);
-		Overlay = null;
-	}
+        return false;
+    }
 
-	public IEnumerable<HexCoord> EnumeratePath()
-	{
-		foreach (var node in Path)
-		{
-			yield return node.Location;
-		}
-	}
+    public bool IsObstacleOrTower(HexCoord coord)
+    {
+        if (IsObstacle(coord))
+        {
+            return true;
+        }
 
-	public string PathToString()
-	{
-		if (Path == null)
-		{
-			return "(NONE)";
-		}
+        if (GameManager.Instance.TowerManager.HasTower(coord))
+        {
+            return true;
+        }
 
-		string output = "";
-		for (int i = 0; i < Path.Length; i++)
-		{
-			if (i > 0)
-			{
-				output += " ";
-			}
-			output += Path[i].Location.ToString();
-		}
-		return output;
-	}
+        return false;
+    }
 
-	protected virtual bool ShouldShowPath()
-	{
-		if (ShowPath)
-		{
-			return true;
-		}
+    public bool IsObstacleOrTowerCoverage(HexCoord coord)
+    {
+        if (AvoidTowers)
+        {
+            if (IsObstacleOrTower(coord))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if (IsObstacle(coord))
+            {
+                return true;
+            }
+        }
 
-		#if UNITY_EDITOR
-		if (Selection.activeGameObject == gameObject)
-		{
-			return true;
-		}
-		#endif
+        if (GameManager.Instance.TowerManager.Coverage(coord) > 0)
+        {
+            return true;
+        }
 
-		return false;
-	}
-	
-	#region MessageHandling
-	protected virtual void Log(string message)
-	{
-		if(ShowDebugLogs)
-			Debug.Log("[Pathfinder] " + message);
-	}
-	
-	protected virtual void LogError(string message)
-	{
-		if(ShowDebugLogs)
-			Debug.LogError("[Pathfinder] " + message);
-	}
-	#endregion
+        return false;
+    }
+
+    public HexCoord Next()
+    {
+        var location = ObjHexLocation.location;
+        if (location == Target)
+        {
+            return location;
+        }
+
+        if (Path == null || Path.Length == 0 || Path[0].Location == location)
+        {
+            Solve();
+        }
+
+        if (Path != null && Path.Length > 0)
+        {
+            return Path[0].Location;
+        }
+        else
+        {
+            return location;
+        }
+    }
+
+    public void UpdatePathOverlay()
+    {
+        if (ShouldShowPath())
+        {
+            if (Overlay == null)
+            {
+                AddPathOverlay();
+            }
+            Overlay.Update(EnumeratePath());
+        }
+        else if (Overlay != null)
+        {
+            RemovePathOverlay();
+        }
+    }
+
+    public void AddPathOverlay()
+    {
+        int id = gameObject.GetInstanceID();
+        Overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding][id];
+        Overlay.Color = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), 1.0f);
+        Overlay.Show();
+    }
+
+    public void RemovePathOverlay()
+    {
+        int id = gameObject.GetInstanceID();
+        GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding].Remove(id);
+        Overlay = null;
+    }
+
+    public IEnumerable<HexCoord> EnumeratePath()
+    {
+        foreach (var node in Path)
+        {
+            yield return node.Location;
+        }
+    }
+
+    public string PathToString()
+    {
+        if (Path == null)
+        {
+            return "(NONE)";
+        }
+
+        string output = "";
+        for (int i = 0; i < Path.Length; i++)
+        {
+            if (i > 0)
+            {
+                output += " ";
+            }
+            output += Path[i].Location.ToString();
+        }
+        return output;
+    }
+
+    protected virtual bool ShouldShowPath()
+    {
+        if (ShowPath)
+        {
+            return true;
+        }
+
+#if UNITY_EDITOR
+        if (Selection.activeGameObject == gameObject)
+        {
+            return true;
+        }
+#endif
+
+        return false;
+    }
+
+    #region MessageHandling
+
+    protected virtual void Log(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.Log("[Pathfinder] " + message);
+    }
+
+    protected virtual void LogError(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.LogError("[Pathfinder] " + message);
+    }
+
+    #endregion MessageHandling
 }

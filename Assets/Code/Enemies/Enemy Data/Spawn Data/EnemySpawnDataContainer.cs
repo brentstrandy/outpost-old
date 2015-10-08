@@ -1,8 +1,8 @@
-using UnityEngine;
 //using System.Collections;
 //using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine;
 
 /// <summary>
 /// "Dummy" container class to display a List of the level's spawn data in the inspector.
@@ -10,11 +10,11 @@ using System.Xml.Serialization;
 /// This is seperate from EnemySpawnData because Monobehaviour cannot serialize to XML.
 /// Owner: John Fitzgerald
 /// </summary>
-public class EnemySpawnDataContainer : MonoBehaviour 
+public class EnemySpawnDataContainer : MonoBehaviour
 {
     [HideInInspector]
-	[XmlArray("EnemySpawnActions"), XmlArrayItem(typeof(EnemySpawnData), ElementName = "EnemySpawnAction")]
-	public List<EnemySpawnData> EnemySpawnDataList;
+    [XmlArray("EnemySpawnActions"), XmlArrayItem(typeof(EnemySpawnData), ElementName = "EnemySpawnAction")]
+    public List<EnemySpawnData> EnemySpawnDataList;
 
     public EnemySpawnDataContainer()
     {

@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// An Orb emmited from the Thraceium Rain Tower that follows a parabolic trajectory.
@@ -21,6 +19,7 @@ public class ThraceiumRainOrb : MonoBehaviour
     public float ExplosionDuration = 0.5f;
 
     #region 5TH PATHFINDING (Parabola)
+
     public float CompletionTime = 3f;
     public float ObjectTimer = 0f;
     public float ParabolaHeight = 5f;
@@ -30,7 +29,8 @@ public class ThraceiumRainOrb : MonoBehaviour
     public Vector3 ParabolaMidpoint;
     public Vector3 ParabolaEnd;
     public Vector3 TravelDirection;
-    #endregion
+
+    #endregion 5TH PATHFINDING (Parabola)
 
     private readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
     private bool HitTarget = false;
@@ -50,7 +50,7 @@ public class ThraceiumRainOrb : MonoBehaviour
         ProjectileAngle = 45f;
         //ProjectileAngleToEnemy = Vector3.Angle(TargetHexLocation - transform.position, transform.forward);
 
-        if (Target!= null)
+        if (Target != null)
         {
             ParabolaStart = this.transform.position;
             ParabolaEnd = TargetHexLocation;
@@ -69,7 +69,7 @@ public class ThraceiumRainOrb : MonoBehaviour
         IsSetData = true;
     }
 
-    void Update()
+    private void Update()
     {
         if (!IsSetData)
             SetData();
@@ -96,21 +96,26 @@ public class ThraceiumRainOrb : MonoBehaviour
                 else
                 {
                     #region 5TH PATHFINDING (Parabola)
+
                     // Set how long the projectile takes to reach it's end on a parabolic trajectory
                     //float objectTimer = (Time.time / CompletionTime) % 1;
                     ObjectTimer += 0.01f;
                     this.transform.position = SampleParabola(ObjectTimer);
-                    #endregion
+
+                    #endregion 5TH PATHFINDING (Parabola)
 
                     #region 4TH PATHFINDING
+
                     //float distance = Vector3.Distance (transform.position, TargetHexLocation);
 
                     //Velocity = (transform.position - Previous).magnitude / Time.deltaTime;
                     //Previous = transform.position;
                     //float angle = (Mathf.Asin((Physics.gravity.magnitude * distance) / (Velocity * Velocity)) / 2) * 100;
-                    #endregion
+
+                    #endregion 4TH PATHFINDING
 
                     #region 3RD PATHFINDING
+
                     //Velocity = (transform.position - Previous).magnitude / Time.deltaTime;
                     //Previous = transform.position;
 
@@ -123,9 +128,11 @@ public class ThraceiumRainOrb : MonoBehaviour
                     //       (Mathf.Cos(-ProjectileAngleToEnemy * Mathf.Deg2Rad) * Velocity)) * 2f));
 
                     //transform.position = new Vector3();
-                    #endregion
+
+                    #endregion 3RD PATHFINDING
 
                     #region 2ND PATHFINDING
+
                     //Vector3 targetDir = TargetHexLocation - transform.position;
                     //float distanceTraveled = ProjectileSpeed * Time.deltaTime;
                     ////Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0F);
@@ -138,9 +145,11 @@ public class ThraceiumRainOrb : MonoBehaviour
                     ////RB.AddForce(transform.forward * 50f);
 
                     //transform.position = Vector3.MoveTowards(transform.position, TargetHexLocation, distanceTraveled);
-                    #endregion
+
+                    #endregion 2ND PATHFINDING
 
                     #region 1ST PATHFINDING
+
                     //float distanceTraveled = ProjectileSpeed * Time.deltaTime;
                     //if (Vector3.Distance(this.transform.position, Target.position) < distanceTraveled)
                     //{
@@ -154,7 +163,8 @@ public class ThraceiumRainOrb : MonoBehaviour
                     //    //this.transform.LookAt(Target.position, Up);
                     //    this.transform.position += this.transform.forward * distanceTraveled;
                     //}
-                    #endregion
+
+                    #endregion 1ST PATHFINDING
                 }
             }
             // Explodes when it hits the target
@@ -183,6 +193,7 @@ public class ThraceiumRainOrb : MonoBehaviour
     }
 
     #region 5TH PATHFINDING (Parabola)
+
     /// <summary>
     /// Draw the trajectory parabola in Unity's Scene window
     /// </summary>
@@ -234,11 +245,11 @@ public class ThraceiumRainOrb : MonoBehaviour
             Vector3 levelDirection = ParabolaEnd - new Vector3(ParabolaStart.x, ParabolaStart.y, ParabolaEnd.z);
             // a perpendicular line from the X-Y plane (levelDirection) and the travelDirection
             Vector3 right = Vector3.Cross(TravelDirection, levelDirection);
-            // a perpendicular line from the 
+            // a perpendicular line from the
             Vector3 up = Vector3.Cross(right, levelDirection);
             //Vector3 up = Vector3.Cross(right, travelDirection);
             up.z = up.z * Up.z;
-            
+
             // face up's vector the other direction if the end vector is higher than the start vector
             if (ParabolaEnd.z < ParabolaStart.z)
                 up = -up;
@@ -249,7 +260,8 @@ public class ThraceiumRainOrb : MonoBehaviour
 
         return result;
     }
-    #endregion
+
+    #endregion 5TH PATHFINDING (Parabola)
 
     private void OnTriggerEnter(Collider other)
     {
@@ -275,6 +287,7 @@ public class ThraceiumRainOrb : MonoBehaviour
     }
 
     #region MessageHandling
+
     private void Log(string message)
     {
         if (ShowDebugLogs)
@@ -285,5 +298,6 @@ public class ThraceiumRainOrb : MonoBehaviour
     {
         Debug.LogError("[ThraceiumRainOrb] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

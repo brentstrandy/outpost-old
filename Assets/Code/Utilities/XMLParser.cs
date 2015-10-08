@@ -1,13 +1,14 @@
-using UnityEngine;
 //using System;
 //using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+
 //using System.Security.Cryptography;
 //using System.Text;
 //using System.Xml;
 using System.Xml.Serialization;
-using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Generic de/serializer used to save and load XML files.
@@ -16,11 +17,11 @@ using System.Linq;
 /// <typeparam name="T"></typeparam>
 public static class XMLParser<T>
 {
-    static bool ShowDebugLogs = false;
-    static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata", "levelprogressdata", "accountdata"};
-
+    private static bool ShowDebugLogs = false;
+    private static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata", "levelprogressdata", "accountdata" };
 
     #region LIST DE/SERIALIZERS
+
     /// <summary>
     /// Serialize a List of classes to an XML file.
     /// </summary>
@@ -52,18 +53,18 @@ public static class XMLParser<T>
         }
     }
 
-	public static List<T> XMLDeserializer_Server(string xmlData)
-	{
-		string currentClasss = typeof(T).ToString().ToLower();
+    public static List<T> XMLDeserializer_Server(string xmlData)
+    {
+        string currentClasss = typeof(T).ToString().ToLower();
 
-		if (AvailableClasses.Contains(currentClasss))
-			return (List<T>)DeserializeFromXML_Server(xmlData);
-		else
-		{
-			LogError("Unknown class deserialized: " + typeof(T));
-			return default(List<T>);
-		}
-	}
+        if (AvailableClasses.Contains(currentClasss))
+            return (List<T>)DeserializeFromXML_Server(xmlData);
+        else
+        {
+            LogError("Unknown class deserialized: " + typeof(T));
+            return default(List<T>);
+        }
+    }
 
     private static void SerializeToXML_Local<U>(List<U> obj, string fileName)
     {
@@ -89,7 +90,7 @@ public static class XMLParser<T>
         TextReader reader = null;
         List<T> classList = new List<T>();
 
-		reader = new StringReader(xmlData);
+        reader = new StringReader(xmlData);
 
         classList = (List<T>)deserializer.Deserialize(reader);
         reader.Close();
@@ -99,27 +100,31 @@ public static class XMLParser<T>
         return classList;
     }
 
-	private static List<T> DeserializeFromXML_Local(string filename)
-	{
-		XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
-		TextReader reader = null;
-		List<T> classList = new List<T>();
-		
-		reader = new StreamReader(filename);
+    private static List<T> DeserializeFromXML_Local(string filename)
+    {
+        XmlSerializer deserializer = new XmlSerializer(typeof(List<T>));
+        TextReader reader = null;
+        List<T> classList = new List<T>();
 
-		classList = (List<T>)deserializer.Deserialize(reader);
+        reader = new StreamReader(filename);
 
-		reader.Close();
-		
-		Log("Deserialized (LOCAL): " + filename);
-		
-		return classList;
-	}
-    #endregion
+        classList = (List<T>)deserializer.Deserialize(reader);
+
+        reader.Close();
+
+        Log("Deserialized (LOCAL): " + filename);
+
+        return classList;
+    }
+
+    #endregion LIST DE/SERIALIZERS
 
     #region FOR POTENTIAL FUTURE USE (ENCRYPTION)
+
     /*
+
     #region NON-LIST DE/SERIALIZERS
+
     /// <summary>
     /// Serialize a class to an XML file.
     /// </summary>
@@ -203,7 +208,8 @@ public static class XMLParser<T>
 
         //Log("Serialized: " + Path.GetFileName(name));
     }
-    #endregion
+
+    #endregion NON-LIST DE/SERIALIZERS
 
     #region ENCRYPTION DE/SERIALIZERS
 
@@ -217,7 +223,7 @@ public static class XMLParser<T>
         {
             string original = "Here is some data to encrypt!";
 
-            // Create a new instance of the Aes class. This generates a new key and initialization vector (IV). 
+            // Create a new instance of the Aes class. This generates a new key and initialization vector (IV).
             using (Aes myAes = Aes.Create())
             {
                 //if (obj is EnemySpawner)
@@ -229,7 +235,7 @@ public static class XMLParser<T>
                 // encrypt
                 byte[] encrypted_bytes = Encrypt_AES(original, myAes.Key, myAes.IV);
 
-                // Decrypt the bytes to a string. 
+                // Decrypt the bytes to a string.
                 string roundtrip = Decrypt_AES(encrypted_bytes, myAes.Key, myAes.IV);
 
                 //Display the original data and the decrypted data.
@@ -241,7 +247,6 @@ public static class XMLParser<T>
                     Debug.Log("Round Trip " + roundtrip);
                 }
             }
-
         }
         catch (Exception e)
         {
@@ -273,7 +278,7 @@ public static class XMLParser<T>
             // Create a decrytor to perform the stream transform.
             ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
-            // Create the streams used for encryption. 
+            // Create the streams used for encryption.
             using (MemoryStream msEncrypt = new MemoryStream())
             {
                 using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
@@ -289,7 +294,7 @@ public static class XMLParser<T>
             }
         }
 
-        // Return the encrypted bytes from the memory stream. 
+        // Return the encrypted bytes from the memory stream.
         return encrypted;
     }
 
@@ -298,7 +303,7 @@ public static class XMLParser<T>
     /// </summary>
     private static string Decrypt_AES(byte[] cipherText, byte[] Key, byte[] IV)
     {
-        // Check arguments. 
+        // Check arguments.
         if (cipherText == null || cipherText.Length <= 0)
             throw new ArgumentNullException("cipherText");
         if (Key == null || Key.Length <= 0)
@@ -306,12 +311,12 @@ public static class XMLParser<T>
         if (IV == null || IV.Length <= 0)
             throw new ArgumentNullException("Key");
 
-        // Declare the string used to hold 
-        // the decrypted text. 
+        // Declare the string used to hold
+        // the decrypted text.
         string plaintext = null;
 
-        // Create an Aes object 
-        // with the specified key and IV. 
+        // Create an Aes object
+        // with the specified key and IV.
         using (Aes aesAlg = Aes.Create())
         {
             aesAlg.Key = Key;
@@ -320,7 +325,7 @@ public static class XMLParser<T>
             // Create a decrytor to perform the stream transform.
             ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
-            // Create the streams used for decryption. 
+            // Create the streams used for decryption.
             using (MemoryStream msDecrypt = new MemoryStream(cipherText))
             {
                 using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
@@ -351,7 +356,7 @@ public static class XMLParser<T>
         rij.Key = key;
         // choosing CipherMode:
         // ECB -- should never be used on strings (data must not be related)
-        // 
+        //
         rij.Mode = CipherMode.ECB;
         rij.Padding = PaddingMode.PKCS7;
         ICryptoTransform cTransform = rij.CreateEncryptor();
@@ -374,11 +379,15 @@ public static class XMLParser<T>
         byte[] result = cTransform.TransformFinalBlock(toEncrypt, 0, toEncrypt.Length);
         return UTF8Encoding.UTF8.GetString(result);
     }
-    #endregion
+
+    #endregion ENCRYPTION DE/SERIALIZERS
+
     */
-    #endregion
+
+    #endregion FOR POTENTIAL FUTURE USE (ENCRYPTION)
 
     #region MessageHandling
+
     public static void Log(string message)
     {
         if (ShowDebugLogs)
@@ -387,7 +396,8 @@ public static class XMLParser<T>
 
     public static void LogError(string message)
     {
-    	Debug.LogError("[XMLParser] " + message);
+        Debug.LogError("[XMLParser] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

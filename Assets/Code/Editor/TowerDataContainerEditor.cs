@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEditor;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// Inspector button(s) to save/load/create tower data from XML.
@@ -34,8 +34,8 @@ public class TowerDataContainerEditor : Editor
 
         if (IsListLoaded())
         {
-			GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
-			GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
+            GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
+            GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
             NewItem_Button();
             EditorGUILayout.Space();
             SaveToXML_Button();
@@ -43,7 +43,7 @@ public class TowerDataContainerEditor : Editor
         EditorGUILayout.Space();
 
         LoadFromXML_Button();
-		LoadFromXML_Server_Button();
+        LoadFromXML_Server_Button();
     }
 
     private bool IsListLoaded()
@@ -95,7 +95,7 @@ public class TowerDataContainerEditor : Editor
     {
         if (GUILayout.Button("Save Data"))
         {
-			if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
                 XMLParser<TowerData>.XMLSerializer_Local(MyScript.TowerDataList, XMLPath);
         }
     }
@@ -118,38 +118,37 @@ public class TowerDataContainerEditor : Editor
         }
     }
 
-	private void LoadFromXML_Server_Button()
-	{
-		if (GUILayout.Button("Load SERVER Data"))
-		{
-			if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD data from the SERVER?", "Yes", "No"))
-			{
-				if (Application.isPlaying)
-					EditorUtility.DisplayDialog("Nope.", "Data cannot be loaded form the SERVER during runtime.", "OK");
-				else
-				{
-					MyScript.TowerDataList.Clear();
-					MyScript.TowerDataList = LoadFromXML_Server();
-				}
-			}
-		}
-	}
-	
-	private List<TowerData> LoadFromXML_Server()
-	{
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/TowerData.xml");
-		string myXML;
-		
-		while(!www.isDone)
-		{
-			
-		}
-		
-		myXML = www.text;
-		
-		// Sort by StartTime and PlayerCount before loading
-		return XMLParser<TowerData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
-	}
+    private void LoadFromXML_Server_Button()
+    {
+        if (GUILayout.Button("Load SERVER Data"))
+        {
+            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD data from the SERVER?", "Yes", "No"))
+            {
+                if (Application.isPlaying)
+                    EditorUtility.DisplayDialog("Nope.", "Data cannot be loaded form the SERVER during runtime.", "OK");
+                else
+                {
+                    MyScript.TowerDataList.Clear();
+                    MyScript.TowerDataList = LoadFromXML_Server();
+                }
+            }
+        }
+    }
+
+    private List<TowerData> LoadFromXML_Server()
+    {
+        WWW www = new WWW("http://www.diademstudios.com/outpostdata/TowerData.xml");
+        string myXML;
+
+        while (!www.isDone)
+        {
+        }
+
+        myXML = www.text;
+
+        // Sort by StartTime and PlayerCount before loading
+        return XMLParser<TowerData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
+    }
 
     /// <summary>
     /// Saves current Inspector List to XML.
@@ -166,6 +165,7 @@ public class TowerDataContainerEditor : Editor
     }
 
     #region MessageHandling
+
     protected void Log(string message)
     {
         if (ShowDebugLogs)
@@ -177,5 +177,6 @@ public class TowerDataContainerEditor : Editor
         if (ShowDebugLogs)
             Debug.LogError("[TowerDataContainerEditor] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

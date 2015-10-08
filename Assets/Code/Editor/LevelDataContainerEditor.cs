@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEditor;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// Inspector button(s) to save/load/create level data from XML.
@@ -34,8 +34,8 @@ public class LevelDataContainerEditor : Editor
 
         if (IsListLoaded())
         {
-			GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
-			GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
+            GUILayout.Label("THIS DATA IS FOR LOCAL XML ONLY");
+            GUILayout.Label("DATA CANNOT BE UPDATED AT RUNTIME");
             NewItem_Button();
             EditorGUILayout.Space();
             SaveToXML_Button();
@@ -44,7 +44,7 @@ public class LevelDataContainerEditor : Editor
         EditorGUILayout.Space();
 
         LoadFromXML_Button();
-		LoadFromXML_Server_Button();
+        LoadFromXML_Server_Button();
     }
 
     private bool IsListLoaded()
@@ -96,7 +96,7 @@ public class LevelDataContainerEditor : Editor
     {
         if (GUILayout.Button("Save Data"))
         {
-			if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
                 XMLParser<LevelData>.XMLSerializer_Local(MyScript.LevelDataList, XMLPath);
         }
     }
@@ -119,40 +119,40 @@ public class LevelDataContainerEditor : Editor
         }
     }
 
-	private void LoadFromXML_Server_Button()
-	{
-		if (GUILayout.Button("Load SERVER Data"))
-		{
-			if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD data from the SERVER?", "Yes", "No"))
-			{
-				if (Application.isPlaying)
-					EditorUtility.DisplayDialog("Nope.", "Data cannot be loaded form the SERVER during runtime.", "OK");
-				else
-				{
-					MyScript.LevelDataList.Clear();
-					MyScript.LevelDataList = LoadFromXML_Server();
-				}
-			}
-		}
-	}
+    private void LoadFromXML_Server_Button()
+    {
+        if (GUILayout.Button("Load SERVER Data"))
+        {
+            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD data from the SERVER?", "Yes", "No"))
+            {
+                if (Application.isPlaying)
+                    EditorUtility.DisplayDialog("Nope.", "Data cannot be loaded form the SERVER during runtime.", "OK");
+                else
+                {
+                    MyScript.LevelDataList.Clear();
+                    MyScript.LevelDataList = LoadFromXML_Server();
+                }
+            }
+        }
+    }
 
-	private List<LevelData> LoadFromXML_Server()
-	{
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData.xml");
-		string myXML;
-		
-		while(!www.isDone)
-		{
-			
-		}
-		
-		myXML = www.text;
-		
-		// Sort by StartTime and PlayerCount before loading
-		return XMLParser<LevelData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
-	}
+    private List<LevelData> LoadFromXML_Server()
+    {
+        WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData.xml");
+        string myXML;
+
+        while (!www.isDone)
+        {
+        }
+
+        myXML = www.text;
+
+        // Sort by StartTime and PlayerCount before loading
+        return XMLParser<LevelData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
+    }
 
     #region MessageHandling
+
     protected void Log(string message)
     {
         if (ShowDebugLogs)
@@ -164,5 +164,6 @@ public class LevelDataContainerEditor : Editor
         if (ShowDebugLogs)
             Debug.LogError("[LevelDataContainerEditor] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

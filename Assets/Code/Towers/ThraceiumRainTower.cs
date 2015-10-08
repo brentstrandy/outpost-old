@@ -1,16 +1,15 @@
 using UnityEngine;
-using System.Collections;
 
 public class ThraceiumRainTower : Tower
 {
-	// Use this for initialization
-	public override void Start()
-	{
-		base.Start();
-        
-		// Thraceium Rain Tower will fire at enemies, start a coroutine to check (and fire) on enemies
-		StartCoroutine("Fire");
-	}
+    // Use this for initialization
+    public override void Start()
+    {
+        base.Start();
+
+        // Thraceium Rain Tower will fire at enemies, start a coroutine to check (and fire) on enemies
+        StartCoroutine("Fire");
+    }
 
     /// <summary>
     /// RPC call to tell players to fire a shot. Thraceium Rain tower is unique in that is launches an orb and does not
@@ -31,16 +30,18 @@ public class ThraceiumRainTower : Tower
         go.GetComponent<ThraceiumRainOrb>().Target = TargetedEnemy.transform;
     }
 
-	#region MessageHandling
-	protected override void Log(string message)
-	{
-		if(ShowDebugLogs)
-			Debug.Log("[ThraceiumRainTower] " + message);
-	}
-	
-	protected override void LogError(string message)
-	{
-		Debug.LogError("[ThraceiumRainTower] " + message);
-	}
-	#endregion
+    #region MessageHandling
+
+    protected override void Log(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.Log("[ThraceiumRainTower] " + message);
+    }
+
+    protected override void LogError(string message)
+    {
+        Debug.LogError("[ThraceiumRainTower] " + message);
+    }
+
+    #endregion MessageHandling
 }

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine;
 
 /// <summary>
 /// "Dummy" container class to display a List of the game's level data in the inspector.

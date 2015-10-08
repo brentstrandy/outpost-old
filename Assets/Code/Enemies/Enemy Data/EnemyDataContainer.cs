@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-//using System.Collections;
+﻿//using System.Collections;
 //using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine;
 
 /// <summary>
 /// "Dummy" container class to display a List of the game's enemy data in the inspector.
@@ -17,7 +17,7 @@ public class EnemyDataContainer : MonoBehaviour
     [XmlArray("Enemies"), XmlArrayItem(typeof(EnemyData), ElementName = "Enemy")]
     public List<EnemyData> EnemyDataList;
 
-	public EnemyDataContainer()
+    public EnemyDataContainer()
     {
         EnemyDataList = new List<EnemyData>();
     }

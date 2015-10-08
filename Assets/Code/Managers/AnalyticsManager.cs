@@ -1,9 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
-using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// A collection of analytics for the player and game
@@ -31,8 +28,8 @@ public class AnalyticsManager : MonoBehaviour
     /// 2) Explanation of shorthand
     ///     a) (MASTER): sent by master client
     ///     b) (ALL): sent by all clients
-    /// 
-    /// 
+    ///
+    ///
     ///         TASK AT HAND:
     /// 1) For sending global "(MASTER)" data: only send data from master client.
     /// 2) Compute most averages on the user side to avoid sending so many events to the server.
@@ -42,17 +39,20 @@ public class AnalyticsManager : MonoBehaviour
 
     //[PLAYER]
     public string PlayerName;//Name derived from (Player.Instance.Name) (ALL)
+
     public float PlayerMoney;//Total income per player (ALL & MASTER)
     public bool IsMaster = false;//Indicate if the player is the master client (they will send the global data) (MASTER)
 
     // TODO -- (FITZGERALD) create universal way for Outpost to know which Enemies and Towers are available.
     //[AVAILABLE ENEMIES AND TOWERS]
     public List<string> EnemyTypes;
+
     public List<string> TowerTypes;
 
     //[LEVEL]
     // public float WinPercent_Level; // Win percentage for each level for each # of players (ALL)
     public int LastLevelReached = 0;//Avg last level reached. (ALL)
+
     public int PlayerCount;//Playercount at the beginning of a level. (ALL & MASTER)
     public bool PlayerCountChanged;//Indicates if the player count has changed since the beginning of a level (ALL & MASTER)
     public float GameLength;//Length of time the user plays the level (from game start to loss/win) (MASTER)
@@ -60,22 +60,29 @@ public class AnalyticsManager : MonoBehaviour
 
     //[DAMAGE]
     public float BallisticDamage;//Accumulated in a single level (ALL & MASTER)
+
     public float ThraceiumDamage;//Accumulated in a seingle level (ALL & MASTER)
 
     //[TOWERS]
-    Dictionary <string, int> NumberBuilt_Tower;
+    private Dictionary<string, int> NumberBuilt_Tower;
+
     //public int[] NumberBuilt_Tower;//# of towers built for each type (ALL & MASTER)
-    Dictionary <string, float> DPS_Tower;
+    private Dictionary<string, float> DPS_Tower;
+
     //public float[] DPS_Tower;//Avg DPS for each tower (ALL & MASTER)
-    Dictionary <string, float> DistanceFromCenter_Tower;
+    private Dictionary<string, float> DistanceFromCenter_Tower;
+
     //public float[] DistanceFromCenter_Tower;//Avg distance from center for each tower type (ALL & MASTER)
-    Dictionary <string, float> DistanceFromTower_Tower;
+    private Dictionary<string, float> DistanceFromTower_Tower;
+
     //public float[][] DistanceFromTower_Tower;//Avg distance from other tower (ALL & MASTER)
-    Dictionary <string, float> LifeSpan_Tower;
+    private Dictionary<string, float> LifeSpan_Tower;
+
     //public float[] LifeSpan_Tower;//Avg lifespan for each tower (ALL & MASTER)
 
     //[ENEMIES]
     public int[] NumberOfSpawns_Enemy;//# of spawns for each enemy type (This is controlled by us -- do we need to track it?) (ALL & MASTER)
+
     public float[] TotalDamage_Enemy;//Total damage for each enemy type (ALL & MASTER)
     public float[] DPS_Enemy;//Avg DPS for each enemy type (ALL & MASTER)
     public float[] LifeSpan_Enemy;//Avg lifespan for each enemy type that is destroyed (ALL & MASTER)
@@ -84,9 +91,11 @@ public class AnalyticsManager : MonoBehaviour
 
     //[MISCELLANEOUS]
     public int StolenThraceium;//Avg thraceium stolen per player ()
+
     public int NumberOfBarriers;//Avg # of barriers placed per player ()
 
     #region INSTANCE (SINGLETON)
+
     /// <summary>
     /// Singleton - There can only be one
     /// </summary>
@@ -104,13 +113,15 @@ public class AnalyticsManager : MonoBehaviour
         }
     }
 
-    void Awake()
+    private void Awake()
     {
         instance = this;
     }
-    #endregion
+
+    #endregion INSTANCE (SINGLETON)
 
     #region TODO -- (FITZGERALD)
+
     /// <summary>
     /// Used for TowerResult()
     /// </summary>
@@ -118,7 +129,6 @@ public class AnalyticsManager : MonoBehaviour
     {
         //public TowerAnalytics()
         //{
-
         //}
     }
 
@@ -129,21 +139,20 @@ public class AnalyticsManager : MonoBehaviour
     {
         //public EnemyAnalytics()
         //{
-
         //}
     }
-    #endregion
+
+    #endregion TODO -- (FITZGERALD)
 
     #region PUBLIC FUNCTIONS
+
     /// <summary>
     /// Called at the beginning of each level
     /// </summary>
     public void InitializePlayerAnalytics()
     {
-        PlayerName =  PlayerManager.Instance.Username;
+        PlayerName = PlayerManager.Instance.Username;
         PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
-
-
 
         //EnemyTypes = new List<string>(GameManager.Instance.);
         TowerTypes = new List<string>();
@@ -156,15 +165,12 @@ public class AnalyticsManager : MonoBehaviour
         foreach (TowerData tower in GameDataManager.Instance.TowerDataManager.DataList)
             TowerTypes.Add(tower.DisplayName);
 
-
-
-
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
             IsMaster = true;
         }
     }
-    
+
     /// <summary>
     /// Save player analytics (called at end of game).
     /// </summary>
@@ -189,7 +195,7 @@ public class AnalyticsManager : MonoBehaviour
         GameLength = Time.time - GameManager.Instance.LevelStartTime;
         LevelID = GameManager.Instance.CurrentLevelData.LevelID;
         LastLevelReached = GameManager.Instance.CurrentLevelData.LevelID;
-        
+
         //if (PlayerCountChanged)
         //{
         //    //changes in GameManager.Instace.OnPlayerLeft()
@@ -220,9 +226,11 @@ public class AnalyticsManager : MonoBehaviour
         MiscellaneousAnalytics_Send();
         InitialAnalytics_Send();
     }
-    #endregion
+
+    #endregion PUBLIC FUNCTIONS
 
     #region RESET ANALYTICS
+
     /// <summary>
     /// Resets variables that accumulate in a single level
     /// </summary>
@@ -237,7 +245,7 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resets variables that the only pertain to the Player 
+    /// Resets variables that the only pertain to the Player
     /// </summary>
     public void ResetPlayerAnalytics()
     {
@@ -254,9 +262,11 @@ public class AnalyticsManager : MonoBehaviour
         ResetLevelAnalytics();
         ResetPlayerAnalytics();
     }
-    #endregion
+
+    #endregion RESET ANALYTICS
 
     #region SEND ANALYTICS
+
     /// <summary>
     /// [PLAYER] Player's stats
     /// </summary>
@@ -310,7 +320,8 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     #region TODO -- (FITZGERALD)
-    // [TOWERS] 
+
+    // [TOWERS]
     private void TowerAnalytics_Send()
     {
         Analytics.CustomEvent("TowerData_Event", new Dictionary<string, object>
@@ -323,7 +334,7 @@ public class AnalyticsManager : MonoBehaviour
         });
     }
 
-    // [ENEMIES] 
+    // [ENEMIES]
     private void EnemyAnalytics_Send()
     {
         Analytics.CustomEvent("EnemyData_Event", new Dictionary<string, object>
@@ -336,21 +347,22 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     // TODO -- (FITZGERALD) -- Fix naming for these variables ("Miscellaneous" will not work)
-    // [MISCELLANEOUS] 
+    // [MISCELLANEOUS]
     private void MiscellaneousAnalytics_Send()
     {
         Analytics.CustomEvent("Miscellaneous_Event", new Dictionary<string, object>
         {
             {"StolenThraceium", StolenThraceium},
-            {"NumberOfBarriers", NumberOfBarriers}        
+            {"NumberOfBarriers", NumberOfBarriers}
         });
     }
-    #endregion
 
+    #endregion TODO -- (FITZGERALD)
 
-    #endregion
+    #endregion SEND ANALYTICS
 
     #region MessageHandling
+
     protected void Log(string message)
     {
         if (ShowDebugLogs)
@@ -362,5 +374,6 @@ public class AnalyticsManager : MonoBehaviour
         if (ShowDebugLogs)
             Debug.LogError("[AnalyticsManager] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

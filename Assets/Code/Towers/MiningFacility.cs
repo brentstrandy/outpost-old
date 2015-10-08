@@ -1,73 +1,70 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class MiningFacility : Tower
 {
-	private static MiningFacility instance;
+    private static MiningFacility instance;
 
-	public float IncomePerSecond { get; private set; }
+    public float IncomePerSecond { get; private set; }
 
-	private float LastIncomeTime;
+    private float LastIncomeTime;
 
-	// Use this for initialization
-	public override void Start ()
-	{
-		IncomePerSecond = 1.0f;
-		LastIncomeTime = Time.time;
-		Health = 100.0f;
+    // Use this for initialization
+    public override void Start()
+    {
+        IncomePerSecond = 1.0f;
+        LastIncomeTime = Time.time;
+        Health = 100.0f;
 
-		// Save reference to PhotonView
-		ObjPhotonView = PhotonView.Get (this);
-		NetworkViewID = ObjPhotonView.viewID;
-	}
+        // Save reference to PhotonView
+        ObjPhotonView = PhotonView.Get(this);
+        NetworkViewID = ObjPhotonView.viewID;
+    }
 
-	public void InitializeFromLevelData(LevelData levelData)
-	{
-		// Track the newly added tower in the TowerManager
-		GameManager.Instance.TowerManager.AddActiveTower(this);
+    public void InitializeFromLevelData(LevelData levelData)
+    {
+        // Track the newly added tower in the TowerManager
+        GameManager.Instance.TowerManager.AddActiveTower(this);
 
-		IncomePerSecond = levelData.IncomePerSecond;
-		Health = levelData.MiningFacilityHealth;
-		PlayerManager.Instance.SetStartingMoney(levelData.StartingMoney);
+        IncomePerSecond = levelData.IncomePerSecond;
+        Health = levelData.MiningFacilityHealth;
+        PlayerManager.Instance.SetStartingMoney(levelData.StartingMoney);
 
-		// Lift the facility up to whatever the height of the ground below it is
-		gameObject.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(gameObject.transform.position);
-	}
-	
-	// Update is called once per frame
-	public override void Update ()
-	{
-		EarnIncome();
-	}
+        // Lift the facility up to whatever the height of the ground below it is
+        gameObject.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(gameObject.transform.position);
+    }
 
-	protected override void OnTriggerEnter(Collider other)
-	{
-		if(other.tag == "Enemy")
-		{
-			// Deal damage to the Mining Facility
-			this.TakeDamage(other.gameObject.GetComponent<Enemy>().EnemyAttributes.BallisticDamage, other.gameObject.GetComponent<Enemy>().EnemyAttributes.ThraceiumDamage);
-			// Force Enemy to kill itself
-			other.gameObject.GetComponent<Enemy>().ForceInstantDeath();
-		}
-	}
+    // Update is called once per frame
+    public override void Update()
+    {
+        EarnIncome();
+    }
 
-	protected override void OnTriggerStay(Collider other)
-	{
+    protected override void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            // Deal damage to the Mining Facility
+            this.TakeDamage(other.gameObject.GetComponent<Enemy>().EnemyAttributes.BallisticDamage, other.gameObject.GetComponent<Enemy>().EnemyAttributes.ThraceiumDamage);
+            // Force Enemy to kill itself
+            other.gameObject.GetComponent<Enemy>().ForceInstantDeath();
+        }
+    }
 
-	}
+    protected override void OnTriggerStay(Collider other)
+    {
+    }
 
-	protected override void OnTriggerExit(Collider other)
-	{
+    protected override void OnTriggerExit(Collider other)
+    {
+    }
 
-	}
-
-	private void EarnIncome()
-	{
-		// Only earn income if enough time has passed
-		if(Time.time - LastIncomeTime >= 1)
-		{
-			PlayerManager.Instance.EarnIncome(IncomePerSecond);
-			LastIncomeTime = Time.time;
-		}
-	}
+    private void EarnIncome()
+    {
+        // Only earn income if enough time has passed
+        if (Time.time - LastIncomeTime >= 1)
+        {
+            PlayerManager.Instance.EarnIncome(IncomePerSecond);
+            LastIncomeTime = Time.time;
+        }
+    }
 }

@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Displays heal and damage numbers above GameObjects.
@@ -15,9 +14,9 @@ public class PopUpController : MonoBehaviour
 
     private Camera MainCamera;
 
-    GameObject ObjectOfEffect;
-    GameObject PopUp;
-    GameObject PopUpHolder;
+    private GameObject ObjectOfEffect;
+    private GameObject PopUp;
+    private GameObject PopUpHolder;
 
     public int AmountToDisplay;
     public float DeleteTime;
@@ -33,13 +32,13 @@ public class PopUpController : MonoBehaviour
     public Vector3 PopUp_Position;
     public TextMesh _TextMesh;
 
-    void Awake()
+    private void Awake()
     {
         MainCamera = Camera.main;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         Color currentColor = GetComponent<TextMesh>().color;
         Vector3 position = transform.position;
@@ -133,6 +132,7 @@ public class PopUpController : MonoBehaviour
     //}
 
     #region MessageHandling
+
     private void Log(string message)
     {
         if (ShowDebugLogs)
@@ -149,5 +149,6 @@ public class PopUpController : MonoBehaviour
         if (ShowDebugLogs)
             Debug.LogWarning("[PopUpController] " + message);
     }
-    #endregion
+
+    #endregion MessageHandling
 }

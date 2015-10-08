@@ -1,22 +1,22 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(HexMesh))]
 public class HexMeshInspector : Editor
 {
-	public override void OnInspectorGUI()
-	{
-		base.OnInspectorGUI();
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
 
-		if (target.GetType() == typeof(HexMesh))
-		{
-			HexMesh hm = (HexMesh)target;
+        if (target.GetType() == typeof(HexMesh))
+        {
+            HexMesh hm = (HexMesh)target;
 
-			// Trigger the setters
-			if (GUILayout.Button("Apply Dimensions"))
-			{
-				hm.ApplyProperties();
-			}
-		}
-	}
+            // Trigger the setters
+            if (GUILayout.Button("Apply Dimensions"))
+            {
+                hm.ApplyProperties();
+            }
+        }
+    }
 }

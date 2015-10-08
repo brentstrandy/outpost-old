@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public enum HexMeshSurfaceStyle : int
+﻿public enum HexMeshSurfaceStyle : int
 {
-	Natural,
-	FlatCenter,
-	FlatCentroid,
-	Oblique
+    Natural,
+    FlatCenter,
+    FlatCentroid,
+    Oblique
 }

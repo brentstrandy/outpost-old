@@ -1,7 +1,9 @@
 ﻿public enum SamplingAlgorithm
 {
-	Mean,
-	//Median,
-	Min,
-	Max
+    Mean,
+
+    //Median,
+    Min,
+
+    Max
 }

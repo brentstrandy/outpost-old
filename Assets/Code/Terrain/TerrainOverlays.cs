@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public enum TerrainOverlays : int
+﻿public enum TerrainOverlays : int
 {
-	Outline,
-	Highlight,
-	Selection,
-	Pathfinding
+    Outline,
+    Highlight,
+    Selection,
+    Pathfinding
 }
