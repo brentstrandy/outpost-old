@@ -279,11 +279,6 @@ public class Tower : MonoBehaviour
 
 		InstantiateFire();
 		InstantiateExplosion(); // TODO: Delay?
-
-		// TO DO: FITZGERALD - Technically the towers don't 100% damage the enemy. The enemy can have defensive capabilities that reduce the tower's damage.
-		// I think this analytic should be tracked in the "TakeDamage" for an Enemy. Thoughts?
-		AnalyticsManager.Instance.BallisticDamage += TowerAttributes.BallisticDamage;
-		AnalyticsManager.Instance.ThraceiumDamage += TowerAttributes.ThraceiumDamage;
 	}
 
 	/// <summary>
@@ -311,7 +306,7 @@ public class Tower : MonoBehaviour
 			HealthBar.UpdateHealthBar(Health);
 
         // Display health taken above target
-        ShowPopUpDamage(ballisticDamage + thraceiumDamage);
+        ShowPopUpDamage(bDamageWithDefense + tDamageWithDefense);
 	}
 	
 	/// <summary>
@@ -352,7 +347,7 @@ public class Tower : MonoBehaviour
 				HealthBar.UpdateHealthBar(Health);
 
             // Display health taken above target
-            ShowPopUpDamage(ballisticDamage + thraceiumDamage);
+            ShowPopUpDamage(bDamageWithDefense + tDamageWithDefense);
 
 			// Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
 			if (Health <= 0)
@@ -447,7 +442,7 @@ public class Tower : MonoBehaviour
 							{
 								// Tell all clients to fire upon the enemy
 								ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
-							}
+                            }
 						}
 					}
 				}

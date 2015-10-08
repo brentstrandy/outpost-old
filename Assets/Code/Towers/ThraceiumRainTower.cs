@@ -7,10 +7,7 @@ public class ThraceiumRainTower : Tower
 	public override void Start()
 	{
 		base.Start();
-
-		// Load default attributes from TowerData
-		//TowerData towerData = GameDataManager.Instance.FindTowerDataByPrefabName("ThraceiumRainTower");
-
+        
 		// Thraceium Rain Tower will fire at enemies, start a coroutine to check (and fire) on enemies
 		StartCoroutine("Fire");
 	}
@@ -26,8 +23,10 @@ public class ThraceiumRainTower : Tower
         ReadyToFire = false;
         // Tell the tower Animator the tower has fired
         ObjAnimator.SetTrigger("Shot Fired");
+
         // Instantiate prefab for firing an orb
         GameObject go = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
+
         // Instantiate the orb
         go.GetComponent<ThraceiumRainOrb>().Target = TargetedEnemy.transform;
     }
