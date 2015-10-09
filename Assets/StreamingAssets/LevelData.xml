@@ -30,8 +30,8 @@
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>52</StartingMoney>
-    <IncomePerSecond>1.1</IncomePerSecond>
+    <StartingMoney>60</StartingMoney>
+    <IncomePerSecond>1.3</IncomePerSecond>
     <MiningFacilityHealth>700</MiningFacilityHealth>
   </LevelData>
   <LevelData>

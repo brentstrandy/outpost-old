@@ -25,7 +25,7 @@
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>3</StartTime>
 		<StartAngle>360</StartAngle>
 		<PlayerCount>1</PlayerCount>
@@ -55,7 +55,7 @@
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>11</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>1</PlayerCount>
@@ -85,7 +85,7 @@
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>19</StartTime>
 		<StartAngle>261</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -115,7 +115,7 @@
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>27</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>1</PlayerCount>
@@ -145,7 +145,7 @@
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>35</StartTime>
 		<StartAngle>351</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -277,13 +277,13 @@
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>47</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>47</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>1</PlayerCount>
@@ -307,7 +307,7 @@
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>51</StartTime>
 		<StartAngle>156</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -349,7 +349,7 @@
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>55</StartTime>
 		<StartAngle>70</StartAngle>
 		<PlayerCount>3</PlayerCount>
@@ -361,7 +361,7 @@
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>59</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>3</PlayerCount>
@@ -373,7 +373,7 @@
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>59</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>3</PlayerCount>
@@ -385,67 +385,67 @@
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>59</StartTime>
 		<StartAngle>25</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>63</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>63</StartTime>
 		<StartAngle>22</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>63</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>63</StartTime>
 		<StartAngle>24</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>63</StartTime>
 		<StartAngle>25</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>67</StartTime>
 		<StartAngle>244</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>67</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>67</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>67</StartTime>
 		<StartAngle>250</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>67</StartTime>
 		<StartAngle>252</StartAngle>
 		<PlayerCount>5</PlayerCount>
@@ -625,7 +625,7 @@
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>81</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>1</PlayerCount>
@@ -655,7 +655,7 @@
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>85</StartTime>
 		<StartAngle>261</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -685,7 +685,7 @@
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>89</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>3</PlayerCount>
@@ -715,7 +715,7 @@
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>93</StartTime>
 		<StartAngle>351</StartAngle>
 		<PlayerCount>4</PlayerCount>
@@ -745,7 +745,7 @@
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>97</StartTime>
 		<StartAngle>360</StartAngle>
 		<PlayerCount>5</PlayerCount>
@@ -757,13 +757,13 @@
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>101</StartTime>
 		<StartAngle>201</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>101</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>1</PlayerCount>
@@ -781,7 +781,7 @@
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>105</StartTime>
 		<StartAngle>154</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -799,7 +799,7 @@
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>105</StartTime>
 		<StartAngle>160</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -835,7 +835,7 @@
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>109</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>3</PlayerCount>
@@ -865,67 +865,67 @@
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>113</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>117</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>117</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>117</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>117</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>117</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>121</StartTime>
 		<StartAngle>244</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>121</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>121</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>121</StartTime>
 		<StartAngle>250</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>121</StartTime>
 		<StartAngle>252</StartAngle>
 		<PlayerCount>3</PlayerCount>
@@ -943,7 +943,7 @@
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>125</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>1</PlayerCount>
@@ -967,7 +967,7 @@
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Light Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>129</StartTime>
 		<StartAngle>156</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -1051,61 +1051,61 @@
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>141</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>141</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>141</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>141</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>141</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>145</StartTime>
 		<StartAngle>244</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>145</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>145</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>145</StartTime>
 		<StartAngle>250</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Intense Light Speeder</EnemyName>
 		<StartTime>145</StartTime>
 		<StartAngle>252</StartAngle>
 		<PlayerCount>2</PlayerCount>
@@ -1269,12 +1269,6 @@
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>159</StartTime>
-		<StartAngle>117</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>159</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
@@ -1310,18 +1304,6 @@
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>163</StartTime>
-		<StartAngle>243</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>163</StartTime>
-		<StartAngle>261</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>167</StartTime>
 		<StartAngle>9</StartAngle>
 		<PlayerCount>3</PlayerCount>
@@ -1330,18 +1312,6 @@
 		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>167</StartTime>
 		<StartAngle>27</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>167</StartTime>
-		<StartAngle>45</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>167</StartTime>
-		<StartAngle>63</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
@@ -1370,18 +1340,6 @@
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>171</StartTime>
-		<StartAngle>333</StartAngle>
-		<PlayerCount>4</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>171</StartTime>
-		<StartAngle>351</StartAngle>
-		<PlayerCount>4</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>175</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>5</PlayerCount>
@@ -1394,380 +1352,140 @@
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>175</StartTime>
-		<StartAngle>216</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>175</StartTime>
-		<StartAngle>288</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>175</StartTime>
-		<StartAngle>360</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
 		<StartTime>179</StartTime>
 		<StartAngle>199</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>179</StartTime>
 		<StartAngle>201</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>179</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>179</StartTime>
-		<StartAngle>205</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>179</StartTime>
-		<StartAngle>207</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>183</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>183</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>183</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>183</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>183</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>187</StartTime>
 		<StartAngle>19</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>187</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>187</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>187</StartTime>
-		<StartAngle>25</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>187</StartTime>
-		<StartAngle>27</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>191</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>191</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>191</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>191</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>191</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>195</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>195</StartTime>
-		<StartAngle>291</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>195</StartTime>
-		<StartAngle>293</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>195</StartTime>
-		<StartAngle>295</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>195</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>199</StartTime>
 		<StartAngle>199</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>199</StartTime>
 		<StartAngle>201</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>199</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>199</StartTime>
 		<StartAngle>205</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>199</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>203</StartTime>
-		<StartAngle>199</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>203</StartTime>
-		<StartAngle>201</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>203</StartTime>
-		<StartAngle>203</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>203</StartTime>
-		<StartAngle>205</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>203</StartTime>
-		<StartAngle>207</StartAngle>
-		<PlayerCount>1</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>207</StartTime>
-		<StartAngle>109</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>207</StartTime>
-		<StartAngle>111</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>207</StartTime>
-		<StartAngle>113</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>207</StartTime>
-		<StartAngle>115</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>207</StartTime>
-		<StartAngle>117</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>211</StartTime>
-		<StartAngle>19</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>211</StartTime>
-		<StartAngle>21</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>211</StartTime>
-		<StartAngle>23</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>211</StartTime>
-		<StartAngle>25</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>211</StartTime>
-		<StartAngle>27</StartAngle>
-		<PlayerCount>3</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>215</StartTime>
-		<StartAngle>289</StartAngle>
-		<PlayerCount>4</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>215</StartTime>
-		<StartAngle>291</StartAngle>
-		<PlayerCount>4</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>215</StartTime>
-		<StartAngle>293</StartAngle>
-		<PlayerCount>4</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>215</StartTime>
-		<StartAngle>295</StartAngle>
-		<PlayerCount>4</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>215</StartTime>
-		<StartAngle>297</StartAngle>
-		<PlayerCount>4</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>219</StartTime>
-		<StartAngle>289</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>219</StartTime>
-		<StartAngle>291</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>219</StartTime>
-		<StartAngle>293</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>219</StartTime>
-		<StartAngle>295</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>219</StartTime>
-		<StartAngle>297</StartAngle>
-		<PlayerCount>5</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>223</StartTime>
-		<StartAngle>199</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>223</StartTime>
-		<StartAngle>201</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>223</StartTime>
-		<StartAngle>203</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>223</StartTime>
-		<StartAngle>205</StartAngle>
-		<PlayerCount>2</PlayerCount>
-	</EnemySpawnData>
-	<EnemySpawnData>
-		<EnemyName>Intense Heavy Speeder</EnemyName>
-		<StartTime>223</StartTime>
-		<StartAngle>207</StartAngle>
-		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 </ArrayOfEnemySpawnData>
