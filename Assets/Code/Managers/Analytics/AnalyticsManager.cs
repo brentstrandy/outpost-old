@@ -39,59 +39,47 @@ public class AnalyticsManager : MonoBehaviour
 
     //[PLAYER]
     public string PlayerName;//Name derived from (Player.Instance.Name) (ALL)
-
     public float PlayerMoney;//Total income per player (ALL & MASTER)
     public bool IsMaster = false;//Indicate if the player is the master client (they will send the global data) (MASTER)
 
-    // TODO -- (FITZGERALD) create universal way for Outpost to know which Enemies and Towers are available.
     //[AVAILABLE ENEMIES AND TOWERS]
-    public List<string> EnemyTypes;
-
-    public List<string> TowerTypes;
-
+    public List<Analytics_TrackedAssets> AvailableTowers;
+    public List<Analytics_TrackedAssets> AvailableEnemies;
+    
     //[LEVEL]
     // public float WinPercent_Level; // Win percentage for each level for each # of players (ALL)
     public int LastLevelReached = 0;//Avg last level reached. (ALL)
-
     public int PlayerCount;//Playercount at the beginning of a level. (ALL & MASTER)
     public bool PlayerCountChanged;//Indicates if the player count has changed since the beginning of a level (ALL & MASTER)
     public float GameLength;//Length of time the user plays the level (from game start to loss/win) (MASTER)
     public int LevelID;//ID number of level (MASTER)
 
-    //[DAMAGE]
-    public float BallisticDamage;//Accumulated in a single level (ALL & MASTER)
+    //[DAMAGE BY LEVEL]
+    public float BallisticDamage_Level;//Accumulated in a single level (ALL & MASTER)
+    public float ThraceiumDamage_Level;//Accumulated in a seingle level (ALL & MASTER)
 
-    public float ThraceiumDamage;//Accumulated in a seingle level (ALL & MASTER)
+    ////[TOWERS]
+    //private Dictionary<string, int> NumberBuilt_Tower;
+    ////public int[] NumberBuilt_Tower;//# of towers built for each type (ALL & MASTER)
+    //private Dictionary<string, float> DPS_Tower;
+    ////public float[] DPS_Tower;//Avg DPS for each tower (ALL & MASTER)
+    //private Dictionary<string, float> DistanceFromCenter_Tower;
+    ////public float[] DistanceFromCenter_Tower;//Avg distance from center for each tower type (ALL & MASTER)
+    //private Dictionary<string, float> DistanceFromTower_Tower;
+    ////public float[][] DistanceFromTower_Tower;//Avg distance from other tower (ALL & MASTER)
+    //private Dictionary<string, float> LifeSpan_Tower;
+    ////public float[] LifeSpan_Tower;//Avg lifespan for each tower (ALL & MASTER)
 
-    //[TOWERS]
-    private Dictionary<string, int> NumberBuilt_Tower;
-
-    //public int[] NumberBuilt_Tower;//# of towers built for each type (ALL & MASTER)
-    private Dictionary<string, float> DPS_Tower;
-
-    //public float[] DPS_Tower;//Avg DPS for each tower (ALL & MASTER)
-    private Dictionary<string, float> DistanceFromCenter_Tower;
-
-    //public float[] DistanceFromCenter_Tower;//Avg distance from center for each tower type (ALL & MASTER)
-    private Dictionary<string, float> DistanceFromTower_Tower;
-
-    //public float[][] DistanceFromTower_Tower;//Avg distance from other tower (ALL & MASTER)
-    private Dictionary<string, float> LifeSpan_Tower;
-
-    //public float[] LifeSpan_Tower;//Avg lifespan for each tower (ALL & MASTER)
-
-    //[ENEMIES]
-    public int[] NumberOfSpawns_Enemy;//# of spawns for each enemy type (This is controlled by us -- do we need to track it?) (ALL & MASTER)
-
-    public float[] TotalDamage_Enemy;//Total damage for each enemy type (ALL & MASTER)
-    public float[] DPS_Enemy;//Avg DPS for each enemy type (ALL & MASTER)
-    public float[] LifeSpan_Enemy;//Avg lifespan for each enemy type that is destroyed (ALL & MASTER)
-    public float[] DamageToTower_Enemy;// Find the amount of damage for each enemy to tower (ALL & MASTER)
-    public float[] ActiveTime_Enemy;//Percentage of time that each of the enemies are active (ALL)
+    ////[ENEMIES]
+    //public int[] NumberOfSpawns_Enemy;//# of spawns for each enemy type (This is controlled by us -- do we need to track it?) (ALL & MASTER)
+    //public float[] TotalDamage_Enemy;//Total damage from each tower type (ALL & MASTER)
+    //public float[] DPS_Enemy;//Avg DPS for each enemy type (ALL & MASTER)
+    //public float[] LifeSpan_Enemy;//Avg lifespan for each enemy type that is destroyed (ALL & MASTER)
+    //public float[] DamageToTower_Enemy;// Find the amount of damage for each enemy to tower (ALL & MASTER)
+    ////public float[] ActiveTime_Enemy;//Percentage of time that each of the enemies are active (ALL)
 
     //[MISCELLANEOUS]
     public int StolenThraceium;//Avg thraceium stolen per player ()
-
     public int NumberOfBarriers;//Avg # of barriers placed per player ()
 
     #region INSTANCE (SINGLETON)
@@ -120,59 +108,30 @@ public class AnalyticsManager : MonoBehaviour
 
     #endregion INSTANCE (SINGLETON)
 
-    #region TODO -- (FITZGERALD)
-
-    /// <summary>
-    /// Used for TowerResult()
-    /// </summary>
-    private struct TowerAnalytics
-    {
-        //public TowerAnalytics()
-        //{
-        //}
-    }
-
-    /// <summary>
-    /// Used for EnemyResult()
-    /// </summary>
-    private struct EnemyAnalytics
-    {
-        //public EnemyAnalytics()
-        //{
-        //}
-    }
-
-    #endregion TODO -- (FITZGERALD)
-
     #region PUBLIC FUNCTIONS
 
     /// <summary>
-    /// Called at the beginning of each level
+    /// Called at the beginning of each level within GameManager.StartGame()
     /// </summary>
     public void InitializePlayerAnalytics()
     {
         PlayerName = PlayerManager.Instance.Username;
         PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
 
-        //EnemyTypes = new List<string>(GameManager.Instance.);
-        TowerTypes = new List<string>();
-
-        // Create list of available enemies and towers
-        foreach (EnemyData enemy in GameDataManager.Instance.EnemyDataManager.DataList)
-            EnemyTypes.Add(enemy.DisplayName);
-
-        // Use LevelData availableTowers
+        // Create list of available towers
         foreach (TowerData tower in GameDataManager.Instance.TowerDataManager.DataList)
-            TowerTypes.Add(tower.DisplayName);
+            AvailableTowers.Add(new Analytics_TrackedAssets(tower.DisplayName));
+        // Create list of available enemies
+        foreach (EnemyData enemy in GameDataManager.Instance.EnemyDataManager.DataList)
+            AvailableEnemies.Add(new Analytics_TrackedAssets(enemy.DisplayName));
 
+        // Determine Master Client
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-        {
             IsMaster = true;
-        }
     }
 
     /// <summary>
-    /// Save player analytics (called at end of game).
+    /// Save Player analytics
     /// </summary>
     public void SavePlayerAnalytics()
     {
@@ -180,15 +139,7 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Player stats sent at the end of a game.
-    /// </summary>
-    public void SendPlayerAnalytics()
-    {
-        PlayerAnalytics_Send();
-    }
-
-    /// <summary>
-    /// Save session analytics.
+    /// Save Session/Level analytics
     /// </summary>
     public void SaveSessionAnalytics()
     {
@@ -215,29 +166,52 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Public call to send session analytics.
+    /// Save Asset analytics
+    /// </summary>
+    public void SaveAssetAnalytics()
+    {
+
+    }
+
+    /// <summary>
+    /// Public call to send session/level analytics.
     /// </summary>
     public void SendSessionAnalytics()
     {
         LevelAnalytics_Send();
         DamageAnalytics_Send();
-        TowerAnalytics_Send();
+        //TowerAnalytics_Send();
         DamageAnalytics_Send();
         MiscellaneousAnalytics_Send();
         InitialAnalytics_Send();
     }
 
+    /// <summary>
+    /// Public call to send Player analytics.
+    /// </summary>
+    public void SendPlayerAnalytics()
+    {
+        PlayerAnalytics_Send();
+    }
+
+    /// <summary>
+    /// Public call to send Asset analytics.
+    /// </summary>
+    public void SendPlayerAnalytics()
+    {
+        AssetAnalytics_Send();
+    }
+
     #endregion PUBLIC FUNCTIONS
 
     #region RESET ANALYTICS
-
     /// <summary>
-    /// Resets variables that accumulate in a single level
+    /// Resets level analytics
     /// </summary>
     public void ResetLevelAnalytics()
     {
-        BallisticDamage = 0;
-        ThraceiumDamage = 0;
+        BallisticDamage_Level = 0;
+        ThraceiumDamage_Level = 0;
         GameLength = 0;
         PlayerCount = 0;
         PlayerCountChanged = false;
@@ -245,13 +219,21 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resets variables that the only pertain to the Player
+    /// Resets player analytics
     /// </summary>
     public void ResetPlayerAnalytics()
     {
-        // TODO -- (FITZGERALD) -- account for the possibility the player changes his/her name?
         PlayerMoney = 0;
         IsMaster = false;
+    }
+
+    /// <summary>
+    /// Reset asset analytics
+    /// </summary>
+    public void ResetAssetAnalytics()
+    {
+        AvailableTowers = new List<Analytics_TrackedAssets>();
+        AvailableEnemies = new List<Analytics_TrackedAssets>();
     }
 
     /// <summary>
@@ -261,14 +243,13 @@ public class AnalyticsManager : MonoBehaviour
     {
         ResetLevelAnalytics();
         ResetPlayerAnalytics();
+        ResetAssetAnalytics();
     }
-
     #endregion RESET ANALYTICS
 
     #region SEND ANALYTICS
-
     /// <summary>
-    /// [PLAYER] Player's stats
+    /// [PLAYER] Send player's analytics
     /// </summary>
     private void PlayerAnalytics_Send()
     {
@@ -280,7 +261,7 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// [LEVEL] Player's last level reached and the amount of players participating.
+    /// [LEVEL] Send level analytics
     /// </summary>
     private void LevelAnalytics_Send()
     {
@@ -296,21 +277,30 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
+    /// [ASSETS] Send assets analytics
+    /// </summary>
+    private void AssetAnalytics_Send()
+    {
+
+    }
+
+    // Combine with LevelAnalytics?
+    /// <summary>
     /// [DAMAGE] Level's total ballistic and thraceium damage dealt by player.
     /// </summary>
     private void DamageAnalytics_Send()
     {
         Analytics.CustomEvent("TotalLevelDamage_Event", new Dictionary<string, object>
         {
-            {"BallisticDamage", BallisticDamage},
-            {"ThraceiumDamage", ThraceiumDamage},
+            {"BallisticDamage", BallisticDamage_Level},
+            {"ThraceiumDamage", ThraceiumDamage_Level},
             {"LevelName", GameManager.Instance.CurrentLevelData.SceneName},
             {"LevelID", LevelID}
         });
     }
 
     /// <summary>
-    /// Optional stats for Analytics.
+    /// Set optional stats for Analytics.
     /// </summary>
     private void InitialAnalytics_Send()
     {
@@ -321,30 +311,30 @@ public class AnalyticsManager : MonoBehaviour
 
     #region TODO -- (FITZGERALD)
 
-    // [TOWERS]
-    private void TowerAnalytics_Send()
-    {
-        Analytics.CustomEvent("TowerData_Event", new Dictionary<string, object>
-        {
-            {"NumberBuilt_Tower", NumberBuilt_Tower},
-            {"DPS_Tower", DPS_Tower},
-            {"LifeSpan_Tower", LifeSpan_Tower},
-            {"DistanceFromCenter_Tower", DistanceFromCenter_Tower},
-            {"DistanceFromTower_Tower", DistanceFromTower_Tower}
-        });
-    }
+    //// [TOWERS]
+    //private void TowerAnalytics_Send()
+    //{
+    //    Analytics.CustomEvent("TowerData_Event", new Dictionary<string, object>
+    //    {
+    //        {"NumberBuilt_Tower", NumberBuilt_Tower},
+    //        {"DPS_Tower", DPS_Tower},
+    //        {"LifeSpan_Tower", LifeSpan_Tower},
+    //        {"DistanceFromCenter_Tower", DistanceFromCenter_Tower},
+    //        {"DistanceFromTower_Tower", DistanceFromTower_Tower}
+    //    });
+    //}
 
-    // [ENEMIES]
-    private void EnemyAnalytics_Send()
-    {
-        Analytics.CustomEvent("EnemyData_Event", new Dictionary<string, object>
-        {
-            {"NumberOfSpawns_Enemy", NumberOfSpawns_Enemy},
-            {"TotalDamage_Enemy", TotalDamage_Enemy},
-            {"DPS_Enemy",  DPS_Enemy},
-            {"LifeSpan_Enemy", LifeSpan_Enemy},
-        });
-    }
+    //// [ENEMIES]
+    //private void EnemyAnalytics_Send()
+    //{
+    //    Analytics.CustomEvent("EnemyData_Event", new Dictionary<string, object>
+    //    {
+    //        {"NumberOfSpawns_Enemy", NumberOfSpawns_Enemy},
+    //        {"TotalDamage_Enemy", TotalDamage_Enemy},
+    //        {"DPS_Enemy",  DPS_Enemy},
+    //        {"LifeSpan_Enemy", LifeSpan_Enemy},
+    //    });
+    //}
 
     // TODO -- (FITZGERALD) -- Fix naming for these variables ("Miscellaneous" will not work)
     // [MISCELLANEOUS]
@@ -358,7 +348,6 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     #endregion TODO -- (FITZGERALD)
-
     #endregion SEND ANALYTICS
 
     #region MessageHandling

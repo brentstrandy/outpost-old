@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="us-ascii"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <ArrayOfTowerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <TowerData>
     <DisplayName>EMP Tower</DisplayName>
@@ -58,8 +58,8 @@
     <RateOfFire>0.25</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>6</Range>
-    <BallisticDamage>28</BallisticDamage>
-    <ThraceiumDamage>50</ThraceiumDamage>
+    <BallisticDamage>5</BallisticDamage>
+    <ThraceiumDamage>5</ThraceiumDamage>
     <BallisticDefense>0</BallisticDefense>
     <ThraceiumDefense>0</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
