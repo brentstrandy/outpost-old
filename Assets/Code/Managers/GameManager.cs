@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(NotificationManager.Instance.DisplayLevelNotifications(LevelNotificationDataManager.DataList));
 
         // Initializes player stats for Analytics.
-        AnalyticsManager.Instance.InitializePlayerAnalytics();
+        //AnalyticsManager.Instance.InitializePlayerAnalytics();
     }
 
     public void OnLevelWasLoaded(int level)

@@ -5,7 +5,7 @@ using System.Collections;
 /// A single asset that gets collected for analytics inside a List<Analytics_TrackedAssets>
 /// Owner: John Fitzgerald
 /// </summary>
-public class Analytics_Asset : ScriptableObject
+public class Analytics_Asset// : ScriptableObject
 {
     public int ViewID;
     public string AssetType;             // Enemy or Tower

@@ -197,7 +197,7 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// Public call to send Asset analytics.
     /// </summary>
-    public void SendPlayerAnalytics()
+    public void SendaAssetAnalytics()
     {
         AssetAnalytics_Send();
     }

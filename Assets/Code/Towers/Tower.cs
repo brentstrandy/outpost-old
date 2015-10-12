@@ -307,7 +307,7 @@ public class Tower : MonoBehaviour
         Health = Mathf.Max(Health, 0);
 
         AnalyticsManager.Instance.BallisticDamage_Level += bDamageWithDefense;
-        AnalyticsManager.Instance.ThraceiumDamage += tDamageWithDefense;
+        AnalyticsManager.Instance.ThraceiumDamage_Level += tDamageWithDefense;
 
         // Only update the Health Bar if there is one to update
         if (HealthBar)
@@ -350,7 +350,7 @@ public class Tower : MonoBehaviour
             Health = Mathf.Max(Health, 0);
 
             AnalyticsManager.Instance.BallisticDamage_Level += bDamageWithDefense;
-            AnalyticsManager.Instance.ThraceiumDamage += tDamageWithDefense;
+            AnalyticsManager.Instance.ThraceiumDamage_Level += tDamageWithDefense;
 
             // Only update the Health Bar if there is one to update
             if (HealthBar)
