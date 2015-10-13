@@ -37,8 +37,19 @@ public class EnemySpawnManager
             // Only spawn the enemy if there are the appropriate number of co-op players
             if (SessionManager.Instance.GetRoomPlayerCount() >= spawnDetails.PlayerCount)
             {
+                // Asset's unique ViewID
+                int viewID = SessionManager.Instance.AllocateNewViewID();
+                // Asset's display name
+                string displayName = spawnDetails.EnemyName;
+                // Asset's spawn position
+                Vector3 enemySpawnPosition = GameManager.Instance.TerrainMesh.IntersectPosition(GameManager.Instance.AngleToPosition(spawnDetails.StartAngle), 0);
+
                 // Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
-                ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, spawnDetails.EnemyName, spawnDetails.StartAngle, SessionManager.Instance.AllocateNewViewID());
+                ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, displayName, spawnDetails.StartAngle, viewID);
+
+                //LogError("Enemy Name: " + spawnDetails.EnemyName);
+                // Track the enemy through the AnalyticsManager
+                AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", new Vector2(enemySpawnPosition.x, enemySpawnPosition.y));
             }
         }
     }

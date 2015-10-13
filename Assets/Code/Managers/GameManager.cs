@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <returns>The to position.</returns>
     /// <param name="angle">Angle.</param>
-    private Vector3 AngleToPosition(int angle)
+    public Vector3 AngleToPosition(int angle)
     {
         float radians = (Mathf.PI / 180) * angle; // Mathf.Deg2Rad;
 

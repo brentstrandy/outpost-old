@@ -7,6 +7,8 @@ using System.Collections;
 /// </summary>
 public class Analytics_Asset
 {
+    public bool ShowDebugLogs = true;
+
     public int ViewID;
     public string AssetType;             // Enemy or Tower
 
@@ -16,7 +18,7 @@ public class Analytics_Asset
     private float DistanceFromSameType;  // Enemy to Enemy or only sub type to sub type (eg. TRT to TRT)?
     private float StartOfLife;
     private float LifeSpan;
-    public Vector3 AssetOrigin;
+    public Vector2 AssetOrigin;
     private Vector3 LocationOfDeath;     // Use to coordinate distance from other assets.
     private Vector3 MiningFacility
     {
@@ -26,21 +28,7 @@ public class Analytics_Asset
         }
     }
 
-    // constructor for enemies
-    public Analytics_Asset(int viewID, string assetType)
-    {
-        ViewID = viewID;
-        AssetType = assetType;
-
-        DPS = 0;
-        DamageTaken = 0;
-        DistanceFromCenter = 0;
-        DistanceFromSameType = 0;
-        StartOfLife = Time.time;
-        LifeSpan = 0;
-    }
-
-    // constructor for towers
+    // constructor
     public Analytics_Asset(int viewID, string assetType, Vector3 assetOrigin)
     {
         ViewID = viewID;
@@ -83,19 +71,37 @@ public class Analytics_Asset
     /// <summary>
     /// Distance from center of Mining Facility after the asset dies
     /// </summary>
-    public void CalculateDistanceFromCenter()
+    public float GetDistanceFromCenter()
     {
         if (AssetType == "Enemy")
             DistanceFromCenter = Vector3.Distance(MiningFacility, LocationOfDeath);
-        else
+        else if (AssetType == "Tower")
             DistanceFromCenter = Vector3.Distance(MiningFacility, AssetOrigin);
+        else
+            LogError("Incorrect Type of asset is being tracked: " + AssetType);
+
+        return DistanceFromCenter;
     }
 
     /// <summary>
-    /// Distance from other assets of the same type (sub-type?)
+    /// Distance from other assets of the same type
     /// </summary>
     public void CalculateDistanceFromSameType()
     {
 
     }
+
+    #region MessageHandling
+    protected void Log(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.Log("[Analytics_Asset] " + message);
+    }
+
+    protected void LogError(string message)
+    {
+        if (ShowDebugLogs)
+            Debug.LogError("[Analytics_Asset] " + message);
+    }
+    #endregion MessageHandling
 }

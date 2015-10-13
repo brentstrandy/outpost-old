@@ -252,9 +252,19 @@ public class PlayerManager : MonoBehaviour
                 // Charge the player for building the tower
                 this.Money -= PlacementTowerData.InstallCost;
 
+                // Asset's unique ViewID
+                int viewID = SessionManager.Instance.AllocateNewViewID();
+                // Asset's display name
+                string displayName = PlacementTowerData.DisplayName;
+
                 // Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
                 // TODO: Move to a two-phase system, where the master confirms success before the tower is considered built?
-                ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, PlacementTowerData.DisplayName, coord, SessionManager.Instance.AllocateNewViewID());
+                ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, displayName, coord, viewID);
+
+                //LogError("Coord.Position(): " + coord.Position());
+                //LogError("Enemy Name: " + displayName);
+                // Track the tower through the AnalyticsManager
+                AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
             }
             else
             {

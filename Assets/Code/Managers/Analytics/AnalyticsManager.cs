@@ -141,13 +141,29 @@ public class AnalyticsManager : MonoBehaviour
             if (CurrentLevelData.AvailableEnemies.Contains(enemy.DisplayName))
             {
                 //LogError(++j + ": " + enemy.DisplayName);
-                AvailableTowers.Add(new Analytics_TrackedAssets(enemy.DisplayName));
+                AvailableEnemies.Add(new Analytics_TrackedAssets(enemy.DisplayName));
             }
         }
 
         // Determine Master Client
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
             IsMaster = true;
+    }
+
+    /// <summary>
+    /// Find Tower category by its display name
+    /// </summary>
+    public Analytics_TrackedAssets FindTowerByDisplayName(string displayName)
+    {
+        return AvailableTowers.Find(x => x.DisplayName.Contains(displayName));
+    }
+
+    /// <summary>
+    /// Find Enemy category by its display name
+    /// </summary>
+    public Analytics_TrackedAssets FindEnemyByDisplayName(string displayName)
+    {
+        return AvailableEnemies.Find(x => x.DisplayName.Contains(displayName));
     }
 
     /// <summary>

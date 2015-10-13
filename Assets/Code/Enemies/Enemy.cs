@@ -472,7 +472,14 @@ public class Enemy : MonoBehaviour
 
                 // Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
                 if (Health <= 0)
+                {
+                    Vector3 deathLocation = transform.position;
+
                     ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
+
+                    Analytics_Asset tempAnalytics = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindByViewID(NetworkViewID);
+                    tempAnalytics.DeathOfAsset(deathLocation);
+                }
                 else
                     ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticDamage, thraceiumDamage);
             }

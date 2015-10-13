@@ -361,7 +361,12 @@ public class Tower : MonoBehaviour
 
             // Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
             if (Health <= 0)
+            {
                 ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
+
+                Analytics_Asset tempAnalytics = AnalyticsManager.Instance.FindTowerByDisplayName(TowerAttributes.DisplayName).FindByViewID(NetworkViewID);
+                tempAnalytics.DeathOfAsset(tempAnalytics.AssetOrigin);
+            }
             else
                 ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticDamage, thraceiumDamage);
         }
