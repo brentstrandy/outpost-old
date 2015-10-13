@@ -12,7 +12,7 @@ public class InGame_Menu : MonoBehaviour
 	public Text OutpostHealthText;
 	public Text ScoreText;
 	public Text KillsText;
-    public GameObject DirectionText;
+    public Text TimeText;
 
     private bool FinishedLoadingLevel = false;
 
@@ -64,6 +64,7 @@ public class InGame_Menu : MonoBehaviour
                 OutpostHealthText.text = "Health: " + GameManager.Instance.ObjMiningFacility.Health.ToString();
                 ScoreText.text = "Score: " + PlayerManager.Instance.Score.ToString();
 				KillsText.text = "Kills: " + PlayerManager.Instance.KillCount.ToString();
+				TimeText.text = (Time.time - GameManager.Instance.LevelStartTime).ToString("F2");
             }
         }
     }
