@@ -42,12 +42,13 @@ public class AnalyticsManager : MonoBehaviour
     public float PlayerMoney;//Total income per player (ALL & MASTER)
     public bool IsMaster = false;//Indicate if the player is the master client (they will send the global data) (MASTER)
 
-    //[AVAILABLE ENEMIES AND TOWERS]
+    //[ENTIRE GAME'S AVAILABLE TOWERS AND ENEMIES]
     public List<Analytics_TrackedAssets> AvailableTowers;
     public List<Analytics_TrackedAssets> AvailableEnemies;
     
     //[LEVEL]
     // public float WinPercent_Level; // Win percentage for each level for each # of players (ALL)
+    public LevelData CurrentLevelData;
     public int LastLevelReached = 0;//Avg last level reached. (ALL)
     public int PlayerCount;//Playercount at the beginning of a level. (ALL & MASTER)
     public bool PlayerCountChanged;//Indicates if the player count has changed since the beginning of a level (ALL & MASTER)
@@ -117,13 +118,32 @@ public class AnalyticsManager : MonoBehaviour
     {
         PlayerName = PlayerManager.Instance.Username;
         PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
+        CurrentLevelData = GameManager.Instance.CurrentLevelData;
 
-        // Create list of available towers
+        AvailableTowers = new List<Analytics_TrackedAssets>();
+        AvailableEnemies = new List<Analytics_TrackedAssets>();
+
+        int i = 0;
+        int j = 0;
+
+        // Create list of available towers in the level
         foreach (TowerData tower in GameDataManager.Instance.TowerDataManager.DataList)
-            AvailableTowers.Add(new Analytics_TrackedAssets(tower.DisplayName));
-        // Create list of available enemies
+        {
+            if (CurrentLevelData.AvailableTowers.Contains(tower.DisplayName))
+            {
+                //LogError(++i + ": " + tower.DisplayName);
+                AvailableTowers.Add(new Analytics_TrackedAssets(tower.DisplayName));
+            }
+        }
+        // Create list of available enemies in the level
         foreach (EnemyData enemy in GameDataManager.Instance.EnemyDataManager.DataList)
-            AvailableEnemies.Add(new Analytics_TrackedAssets(enemy.DisplayName));
+        {
+            if (CurrentLevelData.AvailableEnemies.Contains(enemy.DisplayName))
+            {
+                //LogError(++j + ": " + enemy.DisplayName);
+                AvailableTowers.Add(new Analytics_TrackedAssets(enemy.DisplayName));
+            }
+        }
 
         // Determine Master Client
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -159,10 +179,6 @@ public class AnalyticsManager : MonoBehaviour
 
         // TODO -- (FITZGERALD) -- average all of the players' money
         //AnalyticsManager.Instance.PLayerIncome_Average =;
-
-        // TODO -- (FITZGERALD) -- figure out which variables to store (dependent on if they're ALL or SINGLE)
-        //TowerAnalytics towarAnalytics = new TowerAnalytics();
-        //EnemyAnalytics enemyAnalytics = new EnemyAnalytics();
     }
 
     /// <summary>

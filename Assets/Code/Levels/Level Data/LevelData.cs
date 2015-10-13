@@ -22,6 +22,7 @@ public class LevelData : IComparable<LevelData>
     public string AvailableQuadrants;
     public Quadrant StartingQuadrant;
     public string AvailableTowers;
+    public string AvailableEnemies;
     public int MaxTowersPerPlayer;
 
     // Mining Facility Details

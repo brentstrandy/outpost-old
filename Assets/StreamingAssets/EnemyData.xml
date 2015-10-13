@@ -1,33 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfEnemyData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EnemyData>
-    <DisplayName>Drone</DisplayName>
-    <PrefabName>Drone</PrefabName>
-    <EnemyID>0</EnemyID>
-    <PathFinding>TrackEnemy_IgnorePath</PathFinding>
-    <HighlightColor>
-      <r>0</r>
-      <g>0.7931032</g>
-      <b>1</b>
-      <a>0</a>
-    </HighlightColor>
-    <AttackTowers>false</AttackTowers>
-    <AttackMiningFacility>false</AttackMiningFacility>
-    <AttackWhileMoving>false</AttackWhileMoving>
-    <MaxHealth>5</MaxHealth>
-    <RateOfFire>0</RateOfFire>
-    <Acceleration>30</Acceleration>
-    <Speed>2</Speed>
-    <Range>3</Range>
-    <HoverDistance>0.8</HoverDistance>
-    <BallisticDamage>1</BallisticDamage>
-    <ThraceiumDamage>0</ThraceiumDamage>
-    <BallisticDefense>0</BallisticDefense>
-    <ThraceiumDefense>0</ThraceiumDefense>
-    <TurningSpeed>8</TurningSpeed>
-    <ScoreValue>1</ScoreValue>
-  </EnemyData>
-  <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
     <PrefabName>Heavy Speeder</PrefabName>
     <EnemyID>0</EnemyID>
@@ -38,7 +11,7 @@
       <b>1</b>
       <a>0</a>
     </HighlightColor>
-    <AttackTowers>false</AttackTowers>
+    <AttackTowers>true</AttackTowers>
     <AttackMiningFacility>true</AttackMiningFacility>
     <AttackWhileMoving>false</AttackWhileMoving>
     <MaxHealth>20</MaxHealth>
@@ -48,7 +21,7 @@
     <Range>1.5</Range>
     <HoverDistance>0.3</HoverDistance>
     <BallisticDamage>0</BallisticDamage>
-    <ThraceiumDamage>4</ThraceiumDamage>
+    <ThraceiumDamage>3</ThraceiumDamage>
     <BallisticDefense>0.5</BallisticDefense>
     <ThraceiumDefense>0.5</ThraceiumDefense>
     <TurningSpeed>1</TurningSpeed>

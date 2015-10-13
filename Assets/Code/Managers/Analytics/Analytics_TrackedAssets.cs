@@ -6,7 +6,7 @@ using UnityEngine.Analytics;
 /// A collection of assets to be tracked by AnalyticsManager
 /// Owner: John Fitzgerald
 /// </summary>
-public class Analytics_TrackedAssets// : ScriptableObject
+public class Analytics_TrackedAssets
 {
     private string DisplayName;
     private List<Analytics_Asset> Assets;

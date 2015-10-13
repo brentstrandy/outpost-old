@@ -12,6 +12,7 @@
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
+	<AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder</AvailableEnemies>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>10</StartingMoney>
     <IncomePerSecond>0.3</IncomePerSecond>
@@ -29,9 +30,10 @@
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
+	<AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder</AvailableEnemies>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>60</StartingMoney>
-    <IncomePerSecond>1.3</IncomePerSecond>
+    <StartingMoney>30</StartingMoney>
+    <IncomePerSecond>1.0</IncomePerSecond>
     <MiningFacilityHealth>700</MiningFacilityHealth>
   </LevelData>
   <LevelData>
@@ -46,6 +48,7 @@
     <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+	<AvailableEnemies>Light Speeder</AvailableEnemies>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
@@ -63,6 +66,7 @@
     <AvailableQuadrants>North, West, South, East</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+	<AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Intense Heavy Speeder</AvailableEnemies>
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
