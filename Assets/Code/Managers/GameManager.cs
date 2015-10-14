@@ -223,8 +223,8 @@ public class GameManager : MonoBehaviour
         PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, true);
 
         SaveAnalytics();
-
-        //SendAnalytics()
+        SendAnalytics();
+        ResetAnalytics();
     }
 
     [PunRPC]
@@ -238,8 +238,8 @@ public class GameManager : MonoBehaviour
         StartCoroutine(PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, false));
 
         SaveAnalytics();
-
-        //SendAnalytics()
+        SendAnalytics();
+        ResetAnalytics();
     }
 
     #endregion RPC CALLS
@@ -283,7 +283,7 @@ public class GameManager : MonoBehaviour
 
         // If master client, save level anyltics.
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-            AnalyticsManager.Instance.SaveSessionAnalytics();
+            AnalyticsManager.Instance.SaveLevelAnalytics();
     }
 
     /// <summary>
@@ -293,30 +293,21 @@ public class GameManager : MonoBehaviour
     {
         // Each player sends their personal analytics.
         //AnalyticsManager.Instance.SendPlayerAnalytics();
-        //ResetPlayerAnalytics()
 
         // If the user is the master client and the number of players haven't changed, send and reset the level anyltics.
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient && AnalyticsManager.Instance.PlayerCountChanged == false)
         {
+            AnalyticsManager.Instance.SendHeatmapAnalytics();
             //AnalyticsManager.Instance.SendLevelAnalytics();
-
-            //ResetLevelAnalytics();
         }
     }
 
-    /// <summary>
-    /// Reset the AnalyticsManager relevant to the ending of a player's game.
-    /// </summary>
-    private void ResetPlayerAnalytics()
+    /// <summar>
+    /// 
+    /// </summar>
+    private void ResetAnalytics()
     {
         AnalyticsManager.Instance.ResetPlayerAnalytics();
-    }
-
-    /// <summary>
-    /// Reset the AnalyticsManager relevant to the ending of a game.
-    /// </summary>
-    private void ResetLevelAnalytics()
-    {
         AnalyticsManager.Instance.ResetLevelAnalytics();
     }
 

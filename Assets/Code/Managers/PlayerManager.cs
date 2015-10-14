@@ -263,7 +263,7 @@ public class PlayerManager : MonoBehaviour
 
                 //LogError("Coord.Position(): " + coord.Position());
                 //LogError("Enemy Name: " + displayName);
-                // Track the tower through the AnalyticsManager
+                // Send the tower's viewID and spawn coordinate to AnalyticsManager
                 AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
             }
             else

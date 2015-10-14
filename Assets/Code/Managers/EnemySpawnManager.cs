@@ -48,8 +48,8 @@ public class EnemySpawnManager
                 ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, displayName, spawnDetails.StartAngle, viewID);
 
                 //LogError("Enemy Name: " + spawnDetails.EnemyName);
-                // Track the enemy through the AnalyticsManager
-                AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", new Vector2(enemySpawnPosition.x, enemySpawnPosition.y));
+                // Send the enemy's viewID and spawn coordinate to AnalyticsManager
+                AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", enemySpawnPosition);
             }
         }
     }

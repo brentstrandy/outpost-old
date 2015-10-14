@@ -9,22 +9,25 @@ public class Analytics_Asset
 {
     public bool ShowDebugLogs = true;
 
-    public int ViewID;
-    public string AssetType;             // Enemy or Tower
+    public int ViewID;                   // The asset's unique View ID
+    public string AssetType;             // "Enemy" or "Tower" (for now)
 
     private float DPS;                   // Thraceium and Ballistic combined?
     private float DamageTaken;           // Thraceium and Ballistic combined?
-    private float DistanceFromCenter;    // Tower at the time of creation and enemy at the time of death.
-    private float DistanceFromSameType;  // Enemy to Enemy or only sub type to sub type (eg. TRT to TRT)?
-    private float StartOfLife;
-    private float LifeSpan;
-    public Vector2 AssetOrigin;
-    private Vector3 LocationOfDeath;     // Use to coordinate distance from other assets.
-    private Vector3 MiningFacility
+    private float DistanceFromCenter;    // Tower: at the time of creation -- Enemy: at the time of death
+    private float DistanceFromSameType;  // Will most likely be replaced by heat map
+    private float StartOfLife;           // The start of the asset's creation
+    public float LifeSpan { get; private set; }             // When the asset is declared dead (e.g. health < 0)
+
+    public bool IsDead { get; private set; }                // Is the asset dead
+
+    public Vector2 AssetOrigin;                             // Where the asset spawned onto the map
+    public Vector2 LocationOfDeath { get; private set; }    // Use to coordinate distance from other assets
+    private Vector2 MiningFacility       // Returns the GameManager's location of the Mining Facility
     {
         get
         {
-            return GameObject.FindGameObjectWithTag("Mining Facility").transform.position;
+            return GameManager.Instance.ObjMiningFacility.transform.position;
         }
     }
 
@@ -40,6 +43,9 @@ public class Analytics_Asset
         DistanceFromSameType = 0;
         StartOfLife = Time.time;
         LifeSpan = 0;
+
+        IsDead = false;
+
         AssetOrigin = assetOrigin;
     }
 
@@ -64,8 +70,12 @@ public class Analytics_Asset
     /// </summary>
     public void DeathOfAsset(Vector3 locationOfDeath)
     {
-        LifeSpan = Time.time - StartOfLife;
-        LocationOfDeath = locationOfDeath;
+        if (GameManager.Instance.GameRunning)
+        {
+            LifeSpan = Time.time - StartOfLife;
+            LocationOfDeath = locationOfDeath;
+            IsDead = true;
+        }
     }
 
     /// <summary>
@@ -84,7 +94,7 @@ public class Analytics_Asset
     }
 
     /// <summary>
-    /// Distance from other assets of the same type
+    /// Distance from other assets of the same type (should I use heatmap here?)
     /// </summary>
     public void CalculateDistanceFromSameType()
     {

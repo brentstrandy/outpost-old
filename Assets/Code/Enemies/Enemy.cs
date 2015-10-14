@@ -477,7 +477,7 @@ public class Enemy : MonoBehaviour
 
                     ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
 
-                    Analytics_Asset tempAnalytics = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindByViewID(NetworkViewID);
+                    Analytics_Asset tempAnalytics = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
                     tempAnalytics.DeathOfAsset(deathLocation);
                 }
                 else

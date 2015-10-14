@@ -42,18 +42,18 @@ public class AnalyticsManager : MonoBehaviour
     public float PlayerMoney;//Total income per player (ALL & MASTER)
     public bool IsMaster = false;//Indicate if the player is the master client (they will send the global data) (MASTER)
 
-    //[ENTIRE GAME'S AVAILABLE TOWERS AND ENEMIES]
-    public List<Analytics_TrackedAssets> AvailableTowers;
-    public List<Analytics_TrackedAssets> AvailableEnemies;
+    //[LEVEL'S AVAILABLE TOWERS AND ENEMIES]
+    public List<Analytics_TrackedAssets> AvailableTowers;   // Track the towers available in level
+    public List<Analytics_TrackedAssets> AvailableEnemies;  // Track the enemies available in level
     
     //[LEVEL]
-    // public float WinPercent_Level; // Win percentage for each level for each # of players (ALL)
-    public LevelData CurrentLevelData;
-    public int LastLevelReached = 0;//Avg last level reached. (ALL)
-    public int PlayerCount;//Playercount at the beginning of a level. (ALL & MASTER)
-    public bool PlayerCountChanged;//Indicates if the player count has changed since the beginning of a level (ALL & MASTER)
-    public float GameLength;//Length of time the user plays the level (from game start to loss/win) (MASTER)
-    public int LevelID;//ID number of level (MASTER)
+    public LevelData CurrentLevelData;  // Temp storage for level data
+    public int LastLevelReached = 0;    // Last level reached. (ALL)
+    public int PlayerCount;             // Playercount at the beginning of a level. (ALL & MASTER)
+    public bool PlayerCountChanged;     // Indicates if the player count has changed since the beginning of a level (ALL & MASTER)
+    public float GameLength;            // Length of time the user plays the level (from game start to loss/win) (MASTER)
+    public int LevelID;                 // ID number of level (MASTER)
+    public int LevelScore;              // Player's level score
 
     //[DAMAGE BY LEVEL]
     public float BallisticDamage_Level;//Accumulated in a single level (ALL & MASTER)
@@ -155,7 +155,7 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     public Analytics_TrackedAssets FindTowerByDisplayName(string displayName)
     {
-        return AvailableTowers.Find(x => x.DisplayName.Contains(displayName));
+        return AvailableTowers.Find(x => x.DisplayName == displayName);
     }
 
     /// <summary>
@@ -163,7 +163,7 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     public Analytics_TrackedAssets FindEnemyByDisplayName(string displayName)
     {
-        return AvailableEnemies.Find(x => x.DisplayName.Contains(displayName));
+        return AvailableEnemies.Find(x => x.DisplayName == displayName);
     }
 
     /// <summary>
@@ -175,13 +175,14 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Save Session/Level analytics
+    /// Save Level analytics
     /// </summary>
-    public void SaveSessionAnalytics()
+    public void SaveLevelAnalytics()
     {
         GameLength = Time.time - GameManager.Instance.LevelStartTime;
         LevelID = GameManager.Instance.CurrentLevelData.LevelID;
         LastLevelReached = GameManager.Instance.CurrentLevelData.LevelID;
+        LevelScore = PlayerManager.Instance.Score;
 
         //if (PlayerCountChanged)
         //{
@@ -206,6 +207,15 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Save HeatMap analytics (tower and enemy death point (utilizes Heatmap plugin)
+    /// </summary>
+    //public void SaveHeatmapAnalytics()
+    //{
+    //    // Collect the information of each enemy and tower death
+        
+    //}
+
+    /// <summary>
     /// Public call to send session/level analytics.
     /// </summary>
     public void SendSessionAnalytics()
@@ -216,6 +226,9 @@ public class AnalyticsManager : MonoBehaviour
         DamageAnalytics_Send();
         MiscellaneousAnalytics_Send();
         InitialAnalytics_Send();
+        AssetAnalytics_Send();
+
+        HeatMapAnalytics_Send();
     }
 
     /// <summary>
@@ -229,11 +242,18 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// Public call to send Asset analytics.
     /// </summary>
-    public void SendaAssetAnalytics()
+    public void SendAssetAnalytics()
     {
         AssetAnalytics_Send();
     }
 
+    /// <summary>
+    /// Public call to send Heatmap analytics
+    /// </summary>
+    public void SendHeatmapAnalytics()
+    {
+        HeatMapAnalytics_Send();
+    }
     #endregion PUBLIC FUNCTIONS
 
     #region RESET ANALYTICS
@@ -276,6 +296,7 @@ public class AnalyticsManager : MonoBehaviour
         ResetLevelAnalytics();
         ResetPlayerAnalytics();
         ResetAssetAnalytics();
+        //ResetHeatmapAnalytics();
     }
     #endregion RESET ANALYTICS
 
@@ -309,7 +330,7 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// [ASSETS] Send assets analytics
+    /// [ASSETS] Send assets' (tower & enemy) analytics
     /// </summary>
     private void AssetAnalytics_Send()
     {
@@ -329,6 +350,66 @@ public class AnalyticsManager : MonoBehaviour
             {"LevelName", GameManager.Instance.CurrentLevelData.SceneName},
             {"LevelID", LevelID}
         });
+    }
+
+    /// <summary>
+    /// [HEATMAP] Location of asset (enemy and tower) activty on the map
+    /// </summary>
+    private void HeatMapAnalytics_Send()
+    {
+        // Send Tower informtion (option to send by sub-type, too)
+        foreach (Analytics_TrackedAssets assets in AvailableTowers)
+        {
+            int i = 0;
+            foreach (Analytics_Asset tower in assets.Assets)
+            {
+                if (tower.IsDead)
+                {
+                    //LogError(assets.DisplayName + " " + ++i + ") " + tower.LocationOfDeath.x + ", " + tower.LocationOfDeath.y);
+                    //string eventName = tower.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
+                    //LogError(eventName);
+                    HeatMapAnalyticsSingleAsset_Send(tower, "Death");
+                }
+                // Send Tower's spawn
+                //else
+                //    HeatMapAnalyticsSingleAsset_Send(tower, "Spawn");
+            }
+        }
+
+        // Send Enemy information (option to send by sub-type, too)
+        foreach (Analytics_TrackedAssets assets in AvailableEnemies)
+        {
+            int j = 0;
+            foreach (Analytics_Asset enemy in assets.Assets)
+            {
+                if (enemy.IsDead)
+                {
+                    //LogError(assets.DisplayName + " " + ++j + ") " + enemy.LocationOfDeath.x + ", " + enemy.LocationOfDeath.y);
+                    //string eventName = enemy.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
+                    //LogError(eventName);
+                    HeatMapAnalyticsSingleAsset_Send(enemy, "Death");
+                }
+            }
+        }
+
+        Log("HeatMap analytics for tower and enemy deaths have been sent to Unity's server.");
+    }
+
+    /// <summary>
+    /// [HEATMAP] Send a single asset's information to Unity's Heatmap server
+    /// </summary>
+    private void HeatMapAnalyticsSingleAsset_Send(Analytics_Asset asset, string assetState)
+    {
+        #region THIS LEVEL DATA VIA DICTIONARY<STRING, OBJECT> CAN SEND NOW, BUT WILL BE AVAILABLE FOR ACCESS AT A LATER DATE
+        var currentLevelData = new Dictionary<string, object>();
+        currentLevelData["levelData"] = CurrentLevelData;
+        #endregion
+
+        // AssetType+AssetState + Current Level + Player Count (e.g. "TowerDeath|Lvl:1|Plyrs:1")
+        string eventName = asset.AssetType + assetState + "|Lvl:" + CurrentLevelData.LevelID + "|Plyrs:" + PlayerCount;
+
+        // EXPLANATION: Send(string EventName, Vector2 LocationOfDeath, float LifeSpan, Dictionary<string, object> CurrentLevelData)
+        UnityAnalyticsHeatmap.HeatmapEvent.Send(eventName, asset.LocationOfDeath, asset.LifeSpan, currentLevelData);
     }
 
     /// <summary>
