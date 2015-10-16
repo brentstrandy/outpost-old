@@ -3,29 +3,31 @@
   <TowerData>
     <DisplayName>EMP Tower</DisplayName>
     <PrefabName>Heleur_EMP</PrefabName>
-    <MaxHealth>20</MaxHealth>
-    <RateOfFire>0.1</RateOfFire>
-    <Cooldown>1</Cooldown>
-    <Range>2.2</Range>
+    <TowerID>0</TowerID>
+    <MaxHealth>15</MaxHealth>
+    <RateOfFire>0.15</RateOfFire>
+    <Cooldown>2</Cooldown>
+    <Range>3</Range>
     <BallisticDamage>0</BallisticDamage>
     <ThraceiumDamage>0</ThraceiumDamage>
-    <BallisticDefense>0.3</BallisticDefense>
-    <ThraceiumDefense>0.3</ThraceiumDefense>
+    <BallisticDefense>0.4</BallisticDefense>
+    <ThraceiumDefense>0.4</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
-    <InstallCost>15</InstallCost>
+    <InstallCost>13</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
-    <StartupTime>1.5</StartupTime>
+    <StartupTime>1</StartupTime>
     <TrackingSpeed>0</TrackingSpeed>
   </TowerData>
   <TowerData>
     <DisplayName>Small Thraceium Tower</DisplayName>
     <PrefabName>Heleur_STT</PrefabName>
-    <MaxHealth>8</MaxHealth>
-    <RateOfFire>1.6</RateOfFire>
+    <TowerID>0</TowerID>
+    <MaxHealth>10</MaxHealth>
+    <RateOfFire>1.8</RateOfFire>
     <Cooldown>1</Cooldown>
     <Range>3</Range>
     <BallisticDamage>0</BallisticDamage>
-    <ThraceiumDamage>2.2</ThraceiumDamage>
+    <ThraceiumDamage>2.6</ThraceiumDamage>
     <BallisticDefense>0</BallisticDefense>
     <ThraceiumDefense>0.2</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
@@ -37,8 +39,9 @@
   <TowerData>
     <DisplayName>Thraceium Healing Tower</DisplayName>
     <PrefabName>Heleur_THT</PrefabName>
+    <TowerID>0</TowerID>
     <MaxHealth>7</MaxHealth>
-    <RateOfFire>0.8</RateOfFire>
+    <RateOfFire>0.65</RateOfFire>
     <Cooldown>0</Cooldown>
     <Range>4</Range>
     <BallisticDamage>0</BallisticDamage>
@@ -46,7 +49,7 @@
     <BallisticDefense>0</BallisticDefense>
     <ThraceiumDefense>0</ThraceiumDefense>
     <TransitionTime>0</TransitionTime>
-    <InstallCost>14</InstallCost>
+    <InstallCost>12</InstallCost>
     <MaintenanceCost>0</MaintenanceCost>
     <StartupTime>1</StartupTime>
     <TrackingSpeed>0</TrackingSpeed>
@@ -54,6 +57,7 @@
   <TowerData>
     <DisplayName>Thraceium Rain Tower</DisplayName>
     <PrefabName>Heleur_TRT</PrefabName>
+    <TowerID>0</TowerID>
     <MaxHealth>10</MaxHealth>
     <RateOfFire>0.25</RateOfFire>
     <Cooldown>1</Cooldown>
@@ -71,6 +75,7 @@
   <TowerData>
     <DisplayName>Universal Energy Tower</DisplayName>
     <PrefabName>UniversalEnergyTower</PrefabName>
+    <TowerID>0</TowerID>
     <MaxHealth>1</MaxHealth>
     <RateOfFire>1</RateOfFire>
     <Cooldown>1</Cooldown>

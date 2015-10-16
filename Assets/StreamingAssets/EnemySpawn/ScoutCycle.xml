@@ -32,1459 +32,1459 @@
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>11</StartTime>
+		<StartTime>10</StartTime>
 		<StartAngle>99</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>11</StartTime>
+		<StartTime>10</StartTime>
 		<StartAngle>117</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>11</StartTime>
+		<StartTime>10</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>11</StartTime>
+		<StartTime>10</StartTime>
 		<StartAngle>153</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>11</StartTime>
+		<StartTime>10</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>19</StartTime>
+		<StartTime>17</StartTime>
 		<StartAngle>189</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>19</StartTime>
+		<StartTime>17</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>19</StartTime>
+		<StartTime>17</StartTime>
 		<StartAngle>225</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>19</StartTime>
+		<StartTime>17</StartTime>
 		<StartAngle>243</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>19</StartTime>
+		<StartTime>17</StartTime>
 		<StartAngle>261</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>27</StartTime>
+		<StartTime>24</StartTime>
 		<StartAngle>9</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>27</StartTime>
+		<StartTime>24</StartTime>
 		<StartAngle>27</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>27</StartTime>
+		<StartTime>24</StartTime>
 		<StartAngle>45</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>27</StartTime>
+		<StartTime>24</StartTime>
 		<StartAngle>63</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>27</StartTime>
+		<StartTime>24</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>35</StartTime>
+		<StartTime>31</StartTime>
 		<StartAngle>279</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>35</StartTime>
+		<StartTime>31</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>35</StartTime>
+		<StartTime>31</StartTime>
 		<StartAngle>315</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>35</StartTime>
+		<StartTime>31</StartTime>
 		<StartAngle>333</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>35</StartTime>
+		<StartTime>31</StartTime>
 		<StartAngle>351</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>37</StartTime>
+		<StartTime>32.75</StartTime>
 		<StartAngle>9</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>37</StartTime>
+		<StartTime>32.75</StartTime>
 		<StartAngle>27</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>37</StartTime>
+		<StartTime>32.75</StartTime>
 		<StartAngle>45</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>37</StartTime>
+		<StartTime>32.75</StartTime>
 		<StartAngle>63</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>37</StartTime>
+		<StartTime>32.75</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>39</StartTime>
+		<StartTime>34.5</StartTime>
 		<StartAngle>189</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>39</StartTime>
+		<StartTime>34.5</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>39</StartTime>
+		<StartTime>34.5</StartTime>
 		<StartAngle>225</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>39</StartTime>
+		<StartTime>34.5</StartTime>
 		<StartAngle>243</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>39</StartTime>
+		<StartTime>34.5</StartTime>
 		<StartAngle>261</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>41</StartTime>
+		<StartTime>36.25</StartTime>
 		<StartAngle>99</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>41</StartTime>
+		<StartTime>36.25</StartTime>
 		<StartAngle>117</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>41</StartTime>
+		<StartTime>36.25</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>41</StartTime>
+		<StartTime>36.25</StartTime>
 		<StartAngle>153</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>41</StartTime>
+		<StartTime>36.25</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>43</StartTime>
+		<StartTime>38</StartTime>
 		<StartAngle>279</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>43</StartTime>
+		<StartTime>38</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>43</StartTime>
+		<StartTime>38</StartTime>
 		<StartAngle>315</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>43</StartTime>
+		<StartTime>38</StartTime>
 		<StartAngle>333</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>43</StartTime>
+		<StartTime>38</StartTime>
 		<StartAngle>351</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>47</StartTime>
+		<StartTime>41.5</StartTime>
 		<StartAngle>244</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>47</StartTime>
+		<StartTime>41.5</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>47</StartTime>
+		<StartTime>41.5</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>47</StartTime>
+		<StartTime>41.5</StartTime>
 		<StartAngle>250</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>47</StartTime>
+		<StartTime>41.5</StartTime>
 		<StartAngle>252</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>51</StartTime>
+		<StartTime>45</StartTime>
 		<StartAngle>154</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>51</StartTime>
+		<StartTime>45</StartTime>
 		<StartAngle>156</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>51</StartTime>
+		<StartTime>45</StartTime>
 		<StartAngle>158</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>51</StartTime>
+		<StartTime>45</StartTime>
 		<StartAngle>160</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>51</StartTime>
+		<StartTime>45</StartTime>
 		<StartAngle>162</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>55</StartTime>
+		<StartTime>48.5</StartTime>
 		<StartAngle>64</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>55</StartTime>
+		<StartTime>48.5</StartTime>
 		<StartAngle>66</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>55</StartTime>
+		<StartTime>48.5</StartTime>
 		<StartAngle>68</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>55</StartTime>
+		<StartTime>48.5</StartTime>
 		<StartAngle>70</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>55</StartTime>
+		<StartTime>48.5</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>59</StartTime>
+		<StartTime>52</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>59</StartTime>
+		<StartTime>52</StartTime>
 		<StartAngle>22</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>59</StartTime>
+		<StartTime>52</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>59</StartTime>
+		<StartTime>52</StartTime>
 		<StartAngle>24</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>59</StartTime>
+		<StartTime>52</StartTime>
 		<StartAngle>25</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>63</StartTime>
+		<StartTime>55.5</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>63</StartTime>
+		<StartTime>55.5</StartTime>
 		<StartAngle>22</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>63</StartTime>
+		<StartTime>55.5</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>63</StartTime>
+		<StartTime>55.5</StartTime>
 		<StartAngle>24</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>63</StartTime>
+		<StartTime>55.5</StartTime>
 		<StartAngle>25</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>67</StartTime>
+		<StartTime>59</StartTime>
 		<StartAngle>244</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>67</StartTime>
+		<StartTime>59</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>67</StartTime>
+		<StartTime>59</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>67</StartTime>
+		<StartTime>59</StartTime>
 		<StartAngle>250</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>67</StartTime>
+		<StartTime>59</StartTime>
 		<StartAngle>252</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>69</StartTime>
+		<StartTime>60.75</StartTime>
 		<StartAngle>9</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>69</StartTime>
+		<StartTime>60.75</StartTime>
 		<StartAngle>27</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>69</StartTime>
+		<StartTime>60.75</StartTime>
 		<StartAngle>45</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>69</StartTime>
+		<StartTime>60.75</StartTime>
 		<StartAngle>63</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>69</StartTime>
+		<StartTime>60.75</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>71</StartTime>
+		<StartTime>62.5</StartTime>
 		<StartAngle>189</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>71</StartTime>
+		<StartTime>62.5</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>71</StartTime>
+		<StartTime>62.5</StartTime>
 		<StartAngle>225</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>71</StartTime>
+		<StartTime>62.5</StartTime>
 		<StartAngle>243</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>71</StartTime>
+		<StartTime>62.5</StartTime>
 		<StartAngle>261</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>73</StartTime>
+		<StartTime>64.25</StartTime>
 		<StartAngle>99</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>73</StartTime>
+		<StartTime>64.25</StartTime>
 		<StartAngle>117</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>73</StartTime>
+		<StartTime>64.25</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>73</StartTime>
+		<StartTime>64.25</StartTime>
 		<StartAngle>153</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>73</StartTime>
+		<StartTime>64.25</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>75</StartTime>
+		<StartTime>66</StartTime>
 		<StartAngle>279</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>75</StartTime>
+		<StartTime>66</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>75</StartTime>
+		<StartTime>66</StartTime>
 		<StartAngle>315</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>75</StartTime>
+		<StartTime>66</StartTime>
 		<StartAngle>333</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>75</StartTime>
+		<StartTime>66</StartTime>
 		<StartAngle>351</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>77</StartTime>
+		<StartTime>67.75</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>77</StartTime>
+		<StartTime>67.75</StartTime>
 		<StartAngle>144</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>77</StartTime>
+		<StartTime>67.75</StartTime>
 		<StartAngle>216</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>77</StartTime>
+		<StartTime>67.75</StartTime>
 		<StartAngle>288</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>77</StartTime>
+		<StartTime>67.75</StartTime>
 		<StartAngle>360</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>81</StartTime>
+		<StartTime>71.25</StartTime>
 		<StartAngle>99</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>81</StartTime>
+		<StartTime>71.25</StartTime>
 		<StartAngle>117</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>81</StartTime>
+		<StartTime>71.25</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>81</StartTime>
+		<StartTime>71.25</StartTime>
 		<StartAngle>153</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>81</StartTime>
+		<StartTime>71.25</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>85</StartTime>
+		<StartTime>74.75</StartTime>
 		<StartAngle>189</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>85</StartTime>
+		<StartTime>74.75</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>85</StartTime>
+		<StartTime>74.75</StartTime>
 		<StartAngle>225</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>85</StartTime>
+		<StartTime>74.75</StartTime>
 		<StartAngle>243</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>85</StartTime>
+		<StartTime>74.75</StartTime>
 		<StartAngle>261</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>89</StartTime>
+		<StartTime>78.25</StartTime>
 		<StartAngle>9</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>89</StartTime>
+		<StartTime>78.25</StartTime>
 		<StartAngle>27</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>89</StartTime>
+		<StartTime>78.25</StartTime>
 		<StartAngle>45</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>89</StartTime>
+		<StartTime>78.25</StartTime>
 		<StartAngle>63</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>89</StartTime>
+		<StartTime>78.25</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>93</StartTime>
+		<StartTime>81.75</StartTime>
 		<StartAngle>279</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>93</StartTime>
+		<StartTime>81.75</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>93</StartTime>
+		<StartTime>81.75</StartTime>
 		<StartAngle>315</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>93</StartTime>
+		<StartTime>81.75</StartTime>
 		<StartAngle>333</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>93</StartTime>
+		<StartTime>81.75</StartTime>
 		<StartAngle>351</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>97</StartTime>
+		<StartTime>85.25</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>97</StartTime>
+		<StartTime>85.25</StartTime>
 		<StartAngle>144</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>97</StartTime>
+		<StartTime>85.25</StartTime>
 		<StartAngle>216</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>97</StartTime>
+		<StartTime>85.25</StartTime>
 		<StartAngle>288</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>97</StartTime>
+		<StartTime>85.25</StartTime>
 		<StartAngle>360</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>101</StartTime>
+		<StartTime>88.75</StartTime>
 		<StartAngle>199</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>101</StartTime>
+		<StartTime>88.75</StartTime>
 		<StartAngle>201</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>101</StartTime>
+		<StartTime>88.75</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>101</StartTime>
+		<StartTime>88.75</StartTime>
 		<StartAngle>205</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>101</StartTime>
+		<StartTime>88.75</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>105</StartTime>
+		<StartTime>92.25</StartTime>
 		<StartAngle>154</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>105</StartTime>
+		<StartTime>92.25</StartTime>
 		<StartAngle>156</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>105</StartTime>
+		<StartTime>92.25</StartTime>
 		<StartAngle>158</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>105</StartTime>
+		<StartTime>92.25</StartTime>
 		<StartAngle>160</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>105</StartTime>
+		<StartTime>92.25</StartTime>
 		<StartAngle>162</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>109</StartTime>
+		<StartTime>95.75</StartTime>
 		<StartAngle>64</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>109</StartTime>
+		<StartTime>95.75</StartTime>
 		<StartAngle>66</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>109</StartTime>
+		<StartTime>95.75</StartTime>
 		<StartAngle>68</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>109</StartTime>
+		<StartTime>95.75</StartTime>
 		<StartAngle>70</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>109</StartTime>
+		<StartTime>95.75</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>113</StartTime>
+		<StartTime>99.25</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>113</StartTime>
+		<StartTime>99.25</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>113</StartTime>
+		<StartTime>99.25</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>113</StartTime>
+		<StartTime>99.25</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>113</StartTime>
+		<StartTime>99.25</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>117</StartTime>
+		<StartTime>102.75</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>117</StartTime>
+		<StartTime>102.75</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>117</StartTime>
+		<StartTime>102.75</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>117</StartTime>
+		<StartTime>102.75</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>117</StartTime>
+		<StartTime>102.75</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>121</StartTime>
+		<StartTime>106.25</StartTime>
 		<StartAngle>244</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>121</StartTime>
+		<StartTime>106.25</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>121</StartTime>
+		<StartTime>106.25</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>121</StartTime>
+		<StartTime>106.25</StartTime>
 		<StartAngle>250</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>121</StartTime>
+		<StartTime>106.25</StartTime>
 		<StartAngle>252</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>125</StartTime>
+		<StartTime>109.75</StartTime>
 		<StartAngle>199</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>125</StartTime>
+		<StartTime>109.75</StartTime>
 		<StartAngle>201</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>125</StartTime>
+		<StartTime>109.75</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>125</StartTime>
+		<StartTime>109.75</StartTime>
 		<StartAngle>205</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>125</StartTime>
+		<StartTime>109.75</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>129</StartTime>
+		<StartTime>113.25</StartTime>
 		<StartAngle>154</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>129</StartTime>
+		<StartTime>113.25</StartTime>
 		<StartAngle>156</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>129</StartTime>
+		<StartTime>113.25</StartTime>
 		<StartAngle>158</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>129</StartTime>
+		<StartTime>113.25</StartTime>
 		<StartAngle>160</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Light Speeder</EnemyName>
-		<StartTime>129</StartTime>
+		<StartTime>113.25</StartTime>
 		<StartAngle>162</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>133</StartTime>
+		<StartTime>116.75</StartTime>
 		<StartAngle>19</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>133</StartTime>
+		<StartTime>116.75</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>133</StartTime>
+		<StartTime>116.75</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>133</StartTime>
+		<StartTime>116.75</StartTime>
 		<StartAngle>25</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>133</StartTime>
+		<StartTime>116.75</StartTime>
 		<StartAngle>27</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>137</StartTime>
+		<StartTime>120.25</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>137</StartTime>
+		<StartTime>120.25</StartTime>
 		<StartAngle>22</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>137</StartTime>
+		<StartTime>120.25</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>137</StartTime>
+		<StartTime>120.25</StartTime>
 		<StartAngle>24</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>137</StartTime>
+		<StartTime>120.25</StartTime>
 		<StartAngle>25</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>141</StartTime>
+		<StartTime>123.75</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>141</StartTime>
+		<StartTime>123.75</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>141</StartTime>
+		<StartTime>123.75</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>141</StartTime>
+		<StartTime>123.75</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>141</StartTime>
+		<StartTime>123.75</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>145</StartTime>
+		<StartTime>127.25</StartTime>
 		<StartAngle>244</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>145</StartTime>
+		<StartTime>127.25</StartTime>
 		<StartAngle>246</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>145</StartTime>
+		<StartTime>127.25</StartTime>
 		<StartAngle>248</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>145</StartTime>
+		<StartTime>127.25</StartTime>
 		<StartAngle>250</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Intense Light Speeder</EnemyName>
-		<StartTime>145</StartTime>
+		<StartTime>127.25</StartTime>
 		<StartAngle>252</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>147</StartTime>
+		<StartTime>129</StartTime>
 		<StartAngle>9</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>147</StartTime>
+		<StartTime>129</StartTime>
 		<StartAngle>27</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>147</StartTime>
+		<StartTime>129</StartTime>
 		<StartAngle>45</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>147</StartTime>
+		<StartTime>129</StartTime>
 		<StartAngle>63</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>147</StartTime>
+		<StartTime>129</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>149</StartTime>
+		<StartTime>130.75</StartTime>
 		<StartAngle>189</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>149</StartTime>
+		<StartTime>130.75</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>149</StartTime>
+		<StartTime>130.75</StartTime>
 		<StartAngle>225</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>149</StartTime>
+		<StartTime>130.75</StartTime>
 		<StartAngle>243</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>149</StartTime>
+		<StartTime>130.75</StartTime>
 		<StartAngle>261</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>151</StartTime>
+		<StartTime>132.5</StartTime>
 		<StartAngle>99</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>151</StartTime>
+		<StartTime>132.5</StartTime>
 		<StartAngle>117</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>151</StartTime>
+		<StartTime>132.5</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>151</StartTime>
+		<StartTime>132.5</StartTime>
 		<StartAngle>153</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>151</StartTime>
+		<StartTime>132.5</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>153</StartTime>
+		<StartTime>134.25</StartTime>
 		<StartAngle>279</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>153</StartTime>
+		<StartTime>134.25</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>153</StartTime>
+		<StartTime>134.25</StartTime>
 		<StartAngle>315</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>153</StartTime>
+		<StartTime>134.25</StartTime>
 		<StartAngle>333</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>153</StartTime>
+		<StartTime>134.25</StartTime>
 		<StartAngle>351</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>155</StartTime>
+		<StartTime>136</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>155</StartTime>
+		<StartTime>136</StartTime>
 		<StartAngle>144</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>155</StartTime>
+		<StartTime>136</StartTime>
 		<StartAngle>216</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>155</StartTime>
+		<StartTime>136</StartTime>
 		<StartAngle>288</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Land Drone</EnemyName>
-		<StartTime>155</StartTime>
+		<StartTime>136</StartTime>
 		<StartAngle>360</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>159</StartTime>
+		<StartTime>139.5</StartTime>
 		<StartAngle>99</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>159</StartTime>
+		<StartTime>139.5</StartTime>
 		<StartAngle>135</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>159</StartTime>
+		<StartTime>139.5</StartTime>
 		<StartAngle>153</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>159</StartTime>
+		<StartTime>139.5</StartTime>
 		<StartAngle>171</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>163</StartTime>
+		<StartTime>143</StartTime>
 		<StartAngle>189</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>163</StartTime>
+		<StartTime>143</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>163</StartTime>
+		<StartTime>143</StartTime>
 		<StartAngle>225</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>167</StartTime>
+		<StartTime>146.5</StartTime>
 		<StartAngle>9</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>167</StartTime>
+		<StartTime>146.5</StartTime>
 		<StartAngle>27</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>167</StartTime>
+		<StartTime>146.5</StartTime>
 		<StartAngle>81</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>171</StartTime>
+		<StartTime>150</StartTime>
 		<StartAngle>279</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>171</StartTime>
+		<StartTime>150</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>171</StartTime>
+		<StartTime>150</StartTime>
 		<StartAngle>315</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>175</StartTime>
+		<StartTime>153.5</StartTime>
 		<StartAngle>72</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>175</StartTime>
+		<StartTime>153.5</StartTime>
 		<StartAngle>144</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>179</StartTime>
+		<StartTime>157</StartTime>
 		<StartAngle>199</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>179</StartTime>
+		<StartTime>157</StartTime>
 		<StartAngle>201</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>179</StartTime>
+		<StartTime>157</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>183</StartTime>
+		<StartTime>160.5</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>183</StartTime>
+		<StartTime>160.5</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>183</StartTime>
+		<StartTime>160.5</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>2</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>183</StartTime>
+		<StartTime>160.5</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>183</StartTime>
+		<StartTime>160.5</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>187</StartTime>
+		<StartTime>164</StartTime>
 		<StartAngle>19</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>187</StartTime>
+		<StartTime>164</StartTime>
 		<StartAngle>21</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>187</StartTime>
+		<StartTime>164</StartTime>
 		<StartAngle>23</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>191</StartTime>
+		<StartTime>167.5</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>191</StartTime>
+		<StartTime>167.5</StartTime>
 		<StartAngle>291</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>191</StartTime>
+		<StartTime>167.5</StartTime>
 		<StartAngle>293</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>191</StartTime>
+		<StartTime>167.5</StartTime>
 		<StartAngle>295</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>191</StartTime>
+		<StartTime>167.5</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>4</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>195</StartTime>
+		<StartTime>171</StartTime>
 		<StartAngle>289</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>195</StartTime>
+		<StartTime>171</StartTime>
 		<StartAngle>297</StartAngle>
 		<PlayerCount>5</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>199</StartTime>
+		<StartTime>174.5</StartTime>
 		<StartAngle>199</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>199</StartTime>
+		<StartTime>174.5</StartTime>
 		<StartAngle>201</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>199</StartTime>
+		<StartTime>174.5</StartTime>
 		<StartAngle>203</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>199</StartTime>
+		<StartTime>174.5</StartTime>
 		<StartAngle>205</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
 		<EnemyName>Heavy Speeder</EnemyName>
-		<StartTime>199</StartTime>
+		<StartTime>174.5</StartTime>
 		<StartAngle>207</StartAngle>
 		<PlayerCount>3</PlayerCount>
 	</EnemySpawnData>
