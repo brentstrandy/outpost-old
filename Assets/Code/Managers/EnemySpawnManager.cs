@@ -46,10 +46,6 @@ public class EnemySpawnManager
 
                 // Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
                 ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, displayName, spawnDetails.StartAngle, viewID);
-
-                //LogError("Enemy Name: " + spawnDetails.EnemyName);
-                // Send the enemy's viewID and spawn coordinate to AnalyticsManager
-                AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", enemySpawnPosition);
             }
         }
     }

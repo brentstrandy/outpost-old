@@ -17,6 +17,7 @@ public class Tower : MonoBehaviour
 
     public float Health { get; protected set; }
     public int NetworkViewID { get; protected set; }
+    public Analytics_Asset AnalyticsAsset;
 
     public Color PlayerColor { get; private set; }
     protected Enemy TargetedEnemy = null;
@@ -128,6 +129,9 @@ public class Tower : MonoBehaviour
         // Only initialize the health bar if it is used for this tower
         if (HealthBar)
             HealthBar.InitializeBars(TowerAttributes.MaxHealth);
+
+        // Store a reference to the AnalyticsManager's information on this Tower
+        AnalyticsAsset = AnalyticsManager.Instance.FindTowerByDisplayName(TowerAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
     }
 
     #endregion INITIALIZE
@@ -306,8 +310,8 @@ public class Tower : MonoBehaviour
         Health -= tDamageWithDefense;
         Health = Mathf.Max(Health, 0);
 
-        AnalyticsManager.Instance.BallisticDamage_Level += bDamageWithDefense;
-        AnalyticsManager.Instance.ThraceiumDamage_Level += tDamageWithDefense;
+        // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
+        //AnalyticsManager.Instance.AddDamageTakenTower_Level(bDamageWithDefense, tDamageWithDefense);
 
         // Only update the Health Bar if there is one to update
         if (HealthBar)
@@ -323,6 +327,10 @@ public class Tower : MonoBehaviour
     [PunRPC]
     protected virtual void DieAcrossNetwork()
     {
+        // Indicate to the AnalyticsManager where the Tower has died
+        if (GameManager.Instance.GameRunning)
+            AnalyticsAsset.DeathOfAsset(AnalyticsAsset.AssetOrigin);
+
         // Simply destroy the tower (show explosion and play sound)
         DestroyTower();
     }
@@ -349,8 +357,10 @@ public class Tower : MonoBehaviour
             Health -= tDamageWithDefense;
             Health = Mathf.Max(Health, 0);
 
-            AnalyticsManager.Instance.BallisticDamage_Level += bDamageWithDefense;
-            AnalyticsManager.Instance.ThraceiumDamage_Level += tDamageWithDefense;
+            // Send specific asset's Ballisitic and Therceium Damage (w/o defense) to AnalyticsManager
+            //AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
+            // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
+            //AnalyticsManager.Instance.AddDamageTakenTower_Level(bDamageWithDefense, tDamageWithDefense);
 
             // Only update the Health Bar if there is one to update
             if (HealthBar)
@@ -363,9 +373,6 @@ public class Tower : MonoBehaviour
             if (Health <= 0)
             {
                 ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
-
-                Analytics_Asset tempAnalytics = AnalyticsManager.Instance.FindTowerByDisplayName(TowerAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
-                tempAnalytics.DeathOfAsset(tempAnalytics.AssetOrigin);
             }
             else
                 ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticDamage, thraceiumDamage);

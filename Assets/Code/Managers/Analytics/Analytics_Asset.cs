@@ -11,17 +11,18 @@ public class Analytics_Asset
 
     public int ViewID;                   // The asset's unique View ID
     public string AssetType;             // "Enemy" or "Tower" (for now)
-
-    private float DPS;                   // Thraceium and Ballistic combined?
-    private float DamageTaken;           // Thraceium and Ballistic combined?
+    public float DamageDealt_Ballistic { get; private set; } // Raw ddb
+    public float DamageDealt_Thraceium { get; private set; } // Raw ddt
+    public float DamageTaken_Ballistic { get; private set; } // Raw dtb
+    public float DamageTaken_Thraceium { get; private set; } // Raw dtt
+    
     private float DistanceFromCenter;    // Tower: at the time of creation -- Enemy: at the time of death
-    private float DistanceFromSameType;  // Will most likely be replaced by heat map
     private float StartOfLife;           // The start of the asset's creation
     public float LifeSpan { get; private set; }             // When the asset is declared dead (e.g. health < 0)
 
     public bool IsDead { get; private set; }                // Is the asset dead
 
-    public Vector2 AssetOrigin;                             // Where the asset spawned onto the map
+    public Vector2 AssetOrigin;          // Where the asset spawned onto the map
     public Vector2 LocationOfDeath { get; private set; }    // Use to coordinate distance from other assets
     private Vector2 MiningFacility       // Returns the GameManager's location of the Mining Facility
     {
@@ -30,6 +31,7 @@ public class Analytics_Asset
             return GameManager.Instance.ObjMiningFacility.transform.position;
         }
     }
+    public bool IsMiningFacility { get; private set; }
 
     // constructor
     public Analytics_Asset(int viewID, string assetType, Vector3 assetOrigin)
@@ -37,32 +39,37 @@ public class Analytics_Asset
         ViewID = viewID;
         AssetType = assetType;
 
-        DPS = 0;
-        DamageTaken = 0;
+        DamageDealt_Thraceium = 0;
+        DamageDealt_Ballistic = 0;
+        DamageTaken_Thraceium = 0;
+        DamageTaken_Ballistic = 0;
+        
         DistanceFromCenter = 0;
-        DistanceFromSameType = 0;
         StartOfLife = Time.time;
         LifeSpan = 0;
 
         IsDead = false;
 
         AssetOrigin = assetOrigin;
+        IsMiningFacility = viewID < 0 ? true : false;
     }
 
     /// <summary>
     /// Amount of damage asset deals
     /// </summary>
-    public void AddDPS(float dps)
-    {
-        DPS += dps;
+    public void AddDamageDealt(float ballistic, float thraceium)
+    {   
+        DamageDealt_Ballistic += ballistic;
+        DamageDealt_Thraceium += thraceium;
     }
 
     /// <summary>
     /// Amount of damage asset takes
     /// </summary>
-    public void AddDamageTaken(float damageTaken)
+    public void AddDamageTaken(float ballistic, float thraceium)
     {
-        DamageTaken += damageTaken;
+        DamageTaken_Ballistic += ballistic;
+        DamageTaken_Thraceium += thraceium;
     }
 
     /// <summary>
@@ -91,14 +98,6 @@ public class Analytics_Asset
             LogError("Incorrect Type of asset is being tracked: " + AssetType);
 
         return DistanceFromCenter;
-    }
-
-    /// <summary>
-    /// Distance from other assets of the same type (should I use heatmap here?)
-    /// </summary>
-    public void CalculateDistanceFromSameType()
-    {
-
     }
 
     #region MessageHandling

@@ -260,11 +260,6 @@ public class PlayerManager : MonoBehaviour
                 // Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
                 // TODO: Move to a two-phase system, where the master confirms success before the tower is considered built?
                 ObjPhotonView.RPC("SpawnTowerAcrossNetwork", PhotonTargets.All, displayName, coord, viewID);
-
-                //LogError("Coord.Position(): " + coord.Position());
-                //LogError("Enemy Name: " + displayName);
-                // Send the tower's viewID and spawn coordinate to AnalyticsManager
-                AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
             }
             else
             {
@@ -616,6 +611,10 @@ public class PlayerManager : MonoBehaviour
         newTower.AddComponent<PhotonView>();
         // Set Tower's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
         newTower.GetComponent<PhotonView>().viewID = viewID;
+
+        // Send the tower's viewID and spawn coordinate to AnalyticsManager
+        AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
+
         // The Prefab doesn't contain the correct default data. Set the Tower's default data now
         newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), info.sender);
 

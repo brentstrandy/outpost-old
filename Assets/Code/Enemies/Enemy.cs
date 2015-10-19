@@ -51,6 +51,7 @@ public class Enemy : MonoBehaviour
     protected HexLocation ObjHexLocation = null;
 
     public int NetworkViewID { get; private set; }
+    public Analytics_Asset AnalyticsAsset;
 
     // Effects
     public GameObject FiringEffect;
@@ -152,6 +153,9 @@ public class Enemy : MonoBehaviour
 
         // Set the enemy's highlight color
         gameObject.GetComponent<Renderer>().material.color = EnemyAttributes.HighlightColor;
+
+        // Store a reference to the AnalyticsManager's information on this Tower
+        AnalyticsAsset = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
     }
 
     #endregion INITIALIZATION
@@ -390,10 +394,17 @@ public class Enemy : MonoBehaviour
     [PunRPC]
     protected virtual void TakeDamageAcrossNetwork(float ballisticDamage, float thraceiumDamage)
     {
+        // Damage dealt after defense is calculated
+        float bDamageWithDefense = (ballisticDamage * (1 - EnemyAttributes.BallisticDefense));
+        float tDamageWithDefense = (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
+
         // Take damage from Ballistics and Thraceium
-        Health -= (ballisticDamage * (1 - EnemyAttributes.BallisticDefense));
-        Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
+        Health -= bDamageWithDefense;
+        Health -= tDamageWithDefense;
         Health = Mathf.Max(Health, 0);
+
+        // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
+        AnalyticsManager.Instance.AddDamageTakenEnemy_Level(bDamageWithDefense, tDamageWithDefense);
 
         // Only update the Health Bar if there is one to update
         if (HealthBar)
@@ -409,6 +420,9 @@ public class Enemy : MonoBehaviour
     [PunRPC]
     protected virtual void DieAcrossNetwork()
     {
+        // Indicate to the AnalyticsManager where the Enemy has died
+        AnalyticsAsset.DeathOfAsset(transform.position);
+
         // Simply destroy the enemy (show explosion and play sound)
         DestroyEnemy();
     }
@@ -455,10 +469,19 @@ public class Enemy : MonoBehaviour
             ///  Is this really needed? - BS 8/28/15
             if (Health >= 0)
             {
+                // Damage dealt after defense is calculated
+                float bDamageWithDefense = (ballisticDamage * (1 - EnemyAttributes.BallisticDefense));
+                float tDamageWithDefense = (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
+
                 // Take damage from Ballistics and Thraceium
-                Health -= (ballisticDamage * (1 - EnemyAttributes.BallisticDefense));
-                Health -= (thraceiumDamage * (1 - EnemyAttributes.ThraceiumDefense));
+                Health -= bDamageWithDefense;
+                Health -= tDamageWithDefense;
                 Health = Mathf.Max(Health, 0);
+
+                // Send specific asset's Ballisitic and Therceium Damage (w/o defense) to AnalyticsManager
+                AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
+                // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
+                AnalyticsManager.Instance.AddDamageTakenEnemy_Level(bDamageWithDefense, tDamageWithDefense);
 
                 // Only update the Health Bar if there is one to update
                 if (HealthBar)
@@ -473,12 +496,7 @@ public class Enemy : MonoBehaviour
                 // Either tell all other clients the enemy is dead, or tell them to have the enemy take damage
                 if (Health <= 0)
                 {
-                    Vector3 deathLocation = transform.position;
-
                     ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);
-
-                    Analytics_Asset tempAnalytics = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
-                    tempAnalytics.DeathOfAsset(deathLocation);
                 }
                 else
                     ObjPhotonView.RPC("TakeDamageAcrossNetwork", PhotonTargets.Others, ballisticDamage, thraceiumDamage);

@@ -1,0 +1,2019 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ArrayOfEnemySpawnData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>16</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>16</StartTime>
+		<StartAngle>35</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Light Speeder</EnemyName>
+		<StartTime>16</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>16</StartTime>
+		<StartAngle>125</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>16</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>16</StartTime>
+		<StartAngle>215</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>55</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>15</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>145</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>105</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>235</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>195</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>20</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>40</StartTime>
+		<StartAngle>80</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>40</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>40</StartTime>
+		<StartAngle>260</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>50</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>50</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>50</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>52</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>52</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>52</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>54</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>54</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>54</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>56</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>56</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>56</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Light Speeder</EnemyName>
+		<StartTime>60</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Light Speeder</EnemyName>
+		<StartTime>60</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Light Speeder</EnemyName>
+		<StartTime>60</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Light Speeder</EnemyName>
+		<StartTime>60</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Light Speeder</EnemyName>
+		<StartTime>60</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Light Speeder</EnemyName>
+		<StartTime>60</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>65</StartTime>
+		<StartAngle>5</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>65</StartTime>
+		<StartAngle>95</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>65</StartTime>
+		<StartAngle>185</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>70</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>70</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>70</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>75</StartTime>
+		<StartAngle>35</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>75</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>75</StartTime>
+		<StartAngle>125</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>75</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>75</StartTime>
+		<StartAngle>215</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>75</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>76</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>76</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>76</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>76</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>76</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>76</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>77</StartTime>
+		<StartAngle>55</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>77</StartTime>
+		<StartAngle>60</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>77</StartTime>
+		<StartAngle>145</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>77</StartTime>
+		<StartAngle>150</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>77</StartTime>
+		<StartAngle>235</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>77</StartTime>
+		<StartAngle>240</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>80</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>80</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>80</StartTime>
+		<StartAngle>315</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>86</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>86</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>86</StartTime>
+		<StartAngle>320</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>90</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>90</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>90</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>90</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>90</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>90</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>91</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>91</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>91</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>145</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>35</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>55</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>75</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>260</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>235</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>125</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>145</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>165</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>350</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>325</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>215</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>235</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>100</StartTime>
+		<StartAngle>255</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>110</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>110</StartTime>
+		<StartAngle>160</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>110</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>110</StartTime>
+		<StartAngle>250</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>110</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Intense Heavy Speeder</EnemyName>
+		<StartTime>110</StartTime>
+		<StartAngle>340</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>112</StartTime>
+		<StartAngle>165</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>112</StartTime>
+		<StartAngle>255</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>112</StartTime>
+		<StartAngle>345</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>115</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>115</StartTime>
+		<StartAngle>80</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>115</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>115</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>115</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>115</StartTime>
+		<StartAngle>260</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>120</StartTime>
+		<StartAngle>10</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>120</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>120</StartTime>
+		<StartAngle>100</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>120</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>120</StartTime>
+		<StartAngle>190</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>120</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>35</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>55</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>75</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>125</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>145</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>165</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>215</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>235</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>130</StartTime>
+		<StartAngle>255</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>135</StartTime>
+		<StartAngle>100</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>135</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>135</StartTime>
+		<StartAngle>190</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>135</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>135</StartTime>
+		<StartAngle>280</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>135</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>100</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>190</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>280</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>140</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>150</StartTime>
+		<StartAngle>160</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>150</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>150</StartTime>
+		<StartAngle>250</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>150</StartTime>
+		<StartAngle>260</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>150</StartTime>
+		<StartAngle>340</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>150</StartTime>
+		<StartAngle>350</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>160</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>160</StartTime>
+		<StartAngle>315</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>160</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>162</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>162</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>162</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>164</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>164</StartTime>
+		<StartAngle>320</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>164</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>10</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>100</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>160</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>100</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>190</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>250</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>190</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>280</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>165</StartTime>
+		<StartAngle>340</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>315</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>215</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>305</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>35</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>170</StartTime>
+		<StartAngle>315</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>20</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>175</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>180</StartTime>
+		<StartAngle>330</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>180</StartTime>
+		<StartAngle>60</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>180</StartTime>
+		<StartAngle>150</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>182</StartTime>
+		<StartAngle>335</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>182</StartTime>
+		<StartAngle>65</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>182</StartTime>
+		<StartAngle>155</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>184</StartTime>
+		<StartAngle>325</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>184</StartTime>
+		<StartAngle>55</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>184</StartTime>
+		<StartAngle>145</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>190</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>190</StartTime>
+		<StartAngle>150</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>190</StartTime>
+		<StartAngle>260</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>190</StartTime>
+		<StartAngle>240</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>190</StartTime>
+		<StartAngle>350</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>190</StartTime>
+		<StartAngle>330</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>195</StartTime>
+		<StartAngle>160</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>195</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>195</StartTime>
+		<StartAngle>250</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>195</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>195</StartTime>
+		<StartAngle>340</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>195</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>20</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>200</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>210</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>215</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>20</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>220</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>330</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>340</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>350</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>60</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>70</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>80</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Light Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>20</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>150</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>160</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>225</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>330</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>340</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>350</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>60</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>70</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>80</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>150</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>160</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>230</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>20</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>80</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>170</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>235</StartTime>
+		<StartAngle>260</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>240</StartTime>
+		<StartAngle>45</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>240</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>240</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>250</StartTime>
+		<StartAngle>135</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>250</StartTime>
+		<StartAngle>225</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Heavy Speeder</EnemyName>
+		<StartTime>250</StartTime>
+		<StartAngle>315</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>300</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>290</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>310</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>20</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>255</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>265</StartTime>
+		<StartAngle>230</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>30</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>40</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>50</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>110</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>120</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>130</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>140</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>200</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>210</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+	<EnemySpawnData>
+		<EnemyName>Land Drone</EnemyName>
+		<StartTime>270</StartTime>
+		<StartAngle>220</StartAngle>
+		<PlayerCount>1</PlayerCount>
+	</EnemySpawnData>
+</ArrayOfEnemySpawnData>

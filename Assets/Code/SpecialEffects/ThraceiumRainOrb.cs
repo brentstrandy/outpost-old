@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 /// <summary>
@@ -194,6 +196,7 @@ public class ThraceiumRainOrb : MonoBehaviour
 
     #region 5TH PATHFINDING (Parabola)
 
+    #if UNITY_EDITOR
     /// <summary>
     /// Draw the trajectory parabola in Unity's Scene window
     /// </summary>
@@ -223,6 +226,7 @@ public class ThraceiumRainOrb : MonoBehaviour
             lastPoint = point;
         }
     }
+    #endif
 
     /// <summary>
     /// Get position from a parabola defined by start and end vectors, height, and time

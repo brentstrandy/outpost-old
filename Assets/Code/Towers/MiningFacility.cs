@@ -31,6 +31,12 @@ public class MiningFacility : Tower
 
         // Lift the facility up to whatever the height of the ground below it is
         gameObject.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(gameObject.transform.position);
+
+        // Send the tower's viewID and spawn coordinate to AnalyticsManager
+        //AnalyticsManager.Instance.FindTowerByDisplayName("Mining Facility").AddAsset(NetworkViewID, "Tower", gameObject.transform.position);
+
+        // Store a reference to the AnalyticsManager's information on this Tower
+        //AnalyticsAsset = AnalyticsManager.Instance.FindTowerByDisplayName("Mining Facility").FindAssetByViewID(NetworkViewID);
     }
 
     // Update is called once per frame

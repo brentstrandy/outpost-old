@@ -78,10 +78,6 @@ public class GameManager : MonoBehaviour
         // Instantiate object to manage Enemy spawning
         EnemySpawnManager = new EnemySpawnManager(ObjPhotonView);
 
-        // Initialize the mining facility
-        ObjMiningFacility = GameObject.FindGameObjectWithTag("Mining Facility").GetComponent<MiningFacility>();
-        ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
-
         // Begin gathering Enemy Spawn data that the EnemySpawnManager will eventually use
         EnemySpawnDataManager = new DataManager<EnemySpawnData>();
         // Grab the Enemy Spawn data from either the web server or local xml file. The EnemySpawnManager will use this
@@ -145,6 +141,10 @@ public class GameManager : MonoBehaviour
 
         // Initializes player analytics for Unity Analytics
         AnalyticsManager.Instance.InitializePlayerAnalytics();
+
+        // Initialize the mining facility
+        ObjMiningFacility = GameObject.FindGameObjectWithTag("Mining Facility").GetComponent<MiningFacility>();
+        ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
     }
 
     public void OnLevelWasLoaded(int level)
@@ -208,6 +208,10 @@ public class GameManager : MonoBehaviour
         newEnemy.AddComponent<PhotonView>();
         // Set Enemy's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
         newEnemy.GetComponent<PhotonView>().viewID = viewID;
+
+        // Send the enemy's viewID and spawn coordinate to AnalyticsManager
+        AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", pos);
+
         // The Prefab doesn't contain the correct default data. Set the Enemy's default data now
         newEnemy.GetComponent<Enemy>().SetEnemyData(data);
     }
