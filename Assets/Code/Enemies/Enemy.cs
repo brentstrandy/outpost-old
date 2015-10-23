@@ -152,7 +152,20 @@ public class Enemy : MonoBehaviour
         }
 
         // Set the enemy's highlight color
-        gameObject.GetComponent<Renderer>().material.color = EnemyAttributes.HighlightColor;
+        //gameObject.GetComponentInChildren<Renderer>().material.color = EnemyAttributes.HighlightColor;
+
+		// Set the player's color on any material titled "PlayerColorMaterial"
+		foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+		{
+			foreach (Material material in renderer.materials)
+			{
+				if (material.name.Contains("PlayerColorMaterial"))
+				{
+					material.SetColor("_Color", EnemyAttributes.HighlightColor);
+					//material.SetColor("_EmissionColor", EnemyAttributes.HighlightColor);
+				}
+			}
+		}
 
         // Store a reference to the AnalyticsManager's information on this Tower
         AnalyticsAsset = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
