@@ -35,7 +35,7 @@ public class MenuManager : MonoBehaviour
     public GameObject LoadLevelPanel;
     public GameObject EndGamePanel;
 
-    private GameObject CurrentMenuPanel;
+    public GameObject CurrentMenuPanel { get; private set; }
 
     #region INSTANCE (SINGLETON)
 
