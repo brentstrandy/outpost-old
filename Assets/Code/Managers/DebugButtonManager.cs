@@ -47,12 +47,23 @@ public class DebugButtonManager : MonoBehaviour
             {
                 //if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Question))
                 if (Input.GetKeyDown(KeyCode.Slash) && Input.GetKey("left shift") || Input.GetKeyDown("left shift") && Input.GetKey(KeyCode.Slash))
-                {
-                    // Display level name
-                    LogError("Name of Location: " + GameManager.Instance.CurrentLevelData.DisplayName);
+				{
+					string copyText = "";
+					copyText = "Date/Time: " + System.DateTime.Now.ToString() + "\n";
+					copyText += "Player Name: " + PlayerManager.Instance.Username + " (" + PlayerManager.Instance.AccountID + ")\n";
+					copyText += "Level Name: " + GameManager.Instance.CurrentLevelData.DisplayName + "\n";
+					copyText += "Player Count: " + SessionManager.Instance.GetRoomPlayerCount().ToString() + "\n";
+					copyText += "Game Host: " + SessionManager.Instance.GetPlayerInfo().isMasterClient.ToString() + "\n";
+					copyText += "Level Time: " + Mathf.RoundToInt(Time.time - GameManager.Instance.LevelStartTime).ToString();
+
+					TextEditor te = new TextEditor();
+					te.content = new GUIContent(copyText);
+					te.SelectAll();
+					te.Copy();
+
+					NotificationManager.Instance.DisplayNotification(new NotificationData("Debug Info", "Copied Information to clipboard", "QuickInfo"));
                 }
             }
-
         }
         // If pregame, name is returned from MenuManager
         else
