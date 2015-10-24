@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfEnemyData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
@@ -19,7 +19,7 @@
     <Acceleration>0</Acceleration>
     <Speed>0.8</Speed>
     <Range>1.5</Range>
-    <HoverDistance>0.3</HoverDistance>
+    <HoverDistance>0.5</HoverDistance>
     <BallisticDamage>0</BallisticDamage>
     <ThraceiumDamage>4</ThraceiumDamage>
     <BallisticDefense>0.5</BallisticDefense>
@@ -134,5 +134,32 @@
     <ThraceiumDefense>0.3</ThraceiumDefense>
     <TurningSpeed>3</TurningSpeed>
     <ScoreValue>5</ScoreValue>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Sky Drone</DisplayName>
+    <PrefabName>Sky Drone</PrefabName>
+    <EnemyID>0</EnemyID>
+    <PathFinding>TrackEnemy_IgnorePath</PathFinding>
+    <HighlightColor>
+      <r>1</r>
+      <g>0.9724138</g>
+      <b>0</b>
+      <a>0</a>
+    </HighlightColor>
+    <AttackTowers>false</AttackTowers>
+    <AttackMiningFacility>false</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
+    <MaxHealth>5</MaxHealth>
+    <RateOfFire>0</RateOfFire>
+    <Acceleration>35</Acceleration>
+    <Speed>3.5</Speed>
+    <Range>5</Range>
+    <HoverDistance>1</HoverDistance>
+    <BallisticDamage>1</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
+    <TurningSpeed>6</TurningSpeed>
+    <ScoreValue>1</ScoreValue>
   </EnemyData>
 </ArrayOfEnemyData>

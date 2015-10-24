@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     protected float TimeLastShotFired;
     protected Vector3 CurAcceleration;
     protected Vector3 CurVelocity;
+	protected float CurHeight;
 
     // Pathfinding
     protected PathFindingType PathFinding;
@@ -246,11 +247,12 @@ public class Enemy : MonoBehaviour
             // NOTE: This is a kludge. In the end we should adjust the ship's yaw so that it doesn't hit the surface instead of just putting this weird upward force on it
             float minHoverDistance = EnemyAttributes.HoverDistance * 0.5f;
             var intersection = GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position);
-            var distance = Mathf.Abs(this.transform.position.z - intersection.z);
-            if (distance < minHoverDistance)
+            CurHeight = Mathf.Abs(this.transform.position.z - intersection.z);
+            
+			if (CurHeight < minHoverDistance)
             {
                 // We're too close to the ground, apply upward velocity proportionate to how close we are
-                CurVelocity.z -= (minHoverDistance - distance) * EnemyAttributes.Speed * 10.0f;
+				CurVelocity.z -= (minHoverDistance - CurHeight) * EnemyAttributes.Speed * 10.0f * Time.deltaTime;
             }
 
             // Manually change the Enemy's position
