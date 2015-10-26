@@ -34,8 +34,13 @@ public class InGame_Menu : MonoBehaviour
                 // use the last referenced TowerData variable for each of the buttons
                 TowerData td = towerData[index];
                 towerButton.SetActive(true);
-                towerButton.GetComponentInChildren<Text>().text = towerData[index].DisplayName + " ($" + towerData[index].InstallCost.ToString() + ")";
+                towerButton.GetComponentInChildren<Text>().text = "($" + towerData[index].InstallCost.ToString() + ")";
                 towerButton.GetComponent<Button>().onClick.AddListener(() => Tower_Click(td));
+				foreach(Image image in towerButton.GetComponentsInChildren<Image>())
+				{
+					if(image.name == "Image")
+						image.sprite = Resources.Load("GUI/" + towerData[index].PrefabName + "_Mug", typeof(Sprite)) as Sprite;
+				}
             }
             else
                 towerButton.SetActive(false);
