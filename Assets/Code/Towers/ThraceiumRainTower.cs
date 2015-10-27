@@ -27,7 +27,7 @@ public class ThraceiumRainTower : Tower
         GameObject go = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
 
         // Instantiate the orb
-		go.GetComponent<ThraceiumRainOrb>().SetData(go.transform.position, TargetedEnemy.transform.position, PlayerColor);
+		go.GetComponent<ThraceiumRainOrb>().SetData(go.transform.position, new Vector3(TargetedEnemy.transform.position.x, TargetedEnemy.transform.position.y, GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position).z), PlayerColor);
     }
 
     #region MessageHandling
