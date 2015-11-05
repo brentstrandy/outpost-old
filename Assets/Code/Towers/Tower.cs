@@ -31,14 +31,12 @@ public class Tower : MonoBehaviour
 
     // Components
     public HealthBarController HealthBar;
-
     protected PhotonView ObjPhotonView;
     protected HexLocation ObjHexLocation;
     protected Animator ObjAnimator;
 
     // Effects
     public GameObject FiringEffect;
-
     public GameObject ExplodingEffect;
 
     #region INITIALIZE
@@ -131,7 +129,8 @@ public class Tower : MonoBehaviour
             HealthBar.InitializeBars(TowerAttributes.MaxHealth);
 
         // Store a reference to the AnalyticsManager's information on this Tower
-        AnalyticsAsset = AnalyticsManager.Instance.FindTowerByDisplayName(TowerAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
+        if (TowerAttributes.DisplayName != "Mining Facility")
+            AnalyticsAsset = AnalyticsManager.Instance.FindTowerByDisplayName(TowerAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
     }
 
     #endregion INITIALIZE
@@ -310,8 +309,8 @@ public class Tower : MonoBehaviour
         Health -= tDamageWithDefense;
         Health = Mathf.Max(Health, 0);
 
-        // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
-        //AnalyticsManager.Instance.AddDamageTakenTower_Level(bDamageWithDefense, tDamageWithDefense);
+        // Send overall Ballistic and Thraceium Damage (without defense) to AnalyticsManager
+        AnalyticsManager.Instance.AddDamageTakenTower_Level(ballisticDamage, thraceiumDamage);
 
         // Only update the Health Bar if there is one to update
         if (HealthBar)
@@ -329,8 +328,9 @@ public class Tower : MonoBehaviour
     {
         // Indicate to the AnalyticsManager where the Tower has died
         if (GameManager.Instance.GameRunning)
-            AnalyticsAsset.DeathOfAsset(AnalyticsAsset.AssetOrigin);
-
+        {
+            AnalyticsAsset.DeathOfAsset(AnalyticsAsset.LocationOfSpawn);
+        }
         // Simply destroy the tower (show explosion and play sound)
         DestroyTower();
     }
@@ -358,9 +358,9 @@ public class Tower : MonoBehaviour
             Health = Mathf.Max(Health, 0);
 
             // Send specific asset's Ballisitic and Therceium Damage (w/o defense) to AnalyticsManager
-            //AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
+            AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
             // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
-            //AnalyticsManager.Instance.AddDamageTakenTower_Level(bDamageWithDefense, tDamageWithDefense);
+            AnalyticsManager.Instance.AddDamageTakenTower_Level(bDamageWithDefense, tDamageWithDefense);
 
             // Only update the Health Bar if there is one to update
             if (HealthBar)
@@ -405,7 +405,8 @@ public class Tower : MonoBehaviour
             Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 
         // Inform the player that a tower has been destroyed
-        NotificationManager.Instance.DisplayNotification(new NotificationData("", Owner.name + " lost a tower (" + this.TowerAttributes.DisplayName + ")", "QuickInfo"));
+        if (GameManager.Instance.GameRunning)
+            NotificationManager.Instance.DisplayNotification(new NotificationData("", Owner.name + " lost a tower (" + this.TowerAttributes.DisplayName + ")", "QuickInfo"));
 
         // Tell the tower manager this tower is being destroyed
         GameManager.Instance.TowerManager.RemoveActiveTower(this);

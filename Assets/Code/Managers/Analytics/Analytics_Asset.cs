@@ -22,7 +22,7 @@ public class Analytics_Asset
 
     public bool IsDead { get; private set; }                // Is the asset dead
 
-    public Vector2 AssetOrigin;          // Where the asset spawned onto the map
+    public Vector2 LocationOfSpawn;          // Where the asset spawned onto the map
     public Vector2 LocationOfDeath { get; private set; }    // Use to coordinate distance from other assets
     private Vector2 MiningFacility       // Returns the GameManager's location of the Mining Facility
     {
@@ -50,8 +50,9 @@ public class Analytics_Asset
 
         IsDead = false;
 
-        AssetOrigin = assetOrigin;
-        IsMiningFacility = viewID < 0 ? true : false;
+        LocationOfSpawn = assetOrigin;
+
+        IsMiningFacility = viewID == 10 ? true : false; // Mining facility viewID is always 10
     }
 
     /// <summary>
@@ -93,7 +94,7 @@ public class Analytics_Asset
         if (AssetType == "Enemy")
             DistanceFromCenter = Vector3.Distance(MiningFacility, LocationOfDeath);
         else if (AssetType == "Tower")
-            DistanceFromCenter = Vector3.Distance(MiningFacility, AssetOrigin);
+            DistanceFromCenter = Vector3.Distance(MiningFacility, LocationOfSpawn);
         else
             LogError("Incorrect Type of asset is being tracked: " + AssetType);
 

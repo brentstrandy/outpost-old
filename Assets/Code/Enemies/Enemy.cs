@@ -418,8 +418,8 @@ public class Enemy : MonoBehaviour
         Health -= tDamageWithDefense;
         Health = Mathf.Max(Health, 0);
 
-        // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
-        AnalyticsManager.Instance.AddDamageTakenEnemy_Level(bDamageWithDefense, tDamageWithDefense);
+        // Send overall Ballistic and Thraceium Damage (w/o defense) to AnalyticsManager
+        AnalyticsManager.Instance.AddDamageTakenEnemy_Level(ballisticDamage, thraceiumDamage);
 
         // Only update the Health Bar if there is one to update
         if (HealthBar)
@@ -495,8 +495,8 @@ public class Enemy : MonoBehaviour
 
                 // Send specific asset's Ballisitic and Therceium Damage (w/o defense) to AnalyticsManager
                 AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
-                // Send overall Ballistic and Thraceium Damage (with defense) to AnalyticsManager
-                AnalyticsManager.Instance.AddDamageTakenEnemy_Level(bDamageWithDefense, tDamageWithDefense);
+                // Send overall Ballistic and Thraceium Damage (w/o defense) to AnalyticsManager
+                AnalyticsManager.Instance.AddDamageTakenEnemy_Level(ballisticDamage, thraceiumDamage);
 
                 // Only update the Health Bar if there is one to update
                 if (HealthBar)
@@ -532,6 +532,9 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public virtual void ForceInstantDeath()
     {
+        // Indicate to the AnalyticsManager where the Enemy has died
+        AnalyticsAsset.DeathOfAsset(transform.position);
+
         // If this is the master client then they tell all other clients to destroy this enemy
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
             ObjPhotonView.RPC("DieAcrossNetwork", PhotonTargets.All, null);

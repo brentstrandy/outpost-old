@@ -56,7 +56,7 @@ public class AnalyticsManager : MonoBehaviour
     public int LevelScore;              // Player's level score
 
     //[DAMAGE FOR ALL ASSETS BY LEVEL]
-    public float TowerBallisticTaken_Level { get; private set; }   // Accumulated in a single level (ALL & MASTER)
+    public float TowerBallisticTaken_Level { get; private set; }    // Accumulated in a single level (ALL & MASTER)
     public float TowerThraceiumTaken_Level { get; private set; }    // Accumulated in a single level (ALL & MASTER)
     public float EnemyBallisticTaken_Level { get; private set; }    // Accumulated in a single level (ALL & MASTER)
     public float EnemyThraceiumTaken_Level { get; private set; }    // Accumulated in a single level (ALL & MASTER)
@@ -131,8 +131,9 @@ public class AnalyticsManager : MonoBehaviour
         // Create list of available towers in the level
         foreach (TowerData tower in GameDataManager.Instance.TowerDataManager.DataList)
         {
-            // Have to manually add Mining Facility as it is technically a Tower
-            //AvailableTowers.Add(new Analytics_TrackedAssets("Mining Facility"));
+            // Have to manually add Mining Facility as it uses the Tower class, 
+            // is the only one of its kind, and is not included in the Level data
+            AvailableTowers.Add(new Analytics_TrackedAssets("Mining Facility"));
 
             if (CurrentLevelData.AvailableTowers.Contains(tower.DisplayName))
             {
@@ -368,8 +369,12 @@ public class AnalyticsManager : MonoBehaviour
     {
         Analytics.CustomEvent("TotalLevelDamage_Event", new Dictionary<string, object>
         {
-            {"BallisticDamage", TowerBallisticTaken_Level},
-            {"ThraceiumDamage", TowerThraceiumTaken_Level},
+            {"TowerBallisticTaken", TowerBallisticTaken_Level},
+            {"TowerThraceiumTaken", TowerThraceiumTaken_Level},
+            
+            {"EnemyBallisticTaken", EnemyBallisticTaken_Level},
+            {"EnemyThraceiumTaken", EnemyThraceiumTaken_Level},
+            
             {"LevelName", GameManager.Instance.CurrentLevelData.SceneName},
             {"LevelID", LevelID}
         });
@@ -388,14 +393,19 @@ public class AnalyticsManager : MonoBehaviour
             {
                 if (tower.IsDead)
                 {
-                    LogError(assets.DisplayName + " " + ++i + ") " + tower.LocationOfDeath.x + ", " + tower.LocationOfDeath.y);
-                    string eventName = tower.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
-                    LogError(eventName);
-                    //HeatMapAnalyticsSingleAsset_Send(tower, "Death");
+                    //LogError(assets.DisplayName + " " + ++i + ") " + tower.LocationOfDeath.x + ", " + tower.LocationOfDeath.y);
+                    //string eventName = tower.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
+                    //LogError(eventName);
+                    HeatMapAnalyticsSingleAsset_Send(tower, "Death");
                 }
                 // Send Tower's spawn
-                //else
-                //    HeatMapAnalyticsSingleAsset_Send(tower, "Spawn");
+                else
+                {
+                    //LogError(assets.DisplayName + " " + ++i + ") " + tower.LocationOfSpawn.x + ", " + tower.LocationOfSpawn.y);
+                    //string eventName = tower.AssetType + "Spawn" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
+                    //LogError(eventName);
+                    HeatMapAnalyticsSingleAsset_Send(tower, "Spawn");
+                }
             }
         }
 
@@ -407,15 +417,15 @@ public class AnalyticsManager : MonoBehaviour
             {
                 if (enemy.IsDead)
                 {
-                    LogError(assets.DisplayName + " " + ++j + ") " + enemy.LocationOfDeath.x + ", " + enemy.LocationOfDeath.y);
-                    string eventName = enemy.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
-                    LogError(eventName);
-                    //HeatMapAnalyticsSingleAsset_Send(enemy, "Death");
+                    //LogError(assets.DisplayName + " " + ++j + ") " + enemy.LocationOfDeath.x + ", " + enemy.LocationOfDeath.y);
+                    //string eventName = enemy.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
+                    //LogError(eventName);
+                    HeatMapAnalyticsSingleAsset_Send(enemy, "Death");
                 }
             }
         }
 
-        Log("HeatMap analytics for tower and enemy deaths have been sent to Unity's server.");
+        Log("HeatMap analytics for tower&enemy deaths and tower spawns have been sent to Unity's server.");
     }
 
     /// <summary>
@@ -431,8 +441,11 @@ public class AnalyticsManager : MonoBehaviour
         // AssetType+AssetState + Current Level + Player Count (e.g. "TowerDeath|Lvl:1|Plyrs:1")
         string eventName = asset.AssetType + assetState + "|Lvl:" + CurrentLevelData.LevelID + "|Plyrs:" + PlayerCount;
 
+        // Determines if the asset sends its spawn or death location based on its current death state
+        Vector2 locationOfAsset = asset.IsDead ? asset.LocationOfDeath : asset.LocationOfSpawn;
+
         // EXPLANATION: Send(string EventName, Vector2 LocationOfDeath, float LifeSpan, Dictionary<string, object> CurrentLevelData)
-        UnityAnalyticsHeatmap.HeatmapEvent.Send(eventName, asset.LocationOfDeath, asset.LifeSpan, currentLevelData);
+        UnityAnalyticsHeatmap.HeatmapEvent.Send(eventName, locationOfAsset, asset.LifeSpan, currentLevelData);
     }
 
     /// <summary>
