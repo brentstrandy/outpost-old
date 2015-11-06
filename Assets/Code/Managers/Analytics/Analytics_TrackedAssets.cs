@@ -31,9 +31,9 @@ public class Analytics_TrackedAssets
     /// <summary>
     /// Add an asset to the list and increment the number of assets built
     /// </summary>
-    public void AddAsset(int viewID, string assetType, Vector2 assetOrigin)
+    public void AddAsset(int viewID, string assetSupertype, Vector2 assetOrigin)
     {
-        Assets.Add(new Analytics_Asset(viewID, assetType, assetOrigin));
+        Assets.Add(new Analytics_Asset(viewID, assetSupertype, DisplayName, assetOrigin));
         NumberBuilt++;
     }
 

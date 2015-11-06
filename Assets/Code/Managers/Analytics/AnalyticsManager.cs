@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
@@ -385,43 +386,20 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     private void HeatMapAnalytics_Send()
     {
-        // Send Tower informtion (option to send by sub-type, too)
+        // Send Tower spawn&death informtion
         foreach (Analytics_TrackedAssets assets in AvailableTowers)
         {
-            int i = 0;
             foreach (Analytics_Asset tower in assets.Assets)
-            {
-                if (tower.IsDead)
-                {
-                    //LogError(assets.DisplayName + " " + ++i + ") " + tower.LocationOfDeath.x + ", " + tower.LocationOfDeath.y);
-                    //string eventName = tower.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
-                    //LogError(eventName);
-                    HeatMapAnalyticsSingleAsset_Send(tower, "Death");
-                }
-                // Send Tower's spawn
-                else
-                {
-                    //LogError(assets.DisplayName + " " + ++i + ") " + tower.LocationOfSpawn.x + ", " + tower.LocationOfSpawn.y);
-                    //string eventName = tower.AssetType + "Spawn" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
-                    //LogError(eventName);
-                    HeatMapAnalyticsSingleAsset_Send(tower, "Spawn");
-                }
-            }
+                HeatMapAnalyticsSingleAsset_Send(tower);
         }
 
-        // Send Enemy information (option to send by sub-type, too)
+        // Send Enemy death information
         foreach (Analytics_TrackedAssets assets in AvailableEnemies)
         {
-            int j = 0;
             foreach (Analytics_Asset enemy in assets.Assets)
             {
                 if (enemy.IsDead)
-                {
-                    //LogError(assets.DisplayName + " " + ++j + ") " + enemy.LocationOfDeath.x + ", " + enemy.LocationOfDeath.y);
-                    //string eventName = enemy.AssetType + "Death" + "|Lvl:" + CurrentLevelData.LevelID + "|Plrs:" + PlayerCount;
-                    //LogError(eventName);
-                    HeatMapAnalyticsSingleAsset_Send(enemy, "Death");
-                }
+                    HeatMapAnalyticsSingleAsset_Send(enemy);
             }
         }
 
@@ -431,21 +409,38 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// [HEATMAP] Send a single asset's information to Unity's Heatmap server
     /// </summary>
-    private void HeatMapAnalyticsSingleAsset_Send(Analytics_Asset asset, string assetState)
+    private void HeatMapAnalyticsSingleAsset_Send(Analytics_Asset asset)
     {
-        #region THIS LEVEL DATA VIA DICTIONARY<STRING, OBJECT> CAN SEND NOW, BUT WILL BE AVAILABLE FOR ACCESS AT A LATER DATE
-        var currentLevelData = new Dictionary<string, object>();
-        currentLevelData["levelData"] = CurrentLevelData;
+        string eventName = asset.AssetSupertype;
+        string eventDetails = "|Lvl:" + CurrentLevelData.LevelID + "|Plyrs:" + PlayerCount;
+        Vector2 assetLocationData;
+        float assetTimeData;
+
+        #region We can send this Dictionary now but we won't have access to it for a while (according to Unity)
+        // Server will only allow Dictionaries with: strings, ints, and bools
+        Dictionary<string, object> assetDetails = new Dictionary<string, object> 
+        { 
+            // Incase we change scene names and level ids in the future, this will allow us to validate the data
+            { "assetSubtype", asset.AssetSubtype},                  // e.g. "EMP"
+            { "sceneDisplayName", CurrentLevelData.DisplayName},    // e.g. "Better with Friends"
+            { "levelID", CurrentLevelData.LevelID},                 // e.g. 1
+            { "dateTimeUTC", DateTime.UtcNow.ToString()}            // e.g. "11/5/2015 2:53:32 AM"
+        };
         #endregion
 
-        // AssetType+AssetState + Current Level + Player Count (e.g. "TowerDeath|Lvl:1|Plyrs:1")
-        string eventName = asset.AssetType + assetState + "|Lvl:" + CurrentLevelData.LevelID + "|Plyrs:" + PlayerCount;
+        // e.g. "TowerDeath|Lvl:1|Plyrs:1"
+        eventName += asset.IsDead ? "Death" + eventDetails : "Spawn" + eventDetails;
 
-        // Determines if the asset sends its spawn or death location based on its current death state
-        Vector2 locationOfAsset = asset.IsDead ? asset.LocationOfDeath : asset.LocationOfSpawn;
+        // Determine if data sent will be about the asset's spawn or death
+        assetLocationData = asset.IsDead ? asset.LocationOfDeath : asset.LocationOfSpawn;
+        assetTimeData = asset.IsDead ? asset.TimeOfDeathSinceLoad : asset.TimeOfSpawnSinceLoad;
 
-        // EXPLANATION: Send(string EventName, Vector2 LocationOfDeath, float LifeSpan, Dictionary<string, object> CurrentLevelData)
-        UnityAnalyticsHeatmap.HeatmapEvent.Send(eventName, locationOfAsset, asset.LifeSpan, currentLevelData);
+        // Sends an individual asset's death/spawn data to Unity's HeatMap server 
+        UnityAnalyticsHeatmap.HeatmapEvent.Send(eventName, assetLocationData, assetTimeData, assetDetails);
+
+        //LogError(eventName + "|" + DateTime.UtcNow.ToString());
+        //LogError("SpawnTime: " + asset.TimeOfSpawnSinceLoad);
+        //LogError("DeathTime: " + asset.TimeOfDeathSinceLoad);
     }
 
     /// <summary>

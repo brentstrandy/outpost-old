@@ -124,8 +124,6 @@ public class GameManager : MonoBehaviour
     {
         GameRunning = true;
 
-        LevelStartTime = Time.time;//Used for Analytics -- keep track of level's start time
-
         // Set the player's initial quadrant
         PlayerManager.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
         // Inform the Camera of the new quadrant
@@ -169,8 +167,10 @@ public class GameManager : MonoBehaviour
         // Add additional checks for loaded data here if necessary
         if (EnemySpawnDataManager != null)
             if (EnemySpawnDataManager.FinishedLoadingData)
+            {
+                LevelStartTime = Time.time; // Used for Analytics to keep track of level's start time
                 success = true;
-
+            }
         return success;
     }
 

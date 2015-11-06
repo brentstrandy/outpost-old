@@ -9,22 +9,23 @@ public class Analytics_Asset
 {
     public bool ShowDebugLogs = true;
 
-    public int ViewID;                   // The asset's unique View ID
-    public string AssetType;             // "Enemy" or "Tower" (for now)
+    public int ViewID { get; private set; }                  // The asset's unique View ID
+    public string AssetSupertype { get; private set; }       // "Enemy" or "Tower" (for now)
+    public string AssetSubtype { get; private set; }        // "Enemy" or "Tower" (for now)
+
     public float DamageDealt_Ballistic { get; private set; } // Raw ddb
     public float DamageDealt_Thraceium { get; private set; } // Raw ddt
     public float DamageTaken_Ballistic { get; private set; } // Raw dtb
     public float DamageTaken_Thraceium { get; private set; } // Raw dtt
-    
-    private float DistanceFromCenter;    // Tower: at the time of creation -- Enemy: at the time of death
-    private float StartOfLife;           // The start of the asset's creation
-    public float LifeSpan { get; private set; }             // When the asset is declared dead (e.g. health < 0)
 
-    public bool IsDead { get; private set; }                // Is the asset dead
+    public float DistanceFromCenter { get; private set; }    // Tower: at the time of creation -- Enemy: at the time of death
+    public float TimeOfSpawnSinceLoad { get; private set; }
+    public float TimeOfDeathSinceLoad { get; private set; }
+    public float LifeSpan { get; private set; }              // When the asset is declared dead (e.g. health < 0)
 
-    public Vector2 LocationOfSpawn;          // Where the asset spawned onto the map
+    public Vector2 LocationOfSpawn { get; private set; }    // Where the asset spawned onto the map
     public Vector2 LocationOfDeath { get; private set; }    // Use to coordinate distance from other assets
-    private Vector2 MiningFacility       // Returns the GameManager's location of the Mining Facility
+    private Vector2 MiningFacilityLocation                  // Returns the GameManager's location of the Mining Facility
     {
         get
         {
@@ -32,12 +33,14 @@ public class Analytics_Asset
         }
     }
     public bool IsMiningFacility { get; private set; }
+    public bool IsDead { get; private set; }                // Is the asset dead
 
     // constructor
-    public Analytics_Asset(int viewID, string assetType, Vector3 assetOrigin)
+    public Analytics_Asset(int viewID, string assetSupertype, string assetSubtype, Vector3 locationOfSpawn)
     {
         ViewID = viewID;
-        AssetType = assetType;
+        AssetSupertype = assetSupertype;
+        AssetSubtype = assetSubtype;
 
         DamageDealt_Thraceium = 0;
         DamageDealt_Ballistic = 0;
@@ -45,14 +48,15 @@ public class Analytics_Asset
         DamageTaken_Ballistic = 0;
         
         DistanceFromCenter = 0;
-        StartOfLife = Time.time;
+
+        TimeOfSpawnSinceLoad = Time.time - GameManager.Instance.LevelStartTime;
+        TimeOfDeathSinceLoad = 0;
         LifeSpan = 0;
 
+        LocationOfSpawn = locationOfSpawn;
+
+        IsMiningFacility = viewID == 10 ? true : false; // The Mining Facility viewID is always 10
         IsDead = false;
-
-        LocationOfSpawn = assetOrigin;
-
-        IsMiningFacility = viewID == 10 ? true : false; // Mining facility viewID is always 10
     }
 
     /// <summary>
@@ -80,7 +84,8 @@ public class Analytics_Asset
     {
         if (GameManager.Instance.GameRunning)
         {
-            LifeSpan = Time.time - StartOfLife;
+            TimeOfDeathSinceLoad = Time.time - GameManager.Instance.LevelStartTime;
+            LifeSpan = TimeOfDeathSinceLoad - TimeOfSpawnSinceLoad;
             LocationOfDeath = locationOfDeath;
             IsDead = true;
         }
@@ -91,12 +96,12 @@ public class Analytics_Asset
     /// </summary>
     public float GetDistanceFromCenter()
     {
-        if (AssetType == "Enemy")
-            DistanceFromCenter = Vector3.Distance(MiningFacility, LocationOfDeath);
-        else if (AssetType == "Tower")
-            DistanceFromCenter = Vector3.Distance(MiningFacility, LocationOfSpawn);
+        if (AssetSupertype == "Enemy" && IsDead)
+            DistanceFromCenter = Vector3.Distance(MiningFacilityLocation, LocationOfDeath);
+        else if (AssetSupertype == "Tower")
+            DistanceFromCenter = Vector3.Distance(MiningFacilityLocation, LocationOfSpawn);
         else
-            LogError("Incorrect Type of asset is being tracked: " + AssetType);
+            LogError("Incorrect Type of asset is being tracked: " + AssetSupertype);
 
         return DistanceFromCenter;
     }
