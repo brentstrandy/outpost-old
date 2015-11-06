@@ -28,6 +28,7 @@ public class Tower : MonoBehaviour
     public GameObject TurretPivot;
     public GameObject EmissionPoint;
     public GameObject TowerRing;
+	public GameObject DestructibleObject;
 
     // Components
     public HealthBarController HealthBar;
@@ -404,6 +405,19 @@ public class Tower : MonoBehaviour
         if (ExplodingEffect)
             Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 
+		// Real time destruction of tower
+		if(DestructibleObject)
+		{
+			foreach(Transform child in DestructibleObject.GetComponentsInChildren<Transform>())
+			{
+				child.SetParent(null);
+				child.gameObject.AddComponent<DestroyAfterTime>().TimeToDestroy = 1.5f;
+				child.gameObject.AddComponent<SphereCollider>();
+				// Apply a small explosion in the middle of the tower to break apart all the pieces
+				child.gameObject.AddComponent<Rigidbody>().AddExplosionForce(50.0f, DestructibleObject.transform.position, 10.0f);
+			}
+		}
+
         // Inform the player that a tower has been destroyed
         if (GameManager.Instance.GameRunning)
             NotificationManager.Instance.DisplayNotification(new NotificationData("", Owner.name + " lost a tower (" + this.TowerAttributes.DisplayName + ")", "QuickInfo"));
@@ -418,7 +432,7 @@ public class Tower : MonoBehaviour
         }
 
         // The GameObject must be destroyed or else the enemy will stay instantiated
-        Destroy(this.gameObject);
+        Destroy(this.gameObject, 1.5f);
     }
 
     /// <summary>
