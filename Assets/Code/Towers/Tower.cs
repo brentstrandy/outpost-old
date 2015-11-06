@@ -410,11 +410,14 @@ public class Tower : MonoBehaviour
 		{
 			foreach(Transform child in DestructibleObject.GetComponentsInChildren<Transform>())
 			{
-				child.SetParent(null);
-				child.gameObject.AddComponent<DestroyAfterTime>().TimeToDestroy = 1.5f;
-				child.gameObject.AddComponent<SphereCollider>();
-				// Apply a small explosion in the middle of the tower to break apart all the pieces
-				child.gameObject.AddComponent<Rigidbody>().AddExplosionForce(50.0f, DestructibleObject.transform.position, 10.0f);
+				if(child.parent != null)
+				{
+					child.SetParent(null);
+					child.gameObject.AddComponent<DestroyAfterTime>().TimeToDestroy = 1.5f;
+					child.gameObject.AddComponent<SphereCollider>();
+					// Apply a small explosion in the middle of the tower to break apart all the pieces
+					child.gameObject.AddComponent<Rigidbody>().AddExplosionForce(50.0f, DestructibleObject.transform.position, 10.0f);
+				}
 			}
 		}
 
