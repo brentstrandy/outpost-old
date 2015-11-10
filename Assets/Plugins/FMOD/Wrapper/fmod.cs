@@ -1,6 +1,6 @@
 /* ========================================================================================== */
 /*                                                                                            */
-/* FMOD Studio - C# Wrapper . Copyright (c), Firelight Technologies Pty, Ltd. 2004-2015.          */
+/* FMOD Studio - C# Wrapper . Copyright (c), Firelight Technologies Pty, Ltd. 2004-2015.      */
 /*                                                                                            */
 /* ========================================================================================== */
 
@@ -16,7 +16,7 @@ namespace FMOD
     */
     public class VERSION
     {
-        public const int    number = 0x00010604;
+        public const int    number = 0x00010702;
 #if UNITY_IPHONE && !UNITY_EDITOR
         public const string dll    = "__Internal";
 #elif (UNITY_PS4) && !UNITY_EDITOR
@@ -35,7 +35,7 @@ namespace FMOD
     public class CONSTANTS
     {
         public const int MAX_CHANNEL_WIDTH = 32;
-        public const int MAX_LISTENERS = 5;
+        public const int MAX_LISTENERS = 8;
     }
 
     /*
@@ -132,10 +132,11 @@ namespace FMOD
         ERR_EVENT_NOTFOUND,        /* The requested event, bus or vca could not be found. */
         ERR_STUDIO_UNINITIALIZED,  /* The Studio::System object is not yet initialized. */
         ERR_STUDIO_NOT_LOADED,     /* The specified resource is not loaded, so it can't be unloaded. */
-
         ERR_INVALID_STRING,        /* An invalid string was passed to this function. */
         ERR_ALREADY_LOCKED,        /* The specified resource is already locked. */
         ERR_NOT_LOCKED,            /* The specified resource is not locked, so it can't be unlocked. */
+        ERR_RECORD_DISCONNECTED,   /* The specified recording driver has been disconnected. */
+        ERR_TOOMANYSAMPLES,        /* The length provided exceed the allowable limit. */
     }
 
 
@@ -684,11 +685,9 @@ namespace FMOD
         UNKNOWN,         /* 3rd party / unknown plugin format. */
         AIFF,            /* AIFF. */
         ASF,             /* Microsoft Advanced Systems Format (ie WMA/ASF/WMV). */
-        AT3,             /* Sony ATRAC 3 format */
         DLS,             /* Sound font / downloadable sound bank. */
         FLAC,            /* FLAC lossless codec. */
         FSB,             /* FMOD Sample Bank. */
-        GCADPCM,         /* Nintendo GameCube/Wii ADPCM */
         IT,              /* Impulse Tracker. */
         MIDI,            /* MIDI. extracodecdata is a pointer to an FMOD_MIDI_EXTRACODECDATA structure. */
         MOD,             /* Protracker / Fasttracker MOD. */
@@ -701,10 +700,7 @@ namespace FMOD
         WAV,             /* Microsoft WAV. */
         XM,              /* FastTracker 2 XM. */
         XMA,             /* Xbox360 XMA */
-        VAG,             /* PlayStation Portable ADPCM VAG format. */
         AUDIOQUEUE,      /* iPhone hardware decoder, supports AAC, ALAC and MP3. extracodecdata is a pointer to an FMOD_AUDIOQUEUE_EXTRACODECDATA structure. */
-        XWMA,            /* Xbox360 XWMA */
-        BCWAV,           /* 3DS BCWAV container format for DSP ADPCM and PCM */
         AT9,             /* PS4 / PSVita ATRAC 9 format */
         VORBIS,          /* Vorbis */
         MEDIA_FOUNDATION,/* Windows Store Application built in system codecs */
@@ -730,25 +726,15 @@ namespace FMOD
     */
     public enum SOUND_FORMAT : int
     {
-        NONE,             /* Unitialized / unknown. */
-        PCM8,             /* 8bit integer PCM data. */
-        PCM16,            /* 16bit integer PCM data. */
-        PCM24,            /* 24bit integer PCM data. */
-        PCM32,            /* 32bit integer PCM data. */
-        PCMFLOAT,         /* 32bit floating point PCM data. */
-        GCADPCM,          /* Compressed Nintendo 3DS/Wii DSP data. */
-        IMAADPCM,         /* Compressed IMA ADPCM data. */
-        VAG,              /* Compressed PlayStation Portable ADPCM data. */
-        HEVAG,            /* Compressed PSVita ADPCM data. */
-        XMA,              /* Compressed Xbox360 XMA data. */
-        MPEG,             /* Compressed MPEG layer 2 or 3 data. */
-        CELT,             /* Not supported. */
-        AT9,              /* Compressed PSVita ATRAC9 data. */
-        XWMA,             /* Compressed Xbox360 xWMA data. */
-        VORBIS,           /* Compressed Vorbis data. */
-        FADPCM,           /* Compressed FADPCM data. */
+        NONE,       /* Unitialized / unknown */
+        PCM8,       /* 8bit integer PCM data */
+        PCM16,      /* 16bit integer PCM data  */
+        PCM24,      /* 24bit integer PCM data  */
+        PCM32,      /* 32bit integer PCM data  */
+        PCMFLOAT,   /* 32bit floating point PCM data  */
+        BITSTREAM,  /* Sound data is in its native compressed format. */
 
-        MAX,              /* Maximum number of sound formats supported. */
+        MAX         /* Maximum number of sound formats supported. */
     }
 
 
@@ -1035,6 +1021,8 @@ namespace FMOD
         THREADDESTROYED        = 0x00000200,  /* Called directly when a thread is destroyed. */
         PREUPDATE              = 0x00000400,  /* Called at start of System::update function. */
         POSTUPDATE             = 0x00000800,  /* Called at end of System::update function. */
+        RECORDLISTCHANGED      = 0x00001000,  /* Called from System::update when the enumerated list of recording devices has changed. */
+        ALL                    = 0xFFFFFFFF,  /* Pass this mask to System::setCallback to receive all callback types.  */
     }
 	
     #region wrapperinternal
@@ -1087,7 +1075,7 @@ namespace FMOD
     public delegate RESULT FILE_OPENCALLBACK        (StringWrapper name, ref uint filesize, ref IntPtr handle, IntPtr userdata);
     public delegate RESULT FILE_CLOSECALLBACK       (IntPtr handle, IntPtr userdata);
     public delegate RESULT FILE_READCALLBACK        (IntPtr handle, IntPtr buffer, uint sizebytes, ref uint bytesread, IntPtr userdata);
-    public delegate RESULT FILE_SEEKCALLBACK        (IntPtr handle, int pos, IntPtr userdata);
+    public delegate RESULT FILE_SEEKCALLBACK        (IntPtr handle, uint pos, IntPtr userdata);
     public delegate RESULT FILE_ASYNCREADCALLBACK   (IntPtr handle, IntPtr info, IntPtr userdata);
     public delegate RESULT FILE_ASYNCCANCELCALLBACK (IntPtr handle, IntPtr userdata);
 
@@ -1507,7 +1495,7 @@ namespace FMOD
     */
     public class PRESET
     {
-        /*                                                                           Instance  Env   Diffus  Room   RoomHF  RmLF DecTm   DecHF  DecLF   Refl  RefDel   Revb  RevDel  ModTm  ModDp   HFRef    LFRef   Diffus  Densty  FLAGS */
+        /*                                                                                  Instance  Env   Diffus  Room   RoomHF  RmLF DecTm   DecHF  DecLF   Refl  RefDel   Revb  RevDel  ModTm  ModDp   HFRef    LFRef   Diffus  Densty  FLAGS */
         public static REVERB_PROPERTIES OFF()                 { return new REVERB_PROPERTIES(  1000,    7,  11, 5000, 100, 100, 100, 250, 0,    20,  96, -80.0f );}
         public static REVERB_PROPERTIES GENERIC()             { return new REVERB_PROPERTIES(  1500,    7,  11, 5000,  83, 100, 100, 250, 0, 14500,  96,  -8.0f );}
         public static REVERB_PROPERTIES PADDEDCELL()          { return new REVERB_PROPERTIES(   170,    1,   2, 5000,  10, 100, 100, 250, 0,   160,  84,  -7.8f );}
@@ -2572,12 +2560,7 @@ namespace FMOD
         {
             return FMOD5_Sound_Get3DCustomRolloff(rawPtr, out points, out numpoints);
         }
-        public RESULT setSubSound             (int index, Sound subsound)
-        {
-            IntPtr subsoundraw = subsound.getRaw();
 
-            return FMOD5_Sound_SetSubSound(rawPtr, index, subsoundraw);
-        }
         public RESULT getSubSound             (int index, out Sound subsound)
         {
             subsound = null;
@@ -2769,8 +2752,6 @@ namespace FMOD
         private static extern RESULT FMOD5_Sound_Set3DCustomRolloff      (IntPtr sound, ref VECTOR points, int numpoints);
         [DllImport(VERSION.dll)]
         private static extern RESULT FMOD5_Sound_Get3DCustomRolloff      (IntPtr sound, out IntPtr points, out int numpoints);
-        [DllImport(VERSION.dll)]
-        private static extern RESULT FMOD5_Sound_SetSubSound             (IntPtr sound, int index, IntPtr subsound);
         [DllImport(VERSION.dll)]
         private static extern RESULT FMOD5_Sound_GetSubSound             (IntPtr sound, int index, out IntPtr subsound);
         [DllImport(VERSION.dll)]
@@ -3879,9 +3860,9 @@ namespace FMOD
             return FMOD5_DSP_GetMeteringEnabled(rawPtr, out inputEnabled, out outputEnabled);
         }
 
-        public RESULT getMeteringInfo(out DSP_METERING_INFO info)
+        public RESULT getMeteringInfo(DSP_METERING_INFO inputInfo, DSP_METERING_INFO outputInfo)
         {
-            return FMOD5_DSP_GetMeteringInfo(rawPtr, out info);
+			return FMOD5_DSP_GetMeteringInfo(rawPtr, inputInfo, outputInfo);
         }
 
         #region importfunctions
@@ -3963,7 +3944,7 @@ namespace FMOD
         [DllImport(VERSION.dll)]
         public static extern RESULT FMOD5_DSP_GetMeteringEnabled         (IntPtr dsp, out bool inputEnabled, out bool outputEnabled);
         [DllImport(VERSION.dll)]
-        public static extern RESULT FMOD5_DSP_GetMeteringInfo            (IntPtr dsp, out DSP_METERING_INFO dspInfo);
+        public static extern RESULT FMOD5_DSP_GetMeteringInfo            (IntPtr dsp, [Out]DSP_METERING_INFO inputInfo, [Out]DSP_METERING_INFO outputInfo);
         #endregion
 
         #region wrapperinternal

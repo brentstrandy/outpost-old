@@ -55,8 +55,7 @@ namespace FMOD
 			
 			static public void LogWarning(string msg)
 			{
-                // FITZGERALD: TODO: make a global dev bool for use when Jaime needs to use. 
-                //UnityEngine.Debug.LogWarning(msg);
+                UnityEngine.Debug.LogWarning(msg);
 			}
 			
 			static public void LogError(string msg)
@@ -261,6 +260,11 @@ public class FMOD_StudioSystem : MonoBehaviour
         ERRCHECK(FMOD.Studio.System.create(out system));
 
         FMOD.Studio.INITFLAGS flags = FMOD.Studio.INITFLAGS.NORMAL;
+		
+		FMOD.System sys;
+		ERRCHECK(system.getLowLevelSystem(out sys));
+		FMOD.ADVANCEDSETTINGS advancedSettings = new FMOD.ADVANCEDSETTINGS();
+		advancedSettings.randomSeed = (uint) DateTime.Now.Ticks;
 
 #if FMOD_LIVEUPDATE
         flags |= FMOD.Studio.INITFLAGS.LIVEUPDATE;
@@ -269,18 +273,15 @@ public class FMOD_StudioSystem : MonoBehaviour
         if (Application.unityVersion.StartsWith("5"))
         {
             FMOD.Studio.UnityUtil.LogWarning("FMOD_StudioSystem: detected Unity 5, running on port 9265");
-            FMOD.System sys;
-            ERRCHECK(system.getLowLevelSystem(out sys));
-            FMOD.ADVANCEDSETTINGS advancedSettings = new FMOD.ADVANCEDSETTINGS();
             advancedSettings.profilePort = 9265;
-            ERRCHECK(sys.setAdvancedSettings(ref advancedSettings));
         }
 #endif
+
+		ERRCHECK(sys.setAdvancedSettings(ref advancedSettings));
 
 		#if FMOD_DEBUG
 			FMOD.Debug.Initialize(FMOD.DEBUG_FLAGS.LOG, FMOD.DEBUG_MODE.FILE, null, "fmod.log");
 		#endif
-
 
         FMOD.Studio.UnityUtil.Log("FMOD_StudioSystem: system.init");
         FMOD.RESULT result = FMOD.RESULT.OK;
@@ -306,8 +307,10 @@ public class FMOD_StudioSystem : MonoBehaviour
             flags &= ~FMOD.Studio.INITFLAGS.LIVEUPDATE;
             ERRCHECK(system.release());
             ERRCHECK(FMOD.Studio.System.create(out system));
-            FMOD.System sys;
             ERRCHECK(system.getLowLevelSystem(out sys));
+		    advancedSettings = new FMOD.ADVANCEDSETTINGS();
+		    advancedSettings.randomSeed = (uint) DateTime.Now.Ticks;
+			ERRCHECK(sys.setAdvancedSettings(ref advancedSettings));
             result = system.initialize(1024, flags, FMOD.INITFLAGS.NORMAL, global::System.IntPtr.Zero);
             ERRCHECK(result);
         }

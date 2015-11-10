@@ -95,7 +95,14 @@ public class FMODEditorExtension : MonoBehaviour
 	{
         EditorApplication.update += Update;
 		EditorApplication.playmodeStateChanged += HandleOnPlayModeChanged;
-	}
+
+        // Hack: clean up stale files from old versions of the integration that will mess 
+        // with the build. DeleteAsset is a NoOp if the file doesn't exist
+
+        // moved in 1.05.10
+        AssetDatabase.DeleteAsset("Assets/Plugins/Android/libfmod.so");
+        AssetDatabase.DeleteAsset("Assets/Plugins/Android/libfmodstudio.so");
+    }
  
 	static void HandleOnPlayModeChanged()
 	{
@@ -112,16 +119,6 @@ public class FMODEditorExtension : MonoBehaviour
 		}
 	}
 
-    [PostProcessScene]
-    public static void OnPostprocessScene()
-    {
-        // Hack: clean up stale files from old versions of the integration that will mess 
-        // with the build. DeleteAsset is a NoOp if the file doesn't exist
-
-        // moved in 1.05.10
-        AssetDatabase.DeleteAsset("Assets/Plugins/Android/libfmod.so");
-        AssetDatabase.DeleteAsset("Assets/Plugins/Android/libfmodstudio.so");
-    }
 	
 	[PostProcessBuild]
 	public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
@@ -369,11 +366,18 @@ public class FMODEditorExtension : MonoBehaviour
 	static bool ImportAndRefresh(string filePath)
 	{
         FMOD.Studio.UnityUtil.Log("import from path: " + filePath);
-		CopyBanks(filePath);
+		
+		bool banksUpdated = CopyBanks(filePath);
 				
 		if (!LoadAllBanks())
 		{
 			return false;
+		}
+		
+		if (!banksUpdated)
+		{
+			// no banks copied or user cancelled
+			return false; 
 		}
 		
 		List<FMODAsset> existingAssets = new List<FMODAsset>();
@@ -502,13 +506,13 @@ public class FMODEditorExtension : MonoBehaviour
 	[MenuItem ("FMOD/Online Manual")]
 	static void OnlineManual()
 	{
-		Application.OpenURL("http://fmod.com/download/fmodstudio/integrations/Unity/Doc/UnityDocumentation.pdf");
+        Application.OpenURL("http://www.fmod.org/documentation/#content/generated/engine_unity/overview.html");
 	}
     
     [MenuItem ("FMOD/Online API Documentation")]
 	static void OnlineAPIDocs()
 	{
-		Application.OpenURL("http://fmod.com/documentation");
+        Application.OpenURL("http://www.fmod.org/documentation/#content/generated/studio_api.html");
 	}
 	
 	[MenuItem ("FMOD/About Integration")]

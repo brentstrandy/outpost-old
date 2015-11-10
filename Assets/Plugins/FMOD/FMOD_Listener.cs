@@ -55,9 +55,9 @@ public class FMOD_Listener : MonoBehaviour
 	{
 		string bankPath = "";
         if (Application.platform == RuntimePlatform.Android)
-		{
-			bankPath = "jar:file://" + Application.dataPath + "!/assets";
-		}
+        {
+            bankPath = "file:///android_asset";
+        }
         #if (UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6)
         else if (Application.platform == RuntimePlatform.MetroPlayerARM || 
                  Application.platform == RuntimePlatform.MetroPlayerX86 || 
@@ -76,46 +76,9 @@ public class FMOD_Listener : MonoBehaviour
         else
         {
             bankPath = Application.streamingAssetsPath;
-		}
+        }
 		
 		string assetPath = bankPath + "/" + fileName;
-		
-        #if UNITY_ANDROID && !UNITY_EDITOR
-		// Unpack the compressed JAR file
-		string unpackedJarPath = Application.persistentDataPath + "/" + fileName;
-		
-		FMOD.Studio.UnityUtil.Log("Unpacking bank from JAR file into:" + unpackedJarPath);
-		
-		if (File.Exists(unpackedJarPath))
-		{
-			FMOD.Studio.UnityUtil.Log("File already unpacked!!");
-			File.Delete(unpackedJarPath);
-			
-			if (File.Exists(unpackedJarPath))
-			{
-				FMOD.Studio.UnityUtil.Log("Could NOT delete!!");				
-			}
-		}
-		
-		WWW dataStream = new WWW(assetPath);
-		
-		while(!dataStream.isDone) {} // FIXME: not safe
-		
-		
-		if (!String.IsNullOrEmpty(dataStream.error))
-		{
-	        FMOD.Studio.UnityUtil.LogError("### WWW ERROR IN DATA STREAM:" + dataStream.error);
-		}
-		
-		FMOD.Studio.UnityUtil.Log("Android unpacked jar path: " + unpackedJarPath);
-		
-		File.WriteAllBytes(unpackedJarPath, dataStream.bytes);
-		
-		//FileInfo fi = new FileInfo(unpackedJarPath);
-		//FMOD.Studio.UnityUtil.Log("Unpacked bank size = " + fi.Length);
-		
-		assetPath = unpackedJarPath;
-        #endif
 
 		return assetPath;
 	}
@@ -128,33 +91,44 @@ public class FMOD_Listener : MonoBehaviour
 	{
 		FMOD.Studio.UnityUtil.Log("Initialize Listener");
 
-		if (sListener != null)
-		{
-			FMOD.Studio.UnityUtil.LogError("Too many listeners");
-		}
-		
-		sListener = this;
-		
-		LoadPlugins();
-		
-		const string listFileName = "FMOD_bank_list.txt";
-		string bankListPath = getStreamingAsset(listFileName);
+        if (sListener != null)
+        {
+            FMOD.Studio.UnityUtil.LogError("Too many listeners");
+        }
+
+        sListener = this;
+
+        LoadPlugins();
+
+        const string listFileName = "FMOD_bank_list.txt";
+        #if UNITY_ANDROID && !UNITY_EDITOR
+        string bankListPath = Application.streamingAssetsPath + "/" + listFileName;
+        #else
+        string bankListPath = getStreamingAsset(listFileName);
+        #endif
         FMOD.Studio.UnityUtil.Log("Loading Banks");
         try
-        {            
-            
-#if UNITY_METRO && NETFX_CORE
+        {
+
+            #if UNITY_METRO && NETFX_CORE
             var reader = Windows.Storage.PathIO.ReadLinesAsync(bankListPath, Windows.Storage.Streams.UnicodeEncoding.Utf8);
             await reader.AsTask().ConfigureAwait(true);
             var bankList = reader.GetResults();
-#else
-			var bankList = System.IO.File.ReadAllLines(bankListPath);
-#endif
-			foreach (var bankName in bankList)
-			{
-				FMOD.Studio.UnityUtil.Log("Load " + bankName);
-				loadBank(bankName);
-			}
+            #elif UNITY_ANDROID && !UNITY_EDITOR
+            var reader = new WWW(bankListPath);
+            while (!reader.isDone)
+            {
+            }
+            var bankList = reader.text.Split(new Char[] { '\n' });
+            reader.Dispose();
+            #else
+            var bankList = System.IO.File.ReadAllLines(bankListPath);
+            #endif
+            foreach (var bankName in bankList)
+            {
+                FMOD.Studio.UnityUtil.Log("Load " + bankName);
+                loadBank(bankName);
+            }
         }
         catch (Exception e)
         {
@@ -205,13 +179,19 @@ public class FMOD_Listener : MonoBehaviour
 			var path = pluginPath + "/" + GetPluginFileName(name);
 			
 			FMOD.Studio.UnityUtil.Log("Loading plugin: " + path);
-            
-#if !UNITY_METRO
+			
+			#if UNITY_5 && (UNITY_64 || UNITY_EDITOR_64)
 			if (!System.IO.File.Exists(path))
-            {
-                FMOD.Studio.UnityUtil.LogWarning("plugin not found: " + path);
-            }
-#endif
+			{
+				path = pluginPath + "/" + GetPluginFileName(name + "64");
+			}
+			#endif
+			#if !UNITY_METRO
+			if (!System.IO.File.Exists(path))
+			{
+				FMOD.Studio.UnityUtil.LogWarning("plugin not found: " + path);
+			}
+			#endif
 			
 			uint handle;
 			ERRCHECK(sys.loadPlugin(path, out handle));
@@ -222,23 +202,23 @@ public class FMOD_Listener : MonoBehaviour
 	{
 		get
 		{
-#if UNITY_METRO
-            if (Application.platform == RuntimePlatform.MetroPlayerARM)
-            {
-                return Application.dataPath + "/Plugins/arm";
-            }
-            else if (Application.platform == RuntimePlatform.MetroPlayerX86)
-            {
-                return Application.dataPath + "/Plugins/x86";
-            }
-#else
+			#if UNITY_METRO
+			if (Application.platform == RuntimePlatform.MetroPlayerARM)
+			{
+				return Application.dataPath + "/Plugins/arm";
+			}
+			else if (Application.platform == RuntimePlatform.MetroPlayerX86)
+			{
+				return Application.dataPath + "/Plugins/x86";
+			}
+			#else
 			if (Application.platform == RuntimePlatform.WindowsEditor)
 			{
-#if UNITY_5 && UNITY_64
-                return Application.dataPath + "/Plugins/x86_64";
-#else
+				#if UNITY_5 && (UNITY_64 || UNITY_EDITOR_64)
+				return Application.dataPath + "/Plugins/x86_64";
+				#else
 				return Application.dataPath + "/Plugins/x86";
-#endif
+				#endif
 			}
 			else if (Application.platform == RuntimePlatform.WindowsPlayer ||
 			         Application.platform == RuntimePlatform.OSXEditor ||

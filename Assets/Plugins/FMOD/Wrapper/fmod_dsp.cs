@@ -1,9 +1,9 @@
 /*$ preserve start $*/
 /* ========================================================================================== */
-/* FMOD Studio - DSP header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2015.      */
+/* FMOD Studio - DSP header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2015.  */
 /*                                                                                            */
 /* Use this header if you are interested in delving deeper into the FMOD software mixing /    */
-/* DSP engine.  In this header you can find parameter structures for FMOD system reigstered   */
+/* DSP engine.  In this header you can find parameter structures for FMOD system registered   */
 /* DSP effects and generators.                                                                */
 /*                                                                                            */
 /* ========================================================================================== */
@@ -101,24 +101,28 @@ namespace FMOD
     /*
         DSP callbacks
     */
-    public delegate RESULT DSP_CREATECALLBACK           (ref DSP_STATE dsp_state);
-    public delegate RESULT DSP_RELEASECALLBACK          (ref DSP_STATE dsp_state);
-    public delegate RESULT DSP_RESETCALLBACK            (ref DSP_STATE dsp_state);
-    public delegate RESULT DSP_SETPOSITIONCALLBACK      (ref DSP_STATE dsp_state, uint pos);
-    public delegate RESULT DSP_READCALLBACK             (ref DSP_STATE dsp_state, IntPtr inbuffer, IntPtr outbuffer, uint length, int inchannels, ref int outchannels);
-    public delegate RESULT DSP_SHOULDIPROCESS_CALLBACK  (ref DSP_STATE dsp_state, bool inputsidle, uint length, CHANNELMASK inmask, int inchannels, SPEAKERMODE speakermode);
-    public delegate RESULT DSP_PROCESS_CALLBACK         (ref DSP_STATE dsp_state, uint length, ref DSP_BUFFER_ARRAY inbufferarray, ref DSP_BUFFER_ARRAY outbufferarray, bool inputsidle, DSP_PROCESS_OPERATION op);
-    public delegate RESULT DSP_SETPARAM_FLOAT_CALLBACK  (ref DSP_STATE dsp_state, int index, float value);
-    public delegate RESULT DSP_SETPARAM_INT_CALLBACK    (ref DSP_STATE dsp_state, int index, int value);
-    public delegate RESULT DSP_SETPARAM_BOOL_CALLBACK   (ref DSP_STATE dsp_state, int index, bool value);
-    public delegate RESULT DSP_SETPARAM_DATA_CALLBACK   (ref DSP_STATE dsp_state, int index, IntPtr data, uint length);
-    public delegate RESULT DSP_GETPARAM_FLOAT_CALLBACK  (ref DSP_STATE dsp_state, int index, ref float value, IntPtr valuestr);
-    public delegate RESULT DSP_GETPARAM_INT_CALLBACK    (ref DSP_STATE dsp_state, int index, ref int value, IntPtr valuestr);
-    public delegate RESULT DSP_GETPARAM_BOOL_CALLBACK   (ref DSP_STATE dsp_state, int index, ref bool value, IntPtr valuestr);
-    public delegate RESULT DSP_GETPARAM_DATA_CALLBACK   (ref DSP_STATE dsp_state, int index, ref IntPtr data, ref uint length, IntPtr valuestr);
+    public delegate RESULT DSP_CREATECALLBACK                   (ref DSP_STATE dsp_state);
+    public delegate RESULT DSP_RELEASECALLBACK                  (ref DSP_STATE dsp_state);
+    public delegate RESULT DSP_RESETCALLBACK                    (ref DSP_STATE dsp_state);
+    public delegate RESULT DSP_SETPOSITIONCALLBACK              (ref DSP_STATE dsp_state, uint pos);
+    public delegate RESULT DSP_READCALLBACK                     (ref DSP_STATE dsp_state, IntPtr inbuffer, IntPtr outbuffer, uint length, int inchannels, ref int outchannels);
+    public delegate RESULT DSP_SHOULDIPROCESS_CALLBACK          (ref DSP_STATE dsp_state, bool inputsidle, uint length, CHANNELMASK inmask, int inchannels, SPEAKERMODE speakermode);
+    public delegate RESULT DSP_PROCESS_CALLBACK                 (ref DSP_STATE dsp_state, uint length, ref DSP_BUFFER_ARRAY inbufferarray, ref DSP_BUFFER_ARRAY outbufferarray, bool inputsidle, DSP_PROCESS_OPERATION op);
+    public delegate RESULT DSP_SETPARAM_FLOAT_CALLBACK          (ref DSP_STATE dsp_state, int index, float value);
+    public delegate RESULT DSP_SETPARAM_INT_CALLBACK            (ref DSP_STATE dsp_state, int index, int value);
+    public delegate RESULT DSP_SETPARAM_BOOL_CALLBACK           (ref DSP_STATE dsp_state, int index, bool value);
+    public delegate RESULT DSP_SETPARAM_DATA_CALLBACK           (ref DSP_STATE dsp_state, int index, IntPtr data, uint length);
+    public delegate RESULT DSP_GETPARAM_FLOAT_CALLBACK          (ref DSP_STATE dsp_state, int index, ref float value, IntPtr valuestr);
+    public delegate RESULT DSP_GETPARAM_INT_CALLBACK            (ref DSP_STATE dsp_state, int index, ref int value, IntPtr valuestr);
+    public delegate RESULT DSP_GETPARAM_BOOL_CALLBACK           (ref DSP_STATE dsp_state, int index, ref bool value, IntPtr valuestr);
+    public delegate RESULT DSP_GETPARAM_DATA_CALLBACK           (ref DSP_STATE dsp_state, int index, ref IntPtr data, ref uint length, IntPtr valuestr);
 
-    public delegate RESULT DSP_SYSTEM_GETSAMPLERATE     (ref DSP_STATE dsp_state, ref int rate);
-    public delegate RESULT DSP_SYSTEM_GETBLOCKSIZE      (ref DSP_STATE dsp_state, ref uint blocksize);
+    public delegate RESULT DSP_SYSTEM_REGISTER_CALLBACK         (ref DSP_STATE dsp_state);
+    public delegate RESULT DSP_SYSTEM_DEREGISTER_CALLBACK       (ref DSP_STATE dsp_state);
+    public delegate RESULT DSP_SYSTEM_MIX_CALLBACK              (ref DSP_STATE dsp_state, int stage);
+
+    public delegate RESULT DSP_SYSTEM_GETSAMPLERATE             (ref DSP_STATE dsp_state, ref int rate);
+    public delegate RESULT DSP_SYSTEM_GETBLOCKSIZE              (ref DSP_STATE dsp_state, ref uint blocksize);
 
 
     public delegate RESULT DSP_DFT_FFTREAL                      (ref DSP_STATE dsp_state, int size, IntPtr signal, IntPtr dft, IntPtr window, int signalhop);
@@ -179,6 +183,7 @@ namespace FMOD
         LOUDNESS_METER,     /* This unit analyzes the loudness and true peak of the signal. */
         ENVELOPEFOLLOWER,   /* This unit tracks the envelope of the input/sidechain signal */
         CONVOLUTIONREVERB,  /* This unit implements convolution reverb. */
+        CHANNELMIX,         /* This unit provides per signal channel gain, and output channel mapping to allow 1 multichannel signal made up of many groups of signals to map to a single output signal. */
     }
 
 
@@ -241,9 +246,9 @@ namespace FMOD
     [StructLayout(LayoutKind.Sequential)]
     public struct DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
     {
-        public int numpoints;			            /* [w] The number of <position, value> pairs in the piecewise mapping (at least 2). */
-        public IntPtr pointparamvalues;           /* [w] The values in the parameter's units for each point */
-        public IntPtr pointpositions;	            /* [w] The positions along the control's scale (e.g. dial angle) corresponding to each parameter value.  The range of this scale is arbitrary and all positions will be relative to the minimum and maximum values (e.g. [0,1,3] is equivalent to [1,2,4] and [2,4,8]).  If this array is zero, pointparamvalues will be distributed with equal spacing. */
+        public int numpoints;                       /* [w] The number of <position, value> pairs in the piecewise mapping (at least 2). */
+        public IntPtr pointparamvalues;             /* [w] The values in the parameter's units for each point */
+        public IntPtr pointpositions;               /* [w] The positions along the control's scale (e.g. dial angle) corresponding to each parameter value.  The range of this scale is arbitrary and all positions will be relative to the minimum and maximum values (e.g. [0,1,3] is equivalent to [1,2,4] and [2,4,8]).  If this array is zero, pointparamvalues will be distributed with equal spacing. */
     }
 
     /*
@@ -400,13 +405,13 @@ namespace FMOD
     public struct DSP_PARAMETER_DESC_UNION
     {
         [FieldOffset(0)]
-        DSP_PARAMETER_DESC_FLOAT   floatdesc;  /* [w] Struct containing information about the parameter in floating point format.  Use when type is FMOD_DSP_PARAMETER_TYPE_FLOAT. */
+        public DSP_PARAMETER_DESC_FLOAT   floatdesc;  /* [w] Struct containing information about the parameter in floating point format.  Use when type is FMOD_DSP_PARAMETER_TYPE_FLOAT. */
         [FieldOffset(0)]
-        DSP_PARAMETER_DESC_INT     intdesc;    /* [w] Struct containing information about the parameter in integer format.  Use when type is FMOD_DSP_PARAMETER_TYPE_INT. */
+        public DSP_PARAMETER_DESC_INT     intdesc;    /* [w] Struct containing information about the parameter in integer format.  Use when type is FMOD_DSP_PARAMETER_TYPE_INT. */
         [FieldOffset(0)]
-        DSP_PARAMETER_DESC_BOOL    booldesc;   /* [w] Struct containing information about the parameter in boolean format.  Use when type is FMOD_DSP_PARAMETER_TYPE_BOOL. */
+        public DSP_PARAMETER_DESC_BOOL    booldesc;   /* [w] Struct containing information about the parameter in boolean format.  Use when type is FMOD_DSP_PARAMETER_TYPE_BOOL. */
         [FieldOffset(0)]
-        DSP_PARAMETER_DESC_DATA    datadesc;   /* [w] Struct containing information about the parameter in data format.  Use when type is FMOD_DSP_PARAMETER_TYPE_DATA. */
+        public DSP_PARAMETER_DESC_DATA    datadesc;   /* [w] Struct containing information about the parameter in data format.  Use when type is FMOD_DSP_PARAMETER_TYPE_DATA. */
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -419,7 +424,7 @@ namespace FMOD
         public char[]               label;           /* [w] Short string to be put next to value to denote the unit type (ie "hz"). */
         public string               description;     /* [w] Description of the parameter to be displayed as a help item / tooltip for this parameter. */
 
-        DSP_PARAMETER_DESC_UNION desc;
+        public DSP_PARAMETER_DESC_UNION desc;
     }
 
     /*
@@ -541,61 +546,61 @@ namespace FMOD
     ]
     */
     [StructLayout(LayoutKind.Sequential)]
-	public struct DSP_PARAMETER_SIDECHAIN
-	{
-	    public int sidechainenable;                               /* [r/w] Whether sidechains are enabled. */
-	}
-	
-	
-	/*
-	[STRUCTURE] 
-	[
-	    [DESCRIPTION]
-	    Structure for data parameters of type FMOD_DSP_PARAMETER_DATA_TYPE_FFT.
-	    A parameter of this type is declared for the FMOD_DSP_TYPE_FFT effect.
-	
-	    [REMARKS]
-	    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
-	    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
-	    <br>
-	    Notes on the spectrum data member.  Values inside the float buffer are typically between 0 and 1.0.<br>
-	    Each top level array represents one PCM channel of data.<br>
-	    Address data as spectrum[channel][bin].  A bin is 1 fft window entry.<br>
-	    Only read/display half of the buffer typically for analysis as the 2nd half is usually the same data reversed due to the nature of the way FFT works.<br>
-	
-	    [SEE_ALSO]    
-	    FMOD_DSP_PARAMETER_DATA_TYPE
-	    FMOD_DSP_PARAMETER_DESC
-	    FMOD_DSP_PARAMETER_DATA_TYPE_FFT
-	    FMOD_DSP_TYPE
-	    FMOD_DSP_FFT
-	]
-	*/
+    public struct DSP_PARAMETER_SIDECHAIN
+    {
+        public int sidechainenable;                               /* [r/w] Whether sidechains are enabled. */
+    }
+    
+    
+    /*
+    [STRUCTURE] 
+    [
+        [DESCRIPTION]
+        Structure for data parameters of type FMOD_DSP_PARAMETER_DATA_TYPE_FFT.
+        A parameter of this type is declared for the FMOD_DSP_TYPE_FFT effect.
+    
+        [REMARKS]
+        Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+        Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
+        <br>
+        Notes on the spectrum data member.  Values inside the float buffer are typically between 0 and 1.0.<br>
+        Each top level array represents one PCM channel of data.<br>
+        Address data as spectrum[channel][bin].  A bin is 1 fft window entry.<br>
+        Only read/display half of the buffer typically for analysis as the 2nd half is usually the same data reversed due to the nature of the way FFT works.<br>
+    
+        [SEE_ALSO]    
+        FMOD_DSP_PARAMETER_DATA_TYPE
+        FMOD_DSP_PARAMETER_DESC
+        FMOD_DSP_PARAMETER_DATA_TYPE_FFT
+        FMOD_DSP_TYPE
+        FMOD_DSP_FFT
+    ]
+    */
     [StructLayout(LayoutKind.Sequential)]
-	public struct DSP_PARAMETER_FFT
-	{
-	    public int     length;                                    /* [r] Number of entries in this spectrum window.   Divide this by the output rate to get the hz per entry. */
-	    public int     numchannels;                               /* [r] Number of channels in spectrum. */
-		
-		[MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
+    public struct DSP_PARAMETER_FFT
+    {
+        public int     length;                                    /* [r] Number of entries in this spectrum window.   Divide this by the output rate to get the hz per entry. */
+        public int     numchannels;                               /* [r] Number of channels in spectrum. */
+        
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
         private IntPtr[] spectrum_internal;                           /* [r] Per channel spectrum arrays.  See remarks for more. */
-		
-		public float[][] spectrum
-		{
-			get
-			{
-				var buffer = new float[numchannels][];
-				
-				for (int i = 0; i < numchannels; ++i)
-				{
-					buffer[i] = new float[length];
+        
+        public float[][] spectrum
+        {
+            get
+            {
+                var buffer = new float[numchannels][];
+                
+                for (int i = 0; i < numchannels; ++i)
+                {
+                    buffer[i] = new float[length];
                     Marshal.Copy(spectrum_internal[i], buffer[i], 0, length);
-				}
-				
-				return buffer;
-			}
-		}
-	}
+                }
+                
+                return buffer;
+            }
+        }
+    }
 
     /*
     [STRUCTURE]
@@ -624,7 +629,6 @@ namespace FMOD
         FMOD_DSP_READ_CALLBACK
         FMOD_DSP_PROCESS_CALLBACK
         FMOD_DSP_SETPOSITION_CALLBACK
-        FMOD_DSP_SHOULDIPROCESS_CALLBACK
         FMOD_DSP_PARAMETER_DESC
         FMOD_DSP_SETPARAM_FLOAT_CALLBACK
         FMOD_DSP_SETPARAM_INT_CALLBACK
@@ -635,36 +639,43 @@ namespace FMOD
         FMOD_DSP_GETPARAM_BOOL_CALLBACK
         FMOD_DSP_GETPARAM_DATA_CALLBACK
         FMOD_DSP_SHOULDIPROCESS_CALLBACK
+        FMOD_DSP_SYSTEM_REGISTER_CALLBACK
+        FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK
+        FMOD_DSP_SYSTEM_MIX_CALLBACK
     ]
     */
     [StructLayout(LayoutKind.Sequential)]
     public struct DSP_DESCRIPTION
     {
-        public uint pluginsdkversion;                          /* [w] The plugin SDK version this plugin is built for.  set to this to FMOD_PLUGIN_SDK_VERSION defined above. */
+        public uint                           pluginsdkversion;   /* [w] The plugin SDK version this plugin is built for.  set to this to FMOD_PLUGIN_SDK_VERSION defined above. */
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        public char[]                      name;               /* [w] Name of the unit to be displayed in the network. */
-        public uint                        version;            /* [w] Plugin writer's version number. */
-        public int                         numinputbuffers;    /* [w] Number of input buffers to process.  Use 0 for DSPs that only generate sound and 1 for effects that process incoming sound. */
-        public int                         numoutputbuffers;   /* [w] Number of audio output buffers.  Only one output buffer is currently supported. */
-        public DSP_CREATECALLBACK          create;             /* [w] Create callback.  This is called when DSP unit is created.  Can be null. */
-        public DSP_RELEASECALLBACK         release;            /* [w] Release callback.  This is called just before the unit is freed so the user can do any cleanup needed for the unit.  Can be null. */
-        public DSP_RESETCALLBACK           reset;              /* [w] Reset callback.  This is called by the user to reset any history buffers that may need resetting for a filter, when it is to be used or re-used for the first time to its initial clean state.  Use to avoid clicks or artifacts. */
-        public DSP_READCALLBACK            read;               /* [w] Read callback.  Processing is done here.  Can be null. */
-        public DSP_PROCESS_CALLBACK        process;            /* [w] Process callback.  Can be specified instead of the read callback if any channel format changes occur between input and output.  This also replaces shouldiprocess and should return an error if the effect is to be bypassed.  Can be null. */
-        public DSP_SETPOSITIONCALLBACK     setposition;        /* [w] Setposition callback.  This is called if the unit wants to update its position info but not process data.  Can be null. */
+        public char[]                         name;               /* [w] Name of the unit to be displayed in the network. */
+        public uint                           version;            /* [w] Plugin writer's version number. */
+        public int                            numinputbuffers;    /* [w] Number of input buffers to process.  Use 0 for DSPs that only generate sound and 1 for effects that process incoming sound. */
+        public int                            numoutputbuffers;   /* [w] Number of audio output buffers.  Only one output buffer is currently supported. */
+        public DSP_CREATECALLBACK             create;             /* [w] Create callback.  This is called when DSP unit is created.  Can be null. */
+        public DSP_RELEASECALLBACK            release;            /* [w] Release callback.  This is called just before the unit is freed so the user can do any cleanup needed for the unit.  Can be null. */
+        public DSP_RESETCALLBACK              reset;              /* [w] Reset callback.  This is called by the user to reset any history buffers that may need resetting for a filter, when it is to be used or re-used for the first time to its initial clean state.  Use to avoid clicks or artifacts. */
+        public DSP_READCALLBACK               read;               /* [w] Read callback.  Processing is done here.  Can be null. */
+        public DSP_PROCESS_CALLBACK           process;            /* [w] Process callback.  Can be specified instead of the read callback if any channel format changes occur between input and output.  This also replaces shouldiprocess and should return an error if the effect is to be bypassed.  Can be null. */
+        public DSP_SETPOSITIONCALLBACK        setposition;        /* [w] Setposition callback.  This is called if the unit wants to update its position info but not process data.  Can be null. */
 
-        public int                         numparameters;      /* [w] Number of parameters used in this filter.  The user finds this with DSP::getNumParameters */
-        public IntPtr                      paramdesc;          /* [w] Variable number of parameter structures. */
-        public DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat;  /* [w] This is called when the user calls DSP.setParameterFloat. Can be null. */
-        public DSP_SETPARAM_INT_CALLBACK   setparameterint;    /* [w] This is called when the user calls DSP.setParameterInt.   Can be null. */
-        public DSP_SETPARAM_BOOL_CALLBACK  setparameterbool;   /* [w] This is called when the user calls DSP.setParameterBool.  Can be null. */
-        public DSP_SETPARAM_DATA_CALLBACK  setparameterdata;   /* [w] This is called when the user calls DSP.setParameterData.  Can be null. */
-        public DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat;  /* [w] This is called when the user calls DSP.getParameterFloat. Can be null. */
-        public DSP_GETPARAM_INT_CALLBACK   getparameterint;    /* [w] This is called when the user calls DSP.getParameterInt.   Can be null. */
-        public DSP_GETPARAM_BOOL_CALLBACK  getparameterbool;   /* [w] This is called when the user calls DSP.getParameterBool.  Can be null. */
-        public DSP_GETPARAM_DATA_CALLBACK  getparameterdata;   /* [w] This is called when the user calls DSP.getParameterData.  Can be null. */
-        public DSP_SHOULDIPROCESS_CALLBACK shouldiprocess;     /* [w] This is called before processing.  You can detect if inputs are idle and return FMOD_OK to process, or any other error code to avoid processing the effect.  Use a count down timer to allow effect tails to process before idling! */
-        public IntPtr                      userdata;           /* [w] Optional. Specify 0 to ignore. This is user data to be attached to the DSP unit during creation.  Access via DSP::getUserData. */
+        public int                            numparameters;      /* [w] Number of parameters used in this filter.  The user finds this with DSP::getNumParameters */
+        public IntPtr                         paramdesc;          /* [w] Variable number of parameter structures. */
+        public DSP_SETPARAM_FLOAT_CALLBACK    setparameterfloat;  /* [w] This is called when the user calls DSP.setParameterFloat. Can be null. */
+        public DSP_SETPARAM_INT_CALLBACK      setparameterint;    /* [w] This is called when the user calls DSP.setParameterInt.   Can be null. */
+        public DSP_SETPARAM_BOOL_CALLBACK     setparameterbool;   /* [w] This is called when the user calls DSP.setParameterBool.  Can be null. */
+        public DSP_SETPARAM_DATA_CALLBACK     setparameterdata;   /* [w] This is called when the user calls DSP.setParameterData.  Can be null. */
+        public DSP_GETPARAM_FLOAT_CALLBACK    getparameterfloat;  /* [w] This is called when the user calls DSP.getParameterFloat. Can be null. */
+        public DSP_GETPARAM_INT_CALLBACK      getparameterint;    /* [w] This is called when the user calls DSP.getParameterInt.   Can be null. */
+        public DSP_GETPARAM_BOOL_CALLBACK     getparameterbool;   /* [w] This is called when the user calls DSP.getParameterBool.  Can be null. */
+        public DSP_GETPARAM_DATA_CALLBACK     getparameterdata;   /* [w] This is called when the user calls DSP.getParameterData.  Can be null. */
+        public DSP_SHOULDIPROCESS_CALLBACK    shouldiprocess;     /* [w] This is called before processing.  You can detect if inputs are idle and return FMOD_OK to process, or any other error code to avoid processing the effect.  Use a count down timer to allow effect tails to process before idling! */
+        public IntPtr                         userdata;           /* [w] Optional. Specify 0 to ignore. This is user data to be attached to the DSP unit during creation.  Access via DSP::getUserData. */
+
+        public DSP_SYSTEM_REGISTER_CALLBACK   sys_register;       /* [w] Register callback.  This is called when DSP unit is loaded/registered.  Useful for 'global'/per system object init for plugin.  Can be null. */
+        public DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister;     /* [w] Deregister callback.  This is called when DSP unit is unloaded/deregistered.  Useful as 'global'/per system object shutdown for plugin.  Can be null. */
+        public DSP_SYSTEM_MIX_CALLBACK        sys_mix;            /* [w] System mix stage callback.  This is called when the mixer starts to execute or is just finishing executing.  Useful for 'global'/per system object once a mix update calls for a plugin.  Can be null. */
     }
 
     /*
@@ -722,7 +733,7 @@ namespace FMOD
         [REMARKS]
         Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
         Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
-    
+
         [SEE_ALSO]
         FMOD_DSP_STATE
         FMOD_DSP_STATE_DFTCALLBACKS  
@@ -742,7 +753,7 @@ namespace FMOD
     }
 
     /*
-    [STRUCTURE]
+    [STRUCTURE] 
     [
         [DESCRIPTION]
         DSP plugin structure that is passed into each callback.
@@ -750,9 +761,13 @@ namespace FMOD
         [REMARKS]
         Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
         Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
+        <br>
+        'systemobject' is an integer that relates to the System object that created the DSP or registered the DSP plugin.  If only 1 System object is created then it should be 0.  A second object would be 1 and so on.
+        FMOD_DSP_STATE_SYSTEMCALLBACKS::getsamplerate and FMOD_DSP_STATE_SYSTEMCALLBACKS::getblocksize could return different results so it could be relevant to plugin developers to monitor which object is being used.
 
         [SEE_ALSO]
         FMOD_DSP_DESCRIPTION
+        FMOD_DSP_STATE_SYSTEMCALLBACKS
     ]
     */
     [StructLayout(LayoutKind.Sequential)]
@@ -765,6 +780,7 @@ namespace FMOD
         public IntPtr     sidechaindata;       /* [r] The mixed result of all incoming sidechains is stored at this pointer address. */
         public int        sidechainchannels;   /* [r] The number of channels of pcm data stored within the sidechain buffer. */
         public IntPtr     callbacks;           /* [r] Struct containing callbacks for system level functionality. */
+        public int        systemobject;        /* [r] FMOD::System object index, relating to the System object that created this DSP. */
     }
 
     /*
@@ -782,7 +798,7 @@ namespace FMOD
     ]
     */
     [StructLayout(LayoutKind.Sequential)]
-    public struct DSP_METERING_INFO
+    public class DSP_METERING_INFO
     {
         public int   numsamples;        /* [r] The number of samples considered for this metering info. */
         [MarshalAs(UnmanagedType.ByValArray, SizeConst=32)]
@@ -1214,7 +1230,7 @@ namespace FMOD
     [
         [DESCRIPTION]
         Parameter types for the FMOD_DSP_TYPE_COMPRESSOR unit.
-        This is a simple linked multichannel software limiter that is uniform across the whole spectrum.<br>
+        This is a multichannel software limiter that is uniform across the whole spectrum.
 
         [REMARKS]
         The limiter is not guaranteed to catch every peak above the threshold level,
@@ -1240,7 +1256,8 @@ namespace FMOD
         ATTACK,      /* (Type:float) - Attack time (milliseconds), in the range from 0.1 through 1000. The default value is 20. */
         RELEASE,     /* (Type:float) - Release time (milliseconds), in the range from 10 through 5000. The default value is 100 */
         GAINMAKEUP,  /* (Type:float) - Make-up gain (dB) applied after limiting, in the range from 0 through 30. The default value is 0. */
-        USESIDECHAIN /* (Type:bool)  - Whether to analyse the sidechain signal instead of the input signal. The default value is false */
+        USESIDECHAIN,/* (Type:bool)  - Whether to analyse the sidechain signal instead of the input signal. The default value is false */
+        LINKED       /* (Type:bool)  - FALSE = Independent (compressor per channel), TRUE = Linked.  The default value is TRUE. */
     }
 
 
@@ -1341,7 +1358,7 @@ namespace FMOD
     */
     public enum DSP_RETURN
     {
-        ID,             /* (Type:int) - ID of this Return DSP. Read-only.  Default = -1*/
+        ID,                 /* (Type:int) - ID of this Return DSP. Read-only.  Default = -1*/
         INPUT_SPEAKER_MODE  /* (Type:int) - Input speaker mode of this return.  Default = FMOD_SPEAKERMODE_DEFAULT.*/
     }
 
@@ -1670,6 +1687,95 @@ namespace FMOD
         WET,      /* (Type:float) - [r/w] Volume of echo signal to pass to output in dB.  -80.0 to 10.0.  Default = 0. */
         DRY       /* (Type:float) - [r/w] Original sound volume in dB.  -80.0 to 10.0.  Default = 0. */
     }
+
+    /*
+    [ENUM]
+    [
+        [DESCRIPTION]
+        Parameter types for the FMOD_DSP_TYPE_CHANNELGAIN parameter for FMOD_DSP_TYPE_CHANNELMIX effect.
+
+        [REMARKS]
+
+        [SEE_ALSO]
+        DSP::setParameterInt
+        DSP::getParameterInt
+        FMOD_DSP_TYPE
+    ]
+    */
+    public enum DSP_CHANNELMIX_OUTPUT
+    {
+        DEFAULT,      /*  Output channel count = input channel count.  Mapping: See FMOD_SPEAKER enumeration. */
+        ALLMONO,      /*  Output channel count = 1.  Mapping: Mono, Mono, Mono, Mono, Mono, Mono, ... (each channel all the way up to FMOD_MAX_CHANNEL_WIDTH channels are treated as if they were mono) */
+        ALLSTEREO,    /*  Output channel count = 2.  Mapping: Left, Right, Left, Right, Left, Right, ... (each pair of channels is treated as stereo all the way up to FMOD_MAX_CHANNEL_WIDTH channels) */
+        ALLQUAD,      /*  Output channel count = 4.  Mapping: Repeating pattern of Front Left, Front Right, Surround Left, Surround Right. */
+        ALL5POINT1,   /*  Output channel count = 6.  Mapping: Repeating pattern of Front Left, Front Right, Center, LFE, Surround Left, Surround Right. */
+        ALL7POINT1,   /*  Output channel count = 8.  Mapping: Repeating pattern of Front Left, Front Right, Center, LFE, Surround Left, Surround Right, Back Left, Back Right.  */
+        ALLLFE        /*  Output channel count = 6.  Mapping: Repeating pattern of LFE in a 5.1 output signal.  */
+    }
+
+    /*
+    [ENUM]
+    [
+        [DESCRIPTION]
+        Parameter types for the FMOD_DSP_TYPE_CHANNELMIX filter.
+
+        [REMARKS]
+        For FMOD_DSP_CHANNELMIX_OUTPUTGROUPING, this value will set the output speaker format for the DSP, and also map the incoming channels to the 
+        outgoing channels in a round-robin fashion.  Use this for example play a 32 channel input signal as if it were a repeating group of output signals.
+        Ie.
+        FMOD_DSP_CHANNELGAIN_OUTPUT_ALLMONO    = all incoming channels are mixed to a mono output.
+        FMOD_DSP_CHANNELGAIN_OUTPUT_ALLSTEREO  = all incoming channels are mixed to a stereo output, ie even incoming channels 0,2,4,6,etc are mixed to left, and odd incoming channels 1,3,5,7,etc are mixed to right.
+        FMOD_DSP_CHANNELGAIN_OUTPUT_ALL5POINT1 = all incoming channels are mixed to a 5.1 output.  If there are less than 6 coming in, it will just fill the first n channels in the 6 output channels.   
+                                                 If there are more, then it will repeat the input pattern to the output like it did with the stereo case, ie 12 incoming channels are mapped as 0-5 mixed to the 
+                                                 5.1 output and 6 to 11 mapped to the 5.1 output.
+        FMOD_DSP_CHANNELGAIN_OUTPUT_ALLLFE     = all incoming channels are mixed to a 5.1 output but via the LFE channel only.
+
+
+        [SEE_ALSO]
+        DSP::setParameterInt
+        DSP::getParameterInt
+        DSP::setParameterFloat
+        DSP::getParameterFloat
+        FMOD_DSP_TYPE
+    ]
+    */
+    public enum DSP_CHANNELMIX
+    {
+        OUTPUTGROUPING,     /* (Type:int)   - Refer to FMOD_DSP_CHANNELMIX_OUTPUT enumeration.  Default = FMOD_DSP_CHANNELGAIN_OUTPUT_DEFAULT.  See remarks. */
+        GAIN_CH0,           /* (Type:float) - Channel  #0 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH1,           /* (Type:float) - Channel  #1 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH2,           /* (Type:float) - Channel  #2 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH3,           /* (Type:float) - Channel  #3 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH4,           /* (Type:float) - Channel  #4 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH5,           /* (Type:float) - Channel  #5 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH6,           /* (Type:float) - Channel  #6 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH7,           /* (Type:float) - Channel  #7 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH8,           /* (Type:float) - Channel  #8 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH9,           /* (Type:float) - Channel  #9 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH10,          /* (Type:float) - Channel #10 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH11,          /* (Type:float) - Channel #11 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH12,          /* (Type:float) - Channel #12 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH13,          /* (Type:float) - Channel #13 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH14,          /* (Type:float) - Channel #14 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH15,          /* (Type:float) - Channel #15 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH16,          /* (Type:float) - Channel #16 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH17,          /* (Type:float) - Channel #17 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH18,          /* (Type:float) - Channel #18 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH19,          /* (Type:float) - Channel #19 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH20,          /* (Type:float) - Channel #20 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH21,          /* (Type:float) - Channel #21 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH22,          /* (Type:float) - Channel #22 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH23,          /* (Type:float) - Channel #23 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH24,          /* (Type:float) - Channel #24 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH25,          /* (Type:float) - Channel #25 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH26,          /* (Type:float) - Channel #26 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH27,          /* (Type:float) - Channel #27 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH28,          /* (Type:float) - Channel #28 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH29,          /* (Type:float) - Channel #29 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH30,          /* (Type:float) - Channel #30 gain in dB.  -80.0 to 10.0.  Default = 0. */
+        GAIN_CH31           /* (Type:float) - Channel #31 gain in dB.  -80.0 to 10.0.  Default = 0. */
+    }
+
 
 /*$ preserve start $*/
 }
