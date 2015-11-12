@@ -53,6 +53,7 @@ public class PlayerManager : MonoBehaviour
 
     public int Score { get; private set; }
     public float Money { get; private set; }
+    public float TotalMoney { get; private set; }
     public int KillCount { get; private set; }
     public Quadrant CurrentQuadrant;
     public PlayerMode Mode;
@@ -77,6 +78,7 @@ public class PlayerManager : MonoBehaviour
     public void Start()
     {
         Money = 0.0f;
+        TotalMoney = 0.0f;
         Mode = PlayerMode.Selection;
         SelectedTowerCoord = default(HexCoord);
         PlacementTowerData = null;
@@ -613,7 +615,8 @@ public class PlayerManager : MonoBehaviour
         newTower.GetComponent<PhotonView>().viewID = viewID;
 
         // Send the tower's viewID and spawn coordinate to AnalyticsManager
-        AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
+        if (GameManager.Instance.GameRunning)
+            AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
 
         // The Prefab doesn't contain the correct default data. Set the Tower's default data now
         newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), info.sender);
@@ -682,11 +685,13 @@ public class PlayerManager : MonoBehaviour
     public void EarnIncome(float amount)
     {
         Money += amount;
+        TotalMoney += amount;
     }
 
     public void SetStartingMoney(float amount)
     {
         Money = amount;
+        TotalMoney = amount;
     }
 
     public void ResetData()

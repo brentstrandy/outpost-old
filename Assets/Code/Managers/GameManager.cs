@@ -181,9 +181,13 @@ public class GameManager : MonoBehaviour
     {
         // Check to see if all the enemies have spawned and if all enemies are dead
         if (EnemySpawnManager.FinishedSpawning && GameManager.Instance.EnemyManager.ActiveEnemyCount() == 0)
+        {
             EndGame_Victory();
+        }
         else if (ObjMiningFacility.Health <= 0)
+        {
             EndGame_Loss();
+        }
     }
 
     #region RPC CALLS
@@ -210,7 +214,8 @@ public class GameManager : MonoBehaviour
         newEnemy.GetComponent<PhotonView>().viewID = viewID;
 
         // Send the enemy's viewID and spawn coordinate to AnalyticsManager
-        AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", pos);
+        if (GameRunning)
+            AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", pos);
 
         // The Prefab doesn't contain the correct default data. Set the Enemy's default data now
         newEnemy.GetComponent<Enemy>().SetEnemyData(data);
@@ -226,9 +231,8 @@ public class GameManager : MonoBehaviour
         // Save player progress (won level)
         PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, true);
 
-        SaveAnalytics();
-        SendAnalytics();
-        ResetAnalytics();
+        // Saves, sends, and resets all relevant analytics
+        AnalyticsManager.Instance.PerformAnalyticsProcess();
     }
 
     [PunRPC]
@@ -241,11 +245,9 @@ public class GameManager : MonoBehaviour
         // Save player progress (lost level)
         StartCoroutine(PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, false));
 
-        SaveAnalytics();
-        SendAnalytics();
-        ResetAnalytics();
+        // Saves, sends, and resets all relevant analytics
+        AnalyticsManager.Instance.PerformAnalyticsProcess();
     }
-
     #endregion RPC CALLS
 
     /// <summary>
@@ -276,56 +278,17 @@ public class GameManager : MonoBehaviour
     {
         ObjPhotonView.RPC("EndGame_LossAcrossNetwork", PhotonTargets.All, null);
     }
-
-    /// <summary>
-    /// Save the level's analytics.
-    /// </summary>
-    private void SaveAnalytics()
-    {
-        // All players save their personal analytics.
-        AnalyticsManager.Instance.SavePlayerAnalytics();
-
-        // If master client, save level anyltics.
-        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-            AnalyticsManager.Instance.SaveLevelAnalytics();
-    }
-
-    /// <summary>
-    /// Send the level's analytics.
-    /// </summary>
-    private void SendAnalytics()
-    {
-        // Each player sends their personal analytics.
-        //AnalyticsManager.Instance.SendPlayerAnalytics();
-
-        // If the user is the master client and the number of players haven't changed, send and reset the level anyltics.
-        if (SessionManager.Instance.GetPlayerInfo().isMasterClient && AnalyticsManager.Instance.PlayerCountChanged == false)
-        {
-            AnalyticsManager.Instance.SendHeatmapAnalytics();
-            //AnalyticsManager.Instance.SendLevelAnalytics();
-        }
-    }
-
-    /// <summar>
-    /// 
-    /// </summar>
-    private void ResetAnalytics()
-    {
-        AnalyticsManager.Instance.ResetPlayerAnalytics();
-        AnalyticsManager.Instance.ResetLevelAnalytics();
-    }
-
     #region EVENTS
 
     private void OnSwitchMaster(PhotonPlayer player)
     {
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-            AnalyticsManager.Instance.IsMaster = true;
+            AnalyticsManager.Instance.SetIsMaster(true);
     }
 
     private void OnPlayerLeft(PhotonPlayer player)
     {
-        AnalyticsManager.Instance.PlayerCountChanged = true;
+        //AnalyticsManager.Instance.SetPlayerCountChanged(true);
     }
 
     private void OnCameraQuadrantChanged(string direction)

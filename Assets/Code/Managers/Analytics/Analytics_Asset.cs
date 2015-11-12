@@ -9,9 +9,9 @@ public class Analytics_Asset
 {
     public bool ShowDebugLogs = true;
 
-    public int ViewID { get; private set; }                  // The asset's unique View ID
-    public string AssetSupertype { get; private set; }       // "Enemy" or "Tower" (for now)
-    public string AssetSubtype { get; private set; }        // "Enemy" or "Tower" (for now)
+    public int ViewID { get; private set; }                 // The asset's unique View ID
+    public string AssetSupertype { get; private set; }      // e.g. "Enemy" or "Tower"
+    public string AssetSubtype { get; private set; }        // e.g. "Light Speeder" or "EMP"
 
     public float DamageDealt_Ballistic { get; private set; } // Raw ddb
     public float DamageDealt_Thraceium { get; private set; } // Raw ddt
@@ -19,13 +19,13 @@ public class Analytics_Asset
     public float DamageTaken_Thraceium { get; private set; } // Raw dtt
 
     public float DistanceFromCenter { get; private set; }    // Tower: at the time of creation -- Enemy: at the time of death
-    public float TimeOfSpawnSinceLoad { get; private set; }
-    public float TimeOfDeathSinceLoad { get; private set; }
+    public float TimeOfSpawnSinceLoad { get; private set; }  // 
+    public float TimeOfDeathSinceLoad { get; private set; }  // 
     public float LifeSpan { get; private set; }              // When the asset is declared dead (e.g. health < 0)
 
-    public Vector2 LocationOfSpawn { get; private set; }    // Where the asset spawned onto the map
-    public Vector2 LocationOfDeath { get; private set; }    // Use to coordinate distance from other assets
-    private Vector2 MiningFacilityLocation                  // Returns the GameManager's location of the Mining Facility
+    public Vector3 LocationOfSpawn { get; private set; }    // Where the asset spawned onto the map
+    public Vector3 LocationOfDeath { get; private set; }    // Use to coordinate distance from other assets
+    private Vector3 MiningFacilityLocation                  // Returns the GameManager's location of the Mining Facility
     {
         get
         {
@@ -42,10 +42,10 @@ public class Analytics_Asset
         AssetSupertype = assetSupertype;
         AssetSubtype = assetSubtype;
 
-        DamageDealt_Thraceium = 0;
         DamageDealt_Ballistic = 0;
-        DamageTaken_Thraceium = 0;
+        DamageDealt_Thraceium = 0;
         DamageTaken_Ballistic = 0;
+        DamageTaken_Thraceium = 0;
         
         DistanceFromCenter = 0;
 

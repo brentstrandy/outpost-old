@@ -272,7 +272,7 @@ public class FMOD_StudioSystem : MonoBehaviour
 		// Unity 5 liveupdate workaround
         if (Application.unityVersion.StartsWith("5"))
         {
-            FMOD.Studio.UnityUtil.LogWarning("FMOD_StudioSystem: detected Unity 5, running on port 9265");
+            //FMOD.Studio.UnityUtil.LogWarning("FMOD_StudioSystem: detected Unity 5, running on port 9265");
             advancedSettings.profilePort = 9265;
         }
 #endif

@@ -169,7 +169,8 @@ public class Enemy : MonoBehaviour
 		}
 
         // Store a reference to the AnalyticsManager's information on this Tower
-        AnalyticsAsset = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
+        if(GameManager.Instance.GameRunning)
+            AnalyticsAsset = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
     }
 
     #endregion INITIALIZATION
@@ -394,6 +395,9 @@ public class Enemy : MonoBehaviour
         // Tell object to take damage
         TargetedObjectToAttack.GetComponent<Tower>().TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
 
+        if (GameManager.Instance.GameRunning)
+            AnalyticsAsset.AddDamageDealt(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
+
         // Reset timer for tracking when to fire next
         TimeLastShotFired = Time.time;
 
@@ -418,8 +422,9 @@ public class Enemy : MonoBehaviour
         Health -= tDamageWithDefense;
         Health = Mathf.Max(Health, 0);
 
-        // Send overall Ballistic and Thraceium Damage (w/o defense) to AnalyticsManager
-        AnalyticsManager.Instance.AddDamageTakenEnemy_Level(ballisticDamage, thraceiumDamage);
+        // Send specific asset's Ballisitic and Therceium Damage (w/o defense) to AnalyticsManager
+        if (GameManager.Instance.GameRunning)
+            AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
 
         // Only update the Health Bar if there is one to update
         if (HealthBar)
@@ -436,7 +441,8 @@ public class Enemy : MonoBehaviour
     protected virtual void DieAcrossNetwork()
     {
         // Indicate to the AnalyticsManager where the Enemy has died
-        AnalyticsAsset.DeathOfAsset(transform.position);
+        if (GameManager.Instance.GameRunning)    
+            AnalyticsAsset.DeathOfAsset(transform.position);
 
         // Simply destroy the enemy (show explosion and play sound)
         DestroyEnemy();
@@ -494,9 +500,8 @@ public class Enemy : MonoBehaviour
                 Health = Mathf.Max(Health, 0);
 
                 // Send specific asset's Ballisitic and Therceium Damage (w/o defense) to AnalyticsManager
-                AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
-                // Send overall Ballistic and Thraceium Damage (w/o defense) to AnalyticsManager
-                AnalyticsManager.Instance.AddDamageTakenEnemy_Level(ballisticDamage, thraceiumDamage);
+                if (GameManager.Instance.GameRunning)
+                    AnalyticsAsset.AddDamageTaken(ballisticDamage, thraceiumDamage);
 
                 // Only update the Health Bar if there is one to update
                 if (HealthBar)
@@ -533,7 +538,8 @@ public class Enemy : MonoBehaviour
     public virtual void ForceInstantDeath()
     {
         // Indicate to the AnalyticsManager where the Enemy has died
-        AnalyticsAsset.DeathOfAsset(transform.position);
+        if (GameManager.Instance.GameRunning)    
+            AnalyticsAsset.DeathOfAsset(transform.position);
 
         // If this is the master client then they tell all other clients to destroy this enemy
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)

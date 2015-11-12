@@ -9,22 +9,42 @@ using UnityEngine.Analytics;
 public class Analytics_TrackedAssets
 {
     public bool ShowDebugLogs = true;
+    public bool IsAnalyticsSet {get; private set; }           // 
 
-    public string DisplayName;            // The generic name of the asset (e.g. "Emp Tower" or "Light Speeder")
+    public string DisplayName { get; private set; }           // The generic name of the asset (e.g. "Emp Tower" or "Light Speeder")
 
-    private int NumberBuilt;              // Number of this type of asset have been built in the level
-    private int NumberDead;               // Number of this type fo asset that have been killed
-    private float AverageLifeSpan;        // Average Lifespan for all dead assets of this type
+    public int NumberCreated { get; private set; }            // Number of this type of asset have been built in the level
+    public int NumberDead { get; private set; }               // Number of this type fo asset that have been killed
+    public float TotalLifeSpan {get; private set; }           // Lifespan sum for all assets
+    public float TotalLifeSpanOfDead { get; private set; }    // Average Lifespan for all dead assets of this type
+    public float ActivePercent { get; private set; }          // Percentage of time that asset Sub Type has been active
 
-    public List<Analytics_Asset> Assets { get; private set; } // A List containing all the instances of the asset within the specified level
+    public float TotalBallisticTaken { get; private set; }    // 
+    public float TotalThraceiumTaken { get; private set; }    // 
+    public float TotalBallisticDealt { get; private set; }    // 
+    public float TotalThraceiumDealt { get; private set; }    // 
+    public float TotalDPS { get; private set; }               // 
+    public float AvgDPS { get; private set; }                 // 
+
+    public List<Analytics_Asset> Assets { get; private set; }  // A List containing all the instances of the asset within the specified level
 
     // constructor
     public Analytics_TrackedAssets(string displayName)
     {
+        IsAnalyticsSet = false;
         DisplayName = displayName;
-        NumberBuilt = 0;
+        NumberCreated = 0;
         NumberDead = 0;
-        AverageLifeSpan = 0;
+        TotalLifeSpan = 0;
+        TotalLifeSpanOfDead = 0;
+        
+        TotalBallisticTaken = 0;
+        TotalThraceiumTaken = 0;
+        TotalBallisticDealt = 0;
+        TotalThraceiumDealt = 0;
+        TotalDPS = 0;
+        AvgDPS = 0;
+
         Assets = new List<Analytics_Asset>();
     }
 
@@ -34,7 +54,7 @@ public class Analytics_TrackedAssets
     public void AddAsset(int viewID, string assetSupertype, Vector2 assetOrigin)
     {
         Assets.Add(new Analytics_Asset(viewID, assetSupertype, DisplayName, assetOrigin));
-        NumberBuilt++;
+        NumberCreated++;
     }
 
     /// <summary>
@@ -46,25 +66,86 @@ public class Analytics_TrackedAssets
     }
 
     /// <summary>
-    /// Get average lifespan of all the dead tracked assets of this type
+    /// 
     /// </summary>
-    public float GetAverageLifespan()
+    private void SetAnalytics()
     {
-        // Locate all currently dead assets and sum their lifespan
+        // 
         foreach (Analytics_Asset asset in Assets)
         {
-            if (asset.IsDead == true)
+            NumberCreated++;
+            TotalLifeSpan += asset.LifeSpan;
+            TotalBallisticTaken += asset.DamageTaken_Ballistic;
+            TotalThraceiumTaken += asset.DamageTaken_Thraceium;
+            TotalBallisticDealt += asset.DamageDealt_Ballistic;
+            TotalThraceiumDealt += asset.DamageDealt_Thraceium;
+            TotalDPS += asset.DamageDealt_Ballistic + asset.DamageDealt_Thraceium;
+
+            if (asset.IsDead)
             {
                 NumberDead++;
-                AverageLifeSpan += asset.LifeSpan;
+                TotalLifeSpanOfDead += asset.LifeSpan;
             }
         }
 
-        AverageLifeSpan = AverageLifeSpan / NumberDead;
+        TotalDPS /= TotalLifeSpan;
+        AvgDPS = TotalDPS / NumberCreated;
+        ActivePercent = (ActivePercent / AnalyticsManager.Instance.GameLength) * 100;
 
-        return AverageLifeSpan;
+        IsAnalyticsSet = true;
     }
 
+    /// <summary>
+    /// Get number of created assets of this type
+    /// </summary>
+    public int GetNumberCreated()
+    {
+        if (!IsAnalyticsSet)
+            SetAnalytics();
+
+        return NumberCreated;
+    }
+
+    /// <summary>
+    /// Get number of dead assets of this type
+    /// </summary>
+    public int GetNumberDead()
+    {
+        if (!IsAnalyticsSet)
+            SetAnalytics();
+
+        return NumberDead;
+    }
+
+    /// <summary>
+    /// Get average lifespan of all of the dead tracked assets of this type
+    /// </summary>
+    public float GetTotalLifeSpanOfDead()
+    {
+        if (!IsAnalyticsSet)
+            SetAnalytics();
+
+        return TotalLifeSpanOfDead;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public float GetTotalDPS()
+    {
+        if (!IsAnalyticsSet)
+            SetAnalytics();
+
+        return TotalDPS;
+    }
+
+    public float GetActivePercent()
+    {
+        if (!IsAnalyticsSet)
+            SetAnalytics();
+
+        return ActivePercent;
+    }
     #region MessageHandling
     protected void Log(string message)
     {
