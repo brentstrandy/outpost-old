@@ -15,6 +15,24 @@ public enum PathFindingType
     TrackEnemy_FollowPath
 }
 
+public enum TargetType
+{
+    None,
+    MiningFacility,
+    Tower
+}
+
+// TODO: Consider going to a movement system based on the following modes:
+/*
+public enum MovementMode
+{
+    Follow,
+    Hold,
+    MoveTo,
+    MoveWithinRange
+}
+*/
+
 public enum PlayerMode
 {
     Selection,

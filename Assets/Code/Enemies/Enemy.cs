@@ -23,7 +23,25 @@ public class Enemy : MonoBehaviour
 
     protected GameObject TargetedObjectToFollow;
     protected GameObject TargetedObjectToAttack;
-    protected bool AttackingMiningFacility;
+    protected TargetType TargetType
+    {
+        get
+        {
+            if (TargetedObjectToAttack == null)
+            {
+                return TargetType.None;
+            }
+            if (TargetedObjectToAttack.GetComponent<MiningFacility>() != null)
+            {
+                return TargetType.MiningFacility;
+            }
+            if (TargetedObjectToAttack.GetComponent<Tower>() != null)
+            {
+                return TargetType.Tower;
+            }
+            return TargetType.None;
+        }
+    }
 
     protected Quadrant CurrentQuadrant;
 
@@ -189,8 +207,19 @@ public class Enemy : MonoBehaviour
             StunEndTime = 0;
         }
 
+        // Some evaluations only happen on the master client
+        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
+            // If the current leader has died then stop following it
+            if (TargetedObjectToFollow != null && TargetedObjectToFollow.tag == "Dead Enemy")
+            {
+                // Tell everyone that this enemy should stop following the current leader
+                ObjPhotonView.RPC("ForgetLeader", PhotonTargets.All);
+            }
+        }
+
         // Units can only move while firing on a tower IF that ability has been enabled. Also, units will not move when attacking the mining facility
-        if (((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null) && !AttackingMiningFacility && !IsStunned)
+        if (((TargetedObjectToAttack != null && EnemyAttributes.AttackWhileMoving) || TargetedObjectToAttack == null) && TargetType != TargetType.MiningFacility && !IsStunned)
         {
             // MASTER CLIENT movement
             if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -198,7 +227,7 @@ public class Enemy : MonoBehaviour
                 // Use Shortest Path for movement
                 if (PathFinding == PathFindingType.ShortestPath)
                 {
-                    // SJODING: What does this check accomplish?
+                    // Only continue moving if we haven't yet arrived at our destination
                     if (ObjPathfinder.Next() != ObjHexLocation.location)
                     {
                         // Check to see if the pathfinder is targetting a new hex in its path
@@ -263,28 +292,99 @@ public class Enemy : MonoBehaviour
 
     #region IDENTIFYING TARGETS
 
+    protected virtual void EvaluatePotentialTarget(GameObject other)
+    {
+        // Only run evaluation if this is the Master Client
+        if (!SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
+            return;
+        }
+
+        // If we're already targeting a mining facility then don't bother changing the target
+        if (TargetType == TargetType.MiningFacility)
+        {
+            return;
+        }
+
+        if (EnemyAttributes.AttackMiningFacility)
+        {
+            var facility = other.GetComponent<MiningFacility>();
+            if (facility != null)
+            {
+                // Tell everyone that this enemy is targeting the mining facility
+                ObjPhotonView.RPC("TargetFacility", PhotonTargets.All, facility.NetworkViewID);
+                return;
+            }
+        }
+
+        // If we're already targeting a tower then don't bother changing the target
+        if (TargetType == TargetType.Tower)
+        {
+            return;
+        }
+
+        if (EnemyAttributes.AttackTowers)
+        {
+            var tower = other.GetComponent<Tower>();
+            if (tower != null)
+            {
+                // Tell everyone that this enemy is targeting the tower
+                ObjPhotonView.RPC("TargetTower", PhotonTargets.All, tower.NetworkViewID);
+                return;
+            }
+        }
+    }
+
+    protected virtual void EvaluatePotentialLeader(GameObject other)
+    {
+        // Only run evaluation if this is the Master Client
+        if (!SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        {
+            return;
+        }
+
+        // If we're already following a leader then don't change
+        if (TargetedObjectToFollow != null)
+        {
+            return;
+        }
+
+        // Check whether we're configured to follow a leader
+        if (PathFinding != PathFindingType.TrackEnemy_IgnorePath && PathFinding != PathFindingType.TrackEnemy_FollowPath)
+        {
+            return;
+        }
+
+        // Don't follow dead leaders
+        if (other.tag == "Dead Enemy")
+        {
+            return;
+        }
+
+        // Check whether this is actually a fellow enemy
+        var enemy = other.GetComponent<Enemy>();
+        if (enemy == null)
+        {
+            return;
+        }
+
+        // Only take action if the potential leader is of a different kind than us
+        if (enemy.EnemyAttributes.DisplayName == this.EnemyAttributes.DisplayName)
+        {
+            return;
+        }
+
+        // Tell everyone that this enemy is now following a leader
+        ObjPhotonView.RPC("FollowEnemy", PhotonTargets.All, enemy.NetworkViewID);
+    }
+
     public virtual void OnTriggerStay(Collider other)
     {
-        // FIXME (JDS 2015-07-25): This runs every frame for every enemy in range of a tower or the mining facility.
-        //                         It has the potential to flood the network and suck bandwidth needlessly.
-        //                         Why aren't the Enter/Exit functions sufficient?
-
-        // Only Target enemies if this is the Master Client
+        // Only run evaluation if this is the Master Client
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
-            // Always attack the mining facility and forget about any targeted towers when the Mining Facility is within range.
-            if ((other.tag == "Mining Facility" && EnemyAttributes.AttackMiningFacility) || (TargetedObjectToAttack == null && other.tag == "Tower" && EnemyAttributes.AttackTowers))
-            {
-                // Tell everyone to target a new enemy
-                ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.All, other.GetComponent<Tower>().NetworkViewID);
-            }
-
-            // Check to see if the currently targeted enemy to follow has died (and stop following them)
-            if (other.tag == "Dead Enemy")
-            {
-                // Tell everyone to stop targetting the current enemy
-                ObjPhotonView.RPC("TargetNewObjectToFollow", PhotonTargets.All, -1);
-            }
+            EvaluatePotentialTarget(other.gameObject);
+            EvaluatePotentialLeader(other.gameObject);
         }
     }
 
@@ -294,22 +394,14 @@ public class Enemy : MonoBehaviour
     /// <param name="other">Collider definitions</param>
     protected virtual void OnTriggerExit(Collider other)
     {
-        // Only Target objects if this is the Master Client
+        // Only the Master Client updates target data
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
-            // Only reset the targeted object if one is already targeted
-            if (TargetedObjectToAttack != null)
+            // Remove the target when it leaves the enemy's range
+            if (other.gameObject.Equals(TargetedObjectToAttack))
             {
-                // Only reset the target if the object exiting is a tower (mining facilities will never exit the enemy's trigger)
-                if (other.tag == "Tower")
-                {
-                    // Remove the targeted Tower when the enemy tower leaves the enemies range
-                    if (other.gameObject.GetComponent<Tower>().Equals(TargetedObjectToAttack.GetComponent<Tower>()))
-                    {
-                        // Tell everyone that the enemy isnot targeting anyone
-                        ObjPhotonView.RPC("TargetNewObjectToAttack", PhotonTargets.All, -1);
-                    }
-                }
+                // Tell everyone that the enemy should forget its target
+                ObjPhotonView.RPC("ForgetTarget", PhotonTargets.All);
             }
         }
     }
@@ -319,24 +411,11 @@ public class Enemy : MonoBehaviour
         // Only Target objects to follow if this is the Master Client
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
-            // Only look for other enemies if this enemy tracks enemies
-            if (PathFinding == PathFindingType.TrackEnemy_IgnorePath || PathFinding == PathFindingType.TrackEnemy_FollowPath)
-            {
-                // Only start following the enemy if the Drone isn't already following an enemy
-                if (TargetedObjectToFollow == null)
-                {
-                    // Only take action if the droid finds an enemy to follow
-                    if (other.tag == "Enemy")
-                    {
-                        // Only take action if the droid does not find another droid
-                        if (other.GetComponent<Enemy>().EnemyAttributes.DisplayName != this.EnemyAttributes.DisplayName)
-                        {
-                            // Tell everyone to target a new enemy to follow
-                            ObjPhotonView.RPC("TargetNewObjectToFollow", PhotonTargets.All, other.GetComponent<Enemy>().NetworkViewID);
-                        }
-                    }
-                }
-            }
+            // Note from Josh 2015-11-13: I think we're using the same collider for both kamikaze range and firing range tests.
+
+            // Note from Josh 2015-11-13: I really think this next conditional is bad. Why should the facility be damaged instantly
+            // as soon as an enemy gets within firing range? Shouldn't we just let the Fire() function handle this? If this is meant
+            // for the kamikaze function, then it probably needs some additional conditionals for it to work correctly.
 
             // Check to see if the Enemy encounters the Mining Facility and - if so - explode on impact
             if (other.tag == "Mining Facility")
@@ -351,55 +430,87 @@ public class Enemy : MonoBehaviour
     #region RPC CALLS
 
     /// <summary>
-    /// Tells the client to target a new GameObject
+    /// Tells the client to target a tower
     /// </summary>
-    /// <param name="viewID">Network ViewID of the enemy to target. Pass -1 to set the target to null.</param>
+    /// <param name="viewID">NetworkViewID of the enemy to target.</param>
     [PunRPC]
-    protected virtual void TargetNewObjectToAttack(int viewID)
+    protected virtual void TargetTower(int viewID)
     {
-        // A viewID of -1 means there is no targeted enemy. Otherwise, find the enemy by the networkViewID
-        if (viewID == -1)
-            TargetedObjectToAttack = null;
+        var tower = GameManager.Instance.TowerManager.FindTowerByID(viewID);
+        if (tower == null)
+        {
+            LogError(string.Format("Enemy[{0}] told to target tower[{1}] which doesn't exist", NetworkViewID, viewID));
+            return;
+        }
         else
         {
-            var tower = GameManager.Instance.TowerManager.FindTowerByID(viewID);
-            if (tower == null)
-            {
-                LogError(string.Format("Enemy[{0}] told to target tower[{1}] which doesn't exist", NetworkViewID, viewID));
-                return;
-            }
-
-            TargetedObjectToAttack = tower.gameObject;
-
-            // Remember when attacking the mining facility for use in Update for movement
-            if (TargetedObjectToAttack.tag == "Mining Facility")
-                AttackingMiningFacility = true;
-            else
-                AttackingMiningFacility = false;
+            Log(string.Format("Enemy[{0}] targets tower[{1}]", NetworkViewID, viewID));
         }
+
+        TargetedObjectToAttack = tower.gameObject;
     }
 
     /// <summary>
-    /// Tells the client to target a new Enemy to follow
+    /// Tells the enemy to target a facility.
     /// </summary>
-    /// <param name="viewID">Network ViewID of the enemy to target. Pass -1 to set the target to null.</param>
+    /// <param name="viewID">NetworkViewID of the mining facility to target.</param>
     [PunRPC]
-    protected virtual void TargetNewObjectToFollow(int viewID)
+    protected virtual void TargetFacility(int viewID)
     {
-        // A viewID of -1 means there is no targeted enemy. Otherwise, find the enemy by the networkViewID
-        if (viewID == -1)
-            TargetedObjectToFollow = null;
+        var facility = GameManager.Instance.ObjMiningFacility;
+        if (facility == null || facility.NetworkViewID != viewID)
+        {
+            LogError(string.Format("Enemy[{0}] told to target facility[{1}] which doesn't exist", NetworkViewID, viewID));
+            return;
+        }
         else
         {
-            var enemy = GameManager.Instance.EnemyManager.FindEnemyByID(viewID);
-            if (enemy == null)
-            {
-                LogError(string.Format("Enemy[{0}] told to follow enemy[{1}] which doesn't exist", NetworkViewID, viewID));
-                return;
-            }
-
-            TargetedObjectToFollow = enemy.gameObject;
+            Log(string.Format("Enemy[{0}] targets facility[{1}]", NetworkViewID, viewID));
         }
+
+        TargetedObjectToAttack = facility.gameObject;
+    }
+
+    /// <summary>
+    /// Tells the enemy to forget its target.
+    /// </summary>
+    [PunRPC]
+    protected virtual void ForgetTarget()
+    {
+        Log(string.Format("Enemy[{0}] forgets its target", NetworkViewID));
+        TargetedObjectToAttack = null;
+    }
+
+    /// <summary>
+    /// Tells the enemy to follow another enemy.
+    /// </summary>
+    /// <param name="viewID">NetworkViewID of the enemy to follow.</param>
+    [PunRPC]
+    protected virtual void FollowEnemy(int viewID)
+    {
+        var enemy = GameManager.Instance.EnemyManager.FindEnemyByID(viewID);
+        if (enemy == null)
+        {
+            LogError(string.Format("Enemy[{0}] told to follow enemy[{1}] which doesn't exist", NetworkViewID, viewID));
+            return;
+        }
+        else
+        {
+            Log(string.Format("Enemy[{0}] follows enemy[{1}]", NetworkViewID, viewID));
+        }
+
+        TargetedObjectToFollow = enemy.gameObject;
+    }
+
+    /// <summary>
+    /// Tells the enemy to follow another enemy.
+    /// </summary>
+    /// <param name="viewID">NetworkViewID of the enemy to follow. Pass -1 to set the target to null.</param>
+    [PunRPC]
+    protected virtual void ForgetLeader()
+    {
+        Log(string.Format("Enemy[{0}] forgets its leader", NetworkViewID));
+        TargetedObjectToFollow = null;
     }
 
     /// <summary>
@@ -409,7 +520,25 @@ public class Enemy : MonoBehaviour
     protected virtual void FireAcrossNetwork()
     {
         // Tell object to take damage
-        TargetedObjectToAttack.GetComponent<Tower>().TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
+        switch (TargetType)
+        {
+            case TargetType.MiningFacility:
+                Log(string.Format("Enemy[{0}] fires at mining facility", NetworkViewID));
+                var facility = TargetedObjectToAttack.GetComponent<MiningFacility>();
+                if (facility != null)
+                {
+                    facility.TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
+                }
+                break;
+            case TargetType.Tower:
+                Log(string.Format("Enemy[{0}] fires at tower", NetworkViewID));
+                var tower = TargetedObjectToAttack.GetComponent<Tower>();
+                if (tower != null)
+                {
+                    tower.TakeDamage(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
+                }
+                break;
+        }
 
         if (GameManager.Instance.GameRunning)
             AnalyticsAsset.AddDamageDealt(EnemyAttributes.BallisticDamage, EnemyAttributes.ThraceiumDamage);
@@ -621,14 +750,23 @@ public class Enemy : MonoBehaviour
                     // Only fire if there is an enemy being targeted
                     if (TargetedObjectToAttack != null)
                     {
+                        // FIXME: Only fire if in range?
+
                         // Only fire if enemy is ready to fire
                         if (Time.time - TimeLastShotFired >= (1 / EnemyAttributes.RateOfFire))
                         {
-                            // Only fire if the enemy is facing the tower (or if the enemy does not need to face the tower)
-                            if (Vector3.Angle(this.transform.forward, TargetedObjectToAttack.transform.position - this.transform.position) <= 8 || TurretPivot == null)
+                            // Only fire if the enemy (or its turret) is facing the target
+
+                            // TODO: Use a variable angle limit specified in enemy data?
+                            // FIXME: Figure out why the following angle calculation doesn't work
+
+                            //Transform emission = (EmissionPoint != null) ? EmissionPoint.transform : this.transform;
+                            //float angle = Vector3.Angle(emission.forward, TargetedObjectToAttack.transform.position - emission.position);
+                            float angle = 0.0f;
+                            if (angle <= 8.0f)
                             {
-                                // Tell all clients to fire upon the enemy
-                                ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All, null);
+                                // Tell all clients that this enemy is firing at its target
+                                ObjPhotonView.RPC("FireAcrossNetwork", PhotonTargets.All);
                             }
                         }
                     }
