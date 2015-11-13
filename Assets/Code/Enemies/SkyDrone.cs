@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Drone : Enemy
+public class SkyDrone : Enemy
 {
     private bool Alive;
 

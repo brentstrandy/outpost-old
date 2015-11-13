@@ -162,4 +162,31 @@
     <TurningSpeed>6</TurningSpeed>
     <ScoreValue>1</ScoreValue>
   </EnemyData>
+  <EnemyData>
+    <DisplayName>Kamikaze</DisplayName>
+    <PrefabName>Kamikaze</PrefabName>
+    <EnemyID>0</EnemyID>
+    <PathFinding>ShortestPath</PathFinding>
+    <HighlightColor>
+      <r>0</r>
+      <g>1</g>
+      <b>0.08965516</b>
+      <a>0</a>
+    </HighlightColor>
+    <AttackTowers>false</AttackTowers>
+    <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
+    <MaxHealth>20</MaxHealth>
+    <RateOfFire>0</RateOfFire>
+    <Acceleration>0</Acceleration>
+    <Speed>2</Speed>
+    <Range>0</Range>
+    <HoverDistance>0.3</HoverDistance>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>20</ThraceiumDamage>
+    <BallisticDefense>0.3</BallisticDefense>
+    <ThraceiumDefense>0.3</ThraceiumDefense>
+    <TurningSpeed>3</TurningSpeed>
+    <ScoreValue>7</ScoreValue>
+  </EnemyData>
 </ArrayOfEnemyData>
