@@ -215,7 +215,12 @@ public class GameManager : MonoBehaviour
 
         // Send the enemy's viewID and spawn coordinate to AnalyticsManager
         if (GameRunning)
+        {
+            // Checks if the enemy super type is available before adding the enemy to the list
+            if (!AnalyticsManager.Instance.DoesEnemyTypeExist(displayName))
+                AnalyticsManager.Instance.Available_Enemies.Add(new Analytics_TrackedAssets(displayName));
             AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", pos);
+        }
 
         // The Prefab doesn't contain the correct default data. Set the Enemy's default data now
         newEnemy.GetComponent<Enemy>().SetEnemyData(data);

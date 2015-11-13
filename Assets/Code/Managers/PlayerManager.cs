@@ -616,7 +616,13 @@ public class PlayerManager : MonoBehaviour
 
         // Send the tower's viewID and spawn coordinate to AnalyticsManager
         if (GameManager.Instance.GameRunning)
+        {
+            // Checks if the enemy super type is available before adding the enemy to the list
+            if (!AnalyticsManager.Instance.DoesTowerTypeExist(displayName))
+                AnalyticsManager.Instance.Available_Towers.Add(new Analytics_TrackedAssets(displayName));
             AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
+        }
+            
 
         // The Prefab doesn't contain the correct default data. Set the Tower's default data now
         newTower.GetComponent<Tower>().SetTowerData(GameDataManager.Instance.FindTowerDataByDisplayName(displayName), info.sender);

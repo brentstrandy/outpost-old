@@ -212,6 +212,22 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Indicates if the tower super type exists
+    /// </summary>
+    public bool DoesTowerTypeExist(string displayName)
+    {
+        return Available_Towers.Exists(x => x.DisplayName == displayName);
+    }
+
+    /// <summary>
+    /// Indicates if the enemy super type exists
+    /// </summary>
+    public bool DoesEnemyTypeExist(string displayName)
+    {
+        return Available_Enemies.Exists(x => x.DisplayName == displayName);
+    }
+
+    /// <summary>
     /// Save Player analytics
     /// </summary>
     public void SavePlayerAnalytics()
