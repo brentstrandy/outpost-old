@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
-    <DisplayName>BetterWithFriends_2</DisplayName>
-    <SceneName>Level1</SceneName>
-    <LevelID>4</LevelID>
-    <EnemySpawnFilename>BetterWithFriends_2</EnemySpawnFilename>
+    <DisplayName>Test Level</DisplayName>
+    <SceneName>Level2</SceneName>
+    <LevelID>0</LevelID>
+    <EnemySpawnFilename>TestLevel</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>Figure it out!</Description>
+    <Description>This is for internal testing only</Description>
     <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>5</MaximumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
     <AvailableQuadrants>North, West, South, East</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
-    <AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Intense Heavy Speeder</AvailableEnemies>
-    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Thraceium Healing Tower</AvailableTowers>
+    <AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Intense Heavy Speeder, Kamikaze, Sky Drone</AvailableEnemies>
+    <MaxTowersPerPlayer>10</MaxTowersPerPlayer>
+    <StartingMoney>1000</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
@@ -37,8 +37,26 @@
     <MiningFacilityHealth>50</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <DisplayName>Level 3</DisplayName>
+    <DisplayName>Scout Cycle</DisplayName>
     <SceneName>Level1</SceneName>
+    <LevelID>2</LevelID>
+    <EnemySpawnFilename>ScoutCycle</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Scouts who cycle together stay together</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>6</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower, Thraceium Rain Tower</AvailableTowers>
+    <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder</AvailableEnemies>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>25</StartingMoney>
+    <IncomePerSecond>0.9</IncomePerSecond>
+    <MiningFacilityHealth>600</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <DisplayName>Level 3</DisplayName>
+    <SceneName>Level3</SceneName>
     <LevelID>3</LevelID>
     <EnemySpawnFilename>Level5</EnemySpawnFilename>
     <NotificationFilename />
@@ -55,21 +73,21 @@
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <DisplayName>Scout Cycle</DisplayName>
+    <DisplayName>BetterWithFriends_2</DisplayName>
     <SceneName>Level1</SceneName>
-    <LevelID>2</LevelID>
-    <EnemySpawnFilename>ScoutCycle</EnemySpawnFilename>
+    <LevelID>4</LevelID>
+    <EnemySpawnFilename>BetterWithFriends_2</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>Scouts who cycle together stay together</Description>
+    <Description>Figure it out!</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>5</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <AvailableQuadrants>North, West, South, East</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower</AvailableTowers>
-    <AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder</AvailableEnemies>
-    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>25</StartingMoney>
-    <IncomePerSecond>1.1</IncomePerSecond>
-    <MiningFacilityHealth>600</MiningFacilityHealth>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Intense Heavy Speeder</AvailableEnemies>
+    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
 </ArrayOfLevelData>
