@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 04108737cd539cb478e88f4cc2bc49a9
-timeCreated: 1440125508
+guid: d4e6fd77ef3cb431088a372cef41201a
+timeCreated: 1447395539
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -162,7 +162,7 @@ ModelImporter:
     4300000: polySurface138
     9500000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -184,7 +184,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 5
+    globalScale: 6
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
@@ -204,7 +204,7 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human: []
@@ -217,8 +217,10 @@ ModelImporter:
     legStretch: .0500000007
     feetSpacing: 0
     rootMotionBoneName: 
+    hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
