@@ -362,7 +362,14 @@ public class Enemy : MonoBehaviour
             TargetedObjectToAttack = null;
         else
         {
-            TargetedObjectToAttack = GameManager.Instance.TowerManager.FindTowerByID(viewID).gameObject;
+            var tower = GameManager.Instance.TowerManager.FindTowerByID(viewID);
+            if (tower == null)
+            {
+                LogError(string.Format("Enemy[{0}] told to target tower[{1}] which doesn't exist", NetworkViewID, viewID));
+                return;
+            }
+
+            TargetedObjectToAttack = tower.gameObject;
 
             // Remember when attacking the mining facility for use in Update for movement
             if (TargetedObjectToAttack.tag == "Mining Facility")
@@ -383,7 +390,16 @@ public class Enemy : MonoBehaviour
         if (viewID == -1)
             TargetedObjectToFollow = null;
         else
-            TargetedObjectToFollow = GameManager.Instance.EnemyManager.FindEnemyByID(viewID).gameObject;
+        {
+            var enemy = GameManager.Instance.EnemyManager.FindEnemyByID(viewID);
+            if (enemy == null)
+            {
+                LogError(string.Format("Enemy[{0}] told to follow enemy[{1}] which doesn't exist", NetworkViewID, viewID));
+                return;
+            }
+
+            TargetedObjectToFollow = enemy.gameObject;
+        }
     }
 
     /// <summary>
@@ -605,10 +621,10 @@ public class Enemy : MonoBehaviour
                     // Only fire if there is an enemy being targeted
                     if (TargetedObjectToAttack != null)
                     {
-                        // Only fire if tower is ready to fire
+                        // Only fire if enemy is ready to fire
                         if (Time.time - TimeLastShotFired >= (1 / EnemyAttributes.RateOfFire))
                         {
-                            // Only fire if the tower is facing the enemy (or if the tower does not need to face the enemy)
+                            // Only fire if the enemy is facing the tower (or if the enemy does not need to face the tower)
                             if (Vector3.Angle(this.transform.forward, TargetedObjectToAttack.transform.position - this.transform.position) <= 8 || TurretPivot == null)
                             {
                                 // Tell all clients to fire upon the enemy
