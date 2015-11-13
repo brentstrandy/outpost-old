@@ -76,7 +76,7 @@ public class TowerManager
             }
             else
             {
-                LogError("RemoveCoverage called for coordinate with existing coverage: " + coord.ToString());
+                LogError("RemoveCoverage called for coordinate without existing coverage: " + coord.ToString());
             }
         }
     }

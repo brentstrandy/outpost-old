@@ -405,6 +405,8 @@ public class Tower : MonoBehaviour
     /// </summary>
     protected virtual void DestroyTower()
     {
+        Log(string.Format("Tower[{0}] is destroyed", NetworkViewID));
+
         // Instantiate a prefab to show the tower exploding
         if (ExplodingEffect)
             Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
