@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// A single asset that gets collected for analytics inside a List<Analytics_TrackedAssets>
+/// Holds a single Asset as part of a Subtype
 /// Owner: John Fitzgerald
 /// </summary>
 public class Analytics_Asset
@@ -19,8 +19,8 @@ public class Analytics_Asset
     public float DamageTaken_Thraceium { get; private set; } // Raw dtt
 
     public float DistanceFromCenter { get; private set; }    // Tower: at the time of creation -- Enemy: at the time of death
-    public float TimeOfSpawnSinceLoad { get; private set; }  // 
-    public float TimeOfDeathSinceLoad { get; private set; }  // 
+    public float TimeOfSpawnSinceLoad { get; private set; }  // How long since the level loaded and the asset spawned
+    public float TimeOfDeathSinceLoad { get; private set; }  // How long since the level loaded and the asset died
     public float LifeSpan { get; private set; }              // When the asset is declared dead (e.g. health < 0)
 
     public Vector3 LocationOfSpawn { get; private set; }    // Where the asset spawned onto the map
@@ -32,10 +32,9 @@ public class Analytics_Asset
             return GameManager.Instance.ObjMiningFacility.transform.position;
         }
     }
-    public bool IsMiningFacility { get; private set; }
+    public bool IsMiningFacility { get; private set; }      // Is the asset the "Mining Facility"
     public bool IsDead { get; private set; }                // Is the asset dead
 
-    // constructor
     public Analytics_Asset(int viewID, string assetSupertype, string assetSubtype, Vector3 locationOfSpawn)
     {
         ViewID = viewID;
@@ -55,7 +54,7 @@ public class Analytics_Asset
 
         LocationOfSpawn = locationOfSpawn;
 
-        IsMiningFacility = viewID == 10 ? true : false; // The Mining Facility viewID is always 10
+        IsMiningFacility = viewID == 10 ? true : false;     // The Mining Facility viewID is always 10
         IsDead = false;
     }
 

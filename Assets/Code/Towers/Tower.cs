@@ -131,7 +131,7 @@ public class Tower : MonoBehaviour
 
         // Store a reference to the AnalyticsManager's information on this Tower
         if (TowerAttributes.DisplayName != "Mining Facility" && GameManager.Instance.GameRunning)
-            AnalyticsAsset = AnalyticsManager.Instance.FindTowerByDisplayName(TowerAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
+            AnalyticsAsset = AnalyticsManager.Instance.Assets.FindAsset("Tower", TowerAttributes.DisplayName, NetworkViewID);
     }
 
     #endregion INITIALIZE

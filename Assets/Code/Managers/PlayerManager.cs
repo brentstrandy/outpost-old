@@ -614,13 +614,10 @@ public class PlayerManager : MonoBehaviour
         // Set Tower's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
         newTower.GetComponent<PhotonView>().viewID = viewID;
 
-        // Send the tower's viewID and spawn coordinate to AnalyticsManager
+        // Store the tower in AnalyticsManager
         if (GameManager.Instance.GameRunning)
         {
-            // Checks if the enemy super type is available before adding the enemy to the list
-            if (!AnalyticsManager.Instance.DoesTowerTypeExist(displayName))
-                AnalyticsManager.Instance.Available_Towers.Add(new Analytics_TrackedAssets(displayName));
-            AnalyticsManager.Instance.FindTowerByDisplayName(displayName).AddAsset(viewID, "Tower", coord.Position());
+            AnalyticsManager.Instance.Assets.AddAsset("Tower", displayName, viewID, position);
         }
             
 

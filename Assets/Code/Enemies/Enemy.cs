@@ -186,9 +186,9 @@ public class Enemy : MonoBehaviour
 			}
 		}
 
-        // Store a reference to the AnalyticsManager's information on this Tower
+        // Store a reference to the AnalyticsManager's information on this Enemy
         if(GameManager.Instance.GameRunning)
-            AnalyticsAsset = AnalyticsManager.Instance.FindEnemyByDisplayName(EnemyAttributes.DisplayName).FindAssetByViewID(NetworkViewID);
+            AnalyticsAsset = AnalyticsManager.Instance.Assets.FindAsset("Enemy", EnemyAttributes.DisplayName, NetworkViewID);
     }
 
     #endregion INITIALIZATION

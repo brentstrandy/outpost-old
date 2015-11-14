@@ -38,7 +38,7 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
 
     //[PLAYER]
-    public PhotonView ObjPhotonView { get; private set; }   //
+    public PhotonView ObjPhotonView { get; private set; }   // User's unique PhotonView
     public string PlayerName { get; private set; }          // Name derived from (Player.Instance.Name) (ALL)
     public float IndividualPlayerMoney { get; private set; }// Player's total money accumulated (ALL)
     public float AllPlayersMoney { get; private set; }      // All player's total money accumulated (MASTER)
@@ -46,8 +46,8 @@ public class AnalyticsManager : MonoBehaviour
     public bool IsMasterClient { get; private set; }        // Indicate if the player is the master client (they will send the global data) (MASTER)
 
     //[LEVEL'S AVAILABLE TOWERS AND ENEMIES]
-    public List<Analytics_TrackedAssets> Available_Towers { get; private set; }   // Track the towers available in level
-    public List<Analytics_TrackedAssets> Available_Enemies { get; private set; } // Track the enemies available in level
+    public Analytics_AssetSuperclass Assets { get; private set; }    // Catalog all asset super types to be tracked in the level
+    public string[] AssetSupertypeNames { get; private set; }        // "Tower", "Enemy", etc.
     
     //[LEVEL]
     public LevelData CurrentLevelData { get; private set; }  // Temp storage for level data
@@ -67,10 +67,10 @@ public class AnalyticsManager : MonoBehaviour
 
     //[TOWER AND ENEMY STATS]
     //[TOWERS]
-    public int TotalBuilt_Tower { get; private set; }           // 
-    public int TotalDead_Tower { get; private set; }            // 
-    public float AvgLifeSpanDead_Tower { get; private set; }    // 
-    public float AvgDPS_Tower { get; private set; }             // 
+    public int TotalBuilt_Tower { get; private set; }           // Sum of all players' towers built
+    public int TotalDead_Tower { get; private set; }            // Sum of all players' towers destroyed
+    public float AvgLifeSpanDead_Tower { get; private set; }    // Average lifespan of all players' towers destroyed
+    public float AvgDPS_Tower { get; private set; }             // Average DPS of all players' towers
 
 
     //Avg DPS for each tower type (ALL & MASTER)
@@ -80,10 +80,10 @@ public class AnalyticsManager : MonoBehaviour
     //Avg distance from other tower (ALL & MASTER)
 
     //[ENEMIES]
-    public int TotalSpawn_Enemy { get; private set; }           // 
-    public int TotalDead_Enemy { get; private set; }            // 
-    public float AvgLifeSpanDead_Enemy { get; private set; }    // 
-    public float AvgDPS_Enemy { get; private set; }             // 
+    public int TotalSpawn_Enemy { get; private set; }           // Number of enemies spawned
+    public int TotalDead_Enemy { get; private set; }            // Sum of all enemies destroyed
+    public float AvgLifeSpanDead_Enemy { get; private set; }    // Average lifespan of all enemies destroyed
+    public float AvgDPS_Enemy { get; private set; }             // Average DPS of all enemies
     //Avg DPS for each enemy type (ALL & MASTER)
     //Find the amount of damage for each enemy to tower (ALL & MASTER)
 
@@ -122,8 +122,9 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// Called at the beginning of each level within GameManager
     /// </summary>
-    public void InitializePlayerAnalytics()
+    public void InitializePlayerAnalytics(string [] assetSuperTypes)
     {
+        AssetSupertypeNames = assetSuperTypes;
         CurrentLevelData = GameManager.Instance.CurrentLevelData;
         if (LastLevelReached == null)
             LastLevelReached = 0;
@@ -134,26 +135,8 @@ public class AnalyticsManager : MonoBehaviour
         AvgPlayerMoney = 0;
         PlayerCountChanged = false;
         PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
-        
-        Available_Towers = new List<Analytics_TrackedAssets>();
-        Available_Enemies = new List<Analytics_TrackedAssets>();
 
-        // Create list of available towers in the level
-        foreach (TowerData tower in GameDataManager.Instance.TowerDataManager.DataList)
-        {
-            // Have to manually add Mining Facility as it uses the Tower class, 
-            // is the only one of its kind, and is not included in the Level data
-            Available_Towers.Add(new Analytics_TrackedAssets("Mining Facility"));
-
-            if (CurrentLevelData.AvailableTowers.Contains(tower.DisplayName))
-                Available_Towers.Add(new Analytics_TrackedAssets(tower.DisplayName));
-        }
-        // Create list of available enemies in the level
-        foreach (EnemyData enemy in GameDataManager.Instance.EnemyDataManager.DataList)
-        {
-            if (CurrentLevelData.AvailableEnemies.Contains(enemy.DisplayName))
-                Available_Enemies.Add(new Analytics_TrackedAssets(enemy.DisplayName));
-        }
+        InitializeAssets();
 
         // Determine Master Client
         IsMasterClient = SessionManager.Instance.GetPlayerInfo().isMasterClient ? true : false;
@@ -170,13 +153,56 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Initialize the Superclass with Supertypes and Subtypes for Asset sorting
+    /// </summary>
+    private void InitializeAssets()
+    {
+        InitializeSupertypesList();
+        InitializeSubtypesList();
+    }
+
+    /// <summary>
+    /// Initialize the super and sub type assets to individual Lists
+    /// </summary>
+    private void InitializeSupertypesList()
+    {
+        Assets = new Analytics_AssetSuperclass(AssetSupertypeNames);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void InitializeSubtypesList()
+    {
+        var towers = Assets.FindSupertypeByName("Tower");
+        var enemies = Assets.FindSupertypeByName("Enemy");
+        
+        // Must add Mining Facility manually (it derives from Tower but isn't listed as an available Tower)
+        towers.AddAssetSubtype("Mining Facility");
+
+        // Create List of available towers in the level based on the xml file
+        foreach (TowerData tower in GameDataManager.Instance.TowerDataManager.DataList)
+        {
+            if (CurrentLevelData.AvailableTowers.Contains(tower.DisplayName))
+                towers.AddAssetSubtype(tower.DisplayName);
+        }
+
+        // Create List of available enemies in the level based on the xml file
+        foreach (EnemyData enemy in GameDataManager.Instance.EnemyDataManager.DataList)
+        {
+            if (CurrentLevelData.AvailableEnemies.Contains(enemy.DisplayName))
+                enemies.AddAssetSubtype(enemy.DisplayName);
+        }
+    }
+
+    /// <summary>
     /// Public call to save, send, and reset all analytics
     /// </summary>
     public void PerformAnalyticsProcess()
     {
-        SaveAnalytics();
-        SendAnalytics();
-        ResetAnalytics();
+        AllAnalytics_Save();
+        AllAnalytics_Send();
+        AllAnalytics_Reset();
     }
 
     /// <summary>
@@ -196,38 +222,6 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Find Tower category by its display name
-    /// </summary>
-    public Analytics_TrackedAssets FindTowerByDisplayName(string displayName)
-    {
-        return Available_Towers.Find(x => x.DisplayName == displayName);
-    }
-
-    /// <summary>
-    /// Find Enemy category by its display name
-    /// </summary>
-    public Analytics_TrackedAssets FindEnemyByDisplayName(string displayName)
-    {
-        return Available_Enemies.Find(x => x.DisplayName == displayName);
-    }
-
-    /// <summary>
-    /// Indicates if the tower super type exists
-    /// </summary>
-    public bool DoesTowerTypeExist(string displayName)
-    {
-        return Available_Towers.Exists(x => x.DisplayName == displayName);
-    }
-
-    /// <summary>
-    /// Indicates if the enemy super type exists
-    /// </summary>
-    public bool DoesEnemyTypeExist(string displayName)
-    {
-        return Available_Enemies.Exists(x => x.DisplayName == displayName);
-    }
-
-    /// <summary>
     /// Save Player analytics
     /// </summary>
     public void SavePlayerAnalytics()
@@ -237,7 +231,6 @@ public class AnalyticsManager : MonoBehaviour
             ObjPhotonView.RPC("SavePlayers_MoneyMasterClient", PhotonTargets.MasterClient, IndividualPlayerMoney);
         else
             AllPlayersMoney += IndividualPlayerMoney;
-
     }
 
     /// <summary>
@@ -260,36 +253,41 @@ public class AnalyticsManager : MonoBehaviour
     public void SaveAssetAnalytics()
     {
         // Send Tower spawn&death informtion
-        foreach (Analytics_TrackedAssets towerAssets in Available_Towers)
+        foreach (Analytics_AssetSupertype supertype in Assets.AssetSupertypes)
         {
-            // Collect group information
-            if (towerAssets.DisplayName != "Mining Facility")
+            if (supertype.SupertypeName == "Tower")
             {
-                TotalBuilt_Tower += towerAssets.GetNumberCreated();
-                TotalDead_Tower += towerAssets.GetNumberDead();
-                AvgLifeSpanDead_Tower += towerAssets.GetTotalLifeSpanOfDead();
-                AvgDPS_Tower += towerAssets.GetTotalDPS();
+                foreach (Analytics_AssetSubtype subtype in supertype.AssetSubtypes)
+                {
+                    if (subtype.SubtypeName != "Mining Facility")
+                    {
+                        TotalBuilt_Tower += subtype.GetNumberCreated();
+                        TotalDead_Tower += subtype.GetNumberDead();
+                        AvgLifeSpanDead_Tower += subtype.GetTotalLifeSpanOfDead();
+                        AvgDPS_Tower += subtype.GetTotalDPS();
+
+                        // Collect individual Tower analytics
+                        //foreach (Analytics_Asset tower in subtype.Assets)
+                        //{
+                        //}
+                    }
+                }
             }
+            if (supertype.SupertypeName == "Enemy")
+            {
+                foreach (Analytics_AssetSubtype subtype in supertype.AssetSubtypes)
+                {
+                    TotalSpawn_Enemy += subtype.GetNumberCreated();
+                    TotalDead_Enemy += subtype.GetNumberDead();
+                    AvgLifeSpanDead_Enemy += subtype.GetTotalLifeSpanOfDead();
+                    AvgDPS_Enemy += subtype.GetTotalDPS();
 
-            //// Collect individual Tower analytics
-            //foreach (Analytics_Asset tower in towerAssets.Assets)
-            //{
-            //}
-        }
-
-        // Send Enemy death information
-        foreach (Analytics_TrackedAssets enemyAssets in Available_Enemies)
-        {
-            // Collect group information
-            TotalSpawn_Enemy += enemyAssets.GetNumberCreated();
-            TotalDead_Enemy += enemyAssets.GetNumberDead();
-            AvgLifeSpanDead_Enemy += enemyAssets.GetTotalLifeSpanOfDead();
-            AvgDPS_Enemy += enemyAssets.GetTotalDPS();
-
-            //// Collect individual Enemy analytics
-            //foreach (Analytics_Asset enemy in enemyAssets.Assets)
-            //{
-            //}
+                    // Collect individual Enemy analytics
+                    //foreach (Analytics_Asset enemy in subtype.Assets)
+                    //{
+                    //}
+                }
+            }
         }
 
             AvgLifeSpanDead_Tower /= TotalDead_Tower;
@@ -323,54 +321,6 @@ public class AnalyticsManager : MonoBehaviour
     }
     #endregion PUBLIC FUNCTIONS
 
-    #region RESET ANALYTICS
-
-    /// <summary>
-    /// Resets all variables (used for a soft restart)
-    /// </summary>
-    public void ResetAllAnalytics()
-    {
-        ResetPlayerAnalytics();
-        ResetSessionAnalytics();
-        ResetAssetAnalytics();
-    }
-
-    /// <summary>
-    /// Resets player analytics
-    /// </summary>
-    public void ResetPlayerAnalytics()
-    {
-        IndividualPlayerMoney = 0;
-        IsMasterClient = false;
-    }
-
-    /// <summary>
-    /// Resets level analytics
-    /// </summary>
-    public void ResetSessionAnalytics()
-    {
-        TotalBallisticTaken_Tower = 0;
-        TotalThraceiumTaken_Tower = 0;
-        TotalBallisticTaken_Enemy = 0;
-        TotalThraceiumTaken_Enemy = 0;
-        GameLength = 0;
-        PlayerCount = 0;
-        PlayerCountChanged = false;
-        //LastLevelReached = 1;
-
-        Available_Towers = new List<Analytics_TrackedAssets>();
-        Available_Enemies = new List<Analytics_TrackedAssets>();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void ResetAssetAnalytics()
-    {
-
-    }
-    #endregion RESET ANALYTICS
-
     #region RPC Calls
     /// <summary>
     /// 
@@ -382,11 +332,11 @@ public class AnalyticsManager : MonoBehaviour
     }
     #endregion RPC Calls
 
-    #region PRIVATE SAVE/SEND/RESET FUNCTIONS
+    #region PRIVATE SAVE/RESET/SEND FUNCTIONS
     /// <summary>
     /// Saves all relevant analytics
     /// </summary>
-    private void SaveAnalytics()
+    private void AllAnalytics_Save()
     {
         // All players save their personal analytics.
         SavePlayerAnalytics();
@@ -402,7 +352,7 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// Sends all relevant analytics
     /// </summary>
-    private void SendAnalytics()
+    private void AllAnalytics_Send()
     {
         // Each player sends their personal analytics.
         SendPlayerAnalytics();
@@ -416,13 +366,45 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resets all relevant analytics
+    /// Resets all variables (used for a soft restart)
     /// </summary>
-    private void ResetAnalytics()
+    private void AllAnalytics_Reset()
     {
-        ResetPlayerAnalytics();
-        ResetSessionAnalytics();
-        ResetAssetAnalytics();
+        PlayerAnalytics_Reset();
+        SessionAnalytics_Reset();
+        AssetAnalytics_Reset();
+    }
+
+    /// <summary>
+    /// Resets player analytics
+    /// </summary>
+    private void PlayerAnalytics_Reset()
+    {
+        IndividualPlayerMoney = 0;
+        IsMasterClient = false;
+    }
+
+    /// <summary>
+    /// Resets level analytics
+    /// </summary>
+    private void SessionAnalytics_Reset()
+    {
+        TotalBallisticTaken_Tower = 0;
+        TotalThraceiumTaken_Tower = 0;
+        TotalBallisticTaken_Enemy = 0;
+        TotalThraceiumTaken_Enemy = 0;
+        GameLength = 0;
+        PlayerCount = 0;
+        PlayerCountChanged = false;
+        //LastLevelReached = 1;
+    }
+
+    /// <summary>
+    /// Reset Assets' Analytics
+    /// </summary>
+    private void AssetAnalytics_Reset()
+    {
+        Assets = new Analytics_AssetSuperclass(AssetSupertypeNames);
     }
 
     /// <summary>
@@ -487,18 +469,13 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     private void HeatMapAnalytics_Send()
     {
-        // Send Tower spawn&death informtion
-        foreach (Analytics_TrackedAssets assets in Available_Towers)
+        foreach (Analytics_AssetSupertype supertype in Assets.AssetSupertypes)
         {
-            foreach (Analytics_Asset tower in assets.Assets)
-                HeatMapAnalyticsSingleAsset_Send(tower);
-        }
-
-        // Send Enemy death information
-        foreach (Analytics_TrackedAssets assets in Available_Enemies)
-        {
-            foreach (Analytics_Asset enemy in assets.Assets)
-                HeatMapAnalyticsSingleAsset_Send(enemy);
+            foreach (Analytics_AssetSubtype subtype in supertype.AssetSubtypes)
+            {
+                foreach (Analytics_Asset asset in subtype.Assets)
+                    HeatMapAnalyticsSingleAsset_Send(asset);
+            }
         }
 
         Log("HeatMap analytics for tower&enemy deaths and tower spawns have been sent to Unity's server.");
@@ -550,6 +527,9 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     // [TOWERS]
+    /// <summary>
+    /// Send Tower Analytics custom event to Unity's servers
+    /// </summary>
     private void TowerAnalytics_Send()
     {
         Analytics.CustomEvent("TowerData_Event", new Dictionary<string, object>
@@ -560,6 +540,9 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     // [ENEMIES]
+    /// <summary>
+    /// Send Enemy Analytics custom event to Unity's servers
+    /// </summary>
     private void EnemyAnalytics_Send()
     {
         Analytics.CustomEvent("EnemyData_Event", new Dictionary<string, object>
@@ -570,6 +553,9 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     // [MISCELLANEOUS]
+    /// <summary>
+    /// Send Miscellaneous Analytics custom event to Unity's servers
+    /// </summary>
     private void MiscellaneousAnalytics_Send()
     {
         Analytics.CustomEvent("Miscellaneous_Event", new Dictionary<string, object>

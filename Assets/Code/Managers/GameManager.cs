@@ -137,8 +137,9 @@ public class GameManager : MonoBehaviour
         if (LevelNotificationDataManager != null)
             StartCoroutine(NotificationManager.Instance.DisplayLevelNotifications(LevelNotificationDataManager.DataList));
 
-        // Initializes player analytics for Unity Analytics
-        AnalyticsManager.Instance.InitializePlayerAnalytics();
+        // Initializes Analytics
+        string[] assetSuperTypes = { "Tower", "Enemy" };
+        AnalyticsManager.Instance.InitializePlayerAnalytics(assetSuperTypes);
 
         // Initialize the mining facility
         ObjMiningFacility = GameObject.FindGameObjectWithTag("Mining Facility").GetComponent<MiningFacility>();
@@ -205,21 +206,18 @@ public class GameManager : MonoBehaviour
         // Look up the enemy's data
         EnemyData data = GameDataManager.Instance.FindEnemyDataByDisplayName(displayName);
         // Calculate the enemy's position
-        Vector3 pos = TerrainMesh.IntersectPosition(AngleToPosition(startAngle), data.HoverDistance);
+        Vector3 position = TerrainMesh.IntersectPosition(AngleToPosition(startAngle), data.HoverDistance);
         // Instantiate a new Enemy
-        GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.FindEnemyPrefabNameByDisplayName(displayName)), pos, Quaternion.identity) as GameObject;
+        GameObject newEnemy = Instantiate(Resources.Load("Enemies/" + GameDataManager.Instance.FindEnemyPrefabNameByDisplayName(displayName)), position, Quaternion.identity) as GameObject;
         // Add a PhotonView to the Enemy
         newEnemy.AddComponent<PhotonView>();
         // Set Enemy's PhotonView to match the Master Client's PhotonView ID for this GameObject (these IDs must match for networking to work)
         newEnemy.GetComponent<PhotonView>().viewID = viewID;
 
-        // Send the enemy's viewID and spawn coordinate to AnalyticsManager
+        // Store the enemy in AnalyticsManager
         if (GameRunning)
         {
-            // Checks if the enemy super type is available before adding the enemy to the list
-            if (!AnalyticsManager.Instance.DoesEnemyTypeExist(displayName))
-                AnalyticsManager.Instance.Available_Enemies.Add(new Analytics_TrackedAssets(displayName));
-            AnalyticsManager.Instance.FindEnemyByDisplayName(displayName).AddAsset(viewID, "Enemy", pos);
+            AnalyticsManager.Instance.Assets.AddAsset("Enemy", displayName, viewID, position);
         }
 
         // The Prefab doesn't contain the correct default data. Set the Enemy's default data now
