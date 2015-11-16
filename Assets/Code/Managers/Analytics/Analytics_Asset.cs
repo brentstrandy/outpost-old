@@ -8,6 +8,8 @@ using System.Collections;
 public class Analytics_Asset
 {
     public bool ShowDebugLogs = true;
+    public bool IsMiningFacility { get; private set; }      // Is the asset the "Mining Facility"
+    public bool IsDead { get; private set; }                // Is the asset dead
 
     public int ViewID { get; private set; }                 // The asset's unique View ID
     public string AssetSupertype { get; private set; }      // e.g. "Enemy" or "Tower"
@@ -25,15 +27,6 @@ public class Analytics_Asset
 
     public Vector3 LocationOfSpawn { get; private set; }    // Where the asset spawned onto the map
     public Vector3 LocationOfDeath { get; private set; }    // Use to coordinate distance from other assets
-    private Vector3 MiningFacilityLocation                  // Returns the GameManager's location of the Mining Facility
-    {
-        get
-        {
-            return GameManager.Instance.ObjMiningFacility.transform.position;
-        }
-    }
-    public bool IsMiningFacility { get; private set; }      // Is the asset the "Mining Facility"
-    public bool IsDead { get; private set; }                // Is the asset dead
 
     public Analytics_Asset(int viewID, string assetSupertype, string assetSubtype, Vector3 locationOfSpawn)
     {
@@ -48,7 +41,7 @@ public class Analytics_Asset
         
         DistanceFromCenter = 0;
 
-        TimeOfSpawnSinceLoad = Time.time - GameManager.Instance.LevelStartTime;
+        TimeOfSpawnSinceLoad = Time.time;
         TimeOfDeathSinceLoad = 0;
         LifeSpan = 0;
 
@@ -59,7 +52,7 @@ public class Analytics_Asset
     }
 
     /// <summary>
-    /// Amount of damage asset deals
+    /// Adds amount of damage the asset deals during Fire
     /// </summary>
     public void AddDamageDealt(float ballistic, float thraceium)
     {   
@@ -68,7 +61,7 @@ public class Analytics_Asset
     }
 
     /// <summary>
-    /// Amount of damage asset takes
+    /// Adds amount of damage the asset takes while being Fired on
     /// </summary>
     public void AddDamageTaken(float ballistic, float thraceium)
     {
@@ -77,13 +70,13 @@ public class Analytics_Asset
     }
 
     /// <summary>
-    /// Death location and lifespan of asset
+    /// Information stored after the asset is declared dead
     /// </summary>
     public void DeathOfAsset(Vector3 locationOfDeath)
     {
         if (GameManager.Instance.GameRunning)
         {
-            TimeOfDeathSinceLoad = Time.time - GameManager.Instance.LevelStartTime;
+            TimeOfDeathSinceLoad = Time.time;
             LifeSpan = TimeOfDeathSinceLoad - TimeOfSpawnSinceLoad;
             LocationOfDeath = locationOfDeath;
             IsDead = true;
@@ -95,10 +88,12 @@ public class Analytics_Asset
     /// </summary>
     public float GetDistanceFromCenter()
     {
+        Vector3 MFLocation = AnalyticsManager.Instance.MiningFacilityLocation;
+
         if (AssetSupertype == "Enemy" && IsDead)
-            DistanceFromCenter = Vector3.Distance(MiningFacilityLocation, LocationOfDeath);
+            DistanceFromCenter = Vector3.Distance(MFLocation, LocationOfDeath);
         else if (AssetSupertype == "Tower")
-            DistanceFromCenter = Vector3.Distance(MiningFacilityLocation, LocationOfSpawn);
+            DistanceFromCenter = Vector3.Distance(MFLocation, LocationOfSpawn);
         else
             LogError("Incorrect Type of asset is being tracked: " + AssetSupertype);
 

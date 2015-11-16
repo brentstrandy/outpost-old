@@ -144,6 +144,7 @@ public class GameManager : MonoBehaviour
         // Initialize the mining facility
         ObjMiningFacility = GameObject.FindGameObjectWithTag("Mining Facility").GetComponent<MiningFacility>();
         ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
+        AnalyticsManager.Instance.SetMiningFacilityLocation(ObjMiningFacility.transform.position);
     }
 
     public void OnLevelWasLoaded(int level)

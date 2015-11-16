@@ -37,17 +37,19 @@ public class AnalyticsManager : MonoBehaviour
     /// 3) Can I categorize user data by their PlayerName?
     /// </summary>
 
-    //[PLAYER]
+    //[PLAYERS]
     public PhotonView ObjPhotonView { get; private set; }   // User's unique PhotonView
+    public bool IsMasterClient { get; private set; }        // Indicate if the player is the master client (they will send the global data)
+    public bool[] HaveAllPlayersCheckedIn { get; private set; }      // End game check to indicate that all Clients have sent the Master Client their data
     public string PlayerName { get; private set; }          // Name derived from (Player.Instance.Name) (ALL)
     public float IndividualPlayerMoney { get; private set; }// Player's total money accumulated (ALL)
     public float AllPlayersMoney { get; private set; }      // All player's total money accumulated (MASTER)
     public float AvgPlayerMoney { get; private set; }       // Average of all player's income (MASTER)
-    public bool IsMasterClient { get; private set; }        // Indicate if the player is the master client (they will send the global data) (MASTER)
 
     //[LEVEL'S AVAILABLE TOWERS AND ENEMIES]
     public Analytics_AssetSuperclass Assets { get; private set; }    // Catalog all asset super types to be tracked in the level
     public string[] AssetSupertypeNames { get; private set; }        // "Tower", "Enemy", etc.
+    public Vector3 MiningFacilityLocation   {get; private set; }               // Returns the GameManager's location of the Mining Facility
     
     //[LEVEL]
     public LevelData CurrentLevelData { get; private set; }  // Temp storage for level data
@@ -206,6 +208,14 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Sets the Mining Facility location
+    /// </summary>
+    public void SetMiningFacilityLocation(Vector3 miningFacilityLocation)
+    {
+        MiningFacilityLocation = miningFacilityLocation;
+    }
+
+    /// <summary>
     /// Sets the user as the master client
     /// </summary>
     public void SetIsMaster(bool isMaster)
@@ -263,7 +273,7 @@ public class AnalyticsManager : MonoBehaviour
                     {
                         TotalBuilt_Tower += subtype.GetNumberCreated();
                         TotalDead_Tower += subtype.GetNumberDead();
-                        AvgLifeSpanDead_Tower += subtype.GetTotalLifeSpanOfDead();
+                        AvgLifeSpanDead_Tower += subtype.GetTotalLifeSpanDead();
                         AvgDPS_Tower += subtype.GetTotalDPS();
 
                         // Collect individual Tower analytics
@@ -279,7 +289,7 @@ public class AnalyticsManager : MonoBehaviour
                 {
                     TotalSpawn_Enemy += subtype.GetNumberCreated();
                     TotalDead_Enemy += subtype.GetNumberDead();
-                    AvgLifeSpanDead_Enemy += subtype.GetTotalLifeSpanOfDead();
+                    AvgLifeSpanDead_Enemy += subtype.GetTotalLifeSpanDead();
                     AvgDPS_Enemy += subtype.GetTotalDPS();
 
                     // Collect individual Enemy analytics

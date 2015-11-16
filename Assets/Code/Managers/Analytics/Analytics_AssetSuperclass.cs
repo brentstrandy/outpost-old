@@ -193,7 +193,7 @@ public class Analytics_AssetSubtype
     /// </summary>
     private void SetAnalytics()
     {
-        // 
+        // Pull information from each individual asset
         foreach (Analytics_Asset asset in Assets)
         {
             NumberCreated++;
@@ -213,7 +213,6 @@ public class Analytics_AssetSubtype
 
         TotalDPS /= TotalLifeSpan;
         AvgDPS = TotalDPS / NumberCreated;
-        ActivePercent = (ActivePercent / AnalyticsManager.Instance.GameLength) * 100;
 
         IsAnalyticsSet = true;
     }
@@ -260,7 +259,7 @@ public class Analytics_AssetSubtype
     /// <summary>
     /// Get average lifespan of all of the dead tracked assets of this type
     /// </summary>
-    public float GetTotalLifeSpanOfDead()
+    public float GetTotalLifeSpanDead()
     {
         if (!IsAnalyticsSet)
             SetAnalytics();
