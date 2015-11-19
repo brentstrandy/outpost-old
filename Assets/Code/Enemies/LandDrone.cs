@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class LandDrone : Enemy
 {
@@ -63,17 +64,20 @@ public class LandDrone : Enemy
 
     #region Special Effects
 
-    public override void InstantiateFire()
+    public override List<GameObject> InstantiateFire()
     {
-        // Instantiate prefab for firing a shot
-        if (FiringEffect)
+        var effects = base.InstantiateFire();
+        /*
+        // This has been moved to Enemy.InstantiateFire
+        if (TargetedObjectToAttack != null)
         {
-            GameObject effect = Instantiate(FiringEffect, EmissionPoint.transform.position, EmissionPoint.transform.rotation) as GameObject;
-            if (TargetedObjectToAttack != null)
+            foreach (var effect in effects)
             {
                 effect.GetComponent<LaserFire>().Target = TargetedObjectToAttack.transform;
             }
         }
+        */
+        return effects;
     }
 
     #endregion Special Effects

@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour
     public HealthBarController HealthBar;
 
     public GameObject TurretPivot;
-    public GameObject EmissionPoint;
+    public GameObject[] FireEffectEmitters;
     protected PhotonView ObjPhotonView;
     protected Pathfinder ObjPathfinder = null;
     protected HexLocation ObjHexLocation = null;
@@ -781,25 +781,39 @@ public class Enemy : MonoBehaviour
 
     #region Special Effects
 
-    public virtual void InstantiateFire()
+    public virtual List<GameObject> InstantiateFire()
     {
-        // Instantiate prefab for firing a shot
+        // Instantiate prefabs for firing a shot
+        List<GameObject> effects = new List<GameObject>();
         if (FiringEffect)
         {
             GameObject effect;
-            if (EmissionPoint)
+            List<GameObject> emitters;
+            if (FireEffectEmitters != null && FireEffectEmitters.Length > 0)
             {
-                effect = Instantiate(FiringEffect, EmissionPoint.transform.position, EmissionPoint.transform.rotation) as GameObject;
+                emitters = new List<GameObject>(FireEffectEmitters);
             }
             else
             {
-                effect = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
+                emitters = new List<GameObject>(1);
+                emitters.Add(this.gameObject);
             }
-            if (TargetedObjectToAttack != null)
+            foreach (var emitter in emitters)
             {
-                effect.transform.LookAt(TargetedObjectToAttack.transform.position);
+                effect = Instantiate(FiringEffect, emitter.transform.position, emitter.transform.rotation) as GameObject;
+                if (TargetedObjectToAttack != null)
+                {
+                    effect.transform.LookAt(TargetedObjectToAttack.transform.position);
+                    var laser = effect.GetComponent<LaserFire>();
+                    if (laser != null)
+                    {
+                        laser.Target = TargetedObjectToAttack.transform;
+                    }
+                }
+                effects.Add(effect);
             }
         }
+        return effects;
     }
 
     public virtual void InstantiateExplosion()
