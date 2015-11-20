@@ -80,9 +80,9 @@ public class ThraceiumHealingTower : Tower
         // After healing, this tower cannot heal again until it has finished its cooldown
         ReadyToHeal = false;
 
-        // Instantiate prefab for healing
+        // Instantiate prefab for healing over the top of the tower being healed
         if (HealingEffect)
-            Instantiate(HealingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+			Instantiate(HealingEffect, new Vector3(tower.transform.position.x, tower.transform.position.y, tower.transform.position.z), Quaternion.identity);
     }
 
     #endregion RPC CALLS
