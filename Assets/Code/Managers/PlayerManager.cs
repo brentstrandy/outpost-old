@@ -77,6 +77,7 @@ public class PlayerManager : MonoBehaviour
 
     public void Start()
     {
+		Score = 0;
         Money = 0.0f;
         TotalMoney = 0.0f;
         Mode = PlayerMode.Selection;
@@ -701,6 +702,7 @@ public class PlayerManager : MonoBehaviour
     {
         GameLoadOut = null;
         Money = 0.0f;
+		Score = 0;
         Destroy(PlayerLocator);
     }
 
