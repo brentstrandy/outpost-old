@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ArrayOfEnemySpawnData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
-		<StartTime>16</StartTime>
+		<EnemyName>Kamikaze</EnemyName>
+		<StartTime>2</StartTime>
 		<StartAngle>45</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
+		<EnemyName>Light Speeder</EnemyName>
 		<StartTime>16</StartTime>
 		<StartAngle>35</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
+		<EnemyName>Heavy Speeder</EnemyName>
 		<StartTime>20</StartTime>
 		<StartAngle>55</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
+		<EnemyName>Light Speeder</EnemyName>
 		<StartTime>20</StartTime>
 		<StartAngle>15</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
+		<EnemyName>Sky Drone</EnemyName>
 		<StartTime>20</StartTime>
 		<StartAngle>50</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
-		<StartTime>40</StartTime>
+		<EnemyName>Sky Drone</EnemyName>
+		<StartTime>20</StartTime>
 		<StartAngle>80</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
-		<StartTime>50</StartTime>
+		<EnemyName>Sky Drone</EnemyName>
+		<StartTime>22</StartTime>
 		<StartAngle>30</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
 	<EnemySpawnData>
-		<EnemyName>Land Drone</EnemyName>
-		<StartTime>52</StartTime>
+		<EnemyName>Sky Drone</EnemyName>
+		<StartTime>22</StartTime>
 		<StartAngle>30</StartAngle>
 		<PlayerCount>1</PlayerCount>
 	</EnemySpawnData>
