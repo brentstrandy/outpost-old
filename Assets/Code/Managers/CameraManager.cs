@@ -9,7 +9,10 @@ public class CameraManager : MonoBehaviour
     private static CameraManager instance;
     public bool ShowDebugLogs = true;
 
-    public Transform DirectionNorth;
+	public Transform[] CameraPositions;
+	private int CurrentPosition;
+
+    /*public Transform DirectionNorth;
     public Vector3 PositionNorth;
     public Transform DirectionEast;
     public Vector3 PositionEast;
@@ -17,11 +20,13 @@ public class CameraManager : MonoBehaviour
     public Vector3 PositionSouth;
     public Transform DirectionWest;
     public Vector3 PositionWest;
-    public float TurningSpeed;
+	*/
+
+	public float TurningSpeed;
 
     private int DirectionIndex;
-    private Vector3 TargetDirection;
-    private Vector3 TargetPosition;
+    //private Vector3 TargetDirection;
+    //private Vector3 TargetPosition;
     private readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
     private float Smooth; // use for camera lerp
@@ -54,6 +59,14 @@ public class CameraManager : MonoBehaviour
 
     private void Start()
     {
+		// Camera listens for input on when the player wants to change the current camera
+		InputManager.Instance.OnCameraPositionChanged += OnCameraPositionChange;
+
+		CurrentPosition = 0;
+		transform.position = CameraPositions[CurrentPosition].position;
+		transform.rotation = CameraPositions[CurrentPosition].rotation;
+
+		/*
         // North
         PositionNorth = new Vector3(DirectionNorth.position.x, 1.0f, this.transform.position.z - 5);
         // East
@@ -62,23 +75,45 @@ public class CameraManager : MonoBehaviour
         PositionSouth = new Vector3(DirectionSouth.position.x, -1.0f, this.transform.position.z - 5);
         // West
         PositionWest = new Vector3(-1.0f, DirectionWest.position.y, this.transform.position.z - 5);
+        */
     }
 
     private void Update()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(TargetDirection - transform.position, Up), Time.deltaTime * TurningSpeed);
-        transform.position = Vector3.Slerp(transform.position, TargetPosition, Time.deltaTime * TurningSpeed);
+		transform.rotation = Quaternion.Slerp(transform.rotation, CameraPositions[CurrentPosition].rotation, Time.deltaTime * TurningSpeed);//Quaternion.LookRotation(TargetDirection - transform.position, Up), Time.deltaTime * TurningSpeed);
+		transform.position = Vector3.Slerp(transform.position, CameraPositions[CurrentPosition].position, Time.deltaTime * TurningSpeed);
     }
+
+	private void OnCameraPositionChange(int direction)
+	{
+		// Traverse forward through the list
+		if(direction > 0)
+		{
+			if(CurrentPosition >= (CameraPositions.Length - 1))
+				CurrentPosition = 0;
+			else
+				CurrentPosition++;
+		}
+		// Traverse backwards through the list
+		else
+		{
+			if(CurrentPosition <= 0)
+				CurrentPosition = CameraPositions.Length - 1;
+			else
+				CurrentPosition--;
+		}
+	}
 
     public void SetStartQuadrant(Quadrant quadrant)
     {
-        UpdateCameraQuadrant(quadrant);
-        transform.rotation = Quaternion.LookRotation(TargetDirection - transform.position, Up);
-        transform.position = TargetPosition;
+        //UpdateCameraQuadrant(quadrant);
+        //transform.rotation = Quaternion.LookRotation(TargetDirection - transform.position, Up);
+        //transform.position = TargetPosition;
     }
 
     public void UpdateCameraQuadrant(Quadrant newQuadrant)
     {
+		/*
         if (newQuadrant == Quadrant.North)
         {
             TargetDirection = DirectionNorth.position;
@@ -99,7 +134,14 @@ public class CameraManager : MonoBehaviour
             TargetDirection = DirectionWest.position;
             TargetPosition = PositionWest;
         }
+        */
     }
+
+	private void OnDestroy()
+	{
+		// Remove all references to delegate events that were created for this script
+		InputManager.Instance.OnCameraPositionChanged -= OnCameraPositionChange;
+	}
 
     #region MessageHandling
 

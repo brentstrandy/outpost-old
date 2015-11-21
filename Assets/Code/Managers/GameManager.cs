@@ -65,7 +65,6 @@ public class GameManager : MonoBehaviour
         // Track events in order to react to Session Manager events as they happen
         SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
         SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
-        InputManager.Instance.OnQuadrantRotate += OnCameraQuadrantChanged;
 
         // Store LevelData from MenuManager
         CurrentLevelData = MenuManager.Instance.CurrentLevelData;
@@ -125,9 +124,9 @@ public class GameManager : MonoBehaviour
         GameRunning = true;
 
         // Set the player's initial quadrant
-        PlayerManager.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
+        //PlayerManager.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
         // Inform the Camera of the new quadrant
-        CameraManager.Instance.SetStartQuadrant(CurrentLevelData.StartingQuadrant);
+        //CameraManager.Instance.SetStartQuadrant(CurrentLevelData.StartingQuadrant);
 
         // Start Game is called once all data has been loaded. We can now tell the EnemySpawnManager to start
         // spawning enemies based on the previously loaded spawn data.
@@ -295,6 +294,7 @@ public class GameManager : MonoBehaviour
         //AnalyticsManager.Instance.SetPlayerCountChanged(true);
     }
 
+	/*
     private void OnCameraQuadrantChanged(string direction)
     {
         Quadrant newQuadrant = Quadrant.North;
@@ -309,9 +309,9 @@ public class GameManager : MonoBehaviour
         // Inform the Camera of the new quadrant
         CameraManager.Instance.UpdateCameraQuadrant(newQuadrant);
     }
-
+	*/
     #endregion EVENTS
-
+	
     public void AddAvailableQuadrant(Quadrant newQuadrant)
     {
         CurrentLevelData.AvailableQuadrants += ", " + newQuadrant.ToString();
@@ -354,7 +354,6 @@ public class GameManager : MonoBehaviour
         // Remove all references to delegate events that were created for this script
         SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
         SessionManager.Instance.OnSMPlayerLeftRoom -= OnPlayerLeft;
-        InputManager.Instance.OnQuadrantRotate -= OnCameraQuadrantChanged;
     }
 
     #region MessageHandling

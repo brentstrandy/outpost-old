@@ -7,12 +7,10 @@ public class InputManager : MonoBehaviour
 
     #region EVENTS (DELEGATES)
 
-    public delegate void QuadrantAction(string direction);
-
-    public event QuadrantAction OnQuadrantRotate;
+    public delegate void CameraPositionAction(int change);
+	public event CameraPositionAction OnCameraPositionChanged;
 
     public delegate void TowerHotKey(int towerIndex);
-
     public event TowerHotKey OnTowerHotKeyPressed;
 
     #endregion EVENTS (DELEGATES)
@@ -59,13 +57,13 @@ public class InputManager : MonoBehaviour
                 // Test for a change in the player's current quadrant
                 if (Input.GetKeyDown("left"))
                 {
-                    if (OnQuadrantRotate != null)
-                        OnQuadrantRotate("left");
+					if (OnCameraPositionChanged != null)
+						OnCameraPositionChanged(-1);
                 }
                 else if (Input.GetKeyDown("right"))
                 {
-                    if (OnQuadrantRotate != null)
-                        OnQuadrantRotate("right");
+					if (OnCameraPositionChanged != null)
+						OnCameraPositionChanged(1);
                 }
                 else if (Input.GetKeyDown("q"))
                 {

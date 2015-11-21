@@ -8,7 +8,7 @@ public class Tutorial_EastQuadrant : Notification
     {
         base.Start();
 
-        InputManager.Instance.OnQuadrantRotate += OnQuadrantChanged;
+		InputManager.Instance.OnCameraPositionChanged += OnCameraPositionChanged;
 
         // Align this Notification to the mining facility
         this.transform.position = GameManager.Instance.ObjMiningFacility.transform.position;
@@ -26,8 +26,14 @@ public class Tutorial_EastQuadrant : Notification
         }
     }
 
-    private void OnQuadrantChanged(string direction)
+	private void OnCameraPositionChanged(int direction)
     {
         QuadrantChanged = true;
     }
+
+	private void OnDestroy()
+	{
+		// Remove all references to delegate events that were created for this script
+		InputManager.Instance.OnCameraPositionChanged -= OnCameraPositionChanged;
+	}
 }
