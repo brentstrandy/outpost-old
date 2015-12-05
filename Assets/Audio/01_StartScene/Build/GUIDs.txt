@@ -1,10 +1,10 @@
 {cc3098e1-1ef3-442f-8121-47c300afb455} event:/Music/Menu_Loop
+{e8bd7dc7-4374-41f1-8774-e041df98c752} event:/SFX/ThraceiumRainTower/TRTBlast
+{e8a63e9c-a37c-4c7d-812c-015cd4d4e7e1} event:/SFX/ThraceiumRainTower/TRTFire
 {815f6698-d7dc-45f8-a3b8-2532984e52f9} event:/SFX/TowerBuild
 {4b824090-dda9-4fdb-816c-3c205571a969} event:/SFX/Ambience/WindDustAmbience
 {99c493d2-f70a-4da6-8f71-5015f75dff83} event:/SFX/Drone/DroneExplosion
 {71fa2b2a-eb18-486f-b31e-f10c4cd10f75} event:/SFX/Drone/DroneMovement
-{9663bdde-7fc7-4267-a93d-b18ec47e54e3} event:/SFX/EMP/EMPBlast
-{55986bd7-53f3-48ec-85b3-0b9a92b34e85} event:/SFX/EMP/EMPFire
 {6c48dc5d-a097-4112-b4c1-f2d9c2a51cba} event:/SFX/EMPTower/EMPBlast
 {ea986b42-f1b7-454f-8238-2e1c582b1406} event:/SFX/EMPTower/EMPFire
 {d18902e7-bf5c-40f4-8b0d-ba48ca72a06a} event:/SFX/HeavySpeeder/HeavySpeederExplosion
@@ -13,14 +13,14 @@
 {22834fbc-b7bc-47e3-837e-d32a813d14ee} event:/SFX/LightSpeeder/LightSpeederMovement
 {08eb7176-b6b1-4b6c-914e-fa42ec86f272} event:/SFX/SmallThraceiumTower/SmallThraceiumFire
 {e7a4712b-707a-47f6-9b9c-9f26ad9af425} bus:/
-{6caee02d-ad14-46b8-b132-a3560fd1a677} bus:/SFX
-{0381c324-9926-4d20-9cff-c8af3b50d324} bus:/Music
 {3d69b9e0-5ab0-495c-8514-30d04341e1b1} bus:/Reverb
+{0381c324-9926-4d20-9cff-c8af3b50d324} bus:/Music
+{6caee02d-ad14-46b8-b132-a3560fd1a677} bus:/SFX
 {def31c5a-1643-4591-a401-705dbfc0c8c7} vca:/Master Volume
-{540342a5-6d3d-4bb4-8f9a-c9ca358ad417} vca:/Sound Effects
 {ca723e22-0df4-4dbc-ae86-bc244b52bbfb} vca:/Music
-{f12a6c9e-4338-4728-8159-f044029e8819} bank:/Towers
-{3787ac68-7dc1-4ece-a837-4b210c4919c5} bank:/Enemies
+{540342a5-6d3d-4bb4-8f9a-c9ca358ad417} vca:/Sound Effects
 {ccc759a1-9146-47bd-9a08-43ef8526370c} bank:/Ambience
-{c430db1f-5e91-45af-a232-4bb3e734836c} bank:/Master Bank
+{f12a6c9e-4338-4728-8159-f044029e8819} bank:/Towers
 {8879fed9-161a-4f5e-8e50-962f15b4b1a2} bank:/Music
+{3787ac68-7dc1-4ece-a837-4b210c4919c5} bank:/Enemies
+{c430db1f-5e91-45af-a232-4bb3e734836c} bank:/Master Bank
