@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
+    <DisplayName>Test Level</DisplayName>
+    <SceneName>Level1</SceneName>
+    <LevelID>0</LevelID>
+    <EnemySpawnFilename>TestLevel</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>This is for testing only</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>8</MaximumPlayers>
+    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
+    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <StartingMoney>1000</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
     <DisplayName>Something New</DisplayName>
     <SceneName>Level1</SceneName>
     <LevelID>1</LevelID>
@@ -33,7 +51,7 @@
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>25</StartingMoney>
-    <IncomePerSecond>0.9</IncomePerSecond>
+    <IncomePerSecond>0.5</IncomePerSecond>
     <MiningFacilityHealth>600</MiningFacilityHealth>
   </LevelData>
   <LevelData>
@@ -74,7 +92,7 @@
   </LevelData>
   <LevelData>
     <DisplayName>The Grind</DisplayName>
-    <SceneName>Level3</SceneName>
+    <SceneName>Level1</SceneName>
     <LevelID>5</LevelID>
     <EnemySpawnFilename>5_TheGrind</EnemySpawnFilename>
     <NotificationFilename />
@@ -87,24 +105,6 @@
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
     <MaxTowersPerPlayer>1</MaxTowersPerPlayer>
     <StartingMoney>32</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <DisplayName>Test Level</DisplayName>
-    <SceneName>Level1</SceneName>
-    <LevelID>0</LevelID>
-    <EnemySpawnFilename>TestLevel</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>This is for testing only</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>8</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
-    <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
-    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
-    <StartingMoney>1000</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
