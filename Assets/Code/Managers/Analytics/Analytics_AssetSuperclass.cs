@@ -211,7 +211,9 @@ public class Analytics_AssetSubtype
             }
         }
 
+        // TotalDPS is the total accrued damage divided by the total lifespan of all assets.
         TotalDPS /= TotalLifeSpan;
+        // AvgDPS is the total damage per second divided by the number of assets created.
         AvgDPS = TotalDPS / NumberCreated;
 
         IsAnalyticsSet = true;

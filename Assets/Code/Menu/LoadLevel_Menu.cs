@@ -83,11 +83,11 @@ public class LoadLevel_Menu : MonoBehaviour
         }
 
         // Let all clients know that the player has finished loading the level (and all associated level data)
-        ObjPhotonView.RPC("LevelLoadingCompete", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name);
+        ObjPhotonView.RPC("LevelLoadingComplete", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name);
     }
 
     [PunRPC]
-    private void LevelLoadingCompete(string playerName)
+    private void LevelLoadingComplete(string playerName)
     {
         Log(playerName + " Finished Loading Level");
 

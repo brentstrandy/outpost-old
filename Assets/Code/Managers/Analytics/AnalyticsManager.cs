@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
@@ -37,21 +39,18 @@ public class AnalyticsManager : MonoBehaviour
     /// 3) Can I categorize user data by their PlayerName?
     /// </summary>
 
-    //[PLAYERS]
-    public PhotonView ObjPhotonView { get; private set; }   // User's unique PhotonView
-    public bool IsMasterClient { get; private set; }        // Indicate if the player is the master client (they will send the global data)
-    public bool[] HaveAllPlayersCheckedIn { get; private set; }      // End game check to indicate that all Clients have sent the Master Client their data
-    public string PlayerName { get; private set; }          // Name derived from (Player.Instance.Name) (ALL)
-    public float IndividualPlayerMoney { get; private set; }// Player's total money accumulated (ALL)
-    public float AllPlayersMoney { get; private set; }      // All player's total money accumulated (MASTER)
-    public float AvgPlayerMoney { get; private set; }       // Average of all player's income (MASTER)
+    //[NETWORK]
+    public PhotonView ObjPhotonView { get; private set; }   // AnalyticsManager's unique PhotonView
+    public PhotonPlayer PlayerPhotonView { get; private set; }              // Player's unique PhotonView
 
-    //[LEVEL'S AVAILABLE TOWERS AND ENEMIES]
-    public Analytics_AssetSuperclass Assets { get; private set; }    // Catalog all asset super types to be tracked in the level
-    public string[] AssetSupertypeNames { get; private set; }        // "Tower", "Enemy", etc.
-    public Vector3 MiningFacilityLocation   {get; private set; }               // Returns the GameManager's location of the Mining Facility
-    
-    //[LEVEL]
+    //[PLAYER VALIDATION]
+    public bool IsMasterClient { get; private set; }        // Indicate if the player is the master client (they will send the global data)
+    public int AccountID { get; private set; }              // The player's unique Account ID as related to their login credentials
+    public Dictionary<int, bool> PlayerCheckIns { get; private set; }      // End game check to indicate that all Clients have sent the Master Client their data
+    public bool HaveAllUsersCheckedIn {get; private set; }  // Indicates if all bools are true in PlayerCheckIns
+    public float UserCheckInTimeout { get; private set; }   // How long to wait for all player's to check-in before the global analytics are finalized
+
+    //[SESSION]
     public LevelData CurrentLevelData { get; private set; }  // Temp storage for level data
     public int LastLevelReached { get; private set; }        // Last level reached. (ALL)
     public bool IsEndGameVictory { get; private set; }       // If the last level was a win or loss (ALL)
@@ -59,34 +58,32 @@ public class AnalyticsManager : MonoBehaviour
     public bool PlayerCountChanged { get; private set; }     // Indicates if the player count has changed since the beginning of a level (ALL & MASTER)
     public float GameLength { get; private set; }            // Length of time the user plays the level (from game start to loss/win) (MASTER)
     public int LevelID { get; private set; }                 // ID number of level (MASTER)
-    public int LevelScore { get; private set; }              // Player's level score
 
-    //[DAMAGE FOR ALL ASSETS BY LEVEL]
+    //[PLAYER]
+    public string PlayerName { get; private set; }          // Name derived from (Player.Instance.Name) (ALL)
+    public int PhotonViewID { get; private set; }           // The player's unique Photon ID as related to the game session
+    public float IndividualPlayerMoney { get; private set; }// Player's total money accumulated (ALL)
+    public int PlayerScore { get; private set; }              // Player's level score
+    public float AllPlayersMoney { get; private set; }      // All player's total money accumulated (MASTER)
+    public float AvgPlayerMoney { get; private set; }       // Average of all player's income (MASTER)
+   
+    //[ASSETS]
+    public Vector3 MiningFacilityLocation { get; private set; }     // Returns the GameManager's location of the Mining Facility
+    public Analytics_AssetSuperclass Assets { get; private set; }    // Catalog all asset super types to be tracked in the level
+    public string[] AssetSupertypeNames { get; private set; }  
     public float TotalBallisticTaken_Tower { get; private set; }    // Accumulated in a single level (ALL & MASTER)
-    public float TotalThraceiumTaken_Tower { get; private set; }    // Accumulated in a single level (ALL & MASTER)
     public float TotalBallisticTaken_Enemy { get; private set; }    // Accumulated in a single level (ALL & MASTER)
+    public float TotalThraceiumTaken_Tower { get; private set; }    // Accumulated in a single level (ALL & MASTER)
     public float TotalThraceiumTaken_Enemy { get; private set; }    // Accumulated in a single level (ALL & MASTER)
+    public int TotalBuilt_Tower { get; private set; }               // Sum of all players' towers built
+    public int TotalSpawn_Enemy { get; private set; }               // Number of enemies spawned
+    public int TotalDead_Tower { get; private set; }                // Sum of all players' towers destroyed
+    public int TotalDead_Enemy { get; private set; }                // Sum of all enemies destroyed
+    public float TotalAvgLifeSpanDead_Tower { get; private set; }        // Average lifespan of all players' towers destroyed
+    public float TotalAvgLifeSpanDead_Enemy { get; private set; }        // Average lifespan of all enemies destroyed
+    public float TotalAvgDPS_Tower { get; private set; }                 // Average DPS of all players' towers
+    public float TotalAvgDPS_Enemy { get; private set; }                 // Average DPS of all enemies
 
-    //[TOWER AND ENEMY STATS]
-    //[TOWERS]
-    public int TotalBuilt_Tower { get; private set; }           // Sum of all players' towers built
-    public int TotalDead_Tower { get; private set; }            // Sum of all players' towers destroyed
-    public float AvgLifeSpanDead_Tower { get; private set; }    // Average lifespan of all players' towers destroyed
-    public float AvgDPS_Tower { get; private set; }             // Average DPS of all players' towers
-
-
-    //Avg DPS for each tower type (ALL & MASTER)
-    
-    
-    //Avg distance from center for each tower type (ALL & MASTER)
-    //Avg distance from other tower (ALL & MASTER)
-
-    //[ENEMIES]
-    public int TotalSpawn_Enemy { get; private set; }           // Number of enemies spawned
-    public int TotalDead_Enemy { get; private set; }            // Sum of all enemies destroyed
-    public float AvgLifeSpanDead_Enemy { get; private set; }    // Average lifespan of all enemies destroyed
-    public float AvgDPS_Enemy { get; private set; }             // Average DPS of all enemies
-    //Avg DPS for each enemy type (ALL & MASTER)
     //Find the amount of damage for each enemy to tower (ALL & MASTER)
 
     //[MISCELLANEOUS]
@@ -126,32 +123,54 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     public void InitializePlayerAnalytics(string [] assetSuperTypes)
     {
-        AssetSupertypeNames = assetSuperTypes;
-        CurrentLevelData = GameManager.Instance.CurrentLevelData;
-        if (LastLevelReached == null)
-            LastLevelReached = 0;
+        // Network Analytics
         ObjPhotonView = PhotonView.Get(this);
+        PlayerPhotonView = SessionManager.Instance.GetPlayerInfo();
+
+        // Play Validation Analytics
+        IsMasterClient = SessionManager.Instance.GetPlayerInfo().isMasterClient ? true : false;
+        PlayerCheckIns = new Dictionary<int, bool>();
+        AccountID = PlayerManager.Instance.AccountID;
+        ObjPhotonView.RPC("SendAccountID_All", PhotonTargets.All, AccountID);
+        HaveAllUsersCheckedIn = false;
+        UserCheckInTimeout = 5f;
+
+        // Session Analytics
+        CurrentLevelData = GameManager.Instance.CurrentLevelData;
+        IsEndGameVictory = false;
+        PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
+        PlayerCountChanged = false;
+        GameLength = 0;
+        LevelID = CurrentLevelData.LevelID;
+
+        // Player Analytics
         PlayerName = PlayerManager.Instance.Username;
+        Analytics.SetUserId(PlayerName);    // (12/6/15) At a later date Unity Analytics will allow data aggregated from UserIds.
+        PhotonViewID = PlayerPhotonView.ID;
         IndividualPlayerMoney = CurrentLevelData.StartingMoney;
+        PlayerScore = 0;
         AllPlayersMoney = 0;
         AvgPlayerMoney = 0;
-        PlayerCountChanged = false;
-        PlayerCount = SessionManager.Instance.GetRoomPlayerCount();
-
-        InitializeAssets();
-
-        // Determine Master Client
-        IsMasterClient = SessionManager.Instance.GetPlayerInfo().isMasterClient ? true : false;
 
         // Asset Analytics
+        AssetSupertypeNames = assetSuperTypes;
+        InitializeAssets();
+        TotalBallisticTaken_Tower = 0;
+        TotalBallisticTaken_Enemy = 0;
+        TotalThraceiumTaken_Tower = 0;
+        TotalThraceiumTaken_Enemy = 0;
         TotalBuilt_Tower = 0;
         TotalSpawn_Enemy = 0;
         TotalDead_Tower = 0;
         TotalDead_Enemy = 0;
-        AvgLifeSpanDead_Tower = 0;
-        AvgLifeSpanDead_Enemy = 0;
-        AvgDPS_Tower = 0;
-        AvgDPS_Enemy = 0;
+        TotalAvgLifeSpanDead_Tower = 0;
+        TotalAvgLifeSpanDead_Enemy = 0;
+        TotalAvgDPS_Tower = 0;
+        TotalAvgDPS_Enemy = 0;
+
+        // Miscellaneous Analytics
+        StolenThraceium = 0;
+        NumberOfBarriers = 0;
     }
 
     /// <summary>
@@ -164,7 +183,7 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Initialize the super and sub type assets to individual Lists
+    /// Initialize the super type assets to individual Lists.
     /// </summary>
     private void InitializeSupertypesList()
     {
@@ -172,7 +191,7 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Initialize the sub type assets to individual Lists.
     /// </summary>
     private void InitializeSubtypesList()
     {
@@ -198,16 +217,6 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Public call to save, send, and reset all analytics
-    /// </summary>
-    public void PerformAnalyticsProcess()
-    {
-        AllAnalytics_Save();
-        AllAnalytics_Send();
-        AllAnalytics_Reset();
-    }
-
-    /// <summary>
     /// Sets the Mining Facility location
     /// </summary>
     public void SetMiningFacilityLocation(Vector3 miningFacilityLocation)
@@ -224,37 +233,69 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Determine if the player count changed since the game started.
     /// </summary>
-    public void SetPlayerCountChanged(bool playerCountChanged)
+    public void SetPlayerCountChanged()
     {
-        PlayerCountChanged = playerCountChanged;
+        PlayerCountChanged = PlayerCount != SessionManager.Instance.GetRoomPlayerCount() ? true : false;
     }
 
     /// <summary>
-    /// Save Player analytics
+    /// Outputs information to the Unity editor for use in verifying Analytics tracking.
+    /// </summary>
+    private void DisplayUserCheckInData()
+    {
+        LogError("Number of users: " + PlayerCount
+                 + "\nPlayer count change: " + PlayerCountChanged.ToString());
+        LogError("All player money: " + AllPlayersMoney
+                 + "\nUser AccountIDs: ");
+        foreach (KeyValuePair<int, bool> pair in PlayerCheckIns)
+        {
+            LogError(pair.Key.ToString() + " ");
+        }
+    }
+
+    /// <summary>
+    /// Public call to save, send, and reset all analytics.
+    /// </summary>
+    public void PerformAnalyticsProcess()
+    {
+        AllAnalytics_Save();
+        StartCoroutine(AllAnalytics_SendAndReset());
+    }
+
+    /// <summary>
+    /// Save Player analytics.
     /// </summary>
     public void SavePlayerAnalytics()
     {
         IndividualPlayerMoney = PlayerManager.Instance.TotalMoney;
+        PlayerScore = PlayerManager.Instance.Score;
+        SetPlayerCountChanged();
+
         if (!IsMasterClient)
-            ObjPhotonView.RPC("SavePlayers_MoneyMasterClient", PhotonTargets.MasterClient, IndividualPlayerMoney);
+        {
+            ObjPhotonView.RPC("SavePlayersMoney_MasterClient", PhotonTargets.MasterClient, IndividualPlayerMoney);
+            ObjPhotonView.RPC("SendCheckIn_MasterClient", PhotonTargets.MasterClient, AccountID);
+        }
         else
-            AllPlayersMoney += IndividualPlayerMoney;
+        {
+            SavePlayersMoney_MasterClient(IndividualPlayerMoney);
+            SendCheckIn_MasterClient(AccountID);
+        }
     }
 
     /// <summary>
-    /// Save Level analytics
+    /// Save Session analytics (works in conjunction with FinalizeSaveSessionAnalytics()).
     /// </summary>
     public void SaveSessionAnalytics()
     {
         IsEndGameVictory = GameManager.Instance.Victory;
         GameLength = Time.time - GameManager.Instance.LevelStartTime;
-        LevelID = CurrentLevelData.LevelID;
+
+        // Saves last level reached as the current level if the game was a victory.
         if (CurrentLevelData.LevelID > LastLevelReached && IsEndGameVictory == true)
             LastLevelReached = CurrentLevelData.LevelID;
-        LevelScore = PlayerManager.Instance.Score;
-        PlayerCountChanged = PlayerCount != SessionManager.Instance.GetRoomPlayerCount() ? true : false;
     }
 
     /// <summary>
@@ -262,9 +303,9 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     public void SaveAssetAnalytics()
     {
-        // Send Tower spawn&death informtion
         foreach (Analytics_AssetSupertype supertype in Assets.AssetSupertypes)
         {
+            // Analytics for Towers
             if (supertype.SupertypeName == "Tower")
             {
                 foreach (Analytics_AssetSubtype subtype in supertype.AssetSubtypes)
@@ -273,24 +314,30 @@ public class AnalyticsManager : MonoBehaviour
                     {
                         TotalBuilt_Tower += subtype.GetNumberCreated();
                         TotalDead_Tower += subtype.GetNumberDead();
-                        AvgLifeSpanDead_Tower += subtype.GetTotalLifeSpanDead();
-                        AvgDPS_Tower += subtype.GetTotalDPS();
+                        TotalAvgLifeSpanDead_Tower += subtype.GetTotalLifeSpanDead();
+                        TotalAvgDPS_Tower += subtype.GetTotalDPS();
 
                         // Collect individual Tower analytics
                         //foreach (Analytics_Asset tower in subtype.Assets)
                         //{
                         //}
                     }
+                    // Analytics for Mining Facility
+                    else
+                    {
+
+                    }
                 }
             }
-            if (supertype.SupertypeName == "Enemy")
+                // Analytics for Enemies
+            else if (supertype.SupertypeName == "Enemy")
             {
                 foreach (Analytics_AssetSubtype subtype in supertype.AssetSubtypes)
                 {
                     TotalSpawn_Enemy += subtype.GetNumberCreated();
                     TotalDead_Enemy += subtype.GetNumberDead();
-                    AvgLifeSpanDead_Enemy += subtype.GetTotalLifeSpanDead();
-                    AvgDPS_Enemy += subtype.GetTotalDPS();
+                    TotalAvgLifeSpanDead_Enemy += subtype.GetTotalLifeSpanDead();
+                    TotalAvgDPS_Enemy += subtype.GetTotalDPS();
 
                     // Collect individual Enemy analytics
                     //foreach (Analytics_Asset enemy in subtype.Assets)
@@ -300,10 +347,11 @@ public class AnalyticsManager : MonoBehaviour
             }
         }
 
-            AvgLifeSpanDead_Tower /= TotalDead_Tower;
-            AvgLifeSpanDead_Enemy /= TotalDead_Enemy;
-            AvgDPS_Tower /= TotalBuilt_Tower;
-            AvgDPS_Tower /= TotalSpawn_Enemy;
+            TotalAvgLifeSpanDead_Tower /= TotalDead_Tower;
+            TotalAvgLifeSpanDead_Enemy /= TotalDead_Enemy;
+            
+            TotalAvgDPS_Tower /= TotalBuilt_Tower;
+            TotalAvgDPS_Enemy /= TotalSpawn_Enemy;
     }
 
     /// <summary>
@@ -314,29 +362,48 @@ public class AnalyticsManager : MonoBehaviour
         //PlayerAnalytics_Send();
     }
 
-    public void SendAssetAnalytics()
-    {
-        //AssetAnalytics_Send();
-        HeatMapAnalytics_Send();
-    }
-
     /// <summary>
     /// Public call to send session/level analytics.
     /// </summary>
     public void SendSessionAnalytics()
     {
-        //LevelAnalytics_Send();
-        //MiscellaneousAnalytics_Send();
-        //InitialAnalytics_Send();
+        //AllLevelAnalytics_Send();
+        //AllMiscellaneousAnalytics_Send();
+        //AllInitialAnalytics_Send();
+    }
+
+    public void SendAssetAnalytics()
+    {
+        AssetAnalytics_Send();
+        HeatMapAnalytics_Send();
     }
     #endregion PUBLIC FUNCTIONS
 
     #region RPC Calls
     /// <summary>
-    /// 
+    /// Adds the player's ViewID to the PlayerCheckIns.
     /// </summary>
     [PunRPC]
-    private void SavePlayers_MoneyMasterClient(float playerMoney)
+    private void SendAccountID_All(int accountID)
+    {
+        PlayerCheckIns.Add(accountID, false);
+    }
+
+    /// <summary>
+    /// Indicates the player has sent their analytics to the MasterCLient.
+    /// </summary>
+    [PunRPC]
+    private void SendCheckIn_MasterClient(int accountID)
+    {
+        PlayerCheckIns[accountID] = true;
+        LogError("#" + accountID + ") Checked in @: " + Time.time);
+    }
+
+    /// <summary>
+    /// Adds the player's money to all players' money.
+    /// </summary>
+    [PunRPC]
+    private void SavePlayersMoney_MasterClient(float playerMoney)
     {
         AllPlayersMoney += playerMoney;
     }
@@ -362,17 +429,90 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// Sends all relevant analytics
     /// </summary>
-    private void AllAnalytics_Send()
+    private IEnumerator AllAnalytics_SendAndReset()
     {
         // Each player sends their personal analytics.
+        LogError("[1/6]SendPlayerAnalytics() @: " + Time.time);
         SendPlayerAnalytics();
 
         // If the user is the master client and the number of players haven't changed, send and reset the level anyltics.
         if (IsMasterClient)
         {
+            LogError("[2/6]UserCheckInWaitAndProcess @: " + Time.time);
+            UserCheckInTimeout += Time.time;
+            yield return StartCoroutine(WaitAndProcess_UserCheckIn());
+
+            LogError("[3/6] DisplayUserCheckData() @: " + Time.time);
+            DisplayUserCheckInData();
+
+            LogError("[4/6]SendSessionAnalytics() @: " + Time.time);
             SendSessionAnalytics();
+
+            LogError("[5/6]SendAssetAnalytics() @: " + Time.time);
             SendAssetAnalytics();
+
+            LogError("[6/6] AllAnalytics_Reset() @: " + Time.time);
+            AllAnalytics_Reset();
         }
+    }
+
+    /// <summary>
+    /// Coroutine that runs chceck-in verification every 1/10th second until complete.
+    /// </summary>
+    private IEnumerator WaitAndProcess_UserCheckIn()
+    {
+        // How many while loops that are processed until all players check in
+        int attempts = 0;
+
+        while (!HaveAllUsersCheckedIn || Time.time > UserCheckInTimeout)
+        {
+            // WHAT HAPPENS IF THE PLAYER COUNT CHANGED -- IT WILL BE AN INCOMPLETE SET OF DATA THAT COULD SKEW OTHER DATA.
+            if (PlayerCountChanged)
+            {
+                LogError("[2.1/6]Player count has changed!");
+
+                break;
+            }
+
+            VerifyUserCheckIn();
+
+            attempts++;
+
+            yield return new WaitForSeconds(.1f);
+        }
+
+        LogError("[2.3/6]Number of Check-in Verification Attempts: " + attempts);
+    }
+
+    /// <summary>
+    /// Verify each client has checked in with the Master Client, and finalize group analytics.
+    /// </summary>
+    private void VerifyUserCheckIn()
+    {
+        int numberOfCheckIns = 0;
+
+        // Go through PlayerCheckIns and check if all values are true
+        foreach (KeyValuePair<int, bool> pair in PlayerCheckIns)
+        {
+            if (pair.Value == true)
+                numberOfCheckIns++;
+        }
+
+        // All players have checked in
+        if (numberOfCheckIns == PlayerCount)
+        {
+            HaveAllUsersCheckedIn = true;
+            FinalizeSaveSessionAnalytics();
+            LogError("[2.2/6]All User Checked in!");
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void FinalizeSaveSessionAnalytics()
+    {
+        AvgPlayerMoney = AllPlayersMoney / PlayerCount;
     }
 
     /// <summary>
@@ -390,8 +530,11 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     private void PlayerAnalytics_Reset()
     {
-        IndividualPlayerMoney = 0;
+        PhotonViewID = 0;
         IsMasterClient = false;
+        PlayerCheckIns = new Dictionary<int, bool>();
+        IndividualPlayerMoney = 0;
+        AllPlayersMoney = 0;
     }
 
     /// <summary>
@@ -422,9 +565,10 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     private void PlayerAnalytics_Send()
     {
-        Analytics.CustomEvent("PlayerStats", new Dictionary<string, object>
+        Analytics.CustomEvent(AccountID + "_PlayerStats", new Dictionary<string, object>
         {
-            {"PlayerName", PlayerManager.Instance.Username},
+            {"PlayerName", PlayerName},
+            {"PlayerScore", PlayerScore},
             {"PlayerIncome", IndividualPlayerMoney}
         });
     }
@@ -432,7 +576,7 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// [LEVEL] Send level analytics
     /// </summary>
-    private void LevelAnalytics_Send()
+    private void AllLevelAnalytics_Send()
     {
         Analytics.CustomEvent("LastLevelReached_Event", new Dictionary<string, object>
         {
@@ -450,28 +594,9 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     private void AssetAnalytics_Send()
     {
-        //TowerAnalytics_Send();
-        //EnemyAnalytics_Send();
-        //DamageAnalytics_Send();
-    }
-
-    // Combine with LevelAnalytics?
-    /// <summary>
-    /// [DAMAGE] Level's total ballistic and thraceium damage dealt by player.
-    /// </summary>
-    private void DamageAnalytics_Send()
-    {
-        Analytics.CustomEvent("TotalLevelDamage_Event", new Dictionary<string, object>
-        {
-            {"TowerBallisticTaken", TotalBallisticTaken_Tower},
-            {"TowerThraceiumTaken", TotalThraceiumTaken_Tower},
-            
-            {"EnemyBallisticTaken", TotalBallisticTaken_Enemy},
-            {"EnemyThraceiumTaken", TotalThraceiumTaken_Enemy},
-            
-            {"LevelName", GameManager.Instance.CurrentLevelData.SceneName},
-            {"LevelID", LevelID}
-        });
+        //AllTowerAnalytics_Send();
+        //AllEnemyAnalytics_Send();
+        //AllDamageAnalytics_Send();
     }
 
     /// <summary>
@@ -529,44 +654,87 @@ public class AnalyticsManager : MonoBehaviour
     /// <summary>
     /// Set optional stats for Analytics.
     /// </summary>
-    private void InitialAnalytics_Send()
+    private void AllInitialAnalytics_Send()
     {
         //Analytics.SetUserBirthYear(1986);
         //Analytics.SetUserGender(0);
-        //Analytics.SetUserId("ID Number");
+        //Analytics.SetUserId(AccountID.ToString());
+        Analytics.SetUserId(PlayerName);
     }
 
     // [TOWERS]
     /// <summary>
-    /// Send Tower Analytics custom event to Unity's servers
+    /// Send Tower Analytics to Unity's servers.
     /// </summary>
-    private void TowerAnalytics_Send()
+    private void AllTowerAnalytics_Send()
     {
         Analytics.CustomEvent("TowerData_Event", new Dictionary<string, object>
         {
             {"TotalBuilt_Tower", TotalBuilt_Tower},
-            {"LifeSpan_Tower", AvgLifeSpanDead_Tower},
+            {"LifeSpan_Tower", TotalAvgLifeSpanDead_Tower},
+        });
+    }
+
+    /// <summary>
+    /// Send subtype Tower Analytics to Unity's servers.
+    /// </summary>
+    private void TowerSubtypeAnalytics_Send()
+    {
+        Analytics.CustomEvent("TowerData_Event", new Dictionary<string, object>
+        {
+            {"TotalBuilt_Tower", TotalBuilt_Tower},
+            {"LifeSpan_Tower", TotalAvgLifeSpanDead_Tower},
         });
     }
 
     // [ENEMIES]
     /// <summary>
-    /// Send Enemy Analytics custom event to Unity's servers
+    /// Send Enemy Analytics to Unity's servers.
     /// </summary>
-    private void EnemyAnalytics_Send()
+    private void AllEnemyAnalytics_Send()
     {
         Analytics.CustomEvent("EnemyData_Event", new Dictionary<string, object>
         {
             {"TotalSpawn_Enemy", TotalSpawn_Enemy},
-            {"LifeSpan_Enemy", AvgLifeSpanDead_Enemy},
+            {"LifeSpan_Enemy", TotalAvgLifeSpanDead_Enemy},
+        });
+    }
+
+    /// <summary>
+    /// Send subtype Enemy Analytics to Unity's servers.
+    /// </summary>
+    private void EnemySubtypeAnalytics_Send()
+    {
+        Analytics.CustomEvent("EnemyData_Event", new Dictionary<string, object>
+        {
+            {"TotalSpawn_Enemy", TotalSpawn_Enemy},
+            {"LifeSpan_Enemy", TotalAvgLifeSpanDead_Enemy},
+        });
+    }
+
+    /// <summary>
+    /// [DAMAGE] Level's total ballistic and thraceium damage dealt by player.
+    /// </summary>
+    private void AllDamageAnalytics_Send()
+    {
+        Analytics.CustomEvent("TotalLevelDamage_Event", new Dictionary<string, object>
+        {
+            {"TowerBallisticTaken", TotalBallisticTaken_Tower},
+            {"TowerThraceiumTaken", TotalThraceiumTaken_Tower},
+            
+            {"EnemyBallisticTaken", TotalBallisticTaken_Enemy},
+            {"EnemyThraceiumTaken", TotalThraceiumTaken_Enemy},
+            
+            {"LevelName", GameManager.Instance.CurrentLevelData.SceneName},
+            {"LevelID", LevelID}
         });
     }
 
     // [MISCELLANEOUS]
     /// <summary>
-    /// Send Miscellaneous Analytics custom event to Unity's servers
+    /// Send Miscellaneous Analytics custom event to Unity's servers.
     /// </summary>
-    private void MiscellaneousAnalytics_Send()
+    private void AllMiscellaneousAnalytics_Send()
     {
         Analytics.CustomEvent("Miscellaneous_Event", new Dictionary<string, object>
         {
@@ -591,4 +759,4 @@ public class AnalyticsManager : MonoBehaviour
     }
 
     #endregion MessageHandling
-}
+    }
