@@ -63,11 +63,12 @@ public enum PhotonNetworkingMessage
     OnLeftRoom,
 
     /// <summary>
-    /// Called after switching to a new MasterClient when the current one leaves. The former already got removed from the player list.
+    /// Called after switching to a new MasterClient when the current one leaves.
     /// </summary>
     /// <remarks>
     /// This is not called when this client enters a room.
-    ///
+    /// The former MasterClient is still in the player list when this method get called.
+    /// 
     /// Example: void OnMasterClientSwitched(PhotonPlayer newMasterClient) { ... }
     /// </remarks>
     OnMasterClientSwitched,
@@ -81,7 +82,7 @@ public enum PhotonNetworkingMessage
     ///
     /// Example: void OnPhotonCreateRoomFailed() { ... }
     ///
-    /// Example: void OnPhotonCreateRoomFailed(object[] codeAndMsg) { // codeAndMsg[0] is int ErrorCode. codeAndMsg[1] is string debug msg.  }
+    /// Example: void OnPhotonCreateRoomFailed(object[] codeAndMsg) { // codeAndMsg[0] is short ErrorCode. codeAndMsg[1] is string debug msg.  }
     /// </remarks>
     OnPhotonCreateRoomFailed,
 
@@ -94,7 +95,7 @@ public enum PhotonNetworkingMessage
     ///
     /// Example: void OnPhotonJoinRoomFailed() { ... }
     ///
-    /// Example: void OnPhotonJoinRoomFailed(object[] codeAndMsg) { // codeAndMsg[0] is int ErrorCode. codeAndMsg[1] is string debug msg.  }
+    /// Example: void OnPhotonJoinRoomFailed(object[] codeAndMsg) { // codeAndMsg[0] is short ErrorCode. codeAndMsg[1] is string debug msg.  }
     /// </remarks>
     OnPhotonJoinRoomFailed,
 
@@ -231,7 +232,7 @@ public enum PhotonNetworkingMessage
     ///
     /// Example: void OnPhotonRandomJoinFailed() { ... }
     ///
-    /// Example: void OnPhotonRandomJoinFailed(object[] codeAndMsg) { // codeAndMsg[0] is int ErrorCode. codeAndMsg[1] is string debug msg.  }
+    /// Example: void OnPhotonRandomJoinFailed(object[] codeAndMsg) { // codeAndMsg[0] is short ErrorCode. codeAndMsg[1] is string debug msg.  }
     /// </remarks>
     OnPhotonRandomJoinFailed,
 
@@ -442,17 +443,6 @@ public enum PhotonTargets
     /// Benefit: The server's order of sending the RPCs is the same on all clients.
     /// </remarks>
     AllBufferedViaServer
-}
-
-/// <summary>
-/// Options of lobby types available. Lobby types might be implemented in certain Photon versions and won't be available on older servers.
-/// </summary>
-public enum LobbyType :byte
-{
-    /// <summary>This lobby is used unless another is defined by game or JoinRandom. Room-lists will be sent and JoinRandomRoom can filter by matching properties.</summary>
-    Default = 0,
-    /// <summary>This lobby type lists rooms like Default but JoinRandom has a parameter for SQL-like "where" clauses for filtering. This allows bigger, less, or and and combinations.</summary>
-    SqlLobby = 2
 }
 
 

@@ -5,6 +5,10 @@ labels:
 - PUN
 - Photon
 - Networking
+MonoAssemblyImporter:
+  serializedVersion: 1
+  iconMap: {}
+  executionOrder: {}
 PluginImporter:
   serializedVersion: 1
   iconMap: {}

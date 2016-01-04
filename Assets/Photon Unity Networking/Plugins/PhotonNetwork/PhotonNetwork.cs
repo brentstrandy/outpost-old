@@ -10,6 +10,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -27,7 +28,7 @@ using System.IO;
 public static class PhotonNetwork
 {
     /// <summary>Version number of PUN. Also used in GameVersion to separate client version from each other.</summary>
-    public const string versionPUN = "1.60";
+    public const string versionPUN = "1.65";
 
     /// <summary>Version string for your this build. Can be used to separate incompatible clients. Sent during connect.</summary>
     /// <remarks>This is only sent when you connect so that is also the place you set it usually (e.g. in ConnectUsingSettings).</remarks>
@@ -188,7 +189,7 @@ public static class PhotonNetwork
 
     /// <summary>The server (type) this client is currently connected or connecting to.</summary>
     /// <remarks>Photon uses 3 different roles of servers: Name Server, Master Server and Game Server.</remarks>
-    public static ServerConnection Server { get { return PhotonNetwork.networkingPeer.server; } }
+    public static ServerConnection Server { get { return (PhotonNetwork.networkingPeer != null) ? PhotonNetwork.networkingPeer.server : ServerConnection.NameServer; } }
 
     /// <summary>
     /// A user's authentication values used during connect for Custom Authentication with Photon (and a custom service/community).
@@ -216,7 +217,7 @@ public static class PhotonNetwork
                 return offlineModeRoom;
             }
 
-            return networkingPeer.mCurrentGame;
+            return networkingPeer.CurrentGame;
         }
     }
 
@@ -304,9 +305,18 @@ public static class PhotonNetwork
         }
     }
 
-    /// <summary>
-    /// The full PhotonPlayer list, including the local player.
-    /// </summary>
+    /// <summary>The list of players in the current room, including the local player.</summary>
+    /// <remarks>
+    /// This list is only valid, while the client is in a room.
+    /// It automatically gets updated when someone joins or leaves.
+    ///
+    /// This can be used to list all players in a room.
+    /// Each player's PhotonPlayer.customProperties are accessible (set and synchronized via
+    /// PhotonPlayer.SetCustomProperties).
+    ///
+    /// You can use a PhotonPlayer.TagObject to store an arbitrary object for reference.
+    /// That is not synchronized via the network.
+    /// </remarks>
     public static PhotonPlayer[] playerList
     {
         get
@@ -318,9 +328,18 @@ public static class PhotonNetwork
         }
     }
 
-    /// <summary>
-    /// The other PhotonPlayers, not including our local player.
-    /// </summary>
+    /// <summary>The list of players in the current room, excluding the local player.</summary>
+    /// <remarks>
+    /// This list is only valid, while the client is in a room.
+    /// It automatically gets updated when someone joins or leaves.
+    ///
+    /// This can be used to list all other players in a room.
+    /// Each player's PhotonPlayer.customProperties are accessible (set and synchronized via
+    /// PhotonPlayer.SetCustomProperties).
+    ///
+    /// You can use a PhotonPlayer.TagObject to store an arbitrary object for reference.
+    /// That is not synchronized via the network.
+    /// </remarks>
     public static PhotonPlayer[] otherPlayers
     {
         get
@@ -394,6 +413,15 @@ public static class PhotonNetwork
     public static bool UsePrefabCache = true;
 
     /// <summary>
+    /// An Object Pool can be used to keep and reuse instantiated object instances. It replaced Unity's default Instantiate and Destroy methods.
+    /// </summary>
+    /// <remarks>
+    /// To use a GameObject pool, implement IPunPrefabPool and assign it here.
+    /// Prefabs are identified by name.
+    /// </remarks>
+    public static IPunPrefabPool PrefabPool { get { return networkingPeer.ObjectPool; } set { networkingPeer.ObjectPool = value; }}
+
+    /// <summary>
     /// Keeps references to GameObjects for frequent instantiation (out of memory instead of loading the Resources).
     /// </summary>
     /// <remarks>
@@ -452,24 +480,23 @@ public static class PhotonNetwork
             if (value && connected)
             {
                 Debug.LogError("Can't start OFFLINE mode while connected!");
+                return;
+            }
+
+            if (networkingPeer.PeerState != PeerStateValue.Disconnected)
+            {
+                networkingPeer.Disconnect(); // Cleanup (also calls OnLeftRoom to reset stuff)
+            }
+            isOfflineMode = value;
+            if (isOfflineMode)
+            {
+                networkingPeer.ChangeLocalID(-1);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster);
             }
             else
             {
-                if (networkingPeer.PeerState != PeerStateValue.Disconnected)
-                {
-                    networkingPeer.Disconnect(); // Cleanup (also calls OnLeftRoom to reset stuff)
-                }
-                isOfflineMode = value;
-                if (isOfflineMode)
-                {
-                    networkingPeer.ChangeLocalID(-1);
-                    NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster);
-                }
-                else
-                {
-                    offlineModeRoom = null;
-                    networkingPeer.ChangeLocalID(-1);
-                }
+                offlineModeRoom = null;
+                networkingPeer.ChangeLocalID(-1);
             }
         }
     }
@@ -511,19 +538,17 @@ public static class PhotonNetwork
     private static bool _mAutomaticallySyncScene = false;
 
     /// <summary>
-    /// This setting defines if players in a room should destroy a leaving player's instantiated GameObjects and PhotonViews.
-    ///
-    /// When "this client" creates a room/game, autoCleanUpPlayerObjects is copied to that room's properties and used by all
-    /// PUN clients in that room (no matter what their autoCleanUpPlayerObjects value is).
-    ///
-    /// If room.AutoCleanUp is enabled in a room, the PUN clients will destroy a player's objects on leave.
+    /// This setting defines per room, if network-instantiated GameObjects (with PhotonView) get cleaned up when the creator of it leaves.
     /// </summary>
     /// <remarks>
-    /// When enabled, the server will clean RPCs, instantiated GameObjects and PhotonViews of the leaving player and joining
-    /// players won't get those at anymore.
+    /// This setting is done per room. It can't be changed in the room and it will override the settings of individual clients.
     ///
-    /// Once a room is created, this setting can't be changed anymore.
+    /// If room.AutoCleanUp is enabled in a room, the PUN clients will destroy a player's GameObjects on leave.
+    /// This includes GameObjects manually instantiated (via RPCs, e.g.).
+    /// When enabled, the server will clean RPCs, instantiated GameObjects and PhotonViews of the leaving player, too. and
+    /// Players who join after someone left, won't get the events of that player anymore.
     ///
+    /// Under the hood, this setting is stored as a Custom Room Property.
     /// Enabled by default.
     /// </remarks>
     public static bool autoCleanUpPlayerObjects
@@ -571,12 +596,12 @@ public static class PhotonNetwork
     /// Set in PhotonServerSettings asset. Enable to get a list of active lobbies from the Master Server.
     /// </summary>
     /// <remarks>
-    /// Lobby Statistics can be useful if a game uses multiple lobbies and you want 
+    /// Lobby Statistics can be useful if a game uses multiple lobbies and you want
     /// to show activity of each to players.
-    /// 
+    ///
     /// This value is stored in PhotonServerSettings.
     ///
-    /// PhotonNetwork.LobbyStatistics is updated when you connect to the Master Server. 
+    /// PhotonNetwork.LobbyStatistics is updated when you connect to the Master Server.
     /// There is also a callback PunBehaviour.
     /// </remarks>
     public static bool EnableLobbyStatistics
@@ -595,14 +620,14 @@ public static class PhotonNetwork
     /// If turned on, the Master Server will provide information about active lobbies for this application.
     /// </summary>
     /// <remarks>
-    /// Lobby Statistics can be useful if a game uses multiple lobbies and you want 
+    /// Lobby Statistics can be useful if a game uses multiple lobbies and you want
     /// to show activity of each to players. Per lobby, you get: name, type, room- and player-count.
-    /// 
-    /// PhotonNetwork.LobbyStatistics is updated when you connect to the Master Server. 
+    ///
+    /// PhotonNetwork.LobbyStatistics is updated when you connect to the Master Server.
     /// There is also a callback PunBehaviour.OnLobbyStatisticsUpdate, which you should implement
     /// to update your UI (e.g.).
     ///
-    /// Lobby Statistics are not turned on by default. 
+    /// Lobby Statistics are not turned on by default.
     /// Enable them in the PhotonServerSettings file of the project.
     /// </remarks>
     public static List<TypedLobbyInfo> LobbyStatistics
@@ -786,6 +811,51 @@ public static class PhotonNetwork
             }
         }
     }
+
+    /// <summary>
+    /// The current server's millisecond timestamp.
+    /// </summary>
+    /// <remarks>
+    /// This can be useful to sync actions and events on all clients in one room.
+    /// The timestamp is based on the server's Environment.TickCount.
+    ///
+    /// It will overflow from a positive to a negative value every so often, so
+    /// be careful to use only time-differences to check the time delta when things
+    /// happen.
+    ///
+    /// This is the basis for PhotonNetwork.time.
+    /// </remarks>
+    public static int ServerTimestamp
+    {
+        get
+        {
+            if (offlineMode)
+            {
+                return Environment.TickCount;
+            }
+
+            return networkingPeer.ServerTimeInMilliSeconds;
+        }
+    }
+
+    /// <summary>
+    /// Defines after how many seconds PUN will close a connection, after Unity's OnApplicationPause(true) call.
+    /// </summary>
+    /// <remarks>
+    /// The value is set in seconds.
+    /// Set a value greater than 0.001f, if you want to disconnect in background.
+    /// Default: 0.0f.
+    ///
+    /// Note:
+    /// Some platforms (e.g. iOS) don't allow to keep a connection while the app is in background.
+    /// In those cases, this value does not change anything.
+    ///
+    /// Unity's OnApplicationPause() callback is broken in some exports (Android) of some Unity versions.
+    /// Make sure OnApplicationPause() gets the callbacks you'd expect on the platform you target!
+    /// Check PhotonHandler.OnApplicationPause(bool pause), to see the implementation.
+    ///
+    /// </remarks>
+    public static float BackgroundTimeout = 0.0f;
 
     /// <summary>
     /// Are we the master client?
@@ -1030,13 +1100,13 @@ public static class PhotonNetwork
         // Set up the NetworkingPeer and use protocol of PhotonServerSettings
         ConnectionProtocol protocol = PhotonNetwork.PhotonServerSettings.Protocol;
 #if UNITY_WEBGL
-        if (protocol != ConnectionProtocol.WebSocket && protocol != ConnectionProtocol.WebSocketSecure) 
+        if (protocol != ConnectionProtocol.WebSocket && protocol != ConnectionProtocol.WebSocketSecure)
         {
 			Debug.Log("WebGL only supports WebSocket protocol. Overriding PhotonServerSettings.");
 	        protocol = ConnectionProtocol.WebSocketSecure;
 		}
 #endif
-        networkingPeer = new NetworkingPeer(photonMono, string.Empty, protocol);
+        networkingPeer = new NetworkingPeer(string.Empty, protocol);
         networkingPeer.QuickResendAttempts = 2;
         networkingPeer.SentCountAllowance = 7;
 
@@ -1067,7 +1137,7 @@ public static class PhotonNetwork
     public static void SwitchToProtocol(ConnectionProtocol cp)
     {
 #if UNITY_WEBGL
-        if (cp != ConnectionProtocol.WebSocket && cp != ConnectionProtocol.WebSocketSecure) 
+        if (cp != ConnectionProtocol.WebSocket && cp != ConnectionProtocol.WebSocketSecure)
         {
 			Debug.Log("WebGL only supports WebSocket protocol. Overriding PhotonServerSettings.");
 	        cp = ConnectionProtocol.WebSocketSecure;
@@ -1089,7 +1159,7 @@ public static class PhotonNetwork
         }
 
         // set up a new NetworkingPeer
-        NetworkingPeer newPeer = new NetworkingPeer(photonMono, String.Empty, cp);
+        NetworkingPeer newPeer = new NetworkingPeer(String.Empty, cp);
         newPeer.CustomAuthenticationValues = networkingPeer.CustomAuthenticationValues;
         newPeer.PlayerName= networkingPeer.PlayerName;
         newPeer.mLocalActor = networkingPeer.mLocalActor;
@@ -1261,7 +1331,7 @@ public static class PhotonNetwork
             Debug.LogWarning("ConnectToBestCloudServer() failed. Can only connect while in state 'Disconnected'. Current state: " + networkingPeer.PeerState);
             return false;
         }
-        
+
         if (PhotonServerSettings == null)
         {
             Debug.LogError("Can't connect: Loading settings failed. ServerSettings asset must be in any 'Resources' folder as: " + PhotonNetwork.serverSettingsAssetFile);
@@ -1454,66 +1524,6 @@ public static class PhotonNetwork
         return networkingPeer.OpFindFriends(friendsToFind);
     }
 
-    /// <summary>
-    /// Creates a room with given name but fails if this room is existing already.
-    /// </summary>
-    /// <remarks>
-    /// If you don't want to create a unique room-name, pass null or "" as name and the server will assign a roomName (a GUID as string).
-    ///
-    /// The created room is automatically placed in the currently used lobby or the default-lobby if you didn't explicitly join one.
-    ///
-    /// Call this only on the master server.
-    /// Internally, the master will respond with a server-address (and roomName, if needed). Both are used internally
-    /// to switch to the assigned game server and roomName
-    /// </remarks>
-    /// <param name="roomName">Unique name of the room to create. Pass null or "" to make the server generate a name.</param>
-    /// <param name="isVisible">Shows (or hides) this room from the lobby's listing of rooms.</param>
-    /// <param name="isOpen">Allows (or disallows) others to join this room.</param>
-    /// <param name="maxPlayers">Max number of players that can join the room.</param>
-    [Obsolete("Use overload with RoomOptions and TypedLobby parameters.")]
-    public static bool CreateRoom(string roomName, bool isVisible, bool isOpen, int maxPlayers)
-    {
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.isVisible = isVisible;
-        roomOptions.isOpen = isOpen;
-        roomOptions.maxPlayers = (byte)maxPlayers;
-
-        return CreateRoom(roomName, roomOptions, null);
-    }
-
-    /// <summary>
-    /// Creates a room with given name but fails if this room is existing already.
-    /// </summary>
-    /// <remarks>
-    /// If you don't want to create a unique room-name, pass null or "" as name and the server will assign a roomName (a GUID as string).
-    ///
-    /// The created room is automatically placed in the currently used lobby or the default-lobby if you didn't explicitly join one.
-    ///
-    /// Call this only on the master server.
-    /// Internally, the master will respond with a server-address (and roomName, if needed). Both are used internally
-    /// to switch to the assigned game server and roomName.
-    ///
-    /// PhotonNetwork.autoCleanUpPlayerObjects will become this room's AutoCleanUp property and that's used by all clients that join this room.
-    /// </remarks>
-    /// <param name="roomName">Unique name of the room to create. Pass null or "" to make the server generate a name.</param>
-    /// <param name="isVisible">Shows (or hides) this room from the lobby's listing of rooms.</param>
-    /// <param name="isOpen">Allows (or disallows) others to join this room.</param>
-    /// <param name="maxPlayers">Max number of players that can join the room.</param>
-    /// <param name="customRoomProperties">Custom properties of the new room (set on create, so they are immediately available).</param>
-    /// <param name="propsToListInLobby">Array of custom-property-names that should be forwarded to the lobby (include only the useful ones).</param>
-    [Obsolete("Use overload with RoomOptions and TypedLobby parameters.")]
-    public static bool CreateRoom(string roomName, bool isVisible, bool isOpen, int maxPlayers, Hashtable customRoomProperties, string[] propsToListInLobby)
-    {
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.isVisible = isVisible;
-        roomOptions.isOpen = isOpen;
-        roomOptions.maxPlayers = (byte)maxPlayers;
-        roomOptions.customRoomProperties = customRoomProperties;
-        roomOptions.customRoomPropertiesForLobby = propsToListInLobby;
-
-        return CreateRoom(roomName, roomOptions, null);
-    }
-
 
     /// <summary>
     /// Creates a room with given name but fails if this room(name) is existing already. Creates random name for roomName null.
@@ -1532,7 +1542,7 @@ public static class PhotonNetwork
     /// <param name="roomName">Unique name of the room to create.</param>
     public static bool CreateRoom(string roomName)
     {
-        return CreateRoom(roomName, null, null);
+        return CreateRoom(roomName, null, null, null);
     }
 
     /// <summary>
@@ -1562,6 +1572,37 @@ public static class PhotonNetwork
     /// <param name="typedLobby">If null, the room is automatically created in the currently used lobby (which is "default" when you didn't join one explicitly).</param>
     public static bool CreateRoom(string roomName, RoomOptions roomOptions, TypedLobby typedLobby)
     {
+        return CreateRoom(roomName, roomOptions, typedLobby, null);
+    }
+
+    ///  <summary>
+    ///  Creates a room but fails if this room is existing already. Can only be called on Master Server.
+    ///  </summary>
+    ///  <remarks>
+    ///  When successful, this calls the callbacks OnCreatedRoom and OnJoinedRoom (the latter, cause you join as first player).
+    ///  If the room can't be created (because it exists already), OnPhotonCreateRoomFailed gets called.
+    ///
+    ///  If you don't want to create a unique room-name, pass null or "" as name and the server will assign a roomName (a GUID as string).
+    ///
+    ///  Rooms can be created in any number of lobbies. Those don't have to exist before you create a room in them (they get
+    ///  auto-created on demand). Lobbies can be useful to split room lists on the server-side already. That can help keep the room
+    ///  lists short and manageable.
+    ///  If you set a typedLobby parameter, the room will be created in that lobby (no matter if you are active in any).
+    ///  If you don't set a typedLobby, the room is automatically placed in the currently active lobby (if any) or the
+    ///  default-lobby.
+    ///
+    ///  Call this only on the master server.
+    ///  Internally, the master will respond with a server-address (and roomName, if needed). Both are used internally
+    ///  to switch to the assigned game server and roomName.
+    ///
+    ///  PhotonNetwork.autoCleanUpPlayerObjects will become this room's autoCleanUp property and that's used by all clients that join this room.
+    ///  </remarks>
+    /// <param name="roomName">Unique name of the room to create. Pass null or "" to make the server generate a name.</param>
+    /// <param name="roomOptions">Common options for the room like maxPlayers, initial custom room properties and similar. See RoomOptions type..</param>
+    /// <param name="typedLobby">If null, the room is automatically created in the currently used lobby (which is "default" when you didn't join one explicitly).</param>
+    /// <param name="expectedUsers"></param>
+    private static bool CreateRoom(string roomName, RoomOptions roomOptions, TypedLobby typedLobby, string[] expectedUsers)
+    {
         if (offlineMode)
         {
             if (offlineModeRoom != null)
@@ -1572,72 +1613,21 @@ public static class PhotonNetwork
             EnterOfflineRoom(roomName, roomOptions, true);
             return true;
         }
-
-
         if (networkingPeer.server != ServerConnection.MasterServer || !connectedAndReady)
         {
             Debug.LogError("CreateRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
             return false;
         }
 
-        return networkingPeer.OpCreateGame(roomName, roomOptions, typedLobby);
-    }
+        typedLobby = typedLobby ?? ((networkingPeer.insideLobby) ? networkingPeer.lobby : null);  // use given lobby, or active lobby (if any active) or none
 
+        LoadbalancingPeer.EnterRoomParams opParams = new LoadbalancingPeer.EnterRoomParams();
+        opParams.RoomName = roomName;
+        opParams.RoomOptions = roomOptions;
+        opParams.Lobby = typedLobby;
+        //opParams.ExpectedUsers = expectedUsers;
 
-    /// <summary>Join room by roomName with an option to create it on the fly if not existing.</summary>
-    /// <remarks>
-    /// Join will try to enter a room by roomName. If this room is full or closed, this will fail.
-    /// If the room is not existing, JoinRoom will also fail by default.
-    ///
-    /// You can set createIfNotExists to true to make the server create the room if required.
-    /// This makes it easier for groups of players to get into the same room. Once the group
-    /// exchanged a roomName, any player can try to join or create the room in one step -
-    /// it doesn't matter who's first.
-    ///
-    /// OnJoinedRoom() gets called if the room existed and was joined,
-    /// OnCreatedRoom() gets called if the room didn't exist and this client created it.
-    /// OnPhotonJoinRoomFailed() gets called if the room couldn't be joined or created.
-    /// Implement either in any script in the scene to react to joining/creating a room.
-    ///
-    /// To join a room from the lobby's listing, use RoomInfo.name as roomName here.
-    ///
-    /// In OfflineMode, this always "finds" and joins a room.
-    /// </remarks>
-    ///
-    /// <see cref="PhotonNetworkingMessage.OnPhotonJoinRoomFailed"/>
-    /// <see cref="PhotonNetworkingMessage.OnJoinedRoom"/>
-    ///
-    /// <param name="roomName">Unique name of the room to join (or create if createIfNotExists is true).</param>
-    /// <param name="createIfNotExists">If true, the server will attempt to create a room, making the success callback OnCreatedRoom().</param>
-    [Obsolete("Use overload with roomOptions and TypedLobby parameter.")]
-    public static bool JoinRoom(string roomName, bool createIfNotExists)
-    {
-        if (connectionStateDetailed == PeerState.Joining || connectionStateDetailed == PeerState.Joined || connectionStateDetailed == PeerState.ConnectedToGameserver)
-        {
-            Debug.LogError("JoinRoom aborted: You can only join a room while not currently connected/connecting to a room.");
-        }
-        else if (room != null)
-        {
-            Debug.LogError("JoinRoom aborted: You are already in a room!");
-        }
-        else if (roomName == string.Empty)
-        {
-            Debug.LogError("JoinRoom aborted: You must specifiy a room name!");
-        }
-        else
-        {
-            if (offlineMode)
-            {
-                EnterOfflineRoom(roomName, null, false);
-                return true;
-            }
-            else
-            {
-                return networkingPeer.OpJoinRoom(roomName, null, null, createIfNotExists);
-            }
-        }
-
-        return false; // offline and OpJoin both return but the error-cases don't
+        return networkingPeer.OpCreateGame(opParams);
     }
 
 
@@ -1668,21 +1658,22 @@ public static class PhotonNetwork
             EnterOfflineRoom(roomName, null, true);
             return true;
         }
-
-
         if (networkingPeer.server != ServerConnection.MasterServer || !connectedAndReady)
         {
             Debug.LogError("JoinRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
             return false;
         }
-
         if (string.IsNullOrEmpty(roomName))
         {
             Debug.LogError("JoinRoom failed. A roomname is required. If you don't know one, how will you join?");
             return false;
         }
 
-        return networkingPeer.OpJoinRoom(roomName, null, null, false);
+
+        LoadbalancingPeer.EnterRoomParams opParams = new LoadbalancingPeer.EnterRoomParams();
+        opParams.RoomName = roomName;
+
+        return networkingPeer.OpJoinRoom(opParams);
     }
 
 
@@ -1711,21 +1702,27 @@ public static class PhotonNetwork
             EnterOfflineRoom(roomName, roomOptions, true);  // in offline mode, JoinOrCreateRoom assumes you create the room
             return true;
         }
-
-
         if (networkingPeer.server != ServerConnection.MasterServer || !connectedAndReady)
         {
             Debug.LogError("JoinOrCreateRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
             return false;
         }
-
         if (string.IsNullOrEmpty(roomName))
         {
             Debug.LogError("JoinOrCreateRoom failed. A roomname is required. If you don't know one, how will you join?");
             return false;
         }
 
-        return networkingPeer.OpJoinRoom(roomName, roomOptions, typedLobby, true);
+        typedLobby = typedLobby ?? ((networkingPeer.insideLobby) ? networkingPeer.lobby : null);  // use given lobby, or active lobby (if any active) or none
+
+        LoadbalancingPeer.EnterRoomParams opParams = new LoadbalancingPeer.EnterRoomParams();
+        opParams.RoomName = roomName;
+        opParams.RoomOptions = roomOptions;
+        opParams.Lobby = typedLobby;
+        opParams.CreateIfNotExists = true;
+        opParams.PlayerProperties = player.customProperties;
+
+        return networkingPeer.OpJoinRoom(opParams);
     }
 
     /// <summary>
@@ -1807,16 +1804,24 @@ public static class PhotonNetwork
             EnterOfflineRoom("offline room", null, true);
             return true;
         }
-
-
         if (networkingPeer.server != ServerConnection.MasterServer || !connectedAndReady)
         {
             Debug.LogError("JoinRandomRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
             return false;
         }
 
-        return networkingPeer.OpJoinRandomRoom(expectedCustomRoomProperties, expectedMaxPlayers, null, matchingType, typedLobby, sqlLobbyFilter);
+        typedLobby = typedLobby ?? ((networkingPeer.insideLobby) ? networkingPeer.lobby : null);  // use given lobby, or active lobby (if any active) or none
+
+        LoadbalancingPeer.OpJoinRandomRoomParams opParams = new LoadbalancingPeer.OpJoinRandomRoomParams();
+        opParams.ExpectedCustomRoomProperties = expectedCustomRoomProperties;
+        opParams.ExpectedMaxPlayers = expectedMaxPlayers;
+        opParams.MatchingType = matchingType;
+        opParams.TypedLobby = typedLobby;
+        opParams.SqlLobbyFilter = sqlLobbyFilter;
+
+        return networkingPeer.OpJoinRandomRoom(opParams);
     }
+
 
     /// <summary>
     /// Internally used helper-method to setup an offline room, the numbers for actor and master-client and to do the callbacks.
@@ -1826,11 +1831,11 @@ public static class PhotonNetwork
         offlineModeRoom = new Room(roomName, roomOptions);
         networkingPeer.ChangeLocalID(1);
         offlineModeRoom.masterClientId = 1;
-        
+
         if (createdRoom)
         {
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
-        } 
+        }
         NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
     }
 
@@ -2458,9 +2463,9 @@ public static class PhotonNetwork
 
         if (room.serverSideMasterClient)
         {
-            Hashtable newProps = new Hashtable() {{GameProperties.MasterClientId, masterClientPlayer.ID}};
-            Hashtable prevProps = new Hashtable() {{GameProperties.MasterClientId, networkingPeer.mMasterClientId}};
-            return networkingPeer.OpSetPropertiesOfRoom(newProps, false, 0, prevProps);
+            Hashtable newProps = new Hashtable() { { GamePropertyKey.MasterClientId, masterClientPlayer.ID } };
+            Hashtable prevProps = new Hashtable() { { GamePropertyKey.MasterClientId, networkingPeer.mMasterClientId } };
+            return networkingPeer.OpSetPropertiesOfRoom(newProps, expectedProperties: prevProps, webForward: false);
         }
         else
         {
@@ -2879,7 +2884,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        Application.LoadLevel(levelNumber);
+        SceneManager.LoadScene(levelNumber);
     }
 
     /// <summary>Wraps loading a level to pause the network mesage-queue. Optionally syncs the loaded level in a room.</summary>
@@ -2905,7 +2910,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        Application.LoadLevel(levelName);
+        SceneManager.LoadScene(levelName);
     }
 
 
@@ -2991,7 +2996,7 @@ public static class PhotonNetwork
         }
     }
 
-    
+
     /// <summary>
     /// Internally used by Editor scripts, called on Hierarchy change (includes scene save) to remove surplus hidden PhotonHandlers.
     /// </summary>
