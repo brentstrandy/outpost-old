@@ -46,8 +46,11 @@ public class Start_Menu : MonoBehaviour
     private void OnDisable()
     {
         // Remove listeners for all applicable events
-        SessionManager.Instance.OnSMConnected -= Connected_Event;
-        SessionManager.Instance.OnSMConnectionFail -= ConnectionFailed_Event;
+		if(SessionManager.Instance != null)
+		{
+        	SessionManager.Instance.OnSMConnected -= Connected_Event;
+        	SessionManager.Instance.OnSMConnectionFail -= ConnectionFailed_Event;
+		}
     }
 
     #region OnClick

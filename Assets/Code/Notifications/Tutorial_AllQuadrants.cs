@@ -40,6 +40,9 @@ public class Tutorial_AllQuadrants : Notification
 	private void OnDestroy()
 	{
 		// Remove all references to delegate events that were created for this script
-		InputManager.Instance.OnCameraPositionChanged -= OnCameraPositionChanged;
+		if(InputManager.Instance != null)
+		{
+			InputManager.Instance.OnCameraPositionChanged -= OnCameraPositionChanged;
+		}
 	}
 }

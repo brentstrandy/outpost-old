@@ -353,8 +353,11 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         // Remove all references to delegate events that were created for this script
-		SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
-        SessionManager.Instance.OnSMPlayerLeftRoom -= OnPlayerLeft;
+		if(SessionManager.Instance != null)
+		{
+			SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
+        	SessionManager.Instance.OnSMPlayerLeftRoom -= OnPlayerLeft;
+		}
     }
 
     #region MessageHandling

@@ -27,7 +27,10 @@ public class Account_Menu : MonoBehaviour
     private void OnDisable()
     {
         // Remove listeners for all applicable events
-        SessionManager.Instance.OnSMDisconnected -= Disconnected_Event;
+		if(SessionManager.Instance != null)
+		{
+        	SessionManager.Instance.OnSMDisconnected -= Disconnected_Event;
+		}
     }
 
     #region OnClick

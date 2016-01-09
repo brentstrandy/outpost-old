@@ -25,9 +25,12 @@ public class JoinGame_Menu : MonoBehaviour
     private void OnDisable()
     {
         // Remove listeners for all applicable events
-        SessionManager.Instance.OnSMReceivedRoomListUpdate -= RoomListUpdated_Event;
-        SessionManager.Instance.OnSMJoinRoomFail -= JoinRoomFail_Event;
-        SessionManager.Instance.OnSMJoinedRoom -= JoinedRoom_Event;
+		if(SessionManager.Instance != null)
+		{
+        	SessionManager.Instance.OnSMReceivedRoomListUpdate -= RoomListUpdated_Event;
+        	SessionManager.Instance.OnSMJoinRoomFail -= JoinRoomFail_Event;
+        	SessionManager.Instance.OnSMJoinedRoom -= JoinedRoom_Event;
+		}
     }
 
     #region OnClick

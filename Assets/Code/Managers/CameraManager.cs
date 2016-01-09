@@ -140,7 +140,10 @@ public class CameraManager : MonoBehaviour
 	private void OnDestroy()
 	{
 		// Remove all references to delegate events that were created for this script
-		InputManager.Instance.OnCameraPositionChanged -= OnCameraPositionChange;
+		if(InputManager.Instance != null)
+		{
+			InputManager.Instance.OnCameraPositionChanged -= OnCameraPositionChange;
+		}
 	}
 
     #region MessageHandling

@@ -27,11 +27,14 @@ public class MatchmakingGame_Menu : MonoBehaviour
     private void OnDisable()
     {
         // Remove listeners for all applicable events
-        SessionManager.Instance.OnSMJoinedRoom -= JoinedRoom_Event;
-        SessionManager.Instance.OnSMRandomJoinFail -= RandomJoinFail_Event;
-        SessionManager.Instance.OnSMJoinRoomFail -= JoinRoomFail_Event;
-        SessionManager.Instance.OnSMCreatedRoom -= CreatedRoom_Event;
-        SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFailed_Event;
+		if(SessionManager.Instance != null)
+		{
+        	SessionManager.Instance.OnSMJoinedRoom -= JoinedRoom_Event;
+        	SessionManager.Instance.OnSMRandomJoinFail -= RandomJoinFail_Event;
+        	SessionManager.Instance.OnSMJoinRoomFail -= JoinRoomFail_Event;
+        	SessionManager.Instance.OnSMCreatedRoom -= CreatedRoom_Event;
+        	SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFailed_Event;
+		}
     }
 
     #region OnClick

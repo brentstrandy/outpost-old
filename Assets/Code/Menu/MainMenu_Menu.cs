@@ -14,8 +14,11 @@ public class MainMenu_Menu : MonoBehaviour
     private void OnDisable()
     {
         // Remove listeners for all applicable events
-        SessionManager.Instance.OnSMCreatedRoom -= RoomCreated_Event;
-        SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFail_Event;
+		if(SessionManager.Instance != null)
+		{
+        	SessionManager.Instance.OnSMCreatedRoom -= RoomCreated_Event;
+        	SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFail_Event;
+		}
     }
 
     #region OnClick

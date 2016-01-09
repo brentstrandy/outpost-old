@@ -69,9 +69,12 @@ public class RoomDetails_Menu : MonoBehaviour
     private void OnDisable()
     {
         // Remove listeners for all applicable events (these listeners are added again when the menu is shown)
-        SessionManager.Instance.OnSMPlayerJoinedRoom -= PlayerJoinedRoom_Event;
-        SessionManager.Instance.OnSMPlayerLeftRoom -= PlayerLeftRoom_Event;
-        SessionManager.Instance.OnSMLeftRoom -= KickedFromRoom_Event;
+		if(SessionManager.Instance != null)
+		{
+			SessionManager.Instance.OnSMPlayerJoinedRoom -= PlayerJoinedRoom_Event;
+        	SessionManager.Instance.OnSMPlayerLeftRoom -= PlayerLeftRoom_Event;
+        	SessionManager.Instance.OnSMLeftRoom -= KickedFromRoom_Event;
+		}
 
         // Clear chat history so the next room will start with a clear chat area
         Chat_GUIText.GetComponent<Text>().text = "";

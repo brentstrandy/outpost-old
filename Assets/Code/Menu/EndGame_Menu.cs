@@ -45,7 +45,10 @@ public class EndGame_Menu : MonoBehaviour
     {
         Visible = false;
 
-        SessionManager.Instance.OnSMSwitchMaster -= MasterClientQuit_Event;
+		if(SessionManager.Instance != null)
+		{
+        	SessionManager.Instance.OnSMSwitchMaster -= MasterClientQuit_Event;
+		}
     }
 
     // Use this for initialization
