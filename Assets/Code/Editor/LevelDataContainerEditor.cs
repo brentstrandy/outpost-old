@@ -138,7 +138,8 @@ public class LevelDataContainerEditor : Editor
 
     private List<LevelData> LoadFromXML_Server()
     {
-        WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData.xml");
+        //WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData.xml");
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData_GetData.php");
         string myXML;
 
         while (!www.isDone)
@@ -148,7 +149,7 @@ public class LevelDataContainerEditor : Editor
         myXML = www.text;
 
         // Sort by StartTime and PlayerCount before loading
-        return XMLParser<LevelData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
+        return XMLParser<LevelData>.XMLDeserializer_Server(myXML).OrderBy(o => o.LevelID).ToList();
     }
 
     #region MessageHandling

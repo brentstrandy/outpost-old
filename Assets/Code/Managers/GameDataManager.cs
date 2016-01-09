@@ -71,7 +71,8 @@ public class GameDataManager : MonoBehaviour
         StartCoroutine(EnemyDataManager.LoadDataFromServer("EnemyData.xml"));
         // Run coroutine to download LevelData from server (This coroutine cannot be called from the DataManager because
         // it must be called from a MonoBehavior class)
-        StartCoroutine(LevelDataManager.LoadDataFromServer("LevelData.xml"));
+		StartCoroutine(LevelDataManager.LoadDataFromServer("LevelData_GetData.php"));
+		//StartCoroutine(LevelDataManager.LoadDataFromServer("LevelData.xml"));
     }
 
     public void SwitchToLocalData()
