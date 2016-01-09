@@ -41,8 +41,6 @@ public class EnemySpawnManager
                 int viewID = SessionManager.Instance.AllocateNewViewID();
                 // Asset's display name
                 string displayName = spawnDetails.EnemyName;
-                // Asset's spawn position
-                Vector3 enemySpawnPosition = GameManager.Instance.TerrainMesh.IntersectPosition(GameManager.Instance.AngleToPosition(spawnDetails.StartAngle), 0);
 
                 // Tell all other players that an Enemy has spawned (SpawnEnemyAcrossNetwork is currently in GameManager.cs)
                 ObjPhotonView.RPC("SpawnEnemyAcrossNetwork", PhotonTargets.All, displayName, spawnDetails.StartAngle, viewID);

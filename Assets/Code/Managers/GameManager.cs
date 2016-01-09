@@ -150,7 +150,7 @@ public class GameManager : MonoBehaviour
     {
         // TerrainMesh must be set when the level is started because the HexMesh object is not created
         // until the level loads. All levels MUST begin with a defined prefix for this to work properly
-        if (Application.loadedLevelName.StartsWith("Level"))
+		if(SceneManagerHelper.ActiveSceneName.StartsWith("Level"))
         {
             TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexMesh>() as HexMesh;
         }

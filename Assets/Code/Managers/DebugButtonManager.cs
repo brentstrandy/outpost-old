@@ -57,7 +57,7 @@ public class DebugButtonManager : MonoBehaviour
 					copyText += "Level Time: " + Mathf.RoundToInt(Time.time - GameManager.Instance.LevelStartTime).ToString();
 
 					TextEditor te = new TextEditor();
-					te.content = new GUIContent(copyText);
+					te.text = new GUIContent(copyText).ToString();
 					te.SelectAll();
 					te.Copy();
 
