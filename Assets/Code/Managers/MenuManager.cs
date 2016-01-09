@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages high-level menu operations. Is responsible for transitioning to new menus
@@ -85,7 +86,7 @@ public class MenuManager : MonoBehaviour
         CurrentLevelData = levelData;
 
         // Load the selected level
-        Application.LoadLevelAsync(CurrentLevelData.SceneName);
+		SceneManager.LoadSceneAsync(CurrentLevelData.SceneName);
 
         // Show the loading screen as the level is loaded
         LoadLevelPanel.SetActive(true);
@@ -97,7 +98,7 @@ public class MenuManager : MonoBehaviour
     public void ReturnToRoomDetailsMenu()
     {
         // Return to the main game scene where the main menu functionality takes place
-        Application.LoadLevel("MainGame");
+		SceneManager.LoadScene("MainGame");
 
         // Show the Room Details menu
         SetCurrentMenuPanel(RoomDetailsPanel);

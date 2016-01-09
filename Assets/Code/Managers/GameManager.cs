@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages single game levels. This manager is only persistent within a single game instance. It will be destroyed
@@ -150,7 +151,7 @@ public class GameManager : MonoBehaviour
     {
         // TerrainMesh must be set when the level is started because the HexMesh object is not created
         // until the level loads. All levels MUST begin with a defined prefix for this to work properly
-		if(SceneManagerHelper.ActiveSceneName.StartsWith("Level"))
+		if(SceneManager.GetActiveScene().name.StartsWith("Level"))
         {
             TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexMesh>() as HexMesh;
         }
@@ -352,7 +353,7 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         // Remove all references to delegate events that were created for this script
-        SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
+		SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
         SessionManager.Instance.OnSMPlayerLeftRoom -= OnPlayerLeft;
     }
 

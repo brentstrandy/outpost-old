@@ -12,8 +12,6 @@ public class PopUpController : MonoBehaviour
     private string PopUpHolderName = "PopUpHolder";
     private string PopUpHolderLocation;
 
-    private Camera MainCamera;
-
     private GameObject ObjectOfEffect;
     private GameObject PopUp;
     private GameObject PopUpHolder;
@@ -31,11 +29,6 @@ public class PopUpController : MonoBehaviour
 
     public Vector3 PopUp_Position;
     public TextMesh _TextMesh;
-
-    private void Awake()
-    {
-        MainCamera = Camera.main;
-    }
 
     // Update is called once per frame
     private void Update()

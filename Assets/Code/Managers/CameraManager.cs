@@ -27,7 +27,7 @@ public class CameraManager : MonoBehaviour
     private int DirectionIndex;
     //private Vector3 TargetDirection;
     //private Vector3 TargetPosition;
-    private readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
+    //private readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
     private float Smooth; // use for camera lerp
 

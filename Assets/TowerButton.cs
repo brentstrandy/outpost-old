@@ -6,8 +6,6 @@ public class TowerButton : MonoBehaviour
 {
 	public bool ShowDebugLogs = true;
 	
-	private TowerData TowerAttributes;
-	
 	public GameObject BackgroundImage;
 	public GameObject TowerText;
 	public GameObject SelectedImage;
@@ -18,8 +16,6 @@ public class TowerButton : MonoBehaviour
 	public void SetTowerData(TowerData towerData)
 	{
 		string towerDescription = "";
-		
-		TowerAttributes = towerData;
 		
 		// Set background image based on level
 		BackgroundImage.GetComponent<Image>().sprite = Resources.Load("GUI/" + towerData.PrefabName + "_Mug", typeof(Sprite)) as Sprite;

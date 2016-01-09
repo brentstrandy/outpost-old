@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Player is a Singleton used for the entirety of the game session.
@@ -50,7 +51,7 @@ public class PlayerManager : MonoBehaviour
         }
         private set { }
     }
-
+		
     public int Score { get; private set; }
     public float Money { get; private set; }
     public float TotalMoney { get; private set; }
@@ -69,8 +70,6 @@ public class PlayerManager : MonoBehaviour
 
     // Tower Selection
     public HexCoord SelectedTowerCoord { get; private set; }
-
-    private int PlayerColorIndex;
 
     // Components
     private PhotonView ObjPhotonView;
@@ -351,7 +350,7 @@ public class PlayerManager : MonoBehaviour
         var overlay = terrain.Overlays[(int)TerrainOverlays.Highlight][PhotonNetwork.player.ID];
 
         overlay.Update(coord);
-        overlay.Color = PlayerColors.colors[PlayerColorIndex];
+		overlay.Color = PlayerColors.colors[(int)SessionManager.Instance.GetPlayerInfo().customProperties["PlayerColorIndex"]];
         overlay.Show();
 
         if (Mode == PlayerMode.Placement)
@@ -424,7 +423,7 @@ public class PlayerManager : MonoBehaviour
         var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
 
         overlay.Update(coord);
-        overlay.Color = PlayerColors.colors[PlayerColorIndex];
+		overlay.Color = PlayerColors.colors[(int)SessionManager.Instance.GetPlayerInfo().customProperties["PlayerColorIndex"]];
         overlay.Show();
 
         // Deselect the old tower
@@ -709,7 +708,7 @@ public class PlayerManager : MonoBehaviour
     public void OnLevelWasLoaded(int level)
     {
         // All levels MUST begin with a defined prefix for this to work properly
-        if (Application.loadedLevelName.StartsWith("Level"))
+		if (SceneManager.GetActiveScene().name.StartsWith("Level"))
         {
             // Instantiate a player locator point that is used for the allies' Radar
             PlayerLocator = SessionManager.Instance.InstantiateObject("PlayerLocator", new Vector3(0, 0, 0), Quaternion.identity) as GameObject;

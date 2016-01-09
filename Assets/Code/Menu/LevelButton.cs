@@ -5,8 +5,6 @@ public class LevelButton : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
 
-    private LevelData LevelAttributes;
-
     public GameObject BackgroundImage;
     public GameObject LevelText;
     public GameObject SelectedImage;
@@ -18,8 +16,6 @@ public class LevelButton : MonoBehaviour
     public void SetLevelData(LevelData levelData)
     {
         string levelDescription = "";
-
-        LevelAttributes = levelData;
 
         // Set background image based on level
         BackgroundImage.GetComponent<Image>().sprite = Resources.Load("GUI/" + levelData.SceneName + "_Mug", typeof(Sprite)) as Sprite;

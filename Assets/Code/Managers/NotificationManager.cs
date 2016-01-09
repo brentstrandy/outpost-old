@@ -16,7 +16,7 @@ public class NotificationManager : MonoBehaviour
 
     private List<NotificationData> LevelNotificationList;
     private float StartTime;
-    private PhotonView ObjPhotonView;
+    //private PhotonView ObjPhotonView;
 
     #region INSTANCE (SINGLETON)
 
@@ -48,7 +48,7 @@ public class NotificationManager : MonoBehaviour
     private void Start()
     {
         // Store a reference to the PhotonView
-        ObjPhotonView = PhotonView.Get(this);
+        //ObjPhotonView = PhotonView.Get(this);
 
         FinishedSpawning = false;
     }

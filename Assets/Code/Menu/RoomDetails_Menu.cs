@@ -477,7 +477,7 @@ public class RoomDetails_Menu : MonoBehaviour
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
             int index = 0;
-            bool previousLevelComplete = true;
+            //bool previousLevelComplete = true;
 
             // First, order levels by ID
             GameDataManager.Instance.LevelDataManager.SortDataList();
