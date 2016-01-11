@@ -4,6 +4,14 @@ using UnityEngine.UI;
 
 public class RoomDetails_Menu : MonoBehaviour
 {
+	/* Player Color Picking
+	* The Master Client is initially assigned a color when the room is created
+	* When a client joins, the Master Client assigns a color to that client (triggering the Event "PlayerCustPropUpdated_Event")
+	* When "PlayerCustPropUpdated_Event" is triggered all players update their display
+	* When a client changes their color the MasterClient is notified, validates, and updates the player's color (triggering the Event "PlayerCustPropUpdated_Event")
+	* When the Master Client is switched to a different client, the new Master Client assumes the role of the old Master Client
+	*/
+
     public bool ShowDebugLogs = true;
 
     // Handles to GUI objects
@@ -14,6 +22,7 @@ public class RoomDetails_Menu : MonoBehaviour
     public GameObject SendChat_GUIInput;
     public GameObject StartGame_GUIButton;
     public GameObject LevelTitle_GUILabel;
+	public Dropdown PlayerColor_GUIDropdown;
 
     /// <summary>
     /// Tracks GUI objects for each tower that is selected for the Loadout
@@ -34,7 +43,8 @@ public class RoomDetails_Menu : MonoBehaviour
     private LevelData LevelLoadoutData;
 
     private bool LevelSelected;
-    private string AvailableColorIndexes = "01234567";
+    //private string AvailableColorIndexes = "01234567";
+	private int[] PlayerColorIndexes;
 
     private PhotonView ObjPhotonView;
 
@@ -43,6 +53,13 @@ public class RoomDetails_Menu : MonoBehaviour
         TowerButtonList = new List<GameObject>();
         SelectedTowerButtonList = new List<GameObject>();
         TowerLoadoutData = new List<TowerData>();
+		
+		PlayerColorIndexes = new int[PlayerColors.colors.Length];
+		// Initialize all player colors
+		for(int i = 0; i < PlayerColors.colors.Length; i++)
+			PlayerColorIndexes[i] = -1;
+
+		SetPlayerColor(GetNextColorIndex(), SessionManager.Instance.GetPlayerInfo());
 
         // Save a handle to the photon view associated with this GameObject for use later
         ObjPhotonView = PhotonView.Get(this);
@@ -59,6 +76,7 @@ public class RoomDetails_Menu : MonoBehaviour
         SessionManager.Instance.OnSMPlayerLeftRoom += PlayerLeftRoom_Event;
         SessionManager.Instance.OnSMLeftRoom += KickedFromRoom_Event;
         SessionManager.Instance.OnSMSwitchMaster += MasterClientSwitched_Event;
+		SessionManager.Instance.OnSMPlayerPropertiesChanged += PlayerCustPropUpdated_Event;
 
         Initialize();
     }
@@ -74,6 +92,8 @@ public class RoomDetails_Menu : MonoBehaviour
 			SessionManager.Instance.OnSMPlayerJoinedRoom -= PlayerJoinedRoom_Event;
         	SessionManager.Instance.OnSMPlayerLeftRoom -= PlayerLeftRoom_Event;
         	SessionManager.Instance.OnSMLeftRoom -= KickedFromRoom_Event;
+			SessionManager.Instance.OnSMSwitchMaster -= MasterClientSwitched_Event;
+			SessionManager.Instance.OnSMPlayerPropertiesChanged -= PlayerCustPropUpdated_Event;
 		}
 
         // Clear chat history so the next room will start with a clear chat area
@@ -91,6 +111,15 @@ public class RoomDetails_Menu : MonoBehaviour
         else
             StartGame_GUIButton.SetActive(false);
 
+		// Initialize all player colors
+		for(int i = 0; i < PlayerColors.colors.Length; i++)
+			PlayerColorIndexes[i] = -1;
+		foreach(PhotonPlayer pp in SessionManager.Instance.GetAllPlayersInRoom())
+		{
+			if(pp.customProperties["PlayerColorIndex"] != null)
+				PlayerColorIndexes[(int)pp.customProperties["PlayerColorIndex"]] = pp.ID;
+		}
+
         // Immediately refresh the player name list to show the host
         RefreshPlayerNames();
 
@@ -99,6 +128,9 @@ public class RoomDetails_Menu : MonoBehaviour
 
         // Add Level Buttons for each Level (this needs to be done before the tower buttons because the towers depend on the LevelData)
         InitiateLevelButtons();
+
+		// Select the level currently chosen by the Master Client
+		NewLevelSelected(LevelLoadoutData.DisplayName);
 
         // The towers are automatically refreshed when the level buttons are initiated
         //RefreshTowerButtons();
@@ -211,6 +243,12 @@ public class RoomDetails_Menu : MonoBehaviour
         SessionManager.Instance.KickPlayer(player);
     }
 
+	public void PlayerColor_Click()
+	{
+		if(!PlayerColor_GUIDropdown.captionText.text.Contains("<!>"))
+			ObjPhotonView.RPC("SetPlayerColor", PhotonTargets.MasterClient, System.Array.FindIndex(PlayerColors.names, x => x == PlayerColor_GUIDropdown.captionText.text.ToString()));
+	}
+
     #endregion ON CLICK
 
     #region EVENTS
@@ -221,14 +259,10 @@ public class RoomDetails_Menu : MonoBehaviour
     /// <param name="player">Player Data</param>
     private void PlayerJoinedRoom_Event(PhotonPlayer player)
     {
-        // Give the player a color (assign it only if player is the Master Client)
-        int colorIndex = AssignColor();
-        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-            player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", colorIndex } });
+		// Immediately set the player's color
+		SetPlayerColor(GetNextColorIndex(), player);
 
-        // Tell the new Player which level is currently selected
-        ObjPhotonView.RPC("NewLevelSelected", player, LevelLoadoutData.DisplayName);
-
+		// New player has joined, update the list of current players
         RefreshPlayerNames();
 
         // Update whether or not the start button is enabled based on the current number of players in the room
@@ -242,7 +276,7 @@ public class RoomDetails_Menu : MonoBehaviour
     private void PlayerLeftRoom_Event(PhotonPlayer player)
     {
         // Unassign color given to the player
-        //UnassignColor((int)player.customProperties["PlayerColorIndex"]);
+        UnassignColorIndex((int)player.customProperties["PlayerColorIndex"]);
 
         RefreshPlayerNames();
 
@@ -259,6 +293,20 @@ public class RoomDetails_Menu : MonoBehaviour
         // Tell the MenuManager to transition back to the main menu
         MenuManager.Instance.ShowMainMenu();
     }
+
+	/// <summary>
+	/// Event listener that is triggered when any player updates a custom property
+	/// </summary>
+	/// <param name="playerAndUpdatedProps">Player and updated properties.</param>
+	private void PlayerCustPropUpdated_Event(object[] playerAndUpdatedProps)
+	{
+		// The client needs to save which colors have been picked so they know
+		if(!SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			AssignColorIndex((int)((PhotonPlayer)playerAndUpdatedProps[0]).customProperties["PlayerColorIndex"], ((PhotonPlayer)playerAndUpdatedProps[0]).ID);
+
+		this.RefreshPlayerColorDropdown();
+		this.RefreshPlayerNames();
+	}
 
     private void MasterClientSwitched_Event(PhotonPlayer newMasterClient)
     {
@@ -322,7 +370,44 @@ public class RoomDetails_Menu : MonoBehaviour
         MenuManager.Instance.ShowStartGame(LevelLoadoutData);
     }
 
+	[PunRPC]
+	private void SetPlayerColor(int colorIndex, PhotonMessageInfo msgInfo)
+	{
+		SetPlayerColor(colorIndex, msgInfo.sender);
+	}
+
     #endregion [PunRPC] CALLS
+
+	private void SetPlayerColor(int colorIndex, PhotonPlayer player)
+	{
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			// Ensure the color is available to be picked
+			if(PlayerColorIndexes[colorIndex] == -1)
+			{
+				AssignColorIndex(colorIndex, player.ID);
+
+				// Set the player's color, triggering the Event "PlayerCustPropUpdated_Event"
+				player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", colorIndex } });
+			}
+		}
+	}
+
+	private void RefreshPlayerColorDropdown()
+	{
+		string colorTitle;
+		PlayerColor_GUIDropdown.ClearOptions();
+
+		for(int i = 0; i < PlayerColors.colors.Length; i++)
+		{
+			if(PlayerColorIndexes[i] != -1)
+				colorTitle = "<!> " + PlayerColors.names[i].ToString();
+			else
+				colorTitle = PlayerColors.names[i].ToString();
+
+			PlayerColor_GUIDropdown.options.Add(new Dropdown.OptionData(colorTitle));
+		}
+	}
 
     /// <summary>
     /// Refresh the names of all players currently in the room
@@ -340,6 +425,11 @@ public class RoomDetails_Menu : MonoBehaviour
                 // and will not use unique PhotonPlayers for each (http://stackoverflow.com/questions/25819406/unity-4-6-how-to-stop-clones-sharing-listener)
                 PhotonPlayer pp = playerList[i];
                 PlayerName_GUIText[i].GetComponent<Text>().text = pp.name;
+
+				if(pp.customProperties["PlayerColorIndex"] != null)
+					PlayerName_GUIText[i].GetComponent<Text>().color = PlayerColors.colors[(int)pp.customProperties["PlayerColorIndex"]];
+				else
+					PlayerName_GUIText[i].GetComponent<Text>().color = Color.white;
 
                 // Master Client can kick players
                 if (SessionManager.Instance.GetPlayerInfo().isMasterClient && pp.name != PlayerManager.Instance.Username)
@@ -360,23 +450,47 @@ public class RoomDetails_Menu : MonoBehaviour
             else
             {
                 PlayerName_GUIText[i].GetComponent<Text>().text = "<OPEN>";
+				PlayerName_GUIText[i].GetComponent<Text>().color = Color.white;
                 PlayerName_GUIText[i].transform.GetChild(0).gameObject.SetActive(false);
             }
         }
     }
 
-    private int AssignColor()
-    {
-        int index = -1;
-        int.TryParse(AvailableColorIndexes[0].ToString(), out index);
-        AvailableColorIndexes = AvailableColorIndexes.Remove(0, 1);
+	/// <summary>
+	/// Simply get the next available color - do NOT assign the color yet
+	/// </summary>
+	/// <returns>The next color index.</returns>
+	private int GetNextColorIndex()
+	{
+		int index = -1;
 
-        return index;
-    }
+		for(int i = 0; i < PlayerColorIndexes.Length; i++)
+		{
+			if(PlayerColorIndexes[i] == -1)
+			{
+				index = i;
+				i = PlayerColorIndexes.Length;
+			}
+		}
 
-    private void UnassignColor(int colorIndex)
+		return index;
+	}
+
+	private void AssignColorIndex(int colorIndex, int playerID)
+	{
+		// Remove the old index before assigning it in a new place
+		for(int i = 0; i < PlayerColorIndexes.Length; i++)
+		{
+			if(PlayerColorIndexes[i] == playerID)
+				PlayerColorIndexes[i] = -1;
+		}
+
+		PlayerColorIndexes[colorIndex] = playerID;
+	}
+
+    private void UnassignColorIndex(int colorIndex)
     {
-        AvailableColorIndexes = colorIndex.ToString() + AvailableColorIndexes;
+		PlayerColorIndexes[colorIndex] = -1;
     }
 
     /// <summary>
@@ -385,6 +499,8 @@ public class RoomDetails_Menu : MonoBehaviour
     private void RefreshRoomDetails()
     {
         RoomTitle_GUIText.GetComponent<Text>().text = SessionManager.Instance.GetCurrentRoomInfo().name.Substring(0, SessionManager.Instance.GetCurrentRoomInfo().name.IndexOf("(")); ;
+
+		RefreshPlayerColorDropdown();
     }
 
     /// <summary>

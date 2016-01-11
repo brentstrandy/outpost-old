@@ -18,6 +18,8 @@ public class SessionManager : MonoBehaviour
 
     public delegate void SessionManagerActionRoomFailure(object[] codeAndMsg);
 
+	public delegate void SessionManagerActionCustProperties(object[] parameters);
+
     public delegate void SessionManagerActionPlayer(PhotonPlayer player);
 
     public delegate void SessionManagerActionAuthFailed(string message);
@@ -101,6 +103,11 @@ public class SessionManager : MonoBehaviour
     /// Called when the master client was switched to a different client
     /// </summary>
     public event SessionManagerActionPlayer OnSMSwitchMaster;
+
+	/// <summary>
+	/// Called when the custom properties for any player have changed
+	/// </summary>
+	public event SessionManagerActionCustProperties OnSMPlayerPropertiesChanged;
 
     #endregion EVENTS (DELEGATES)
 
@@ -657,6 +664,19 @@ public class SessionManager : MonoBehaviour
         if (OnSMPlayerLeftRoom != null)
             OnSMPlayerLeftRoom(player);
     }
+
+	/// <summary>
+	/// Called when any player's custom properties have changed
+	/// </summary>
+	/// <param name="playerAndUpdatedProps">Player and updated properties.</param>
+	private void OnPhotonPlayerPropertiesChanged(object[] playerAndUpdatedProps)
+	{
+		this.Log("Player (" + ((PhotonPlayer)playerAndUpdatedProps[0]).name + ") properties changed");
+
+		// Call delegate event linked to this action
+		if(OnSMPlayerPropertiesChanged != null)
+			OnSMPlayerPropertiesChanged(playerAndUpdatedProps);
+	}
 
     #endregion PHOTON PLAYER
 

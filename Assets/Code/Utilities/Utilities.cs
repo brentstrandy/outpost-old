@@ -44,4 +44,5 @@ public enum PlayerMode
 public static class PlayerColors
 {
     public static Color[] colors = new Color[] { Color.blue, Color.red, Color.green, Color.yellow, Color.magenta, Color.white, Color.black, Color.gray };
+	public static string[] names = new string[] { "Blue", "Red", "Green", "Yellow", "Magenta", "White", "Black", "Gray" };
 }
