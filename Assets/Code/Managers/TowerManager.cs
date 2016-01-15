@@ -96,6 +96,33 @@ public class TowerManager
         return ActiveTowerList.Find(x => x.NetworkViewID == viewID);
     }
 
+	public void FreezePlayerTowers(string username)
+	{
+		// Run through each of the player's towers, freezing them
+		foreach(Tower tower in ActiveTowerList.FindAll(x => x.OwnerUsername == username))
+		{
+			tower.FreezeTower();
+		}
+	}
+
+	public void UnfreezePlayerTowers(PhotonPlayer owner)
+	{
+		// Run through each of the player's towers, unfreezing them
+		foreach(Tower tower in ActiveTowerList.FindAll(x => x.OwnerUsername == owner.name))
+		{
+			tower.UnfreezeTower(owner);
+		}
+	}
+
+	public void ReassignPlayerTowers(PhotonPlayer owner)
+	{
+		// Run through each of the player's towers, freezing them for 5 minutes
+		foreach(Tower tower in ActiveTowerList.FindAll(x => x.OwnerUsername == owner.name))
+		{
+			tower.ReallocateTower(owner);
+		}
+	}
+
     #region MessageHandling
 
     protected void Log(string message)

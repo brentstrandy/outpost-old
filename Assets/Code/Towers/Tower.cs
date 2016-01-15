@@ -11,6 +11,7 @@ public class Tower : MonoBehaviour
 
     public bool ShowDebugLogs = true;
     public PhotonPlayer Owner { get; protected set; }
+	public string OwnerUsername { get; protected set; }
 
     // Tower Attributes/Details/Data
     public TowerData TowerAttributes;
@@ -29,6 +30,7 @@ public class Tower : MonoBehaviour
     public GameObject EmissionPoint;
     public GameObject TowerRing;
 	public GameObject DestructibleObject;
+	public GameObject FrozenIndicator;
 
     // Components
     public HealthBarController HealthBar;
@@ -87,8 +89,8 @@ public class Tower : MonoBehaviour
     {
         TowerAttributes = towerData;
         Owner = owner;
+		OwnerUsername = owner.name;
         Health = TowerAttributes.MaxHealth;
-        PlayerColor = PlayerColors.colors[(int)Owner.customProperties["PlayerColorIndex"]];
 
         // Set the speed at which this tower is built
         //this.GetComponent<Animation>()[TowerAttributes.PrefabName + "_Build"].speed = (1 / TowerAttributes.StartupTime);
@@ -109,18 +111,7 @@ public class Tower : MonoBehaviour
             go.transform.localPosition = Vector3.zero;
         }
 
-        // Set the player's color on any material titled "PlayerColorMaterial"
-        foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
-        {
-            foreach (Material material in renderer.materials)
-            {
-                if (material.name.Contains("PlayerColorMaterial"))
-                {
-                    material.SetColor("_Color", PlayerColor);
-                    material.SetColor("_EmissionColor", PlayerColor);
-                }
-            }
-        }
+		this.SetPlayerColor(PlayerColors.colors[(int)Owner.customProperties["PlayerColorIndex"]]);
 
         // Initiate animation playback speeds based on Tower Attributes
         ObjAnimator.SetFloat("Cooldown Playback Speed", TowerAttributes.RateOfFire);
@@ -133,6 +124,24 @@ public class Tower : MonoBehaviour
         if (TowerAttributes.DisplayName != "Mining Facility" && GameManager.Instance.GameRunning)
             AnalyticsAsset = AnalyticsManager.Instance.Assets.FindAsset("Tower", TowerAttributes.DisplayName, NetworkViewID);
     }
+
+	private void SetPlayerColor(Color playerColor)
+	{
+		PlayerColor = playerColor;
+
+		// Set the player's color on any material titled "PlayerColorMaterial"
+		foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+		{
+			foreach (Material material in renderer.materials)
+			{
+				if (material.name.Contains("PlayerColorMaterial"))
+				{
+					material.SetColor("_Color", PlayerColor);
+					material.SetColor("_EmissionColor", PlayerColor);
+				}
+			}
+		}
+	}
 
     #endregion INITIALIZE
 
@@ -173,6 +182,29 @@ public class Tower : MonoBehaviour
             }
         }
     }
+
+	public void FreezeTower()
+	{
+		if(FrozenIndicator != null)
+			FrozenIndicator.SetActive(true);
+	}
+
+	public void UnfreezeTower(PhotonPlayer owner)
+	{
+		Owner = owner;
+		if(FrozenIndicator != null)
+			FrozenIndicator.SetActive(false);
+	}
+
+	public void ReallocateTowerOwner(PhotonPlayer owner)
+	{
+		Debug.Log("Reallocate tower");
+		Owner = owner;
+		OwnerUsername = Owner.name;
+		SetPlayerColor(PlayerColors.colors[(int)Owner.customProperties["PlayerColorIndex"]]);
+		if(FrozenIndicator != null)
+			FrozenIndicator.SetActive(false);
+	}
 
     /// <summary>
     /// Used by the animation system. Called when the Startup Animation Finishes

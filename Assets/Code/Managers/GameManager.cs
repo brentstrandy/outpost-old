@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 /// <summary>
 /// Manages single game levels. This manager is only persistent within a single game instance. It will be destroyed
@@ -21,6 +22,9 @@ public class GameManager : MonoBehaviour
     public LevelData CurrentLevelData { get; private set; }
     public DataManager<EnemySpawnData> EnemySpawnDataManager { get; private set; }
     public DataManager<NotificationData> LevelNotificationDataManager { get; private set; }
+
+	private Dictionary<string, float> DroppedPlayersInWaiting = new Dictionary<string, float>();
+	private List<string> TempList = new List<string>();
 
     public bool Victory { get; private set; }
     public bool GameRunning { get; private set; }
@@ -66,6 +70,7 @@ public class GameManager : MonoBehaviour
         // Track events in order to react to Session Manager events as they happen
         SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
         SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
+		SessionManager.Instance.OnSMPlayerJoinedRoom += OnPlayerJoined;
 
         // Store LevelData from MenuManager
         CurrentLevelData = MenuManager.Instance.CurrentLevelData;
@@ -113,6 +118,25 @@ public class GameManager : MonoBehaviour
             // TO DO: This should not be checked every update loop. It can probably just be checked every 1-2 seconds
             if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
                 EndGameCheck();
+
+			// Manage towers of dropped players
+			if(DroppedPlayersInWaiting.Count > 0)
+			{
+				// If any players have dropped, reassign their towers after a certain amount of time
+				foreach(KeyValuePair<string, float> item in DroppedPlayersInWaiting)
+				{
+					if(Time.time - item.Value > 5.0f)
+					{
+						// Reassign player's towers to the current Master Client
+						TowerManager.ReassignPlayerTowers(SessionManager.Instance.GetMasterClient());
+						TempList.Add(item.Key);
+					}
+				}
+
+				// If a player's towers were reassigned, stop tracking them
+				foreach(string username in TempList)
+					DroppedPlayersInWaiting.Remove(username);
+			}
         }
     }
 
@@ -292,8 +316,23 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerLeft(PhotonPlayer player)
     {
-        //AnalyticsManager.Instance.SetPlayerCountChanged(true);
+		if(GameRunning)
+		{
+	        // Tell the Tower Manager to "freeze" all of the player's towers for 5 minutes
+			TowerManager.FreezePlayerTowers(player.name);
+
+			// Track when a player dropped so that their towers can be reallocated if they don't return
+			DroppedPlayersInWaiting.Add(player.name, Time.time);
+		}
     }
+
+	private void OnPlayerJoined(PhotonPlayer player)
+	{
+		if(GameRunning)
+		{
+			// Manage what to do when a player returns
+		}
+	}
 
 	/*
     private void OnCameraQuadrantChanged(string direction)

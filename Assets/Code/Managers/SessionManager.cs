@@ -431,6 +431,15 @@ public class SessionManager : MonoBehaviour
         PhotonNetwork.LoadLevel(level);
     }
 
+	/// <summary>
+	/// Gets the master client PhotonPlayer
+	/// </summary>
+	/// <returns>The master client.</returns>
+	public PhotonPlayer GetMasterClient()
+	{
+		return PhotonNetwork.masterClient;
+	}
+
     public int GetMasterClientID()
     {
         return PhotonNetwork.masterClient.ID;
