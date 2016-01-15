@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ExitGames.Client.Photon;
 
 public class RoomDetails_Menu : MonoBehaviour
 {
@@ -129,8 +130,16 @@ public class RoomDetails_Menu : MonoBehaviour
         // Add Level Buttons for each Level (this needs to be done before the tower buttons because the towers depend on the LevelData)
         InitiateLevelButtons();
 
-		// Select the level currently chosen by the Master Client
-		NewLevelSelected(LevelLoadoutData.DisplayName);
+		// Get the current level loadout data
+		if(LevelLoadoutData == null)
+		{
+			if(SessionManager.Instance.GetCurrentRoomInfo().customProperties["Level"] != null)
+				NewLevelSelected(SessionManager.Instance.GetCurrentRoomInfo().customProperties["Level"].ToString());
+			else
+				LogError("Unable to find Level name");
+		}
+		else
+			NewLevelSelected(LevelLoadoutData.DisplayName);
 
         // The towers are automatically refreshed when the level buttons are initiated
         //RefreshTowerButtons();
@@ -227,6 +236,9 @@ public class RoomDetails_Menu : MonoBehaviour
         // Tell all other clients that a new level has been selected
         ObjPhotonView.RPC("NewLevelSelected", PhotonTargets.Others, levelData.DisplayName);
 
+		// Save the level name for others to see in the lobby
+		SessionManager.Instance.SetRoomCustomProperties(new Hashtable { { "Level", levelData.DisplayName } });
+
         // Sets level to be loaded
         LevelLoadoutData = levelData;
         LevelSelected = true;
@@ -308,6 +320,15 @@ public class RoomDetails_Menu : MonoBehaviour
 		this.RefreshPlayerNames();
 	}
 
+	private void RoomCustPropUpdated_Event(Hashtable propertiesThatChanged)
+	{
+		// Check to see if the level changed
+		if(propertiesThatChanged["Level"] != null)
+		{
+
+		}
+	}
+
     private void MasterClientSwitched_Event(PhotonPlayer newMasterClient)
     {
         // Check to see if the client is the new master client
@@ -360,9 +381,6 @@ public class RoomDetails_Menu : MonoBehaviour
     [PunRPC]
     private void LoadLevel()
     {
-        int playerColorIndex = Random.Range(0, 8);
-        SessionManager.Instance.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", playerColorIndex } });
-
         // Record the Loadouts chosen by the player
         PlayerManager.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
 
@@ -388,7 +406,7 @@ public class RoomDetails_Menu : MonoBehaviour
 				AssignColorIndex(colorIndex, player.ID);
 
 				// Set the player's color, triggering the Event "PlayerCustPropUpdated_Event"
-				player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "PlayerColorIndex", colorIndex } });
+				player.SetCustomProperties(new Hashtable() { { "PlayerColorIndex", colorIndex } });
 			}
 		}
 	}

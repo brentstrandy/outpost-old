@@ -1,20 +1,56 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
-    <DisplayName>Test Level</DisplayName>
+    <DisplayName>Colossus</DisplayName>
     <SceneName>Level1</SceneName>
-    <LevelID>0</LevelID>
-    <EnemySpawnFilename>TestLevel</EnemySpawnFilename>
+    <LevelID>4</LevelID>
+    <EnemySpawnFilename>4_Colossus</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>This is for testing only</Description>
-    <MinimumPlayers>1</MinimumPlayers>
+    <Description>Coordination is key</Description>
+    <MinimumPlayers>6</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
-    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
-    <StartingMoney>1000</StartingMoney>
+    <MaxTowersPerPlayer>1</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
+    <IncomePerSecond>1</IncomePerSecond>
+    <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <DisplayName>Desperation</DisplayName>
+    <SceneName>Level1</SceneName>
+    <LevelID>2</LevelID>
+    <EnemySpawnFilename>2_Desperation</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Land of the lifeless</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>6</MaximumPlayers>
+    <AvailableQuadrants>North</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower, Thraceium Rain Tower</AvailableTowers>
+    <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>25</StartingMoney>
+    <IncomePerSecond>0.5</IncomePerSecond>
+    <MiningFacilityHealth>600</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <DisplayName>PMCC1171701</DisplayName>
+    <SceneName>Level2</SceneName>
+    <LevelID>3</LevelID>
+    <EnemySpawnFilename>3_PMCC1171701</EnemySpawnFilename>
+    <NotificationFilename />
+    <Description>Planet from Cerulean Rising</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>5</MaximumPlayers>
+    <AvailableQuadrants>North</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
+    <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
@@ -37,56 +73,20 @@
     <MiningFacilityHealth>50</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <DisplayName>Desperation</DisplayName>
+    <DisplayName>Test Level</DisplayName>
     <SceneName>Level1</SceneName>
-    <LevelID>2</LevelID>
-    <EnemySpawnFilename>2_Desperation</EnemySpawnFilename>
+    <LevelID>0</LevelID>
+    <EnemySpawnFilename>TestLevel</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>Land of the lifeless</Description>
+    <Description>This is for testing only</Description>
     <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>6</MaximumPlayers>
-    <AvailableQuadrants>North, West, South, East</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower, Thraceium Rain Tower</AvailableTowers>
-    <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
-    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>25</StartingMoney>
-    <IncomePerSecond>0.5</IncomePerSecond>
-    <MiningFacilityHealth>600</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <DisplayName>PMCC1171701</DisplayName>
-    <SceneName>Level2</SceneName>
-    <LevelID>3</LevelID>
-    <EnemySpawnFilename>3_PMCC1171701</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description>Planet from Cerulean Rising</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>5</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
-    <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
-    <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
-    <IncomePerSecond>1</IncomePerSecond>
-    <MiningFacilityHealth>100</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <DisplayName>Colossus</DisplayName>
-    <SceneName>Level1</SceneName>
-    <LevelID>4</LevelID>
-    <EnemySpawnFilename>4_Colossus</EnemySpawnFilename>
-    <NotificationFilename />
-    <Description />
-    <MinimumPlayers>6</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
-    <MaxTowersPerPlayer>1</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
+    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <StartingMoney>1000</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
@@ -99,7 +99,7 @@
     <Description>Solo mission only. Can you survive The Grind?</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
-    <AvailableQuadrants>North, East, South, West</AvailableQuadrants>
+    <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>

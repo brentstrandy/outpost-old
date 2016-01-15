@@ -1,4 +1,5 @@
 using UnityEngine;
+using ExitGames.Client.Photon;
 
 /// <summary>
 /// Manages Network Session - Singleton
@@ -18,7 +19,9 @@ public class SessionManager : MonoBehaviour
 
     public delegate void SessionManagerActionRoomFailure(object[] codeAndMsg);
 
-	public delegate void SessionManagerActionCustProperties(object[] parameters);
+	public delegate void SessionManagerActionCustPlayerProperties(object[] parameters);
+
+	public delegate void SessionManagerActionCustRoomProperties(Hashtable propertiesThatChanged);
 
     public delegate void SessionManagerActionPlayer(PhotonPlayer player);
 
@@ -105,9 +108,14 @@ public class SessionManager : MonoBehaviour
     public event SessionManagerActionPlayer OnSMSwitchMaster;
 
 	/// <summary>
+	/// Called when the custom properties for the room have changed
+	/// </summary>
+	public event SessionManagerActionCustRoomProperties OnSMRoomPropertiesChanged;
+
+	/// <summary>
 	/// Called when the custom properties for any player have changed
 	/// </summary>
-	public event SessionManagerActionCustProperties OnSMPlayerPropertiesChanged;
+	public event SessionManagerActionCustPlayerProperties OnSMPlayerPropertiesChanged;
 
     #endregion EVENTS (DELEGATES)
 
@@ -269,11 +277,20 @@ public class SessionManager : MonoBehaviour
             PhotonNetwork.room.open = newValue;
     }
 
+	/// <summary>
+	/// Sets the room custom properties.
+	/// </summary>
+	/// <param name="properties">Properties to set</param>
+	public void SetRoomCustomProperties(Hashtable properties)
+	{
+		PhotonNetwork.room.SetCustomProperties(properties);
+	}
+
     /// <summary>
     /// Sets custom properties of the player as defined in the Hashtable.
     /// </summary>
     /// <param name="properties">Properties to set</param>
-    public void SetPlayerCustomProperties(ExitGames.Client.Photon.Hashtable properties)
+    public void SetPlayerCustomProperties(Hashtable properties)
     {
         PhotonNetwork.player.SetCustomProperties(properties);
     }
@@ -618,6 +635,19 @@ public class SessionManager : MonoBehaviour
         if (OnSMJoinedRoom != null)
             OnSMJoinedRoom();
     }
+
+	/// <summary>
+	/// Called when any room's custom properties have changed
+	/// </summary>
+	/// <param name="propertiesThatChanged">Properties that changed.</param>
+	private void OnPhotonCustomRoomPropertiesChanged(Hashtable propertiesThatChanged)
+	{
+		this.Log("Room (" + PhotonNetwork.room.name + ") properties changed");
+
+		// Call delegate event linked to this action
+		if(OnSMRoomPropertiesChanged != null)
+			OnSMRoomPropertiesChanged(propertiesThatChanged);
+	}
 
     /// <summary>
     /// Called after switching to a new MasterClient when the current one leaves. The former already got removed from the player list.
