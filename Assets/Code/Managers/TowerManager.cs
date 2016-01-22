@@ -119,7 +119,7 @@ public class TowerManager
 		// Run through each of the player's towers, freezing them for 5 minutes
 		foreach(Tower tower in ActiveTowerList.FindAll(x => x.OwnerUsername == owner.name))
 		{
-			tower.ReallocateTower(owner);
+			tower.ReallocateTowerOwner(owner);
 		}
 	}
 
