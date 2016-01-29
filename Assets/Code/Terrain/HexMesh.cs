@@ -28,31 +28,15 @@ public class HexMesh : MonoBehaviour
 		new NeighborCorner[]{ new NeighborCorner(0, 3), new NeighborCorner(5, 1)},
 	};
 
+    public Map Map;
+
     // Properties adjustable in the inspector
     //public bool GenerateNoise = true;
     public Texture2D HeightMap;
 
-    public float HeightScale = 5.0f;
-    public float AttenuationMultiplier = 0.0f;
-    public float AttenuationExponent = 0.0f;
-    public HexMeshAttentuationStyle AttenuationStyle;
     public bool ShowDebugLogs = true;
     public bool FlatShaded = true;
-    public HexMeshSurfaceStyle SurfaceStyle;
 
-    [Range(0.0f, 1.0f)]
-    public float SurfaceStyleInterpolation = 1.0f;
-
-    public bool SurfaceStyleAttenuation = false;
-    public HexMeshNeighborStyle NeighborStyle;
-
-    [Range(0.0f, 1.0f)]
-    public float NeighborStyleInterpolation = 1.0f;
-
-    public int GridWidth = 5;
-    public int GridHeight = 5;
-    public int FacilityRadius = 5;
-    public int PeripheralRadius = 12;
     public float HexagonRadius = 1.0f;
     public float DetailWidth = 0.1f;
     public float OutlineWidth = 0.02f;
@@ -136,14 +120,14 @@ public class HexMesh : MonoBehaviour
     public void ApplyProperties()
     {
         // Enforce odd numbered dimensions
-        if (GridWidth % 2 == 0)
+        if (Map.GridWidth % 2 == 0)
         {
-            GridWidth += 1;
+            Map.GridWidth += 1;
         }
 
-        if (GridHeight % 2 == 0)
+        if (Map.GridHeight % 2 == 0)
         {
-            GridHeight += 1;
+            Map.GridHeight += 1;
         }
 
         CreateOverlays();
@@ -222,7 +206,7 @@ public class HexMesh : MonoBehaviour
 
     public HexCoord[] GetHexBounds()
     {
-        var corner = new Vector2(GridWidth / 2, GridHeight / 2);
+        var corner = new Vector2(Map.GridWidth / 2, Map.GridHeight / 2);
         return HexCoord.CartesianRectangleBounds(corner, -corner);
     }
 
@@ -230,7 +214,7 @@ public class HexMesh : MonoBehaviour
     {
         // TODO: Consider moving this to the facility object
         int distance = HexCoord.Distance(HexCoord.origin, coord);
-        return distance >= FacilityRadius && distance <= PeripheralRadius;
+        return distance >= Map.FacilityRadius && distance <= Map.PeripheralRadius;
     }
 
     public bool OutsidePlacementRange(HexCoord coord)
@@ -295,7 +279,7 @@ public class HexMesh : MonoBehaviour
             float result = HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale;
 
             // Apply the height scale (inverted because up is in negative Z)
-            result *= -HeightScale;
+            result *= -Map.SurfaceHeightScale;
 
             // Apply the attenuation factor
             result *= 1.0f + GetAttenuationFactor(uv);
@@ -314,7 +298,7 @@ public class HexMesh : MonoBehaviour
 
         // Calculate attenuation value
         float attenuationValue = 0.0f;
-        switch (AttenuationStyle)
+        switch (Map.AttenuationStyle)
         {
             case HexMeshAttentuationStyle.DistanceFromCenter:
                 attenuationValue = pos.magnitude;
@@ -326,12 +310,12 @@ public class HexMesh : MonoBehaviour
         }
 
         // Calculate attenuation factor
-        return AttenuationMultiplier * Mathf.Pow(attenuationValue, AttenuationExponent);
+        return Map.AttenuationMultiplier * Mathf.Pow(attenuationValue, Map.AttenuationExponent);
     }
 
     private Func<Vector2, Vector2> GetUVPredicate()
     {
-        Vector2 scale = new Vector2(1.0f / (float)GridWidth, 1.0f / (float)GridHeight);
+        Vector2 scale = new Vector2(1.0f / (float)Map.GridWidth, 1.0f / (float)Map.GridHeight);
         Vector2 offset = new Vector2(0.5f, 0.5f);
         return (Vector2 uv) => Vector2.Scale(uv, scale) + offset;
     }
@@ -368,7 +352,7 @@ public class HexMesh : MonoBehaviour
         if (i < 6)
         {
             // Exterior vertex
-            if (NeighborStyleInterpolation > 0.0f)
+            if (Map.NeighborStyleInterpolation > 0.0f)
             {
                 // Take samples from the neighbors
                 List<float> samples = new List<float>(3);
@@ -380,7 +364,7 @@ public class HexMesh : MonoBehaviour
                     }
                 }
 
-                switch (NeighborStyle)
+                switch (Map.NeighborStyle)
                 {
                     case HexMeshNeighborStyle.Average:
                         // Interpolate exterior corners with the average height of their interior neighbors
@@ -406,17 +390,17 @@ public class HexMesh : MonoBehaviour
                         break;
                 }
 
-                z = Mathf.Lerp(h, z, NeighborStyleInterpolation);
+                z = Mathf.Lerp(h, z, Map.NeighborStyleInterpolation);
             }
         }
         else
         {
             // Interior vertex
-            switch (SurfaceStyle)
+            switch (Map.SurfaceStyle)
             {
                 case HexMeshSurfaceStyle.FlatCenter:
                     float center = height(tex(hex.Position()));
-                    z = Mathf.Lerp(h, center, SurfaceStyleInterpolation);
+                    z = Mathf.Lerp(h, center, Map.SurfaceStyleInterpolation);
                     break;
 
                 case HexMeshSurfaceStyle.FlatCentroid:
@@ -427,7 +411,7 @@ public class HexMesh : MonoBehaviour
                         centroid += height(tex(sc));
                     }
                     centroid *= 0.166666666667f; // Divide by six
-                    z = Mathf.Lerp(h, centroid, SurfaceStyleInterpolation);
+                    z = Mathf.Lerp(h, centroid, Map.SurfaceStyleInterpolation);
                     break;
 
                 case HexMeshSurfaceStyle.Oblique:
@@ -450,12 +434,12 @@ public class HexMesh : MonoBehaviour
                     if (plane.Raycast(ray, out distance))
                     {
                         float intersection = ray.GetPoint(distance).z;
-                        z = Mathf.Lerp(h, intersection, SurfaceStyleInterpolation);
+                        z = Mathf.Lerp(h, intersection, Map.SurfaceStyleInterpolation);
                     }
                     break;
             }
 
-            if (SurfaceStyleAttenuation)
+            if (Map.SurfaceStyleAttenuation)
             {
                 z = Mathf.Lerp(z, h, GetAttenuationFactor(uv));
             }
