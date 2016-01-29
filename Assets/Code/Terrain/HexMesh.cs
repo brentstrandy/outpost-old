@@ -37,7 +37,7 @@ public class HexMesh : MonoBehaviour
     public bool ShowDebugLogs = true;
     public bool FlatShaded = true;
 
-    public float HexagonRadius = 1.0f;
+    public const float HexagonRadius = 1.0f;
     public float DetailWidth = 0.1f;
     public float OutlineWidth = 0.02f;
     public Color OutlineColor = Color.yellow;
@@ -135,7 +135,7 @@ public class HexMesh : MonoBehaviour
         UpdateOutlines();
     }
 
-    private void CreateOverlays()
+    public void CreateOverlays()
     {
         if (Overlays == null)
         {
@@ -150,6 +150,7 @@ public class HexMesh : MonoBehaviour
         Overlays.Add((int)TerrainOverlays.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth));
         Overlays.Add((int)TerrainOverlays.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
         Overlays.Add((int)TerrainOverlays.Pathfinding, "TerrainPathfinding", "Standard", CreateOverlayBuilder(HighlightWidth));
+        Overlays.Add((int)TerrainOverlays.Editor, "TerrainEditor", "Standard", CreateOverlayBuilder(HighlightWidth));
     }
 
     private void UpdateMesh()
@@ -264,16 +265,16 @@ public class HexMesh : MonoBehaviour
         return builder;
     }
 
-    private Func<Vector2, float> GetHeightPredicate()
+    private Func<Vector2, HexCoord, float> GetHeightPredicate()
     {
         if (HeightMap == null)
         {
             //Log("No HeightMap Specified");
-            return (Vector2 uv) => 0.0f;
+            return (Vector2 uv, HexCoord hex) => Map.GetOffset(hex);
         }
 
         //Log("Using HeightMap");
-        return (Vector2 uv) =>
+        return (Vector2 uv, HexCoord hex) =>
         {
             // Fetch the value from the height map
             float result = HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale;
@@ -283,6 +284,9 @@ public class HexMesh : MonoBehaviour
 
             // Apply the attenuation factor
             result *= 1.0f + GetAttenuationFactor(uv);
+
+            // Apply the offset
+            result += Map.GetOffset(hex);
 
             return result;
         };
@@ -320,7 +324,7 @@ public class HexMesh : MonoBehaviour
         return (Vector2 uv) => Vector2.Scale(uv, scale) + offset;
     }
 
-    protected HexMeshBuilder.Node CalculateOutlineMeshNode(Func<Vector2, float> height, Func<Vector2, Vector2> tex, float width, float outer, float inner, HexCoord hex, int i)
+    protected HexMeshBuilder.Node CalculateOutlineMeshNode(Func<Vector2, HexCoord, float> height, Func<Vector2, Vector2> tex, float width, float outer, float inner, HexCoord hex, int i)
     {
         if (i < 6)
         {
@@ -341,12 +345,12 @@ public class HexMesh : MonoBehaviour
         }
     }
 
-    protected HexMeshBuilder.Node CalculateBaseMeshNode(Func<Vector2, float> height, Func<Vector2, Vector2> tex, float outer, float inner, HexCoord hex, int i)
+    protected HexMeshBuilder.Node CalculateBaseMeshNode(Func<Vector2, HexCoord, float> height, Func<Vector2, Vector2> tex, float outer, float inner, HexCoord hex, int i)
     {
         // Note: Corner 0 is at the upper right, others proceed counterclockwise.
         Vector2 c = HexCoord.CornerVector(i) * (i < 6 ? outer : inner) + hex.Position();
         Vector2 uv = tex(c);
-        float h = height(uv);
+        float h = height(uv, hex);
         float z = h;
 
         if (i < 6)
@@ -399,7 +403,7 @@ public class HexMesh : MonoBehaviour
             switch (Map.SurfaceStyle)
             {
                 case HexMeshSurfaceStyle.FlatCenter:
-                    float center = height(tex(hex.Position()));
+                    float center = height(tex(hex.Position()), hex);
                     z = Mathf.Lerp(h, center, Map.SurfaceStyleInterpolation);
                     break;
 
@@ -408,7 +412,7 @@ public class HexMesh : MonoBehaviour
                     for (int s = 0; s < 6; s++)
                     {
                         Vector2 sc = HexCoord.CornerVector(s) * inner + hex.Position();
-                        centroid += height(tex(sc));
+                        centroid += height(tex(sc), hex);
                     }
                     centroid *= 0.166666666667f; // Divide by six
                     z = Mathf.Lerp(h, centroid, Map.SurfaceStyleInterpolation);
@@ -420,9 +424,9 @@ public class HexMesh : MonoBehaviour
                     Vector2 c0 = HexCoord.CornerVector(0) * inner + hex.Position();
                     Vector2 c2 = HexCoord.CornerVector(2) * inner + hex.Position();
                     Vector2 c4 = HexCoord.CornerVector(4) * inner + hex.Position();
-                    Vector3 p0 = new Vector3(c0.x, c0.y, height(tex(c0)));
-                    Vector3 p2 = new Vector3(c2.x, c2.y, height(tex(c2)));
-                    Vector3 p4 = new Vector3(c4.x, c4.y, height(tex(c4)));
+                    Vector3 p0 = new Vector3(c0.x, c0.y, height(tex(c0), hex));
+                    Vector3 p2 = new Vector3(c2.x, c2.y, height(tex(c2), hex));
+                    Vector3 p4 = new Vector3(c4.x, c4.y, height(tex(c4), hex));
                     plane.Set3Points(p4, p2, p0);
 
                     // Prepare a ray from p that fires straight down toward the plane

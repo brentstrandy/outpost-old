@@ -3,5 +3,6 @@
     Outline,
     Highlight,
     Selection,
-    Pathfinding
+    Pathfinding,
+    Editor
 }

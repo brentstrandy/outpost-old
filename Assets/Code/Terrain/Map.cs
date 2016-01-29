@@ -27,20 +27,33 @@ public class Map
 
     [Range(0.0f, 1.0f)]
     public float NeighborStyleInterpolation = 1.0f;
-    private Dictionary<HexLocation, float> Offsets;
 
-    public float GetOffset(HexLocation location)
+    [Range(0.0f, 1.0f)]
+    public float DetailWidth = 0.2f;
+
+    public Dictionary<HexCoord, float> Offsets;
+
+    public float GetOffset(HexCoord coord)
     {
         float value = 0.0f;
-        Offsets.TryGetValue(location, out value);
+        if (Offsets != null)
+        {
+            Offsets.TryGetValue(coord, out value);
+        }
         return value;
     }
 
-    public void SetOffset(HexLocation location, float value)
+    public void SetOffset(HexCoord coord, float value)
     {
-        Offsets[location] = value;
+        if (Offsets == null)
+        {
+            Offsets = new Dictionary<HexCoord, float>();
+        }
+        Offsets[coord] = value;
     }
-    
-    public void Build(int width, int height) {
-	}
+
+    public void ChangeOffset(HexCoord coord, float change)
+    {
+        SetOffset(coord, GetOffset(coord) + change);
+    }
 }
