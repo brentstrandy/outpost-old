@@ -130,7 +130,7 @@ public class AnalyticsManager : MonoBehaviour
         // Play Validation Analytics
         IsMasterClient = SessionManager.Instance.GetPlayerInfo().isMasterClient ? true : false;
         PlayerCheckIns = new Dictionary<int, bool>();
-        AccountID = PlayerManager.Instance.AccountID;
+        AccountID = PlayerManager.Instance.CurPlayer.AccountID;
         ObjPhotonView.RPC("SendAccountID_All", PhotonTargets.All, AccountID);
         HaveAllUsersCheckedIn = false;
         UserCheckInTimeout = 5f;
@@ -144,7 +144,7 @@ public class AnalyticsManager : MonoBehaviour
         LevelID = CurrentLevelData.LevelID;
 
         // Player Analytics
-        PlayerName = PlayerManager.Instance.Username;
+        PlayerName = PlayerManager.Instance.CurPlayer.Username;
         Analytics.SetUserId(PlayerName);    // (12/6/15) At a later date Unity Analytics will allow data aggregated from UserIds.
         PhotonViewID = PlayerPhotonView.ID;
         IndividualPlayerMoney = CurrentLevelData.StartingMoney;
@@ -269,8 +269,8 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     public void SavePlayerAnalytics()
     {
-        IndividualPlayerMoney = PlayerManager.Instance.TotalMoney;
-        PlayerScore = PlayerManager.Instance.Score;
+        IndividualPlayerMoney = PlayerManager.Instance.CurPlayer.TotalMoney;
+        PlayerScore = PlayerManager.Instance.CurPlayer.Score;
         SetPlayerCountChanged();
 
         if (!IsMasterClient)

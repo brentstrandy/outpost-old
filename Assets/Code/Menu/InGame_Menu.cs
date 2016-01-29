@@ -65,10 +65,10 @@ public class InGame_Menu : MonoBehaviour
             if (GameManager.Instance.GameRunning)
             {
                 // Display how much money the player current has
-                MoneyText.text = "Money: " + Mathf.FloorToInt(PlayerManager.Instance.Money).ToString();
+                MoneyText.text = "Money: " + Mathf.FloorToInt(PlayerManager.Instance.CurPlayer.Money).ToString();
                 OutpostHealthText.text = "Health: " + GameManager.Instance.ObjMiningFacility.Health.ToString();
-                ScoreText.text = "Score: " + PlayerManager.Instance.Score.ToString();
-				KillsText.text = "Kills: " + PlayerManager.Instance.KillCount.ToString();
+                ScoreText.text = "Score: " + PlayerManager.Instance.CurPlayer.Score.ToString();
+				KillsText.text = "Kills: " + PlayerManager.Instance.CurPlayer.KillCount.ToString();
 				TimeText.text = (Time.time - GameManager.Instance.LevelStartTime).ToString("F2");
             }
         }
@@ -93,7 +93,7 @@ public class InGame_Menu : MonoBehaviour
     public void Tower_Click(TowerData towerData)
     {
         // Inform the player a tower has been selected for placement
-        PlayerManager.Instance.TowerSelectedForPlacement(towerData);
+        PlayerInteractionManager.Instance.TowerSelectedForPlacement(towerData);
     }
 
     #endregion OnClick

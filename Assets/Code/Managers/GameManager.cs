@@ -23,18 +23,15 @@ public class GameManager : MonoBehaviour
     public DataManager<EnemySpawnData> EnemySpawnDataManager { get; private set; }
     public DataManager<NotificationData> LevelNotificationDataManager { get; private set; }
 
-	private Dictionary<string, float> DroppedPlayersInWaiting = new Dictionary<string, float>();
-	private List<string> TempList = new List<string>();
-
     public bool Victory { get; private set; }
     public bool GameRunning { get; private set; }
 
     public float LevelStartTime { get; private set; }
 
     // Components
-    public HexMesh TerrainMesh;
+	public HexMesh TerrainMesh { get; private set; }
 
-    public MiningFacility ObjMiningFacility;
+	public MiningFacility ObjMiningFacility;
     private PhotonView ObjPhotonView;
 
     #region INSTANCE (SINGLETON)
@@ -59,7 +56,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        PhotonSerializer.Register();
+		PhotonSerializer.Register();
     }
 
     #endregion INSTANCE (SINGLETON)
@@ -69,13 +66,11 @@ public class GameManager : MonoBehaviour
     {
         // Track events in order to react to Session Manager events as they happen
         SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
-        SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft;
-		SessionManager.Instance.OnSMPlayerJoinedRoom += OnPlayerJoined;
 
         // Store LevelData from MenuManager
         CurrentLevelData = MenuManager.Instance.CurrentLevelData;
-        // Store a reference to the PhotonView
-        ObjPhotonView = PhotonView.Get(this);
+
+		ObjPhotonView = PhotonView.Get(this);
 
         // Instantiate objects to manage Enemies and Towers
         EnemyManager = new EnemyManager();
@@ -118,25 +113,6 @@ public class GameManager : MonoBehaviour
             // TO DO: This should not be checked every update loop. It can probably just be checked every 1-2 seconds
             if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
                 EndGameCheck();
-
-			// Manage towers of dropped players
-			if(DroppedPlayersInWaiting.Count > 0)
-			{
-				// If any players have dropped, reassign their towers after a certain amount of time
-				foreach(KeyValuePair<string, float> item in DroppedPlayersInWaiting)
-				{
-					if(Time.time - item.Value > 5.0f)
-					{
-						// Reassign player's towers to the current Master Client
-						TowerManager.ReassignPlayerTowers(SessionManager.Instance.GetMasterClient());
-						TempList.Add(item.Key);
-					}
-				}
-
-				// If a player's towers were reassigned, stop tracking them
-				foreach(string username in TempList)
-					DroppedPlayersInWaiting.Remove(username);
-			}
         }
     }
 
@@ -313,80 +289,11 @@ public class GameManager : MonoBehaviour
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
             AnalyticsManager.Instance.SetIsMaster(true);
     }
-
-    private void OnPlayerLeft(PhotonPlayer player)
-    {
-		if(GameRunning)
-		{
-	        // Tell the Tower Manager to "freeze" all of the player's towers for 5 minutes
-			TowerManager.FreezePlayerTowers(player.name);
-
-			// Track when a player dropped so that their towers can be reallocated if they don't return
-			DroppedPlayersInWaiting.Add(player.name, Time.time);
-		}
-    }
-
-	private void OnPlayerJoined(PhotonPlayer player)
-	{
-		if(GameRunning)
-		{
-			// Manage what to do when a player returns
-		}
-	}
-
-	/*
-    private void OnCameraQuadrantChanged(string direction)
-    {
-        Quadrant newQuadrant = Quadrant.North;
-
-        if (direction == "left")
-            newQuadrant = GetNextCounterClockwiseQuadrant();
-        else if (direction == "right")
-            newQuadrant = GetNextClockwiseQuadrant();
-
-        // Inform the Player of the new quadrant
-        PlayerManager.Instance.CurrentQuadrant = newQuadrant;
-        // Inform the Camera of the new quadrant
-        CameraManager.Instance.UpdateCameraQuadrant(newQuadrant);
-    }
-	*/
     #endregion EVENTS
 	
     public void AddAvailableQuadrant(Quadrant newQuadrant)
     {
         CurrentLevelData.AvailableQuadrants += ", " + newQuadrant.ToString();
-    }
-
-    private Quadrant GetNextClockwiseQuadrant()
-    {
-        Quadrant quadrant = PlayerManager.Instance.CurrentQuadrant;
-
-        if (PlayerManager.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("East"))
-            quadrant = Quadrant.East;
-        else if (PlayerManager.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("South"))
-            quadrant = Quadrant.South;
-        else if (PlayerManager.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("West"))
-            quadrant = Quadrant.West;
-        else if (PlayerManager.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("North"))
-            quadrant = Quadrant.North;
-
-        return quadrant;
-    }
-
-    private Quadrant GetNextCounterClockwiseQuadrant()
-    {
-        Quadrant quadrant = PlayerManager.Instance.CurrentQuadrant;
-
-        if (PlayerManager.Instance.CurrentQuadrant == Quadrant.North && CurrentLevelData.AvailableQuadrants.Contains("West"))
-            quadrant = Quadrant.West;
-        else if (PlayerManager.Instance.CurrentQuadrant == Quadrant.East && CurrentLevelData.AvailableQuadrants.Contains("North"))
-            quadrant = Quadrant.North;
-        else if (PlayerManager.Instance.CurrentQuadrant == Quadrant.South && CurrentLevelData.AvailableQuadrants.Contains("East"))
-            quadrant = Quadrant.East;
-        else if (PlayerManager.Instance.CurrentQuadrant == Quadrant.West && CurrentLevelData.AvailableQuadrants.Contains("South"))
-            quadrant = Quadrant.South;
-
-        return quadrant;
     }
 
     private void OnDestroy()
@@ -395,7 +302,6 @@ public class GameManager : MonoBehaviour
 		if(SessionManager.Instance != null)
 		{
 			SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
-        	SessionManager.Instance.OnSMPlayerLeftRoom -= OnPlayerLeft;
 		}
     }
 

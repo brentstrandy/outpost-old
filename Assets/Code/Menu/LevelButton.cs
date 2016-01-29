@@ -28,7 +28,7 @@ public class LevelButton : MonoBehaviour
         else
             levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
 
-        LevelProgressData lpd = PlayerManager.Instance.LevelProgressDataManager.DataList.Find(x => x.LevelID == levelData.LevelID);
+        LevelProgressData lpd = PlayerManager.Instance.CurPlayer.LevelProgressDataManager.DataList.Find(x => x.LevelID == levelData.LevelID);
         if (lpd != null)
             levelDescription += "\n[Score: " + lpd.Score.ToString() + "]";
         else

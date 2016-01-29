@@ -27,7 +27,7 @@ public class MiningFacility : Tower
 
         IncomePerSecond = levelData.IncomePerSecond;
         Health = levelData.MiningFacilityHealth;
-        PlayerManager.Instance.SetStartingMoney(levelData.StartingMoney);
+        PlayerManager.Instance.CurPlayer.SetStartingMoney(levelData.StartingMoney);
 
         // Lift the facility up to whatever the height of the ground below it is
         gameObject.transform.position = GameManager.Instance.TerrainMesh.IntersectPosition(gameObject.transform.position);
@@ -69,7 +69,7 @@ public class MiningFacility : Tower
         // Only earn income if enough time has passed
         if (Time.time - LastIncomeTime >= 1)
         {
-            PlayerManager.Instance.EarnIncome(IncomePerSecond);
+            PlayerManager.Instance.CurPlayer.EarnIncome(IncomePerSecond);
             LastIncomeTime = Time.time;
         }
     }

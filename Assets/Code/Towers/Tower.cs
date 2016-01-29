@@ -69,7 +69,7 @@ public class Tower : MonoBehaviour
         {
             TowerRing.transform.localScale *= TowerAttributes.AdjustedRange;
 
-            bool selected = (PlayerManager.Instance.SelectedTowerCoord == ObjHexLocation.location);
+            bool selected = (PlayerInteractionManager.Instance.SelectedTowerCoord == ObjHexLocation.location);
             if (selected)
             {
                 OnSelect();

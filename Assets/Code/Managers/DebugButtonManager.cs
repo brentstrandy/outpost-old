@@ -50,7 +50,7 @@ public class DebugButtonManager : MonoBehaviour
 				{
 					string copyText = "";
 					copyText = "Date/Time: " + System.DateTime.Now.ToString() + "\n";
-					copyText += "Player Name: " + PlayerManager.Instance.Username + " (" + PlayerManager.Instance.AccountID + ")\n";
+					copyText += "Player Name: " + PlayerManager.Instance.CurPlayer.Username + " (" + PlayerManager.Instance.CurPlayer.AccountID + ")\n";
 					copyText += "Level Name: " + GameManager.Instance.CurrentLevelData.DisplayName + "\n";
 					copyText += "Player Count: " + SessionManager.Instance.GetRoomPlayerCount().ToString() + "\n";
 					copyText += "Game Host: " + SessionManager.Instance.GetPlayerInfo().isMasterClient.ToString() + "\n";

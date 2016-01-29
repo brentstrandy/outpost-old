@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 
 /// <summary>
-/// All information about an individual account
+/// All private information about a player account
 /// Owner: Brent Strandy
 /// </summary>
 [Serializable]
@@ -12,7 +12,6 @@ public class AccountData
     // Level Details
     public int AccountID;
 
-    public string Username;
     public string Email;
     //public DateTime LastLogin;
 
@@ -24,10 +23,9 @@ public class AccountData
     {
     }
 
-    public AccountData(int accountID, string username, string email)
+    public AccountData(int accountID, string email)
     {
         AccountID = accountID;
-        Username = username;
         Email = email;
     }
 

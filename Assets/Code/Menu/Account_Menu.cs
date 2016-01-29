@@ -20,8 +20,8 @@ public class Account_Menu : MonoBehaviour
         // Establish listeners for all applicable events
         SessionManager.Instance.OnSMDisconnected += Disconnected_Event;
 
-        UsernameField.GetComponent<InputField>().text = PlayerManager.Instance.Username;
-        EmailField.GetComponent<InputField>().text = PlayerManager.Instance.Email;
+        UsernameField.GetComponent<InputField>().text = PlayerManager.Instance.CurPlayer.Username;
+        EmailField.GetComponent<InputField>().text = PlayerManager.Instance.CurPlayer.Email;
     }
 
     private void OnDisable()
@@ -95,7 +95,7 @@ public class Account_Menu : MonoBehaviour
     private IEnumerator ChangePassword(string newPassword)
     {
         Log("Resetting Password");
-        WWW www = new WWW("http://www.diademstudios.com/accounts/DBResetPassword.php?accountID=" + PlayerManager.Instance.AccountID.ToString() + "&password=" + newPassword);
+        WWW www = new WWW("http://www.diademstudios.com/accounts/DBResetPassword.php?accountID=" + PlayerManager.Instance.CurPlayer.AccountID.ToString() + "&password=" + newPassword);
 
         while (!www.isDone)
         {
@@ -124,7 +124,7 @@ public class Account_Menu : MonoBehaviour
     /// <param name="username">Username</param>
     private IEnumerator UpdateAccount(string email, string username)
     {
-        WWW www = new WWW("http://www.diademstudios.com/accounts/DBUpdateAccount.php?accountID=" + PlayerManager.Instance.AccountID.ToString() + "&email=" + email + "&username=" + username);
+        WWW www = new WWW("http://www.diademstudios.com/accounts/DBUpdateAccount.php?accountID=" + PlayerManager.Instance.CurPlayer.AccountID.ToString() + "&email=" + email + "&username=" + username);
 
         while (!www.isDone)
         {

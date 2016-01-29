@@ -123,7 +123,7 @@ public class InputManager : MonoBehaviour
                 }
                 else if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    PlayerManager.Instance.EarnIncome(100);
+                    PlayerManager.Instance.CurPlayer.EarnIncome(100);
                 }
 #endif
             }

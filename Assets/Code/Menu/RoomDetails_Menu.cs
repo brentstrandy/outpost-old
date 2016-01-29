@@ -382,7 +382,7 @@ public class RoomDetails_Menu : MonoBehaviour
     private void LoadLevel()
     {
         // Record the Loadouts chosen by the player
-        PlayerManager.Instance.SetGameLoadOut(new LoadOut(TowerLoadoutData));
+        PlayerManager.Instance.CurPlayer.SetGameLoadOut(new LoadOut(TowerLoadoutData));
 
         // Start the game
         MenuManager.Instance.ShowStartGame(LevelLoadoutData);
@@ -450,7 +450,7 @@ public class RoomDetails_Menu : MonoBehaviour
 					PlayerName_GUIText[i].GetComponent<Text>().color = Color.white;
 
                 // Master Client can kick players
-                if (SessionManager.Instance.GetPlayerInfo().isMasterClient && pp.name != PlayerManager.Instance.Username)
+                if (SessionManager.Instance.GetPlayerInfo().isMasterClient && pp.name != PlayerManager.Instance.CurPlayer.Username)
                 {
                     // Need to use "GetChild" because the Child's Component has been set to inactive and is not searchable with "GetComponentInChildren"
                     PlayerName_GUIText[i].transform.GetChild(0).gameObject.SetActive(true);

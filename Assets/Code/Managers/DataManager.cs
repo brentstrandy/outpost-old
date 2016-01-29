@@ -1,109 +1,134 @@
+using UnityEngine;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+using System.Linq;
 
 public class DataManager<T>
 {
-    public bool ShowDebugLogs = false;
+	public bool ShowDebugLogs = false;
 
-    public bool FinishedLoadingData { get; private set; }
+	public bool FinishedLoadingData { get; private set; }
 
-    /// <summary>
-    /// Gets the Data list.
-    /// </summary>
-    /// <value>The data list.</value>
-    public List<T> DataList { get; private set; }
+	// Events fired when data finishes downloading
+	public delegate void DataManagerAction();
+	public event DataManagerAction OnDataLoadSuccess;
+	public event DataManagerAction OnDataLoadFailure;
 
-    public DataManager()
-    {
-        FinishedLoadingData = false;
+	/// <summary>
+	/// Gets the Data list.
+	/// </summary>
+	/// <value>The data list.</value>
+	public List<T> DataList { get; private set; }
 
-        // Instantiate lists to save the data
-        DataList = new List<T>();
-    }
+	public DataManager()
+	{
+		FinishedLoadingData = false;
 
-    /// <summary>
-    /// Method used to load XML from a local location
-    /// </summary>
-    /// <param name="filename">Filename.</param>
-    public void LoadDataFromLocal(string filename)
-    {
-        string levelDataXMLPath = Application.streamingAssetsPath + "/" + filename;
+		// Instantiate lists to save the data
+		DataList = new List<T>();
+	}
 
-        if (File.Exists(levelDataXMLPath))
-        {
-            foreach (T data in XMLParser<T>.XMLDeserializer_Local(levelDataXMLPath))
-            {
-                DataList.Add(data);
-            }
+	/// <summary>
+	/// Method used to load XML from a local location
+	/// </summary>
+	/// <param name="filename">Filename.</param>
+	public void LoadDataFromLocal(string filename)
+	{
+		string levelDataXMLPath = Application.streamingAssetsPath + "/" + filename;
 
-            FinishedLoadingData = true;
-            Log("Loaded " + typeof(T) + " (Local)");
-        }
-        else
-            LogError("Cannot find " + filename + " XML data file");
-    }
+		if (File.Exists(levelDataXMLPath))
+		{
+			foreach (T data in XMLParser<T>.XMLDeserializer_Local(levelDataXMLPath))
+			{
+				DataList.Add(data);
+			}
 
-    /// <summary>
-    /// Coroutine method used to load XML data from a server location
-    /// </summary>
-    public IEnumerator LoadDataFromServer(string filename)
-    {
-        WWW www = new WWW("http://www.diademstudios.com/outpostdata/" + filename);
-        string myXML;
+			FinishedLoadingData = true;
+			Log ("Loaded " + typeof(T) + " (Local)");
+		}
+		else
+			LogError("Cannot find " + filename + " XML data file");
+	}
 
-        while (!www.isDone)
-        {
-            yield return 0;
-        }
+	/// <summary>
+	/// Coroutine method used to load XML data from a server location
+	/// </summary>
+	public IEnumerator LoadDataFromServer(string filename, WWWForm form = null)
+	{
+		WWW www;
+		string myXML;
+		if(form != null)
+			www = new WWW(filename, form);
+		else
+			www = new WWW(filename);
 
-        myXML = www.text;
+		Log ("About to download Data: " + filename);
+		while(!www.isDone)
+		{
+			yield return 0;
+		}
 
-        // Deserialize XML and add each enemy spawn to the lists
-        foreach (T data in XMLParser<T>.XMLDeserializer_Server(myXML))
-        {
-            DataList.Add(data);
-        }
+		// Check for an error in processing before continuing
+		if(string.IsNullOrEmpty(www.error) && !string.IsNullOrEmpty(www.text))
+		{
+			myXML = www.text;
 
-        FinishedLoadingData = true;
-        Log("Loaded " + typeof(T) + " (Server)");
-    }
+			// Deserialize XML and add each enemy spawn to the lists
+			foreach (T data in XMLParser<T>.XMLDeserializer_Server(myXML))
+			{
+				DataList.Add(data);
+			}
 
-    /// <summary>
-    /// Total number of data items
-    /// </summary>
-    /// <returns>Total Count</returns>
-    public int Count()
-    {
-        return DataList.Count;
-    }
+			FinishedLoadingData = true;
 
-    /// <summary>
-    /// Clears all currently loaded data items
-    /// </summary>
-    public void ClearData()
-    {
-        DataList.Clear();
-    }
+			if(OnDataLoadSuccess != null)
+				OnDataLoadSuccess();
 
-    public void SortDataList()
-    {
-        DataList.Sort();
-    }
+			Log ("Loaded " + typeof(T) + " (Server)");
+		}
+		else
+		{
+			if(OnDataLoadFailure != null)
+				OnDataLoadFailure();
+		}
+	}
 
-    #region MessageHandling
+	/// <summary>
+	/// Total number of data items
+	/// </summary>
+	/// <returns>Total Count</returns>
+	public int Count()
+	{
+		return DataList.Count;
+	}
 
-    protected void Log(string message)
-    {
-        if (ShowDebugLogs)
-            Debug.Log("[DataManager] " + message);
-    }
+	/// <summary>
+	/// Clears all currently loaded data items
+	/// </summary>
+	public void ClearData()
+	{
+		FinishedLoadingData = false;
+		DataList.Clear();
+	}
 
-    protected void LogError(string message)
-    {
-        Debug.LogError("[DataManager] " + message);
-    }
+	public void SortDataList()
+	{
+		DataList.Sort();
+	}
 
-    #endregion MessageHandling
+	#region MessageHandling
+	protected void Log(string message)
+	{
+		if(ShowDebugLogs)
+			Debug.Log("[DataManager] " + message);
+	}
+
+	protected void LogError(string message)
+	{
+		Debug.LogError("[DataManager] " + message);
+	}
+	#endregion
+
 }
+
