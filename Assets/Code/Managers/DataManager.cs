@@ -89,6 +89,7 @@ public class DataManager<T>
 		}
 		else
 		{
+			LogError("Failed downloading " + typeof(T) + " from server. Error: " + www.error.ToString());
 			if(OnDataLoadFailure != null)
 				OnDataLoadFailure();
 		}

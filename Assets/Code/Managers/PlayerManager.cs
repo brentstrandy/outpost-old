@@ -70,6 +70,7 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     private void Connected_Event()
     {
+		Log("Player Connected");
 		// For security reasons, userID should only be used by the current (local) player to authenticate their ACCOUNT (private) data
 		// All other data - like the LEVEL PROGRESS or PROFILE data can be attained with just the username
 		
@@ -80,15 +81,17 @@ public class PlayerManager : MonoBehaviour
 
 		CurPlayer = new CurrentPlayer();
 
+
+		Log("Downloading Player Details");
         // Load player level progress data based on the userID (aquired when logging into Diadem's server)
 		// Get Global Highscore data
 		WWWForm form = new WWWForm();
 		form.AddField("accountID", userID);
-        StartCoroutine(CurPlayer.LevelProgressDataManager.LoadDataFromServer("PlayerData_LevelProgress.php", form));
+		StartCoroutine(CurPlayer.LevelProgressDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_LevelProgress.php", form));
         // Load player account details
-        StartCoroutine(CurPlayer.AccountDataManager.LoadDataFromServer("PlayerData_AccountData.php", form));
+		StartCoroutine(CurPlayer.AccountDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_AccountData.php", form));
 		// Load player profile details
-		StartCoroutine(CurPlayer.ProfileDataManager.LoadDataFromServer("PlayerData_ProfileData.php", form));
+		StartCoroutine(CurPlayer.ProfileDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_ProfileData.php", form));
     }
 
     private void Disconnected_Event()
@@ -109,7 +112,9 @@ public class PlayerManager : MonoBehaviour
 			Player p = new Player();
 
 			// Load player profile details
-			StartCoroutine(p.ProfileDataManager.LoadDataFromServer("PlayerData_ProfileData.php?username=" + username));
+			WWWForm form = new WWWForm();
+			form.AddField("accountID", player.name);
+			StartCoroutine(p.ProfileDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_ProfileData.php", form));
 
 			// Save player to a list of all current players
 			CurrentPlayerList.Add(p);

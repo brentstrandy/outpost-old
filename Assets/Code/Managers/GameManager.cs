@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
         if (GameDataManager.Instance.DataLocation == "Local")
             EnemySpawnDataManager.LoadDataFromLocal("EnemySpawn/" + CurrentLevelData.EnemySpawnFilename + ".xml");
         else
-            StartCoroutine(EnemySpawnDataManager.LoadDataFromServer("EnemySpawn/" + CurrentLevelData.EnemySpawnFilename + ".xml"));
+			StartCoroutine(EnemySpawnDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/EnemySpawn/" + CurrentLevelData.EnemySpawnFilename + ".xml"));
 
         // Determine if there is a Notification File for this level
         if (CurrentLevelData.NotificationFilename != "")
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
             if (GameDataManager.Instance.DataLocation == "Local")
                 LevelNotificationDataManager.LoadDataFromLocal("Notifications/" + CurrentLevelData.NotificationFilename + ".xml");
             else
-                StartCoroutine(LevelNotificationDataManager.LoadDataFromServer("Notifications/" + CurrentLevelData.NotificationFilename + ".xml"));
+				StartCoroutine(LevelNotificationDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/Notifications/" + CurrentLevelData.NotificationFilename + ".xml"));
         }
 
         GameRunning = false;

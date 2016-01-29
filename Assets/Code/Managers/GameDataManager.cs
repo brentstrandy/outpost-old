@@ -65,13 +65,13 @@ public class GameDataManager : MonoBehaviour
 
         // Run coroutine to download TowerData from server (This coroutine cannot be called from the DataManager because
         // it must be called from a MonoBehavior class)
-        StartCoroutine(TowerDataManager.LoadDataFromServer("TowerData.xml"));
+		StartCoroutine(TowerDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/TowerData.xml"));
         // Run coroutine to download EnemyData from server (This coroutine cannot be called from the DataManager because
         // it must be called from a MonoBehavior class)
-        StartCoroutine(EnemyDataManager.LoadDataFromServer("EnemyData.xml"));
+		StartCoroutine(EnemyDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/EnemyData.xml"));
         // Run coroutine to download LevelData from server (This coroutine cannot be called from the DataManager because
         // it must be called from a MonoBehavior class)
-		StartCoroutine(LevelDataManager.LoadDataFromServer("LevelData_GetData.php"));
+		StartCoroutine(LevelDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/LevelData_GetData.php"));
 		//StartCoroutine(LevelDataManager.LoadDataFromServer("LevelData.xml"));
     }
 
