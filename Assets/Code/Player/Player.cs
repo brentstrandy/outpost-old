@@ -26,6 +26,7 @@ public class Player
 	public Player(PhotonPlayer photonPlayer)
     {
 		PhotonPlayerInfo = photonPlayer;
+		Connected = true;
 
         // Download profile data from the server
 		ProfileDataManager = new DataManager<ProfileData>();
