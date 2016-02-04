@@ -58,6 +58,13 @@ public class Map : ISerializationCallbackReceiver
         SetOffset(coord, GetOffset(coord) + change);
     }
 
+    public void ChangeOffset(IEnumerable<HexCoord> coords, float change)
+    {
+        foreach (var coord in coords) {
+            SetOffset(coord, GetOffset(coord) + change);
+        }
+    }
+
     public void OnBeforeSerialize()
     {
         if (ElevationOffsets == null)

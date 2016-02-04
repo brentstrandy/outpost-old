@@ -13,6 +13,9 @@ public class HexMeshEditor : Editor
     public static float BrushStrength = 0.5f;
     public const float MinBrushStrength = 0.1f;
     public const float MaxBrushStrength = 5.0f;
+    public static int BrushRadius = 1;
+    public const int MinBrushRadius = 1;
+    public const int MaxBrushRadius = 5;
 
     public override void OnInspectorGUI()
     {
@@ -34,8 +37,8 @@ public class HexMeshEditor : Editor
             {
                 GUILayout.Label("Brush Strength");
                 BrushStrength = GUILayout.HorizontalSlider(BrushStrength, MinBrushStrength, MaxBrushStrength);
-                //GUILayout.Button("+");
-                //GUILayout.Button("-");
+                GUILayout.Label("Brush Radius");
+                BrushRadius = EditorGUILayout.IntSlider(BrushRadius, MinBrushRadius, MaxBrushRadius);
             }
         }
     }
@@ -99,9 +102,15 @@ public class HexMeshEditor : Editor
 
                         if (terrain.Map != null)
                         {
-                            terrain.Map.ChangeOffset(coord, offset);
-                            terrain.UpdateMesh(HexKit.WithinRange(coord, 1, false));
-                            overlay = terrain.Overlays[(int)TerrainOverlays.Editor][0]; // ApplyProperties can recreate the overlays so we grab this again
+                            // We always change the offsets of BrushRadius - 1, because a user-selected radius of 1 actually
+                            // means no expansion beyond the selected hexagon.
+                            terrain.Map.ChangeOffset(HexKit.WithinRange(coord, BrushRadius - 1, false), offset);
+
+                            // We always update the mesh for the updated hexagons plus an additional ring of hexagons so that
+                            // their transitions can be updated.
+                            terrain.UpdateMesh(HexKit.WithinRange(coord, BrushRadius, false));
+
+                            overlay = terrain.Overlays[(int)TerrainOverlays.Editor][0]; // UpdateMesh could recreate the overlays so we grab this again
                         }
                     }
 
