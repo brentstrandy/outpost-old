@@ -166,7 +166,6 @@ public class HexMesh : MonoBehaviour
         Triangles = builder.GetTriangles();
         Predicate = builder.GetPredicate();
         CoordIndexMap = builder.GetCoordIndexMap();
-        Debug.Log("Index Map Count: " + CoordIndexMap.Count);
         Revision = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
     }
 

@@ -12,7 +12,7 @@ public class HexMeshEditor : Editor
     public static bool HasFocus = false;
     public static float BrushStrength = 0.5f;
     public const float MinBrushStrength = 0.1f;
-    public const float MaxBrushStrength = 20.0f;
+    public const float MaxBrushStrength = 5.0f;
 
     public override void OnInspectorGUI()
     {
