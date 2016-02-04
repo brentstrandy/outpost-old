@@ -114,12 +114,13 @@ public class TowerManager
 		}
 	}
 
-	public void ReassignPlayerTowers(PhotonPlayer owner)
+	public void ReassignPlayerTowers(string ownerFrom, PhotonPlayer newPhotonOwner)
 	{
+		Log("Reassigning " + ownerFrom + "'s Towers to " + newPhotonOwner.name);
 		// Run through each of the player's towers, freezing them for 5 minutes
-		foreach(Tower tower in ActiveTowerList.FindAll(x => x.OwnerUsername == owner.name))
+		foreach(Tower tower in ActiveTowerList.FindAll(x => x.OwnerUsername == ownerFrom))
 		{
-			tower.ReallocateTowerOwner(owner);
+			tower.ReallocateTowerOwner(newPhotonOwner);
 		}
 	}
 

@@ -9,23 +9,38 @@ public class Player
 	public bool Connected { get; private set; }
 	private float DisconnectedTimestamp = -1;
 
+	private PhotonPlayer PhotonPlayerInfo;
+
 	public string Username
 	{
 		get
 		{
-			if (ProfileDataManager.DataList.Count > 0)
-				return ProfileDataManager.DataList[0].Username;
+			if (PhotonPlayerInfo != null && PhotonPlayerInfo.name != "")
+				return PhotonPlayerInfo.name;
 			else
 				return "";
 		}
 		private set { }
 	}
 
-	public Player()
+	public Player(PhotonPlayer photonPlayer)
     {
+		PhotonPlayerInfo = photonPlayer;
+
         // Download profile data from the server
 		ProfileDataManager = new DataManager<ProfileData>();
+
+		ProfileDataManager.OnDataLoadSuccess += OnProfileDataDownloaded;
+		ProfileDataManager.OnDataLoadFailure += OnProfileDataDownloaded;
     }
+
+	public Color PlayerColor()
+	{
+		if(PhotonPlayerInfo.customProperties["PlayerColorIndex"] == null)
+			return Color.clear;
+		else
+			return PlayerColors.colors[(int)PhotonPlayerInfo.customProperties["PlayerColorIndex"]];
+	}
 
 	public void DisconnectPlayer()
 	{
@@ -45,6 +60,11 @@ public class Player
 			return 0;
 		else
 			return Time.time - DisconnectedTimestamp;
+	}
+
+	private void OnProfileDataDownloaded()
+	{
+		Log("Downloaded Profile Data! Username: " + Username);
 	}
 
 	#region MessageHandling

@@ -79,8 +79,7 @@ public class PlayerManager : MonoBehaviour
 		// Get the username that represents the player
 		string username = SessionManager.Instance.GetPlayerInfo().name;
 
-		CurPlayer = new CurrentPlayer();
-
+		CurPlayer = new CurrentPlayer(SessionManager.Instance.GetPlayerInfo());
 
 		Log("Downloading Player Details");
         // Load player level progress data based on the userID (aquired when logging into Diadem's server)
@@ -98,6 +97,7 @@ public class PlayerManager : MonoBehaviour
     {
 		// Clear all player lists - we are no longer connected to the game
 		CurrentPlayerList.Clear();
+		// Keep the CurPlayer as they never leave (until the game is shutdown)
 		CurrentPlayerList.Add(CurPlayer);
     }
 
@@ -109,8 +109,9 @@ public class PlayerManager : MonoBehaviour
 		// Only add a new player if the player joining the game didn't previously leave
 		if(index == -1)
 		{
-			Player p = new Player();
+			Player p = new Player(player);
 
+			Log("Player Joined. Downloading profile data from server.");
 			// Load player profile details
 			WWWForm form = new WWWForm();
 			form.AddField("accountID", player.name);
@@ -121,9 +122,10 @@ public class PlayerManager : MonoBehaviour
 		}
 		else
 		{
+			Log("Player Returned! Giving player their towers back");
 			// Reconnect the player who had previously disconnected and assign the player's towers back to them
 			CurrentPlayerList[index].ReconnectPlayer();
-			GameManager.Instance.TowerManager.ReassignPlayerTowers(player);
+			GameManager.Instance.TowerManager.ReassignPlayerTowers(player.name, player);
 		}
 	}
 
@@ -136,8 +138,9 @@ public class PlayerManager : MonoBehaviour
 		if(index != -1)
 		{
 			// When in-game, the player has time to return and reclaim their towers. When in the lobby, this doesn't happen
-			if(GameManager.Instance.GameRunning)
+			if(GameManager.Instance != null && GameManager.Instance.GameRunning)
 			{	
+				Log("Player left (" + username + "). Freezing towers for a short period to allow player to return.");
 				// Set the player's current connection status as disconnected
 				CurrentPlayerList[CurrentPlayerList.FindIndex(x => x.Username == username)].DisconnectPlayer();
 
@@ -150,6 +153,8 @@ public class PlayerManager : MonoBehaviour
 				CurrentPlayerList.RemoveAt(index);
 			}
 		}
+		else
+			Log("Player left, but we don't know who it was :(");
 	}
 
     #endregion EVENTS
@@ -158,17 +163,19 @@ public class PlayerManager : MonoBehaviour
     {
         if (GameManager.Instance != null && GameManager.Instance.GameRunning)
         {
-			// Only check status of removed players every few seconds
-			if(Time.time - LastTimeChecked > 10)
+			// Only check status of removed players every THREE seconds
+			if(Time.time - LastTimeChecked > 3)
 			{
 				// Loop through every player that has dropped to see when it is safe for them to be permanently removed from the game
-				foreach(Player p in CurrentPlayerList.FindAll(x => x.Connected == true))
+				foreach(Player p in CurrentPlayerList.FindAll(x => x.Connected == false))
 				{
+					Log("Testing " + p.Username + " to see if they have returned. Total Disconnect Duration: " + p.DisconnectedDuration());
 					// If player is gone for a certain amount of time, remove them from the game
 					if(p.DisconnectedDuration() > 5)
 					{
+						Log(p.Username + " ran out of time. Towers being reallocated");
 						// Reassign player's towers to the current Master Client
-						GameManager.Instance.TowerManager.ReassignPlayerTowers(SessionManager.Instance.GetMasterClient());
+						GameManager.Instance.TowerManager.ReassignPlayerTowers(p.Username, SessionManager.Instance.GetMasterClient());
 					}
 				}
 

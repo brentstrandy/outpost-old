@@ -198,7 +198,6 @@ public class Tower : MonoBehaviour
 
 	public void ReallocateTowerOwner(PhotonPlayer owner)
 	{
-		Debug.Log("Reallocate tower");
 		Owner = owner;
 		OwnerUsername = Owner.name;
 		SetPlayerColor(PlayerColors.colors[(int)Owner.customProperties["PlayerColorIndex"]]);

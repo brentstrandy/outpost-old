@@ -41,7 +41,7 @@ public class CurrentPlayer : Player
 		private set { }
 	}
 
-	public CurrentPlayer() : base()
+	public CurrentPlayer(PhotonPlayer photonPlayer) : base(photonPlayer)
 	{
 		AccountDataManager = new DataManager<AccountData>();
 		LevelProgressDataManager = new DataManager<LevelProgressData>();
