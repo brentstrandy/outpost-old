@@ -27,8 +27,10 @@ public class PlayerManager : MonoBehaviour
         SessionManager.Instance.OnSMConnected += Connected_Event;
         SessionManager.Instance.OnSMDisconnected += Disconnected_Event;
 
-		SessionManager.Instance.OnSMPlayerJoinedRoom += OnPlayerJoined_Event;
-		SessionManager.Instance.OnSMPlayerLeftRoom += OnPlayerLeft_Event;
+		SessionManager.Instance.OnSMPlayerJoinedRoom += OnRemotePlayerJoined_Event;
+		SessionManager.Instance.OnSMPlayerLeftRoom += OnRemotePlayerLeft_Event;
+		SessionManager.Instance.OnSMJoinedRoom += OnLocalPlayerJoined_Event;
+		SessionManager.Instance.OnSMLeftRoom += OnLocalPlayerLeft_Event;
 
         ObjPhotonView = PhotonView.Get(this);
 
@@ -70,7 +72,7 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     private void Connected_Event()
     {
-		Log("Player Connected");
+		Log("Local Player Connected");
 		// For security reasons, userID should only be used by the current (local) player to authenticate their ACCOUNT (private) data
 		// All other data - like the LEVEL PROGRESS or PROFILE data can be attained with just the username
 		
@@ -81,7 +83,7 @@ public class PlayerManager : MonoBehaviour
 
 		CurPlayer = new CurrentPlayer(SessionManager.Instance.GetPlayerInfo());
 
-		Log("Downloading Player Details");
+		Log("Downloading Local Player Details");
         // Load player level progress data based on the userID (aquired when logging into Diadem's server)
 		// Get Global Highscore data
 		WWWForm form = new WWWForm();
@@ -101,24 +103,17 @@ public class PlayerManager : MonoBehaviour
 		CurrentPlayerList.Add(CurPlayer);
     }
 
-	private void OnPlayerJoined_Event(PhotonPlayer player)
+	private void OnRemotePlayerJoined_Event(PhotonPlayer player)
 	{
 		string username = player.name;
 		int index = CurrentPlayerList.FindIndex(x => x.Username == username);
 
+		Log("Player joined (" + player.name + ")");
+
 		// Only add a new player if the player joining the game didn't previously leave
 		if(index == -1)
 		{
-			Player p = new Player(player);
-
-			Log("Player Joined. Downloading profile data from server.");
-			// Load player profile details
-			WWWForm form = new WWWForm();
-			form.AddField("accountID", player.name);
-			StartCoroutine(p.ProfileDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_ProfileData.php", form));
-
-			// Save player to a list of all current players
-			CurrentPlayerList.Add(p);
+			AddPlayerToCurrentList(player);
 		}
 		else
 		{
@@ -129,7 +124,7 @@ public class PlayerManager : MonoBehaviour
 		}
 	}
 
-	private void OnPlayerLeft_Event(PhotonPlayer player)
+	private void OnRemotePlayerLeft_Event(PhotonPlayer player)
 	{
 		string username = player.name;
 		int index = CurrentPlayerList.FindIndex(x => x.Username == username);
@@ -157,7 +152,39 @@ public class PlayerManager : MonoBehaviour
 			Log("Player left, but we don't know who it was :(");
 	}
 
+	private void OnLocalPlayerJoined_Event()
+	{
+		// Run through all current players in the room and add them to the player's list of current players
+		foreach(PhotonPlayer p in SessionManager.Instance.GetOtherPlayersInRoom())
+		{
+			AddPlayerToCurrentList(p);
+		}
+	}
+
+	private void OnLocalPlayerLeft_Event()
+	{
+		// Clear all player lists - we are no longer connected to the room
+		CurrentPlayerList.Clear();
+		// Keep the CurPlayer as they never leave (until the game is shutdown)
+		CurrentPlayerList.Add(CurPlayer);
+	}
+
     #endregion EVENTS
+
+	private void AddPlayerToCurrentList(PhotonPlayer photonPlayer)
+	{
+		Player p = new Player(photonPlayer);
+
+		Log("Player Joined. Downloading profile data from server.");
+		// Load player profile details
+		WWWForm form = new WWWForm();
+		// TODO: change accountID to username in PHP
+		form.AddField("accountID", photonPlayer.name);
+		StartCoroutine(p.ProfileDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_ProfileData.php", form));
+
+		// Save player to a list of all current players
+		CurrentPlayerList.Add(p);
+	}
 
     public void Update()
     {
@@ -239,16 +266,20 @@ public class PlayerManager : MonoBehaviour
 		//Destroy(PlayerLocator);
     }
 
-    /*public void OnLevelWasLoaded(int level)
-    {
-        // All levels MUST begin with a defined prefix for this to work properly
-		if (SceneManager.GetActiveScene().name.StartsWith("Level"))
-        {
-			// Instantiate a player locator point that is used for the allies' Radar
-			PlayerLocator = SessionManager.Instance.InstantiateObject("PlayerLocator", new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-			PlayerLocator.name = Username;
-        }
-    }*/
+	private void OnDestroy()
+	{
+		// Remove all references to delegate events that were created for this script
+		if(SessionManager.Instance != null)
+		{
+			SessionManager.Instance.OnSMConnected -= Connected_Event;
+			SessionManager.Instance.OnSMDisconnected -= Disconnected_Event;
+
+			SessionManager.Instance.OnSMPlayerJoinedRoom -= OnRemotePlayerJoined_Event;
+			SessionManager.Instance.OnSMPlayerLeftRoom -= OnRemotePlayerLeft_Event;
+			SessionManager.Instance.OnSMJoinedRoom -= OnLocalPlayerJoined_Event;
+			SessionManager.Instance.OnSMLeftRoom -= OnLocalPlayerLeft_Event;
+		}
+	}
 
     #region MessageHandling
 
