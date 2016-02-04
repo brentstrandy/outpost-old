@@ -1,5 +1,6 @@
-﻿using Settworks.Hexagons;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
+using Settworks.Hexagons;
 
 public class HexMeshBuilder : MeshBuilder
 {
@@ -31,12 +32,14 @@ public class HexMeshBuilder : MeshBuilder
 
     protected int[] triangles;
     protected NodeDelegate predicate;
+    protected Dictionary<HexCoord, int[]> coordIndexMap;
 
     public HexMeshBuilder()
         : base()
     {
-        triangles = new int[] { 0, 1, 5, 1, 2, 5, 2, 4, 5, 2, 3, 4 };
-        predicate = (coord, i) => new Node(coord.Corner(i));
+        SetTriangles(new int[] { 0, 1, 5, 1, 2, 5, 2, 4, 5, 2, 3, 4 });
+        SetPredicate((coord, i) => new Node(coord.Corner(i)));
+        coordIndexMap = new Dictionary<HexCoord, int[]>();
     }
 
     public void SetTriangles(int[] triangles)
@@ -44,19 +47,44 @@ public class HexMeshBuilder : MeshBuilder
         this.triangles = triangles;
     }
 
+    public int[] GetTriangles()
+    {
+        return triangles;
+    }
+
     public void SetPredicate(NodeDelegate predicate)
     {
         this.predicate = predicate;
     }
 
+    public NodeDelegate GetPredicate()
+    {
+        return predicate;
+    }
+
+    public Dictionary<HexCoord, int[]> GetCoordIndexMap()
+    {
+        return coordIndexMap;
+    }
+
     public void AddHexagon(HexCoord coord)
     {
+        int[] indices;
+        if (!coordIndexMap.TryGetValue(coord, out indices))
+        {
+            indices = new int[triangles.Length];
+        }
         for (int i = 0; i < triangles.Length; i += 3)
         {
             Node n1 = this.predicate(coord, triangles[i]);
             Node n2 = this.predicate(coord, triangles[i + 1]);
             Node n3 = this.predicate(coord, triangles[i + 2]);
-            AddTriangle(n1.vertex, n1.uv, n2.vertex, n2.uv, n3.vertex, n3.uv);
+            int i1, i2, i3;
+            AddTriangle(n1.vertex, n1.uv, n2.vertex, n2.uv, n3.vertex, n3.uv, out i1, out i2, out i3);
+            indices[i] = i1;
+            indices[i + 1] = i2;
+            indices[i + 2] = i3;
         }
+        coordIndexMap[coord] = indices;
     }
 }

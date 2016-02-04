@@ -2,6 +2,7 @@
 
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 using Settworks.Hexagons;
 
 [CustomEditor(typeof(HexMesh))]
@@ -99,7 +100,7 @@ public class HexMeshEditor : Editor
                         if (terrain.Map != null)
                         {
                             terrain.Map.ChangeOffset(coord, offset);
-                            terrain.ApplyProperties();
+                            terrain.UpdateMesh(HexKit.WithinRange(coord, 1, false));
                             overlay = terrain.Overlays[(int)TerrainOverlays.Editor][0]; // ApplyProperties can recreate the overlays so we grab this again
                         }
                     }

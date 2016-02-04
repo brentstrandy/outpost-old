@@ -50,6 +50,10 @@ public class HexMesh : MonoBehaviour
 
     public HexMeshOverlaySet Overlays;
 
+    protected int[] Triangles = new int[] { 0, 1, 5, 1, 2, 5, 2, 4, 5, 2, 3, 4 };
+    protected HexMeshBuilder.NodeDelegate Predicate;
+    protected Dictionary<HexCoord, int[]> CoordIndexMap = new Dictionary<HexCoord, int[]>();
+
     // Use this for initialization
     private void Start()
     {
@@ -153,12 +157,44 @@ public class HexMesh : MonoBehaviour
         Overlays.Add((int)TerrainOverlays.Editor, "TerrainEditor", "Standard", CreateOverlayBuilder(HighlightWidth));
     }
 
-    private void UpdateMesh()
+    public void UpdateMesh()
     {
-        var mesh = BuildBaseMesh();
+        HexMeshBuilder builder;
+        var mesh = BuildBaseMesh(out builder);
         GetComponent<MeshFilter>().sharedMesh = mesh;
         GetComponent<MeshCollider>().sharedMesh = mesh;
+        Triangles = builder.GetTriangles();
+        Predicate = builder.GetPredicate();
+        CoordIndexMap = builder.GetCoordIndexMap();
+        Debug.Log("Index Map Count: " + CoordIndexMap.Count);
         Revision = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+    }
+
+    public void UpdateMesh(IEnumerable<HexCoord> coords)
+    {
+        var mesh = GetComponent<MeshFilter>().sharedMesh;
+        if (mesh == null || CoordIndexMap == null || CoordIndexMap.Count == 0)
+        {
+            UpdateMesh();
+            return;
+        }
+
+        Vector3[] vertices = mesh.vertices;
+        foreach (var coord in coords)
+        {
+            int[] indices;
+            if (CoordIndexMap.TryGetValue(coord, out indices))
+            {
+                for (int i = 0; i < Triangles.Length; i++) {
+                    vertices[indices[i]] = Predicate(coord, Triangles[i]).vertex;
+                }
+            }
+        }
+
+        mesh.vertices = vertices;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        TangentSolver.Solve2(mesh);
     }
 
     private void UpdateOutlines()
@@ -171,6 +207,12 @@ public class HexMesh : MonoBehaviour
 
     private Mesh BuildBaseMesh()
     {
+        HexMeshBuilder builder;
+        return BuildBaseMesh(out builder);
+    }
+
+    private Mesh BuildBaseMesh(out HexMeshBuilder builder)
+    {
         float outer = 1.0f;
         float inner = 1.0f - DetailWidth;
         var height = GetHeightPredicate();
@@ -182,7 +224,7 @@ public class HexMesh : MonoBehaviour
         };
 
         var bounds = GetHexBounds();
-        var builder = new HexMeshBuilder();
+        builder = new HexMeshBuilder();
         builder.FlatShaded = FlatShaded;
         builder.SetPredicate(predicate);
         builder.SetTriangles(new int[] {

@@ -37,6 +37,16 @@ public class MeshBuilder
         Indices.Add(AddVertex(v3, uv3));
     }
 
+    public void AddTriangle(Vector3 v1, Vector2 uv1, Vector3 v2, Vector2 uv2, Vector3 v3, Vector2 uv3, out int i1, out int i2, out int i3)
+    {
+        i1 = AddVertex(v1, uv1);
+        i2 = AddVertex(v2, uv2);
+        i3 = AddVertex(v3, uv3);
+        Indices.Add(i1);
+        Indices.Add(i2);
+        Indices.Add(i3);
+    }
+
     public int AddVertex(Vector3 vertex, Vector2 uv)
     {
         int index;
