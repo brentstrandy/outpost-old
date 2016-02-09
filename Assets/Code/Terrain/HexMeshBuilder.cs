@@ -30,61 +30,67 @@ public class HexMeshBuilder : MeshBuilder
 
     public delegate Node NodeDelegate(HexCoord coord, int i);
 
-    protected int[] triangles;
-    protected NodeDelegate predicate;
-    protected Dictionary<HexCoord, int[]> coordIndexMap;
+    protected int[] Triangles;
+    protected NodeDelegate Predicate;
+    protected Dictionary<HexCoord, int[]> CoordIndexMap;
 
     public HexMeshBuilder()
         : base()
     {
         SetTriangles(new int[] { 0, 1, 5, 1, 2, 5, 2, 4, 5, 2, 3, 4 });
         SetPredicate((coord, i) => new Node(coord.Corner(i)));
-        coordIndexMap = new Dictionary<HexCoord, int[]>();
+        CoordIndexMap = new Dictionary<HexCoord, int[]>();
     }
 
     public void SetTriangles(int[] triangles)
     {
-        this.triangles = triangles;
+        this.Triangles = triangles;
     }
 
     public int[] GetTriangles()
     {
-        return triangles;
+        return Triangles;
     }
 
     public void SetPredicate(NodeDelegate predicate)
     {
-        this.predicate = predicate;
+        this.Predicate = predicate;
     }
 
     public NodeDelegate GetPredicate()
     {
-        return predicate;
+        return Predicate;
     }
 
     public Dictionary<HexCoord, int[]> GetCoordIndexMap()
     {
-        return coordIndexMap;
+        return CoordIndexMap;
     }
 
     public void AddHexagon(HexCoord coord)
     {
         int[] indices;
-        if (!coordIndexMap.TryGetValue(coord, out indices))
+        if (!CoordIndexMap.TryGetValue(coord, out indices))
         {
-            indices = new int[triangles.Length];
+            indices = new int[Triangles.Length];
         }
-        for (int i = 0; i < triangles.Length; i += 3)
+        for (int i = 0; i < Triangles.Length; i += 3)
         {
-            Node n1 = this.predicate(coord, triangles[i]);
-            Node n2 = this.predicate(coord, triangles[i + 1]);
-            Node n3 = this.predicate(coord, triangles[i + 2]);
+            Node n1 = this.Predicate(coord, Triangles[i]);
+            Node n2 = this.Predicate(coord, Triangles[i + 1]);
+            Node n3 = this.Predicate(coord, Triangles[i + 2]);
             int i1, i2, i3;
             AddTriangle(n1.vertex, n1.uv, n2.vertex, n2.uv, n3.vertex, n3.uv, out i1, out i2, out i3);
             indices[i] = i1;
             indices[i + 1] = i2;
             indices[i + 2] = i3;
         }
-        coordIndexMap[coord] = indices;
+        CoordIndexMap[coord] = indices;
+    }
+
+    public override void Clear()
+    {
+        base.Clear();
+        CoordIndexMap.Clear();
     }
 }

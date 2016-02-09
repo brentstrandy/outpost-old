@@ -220,7 +220,7 @@ public class Pathfinder : MonoBehaviour
             {
                 AddPathOverlay();
             }
-            Overlay.Update(EnumeratePath());
+            Overlay.IncludeAndUpdate(EnumeratePath());
         }
         else if (Overlay != null)
         {

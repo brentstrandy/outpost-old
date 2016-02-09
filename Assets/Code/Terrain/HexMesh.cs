@@ -155,6 +155,8 @@ public class HexMesh : MonoBehaviour
         Overlays.Add((int)TerrainOverlays.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
         Overlays.Add((int)TerrainOverlays.Pathfinding, "TerrainPathfinding", "Standard", CreateOverlayBuilder(HighlightWidth));
         Overlays.Add((int)TerrainOverlays.Editor, "TerrainEditor", "Standard", CreateOverlayBuilder(HighlightWidth));
+
+        BuildOutlines();
     }
 
     public void UpdateMesh()
@@ -196,12 +198,47 @@ public class HexMesh : MonoBehaviour
         TangentSolver.Solve2(mesh);
     }
 
-    private void UpdateOutlines()
+    public void UpdateOverlays()
     {
-        var overlay = Overlays[(int)TerrainOverlays.Outline][0];
-        overlay.Update(WithinPlacementRange());
-        overlay.Color = OutlineColor;
-        overlay.Show();
+        foreach (var overlay in Overlays)
+        {
+            foreach (var entry in overlay)
+            {
+                entry.Update();
+            }
+        }
+    }
+
+    public void UpdateOverlays(IEnumerable<HexCoord> coords)
+    {
+        foreach (var overlay in Overlays)
+        {
+            foreach (var entry in overlay)
+            {
+                entry.Update(coords);
+            }
+        }
+    }
+
+    public void BuildOutlines()
+    {
+        var outlines = Overlays[(int)TerrainOverlays.Outline][0];
+        outlines.Include(WithinPlacementRange());
+        outlines.Color = OutlineColor;
+        outlines.Update();
+        outlines.Show();
+    }
+
+    public void UpdateOutlines()
+    {
+        var outlines = Overlays[(int)TerrainOverlays.Outline][0];
+        outlines.Update();
+    }
+
+    public void UpdateOutlines(IEnumerable<HexCoord> coords)
+    {
+        var outlines = Overlays[(int)TerrainOverlays.Outline][0];
+        outlines.Update(coords);
     }
 
     private Mesh BuildBaseMesh()

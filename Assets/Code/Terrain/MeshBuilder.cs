@@ -83,7 +83,7 @@ public class MeshBuilder
         return mesh;
     }
 
-    public void Clear()
+    public virtual void Clear()
     {
         DeduplicationCount = 0;
         Vertices.Clear();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class HexMeshOverlaySet
+public class HexMeshOverlaySet : IEnumerable<HexMeshOverlay>
 {
     private Dictionary<int, HexMeshOverlay> Overlays;
     private GameObject Parent;
@@ -27,6 +27,16 @@ public class HexMeshOverlaySet
         }
     }
 
+    public IEnumerator<HexMeshOverlay> GetEnumerator()
+    {
+        return Overlays.Values.GetEnumerator();
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
     public void Clear()
     {
         foreach (var overlay in Overlays.Values)
@@ -37,7 +47,7 @@ public class HexMeshOverlaySet
     }
 }
 
-public class HexMeshOverlay
+public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
 {
     public class Entry
     {
@@ -119,25 +129,73 @@ public class HexMeshOverlay
             }
         }
 
-        public void Update(HexCoord coord)
+        // Updates the included coordinate and updates the overlay if it differs from what was included before
+        public void IncludeAndUpdate(HexCoord coord)
         {
-            Update(SingleCoordinateSet(coord));
+            IncludeAndUpdate(SingleCoordinateSet(coord));
+        }
+
+        // Updates the included coordinate set and updates the overlay if it differs from what was included before
+        public void IncludeAndUpdate(IEnumerable<HexCoord> coords)
+        {
+            if ((Coords as IEnumerable<HexCoord>).Compare(coords) != 0)
+            {
+                Include(coords);
+                Update();
+            }
+        }
+
+        public void Include(HexCoord coord)
+        {
+            Include(SingleCoordinateSet(coord));
+        }
+
+        public void Include(IEnumerable<HexCoord> coords)
+        {
+            Coords.Clear();
+            foreach (var coord in coords)
+            {
+                Coords.Add(coord);
+            }
+        }
+
+        public void Update()
+        {
+            Builder.Clear();
+            foreach (var coord in Coords)
+            {
+                Builder.AddHexagon(coord);
+            }
+            Instance.GetComponent<MeshFilter>().mesh = Builder.Build();
         }
 
         public void Update(IEnumerable<HexCoord> coords)
         {
-            if ((Coords as IEnumerable<HexCoord>).Compare(coords) != 0)
+            var mesh = Instance.GetComponent<MeshFilter>().sharedMesh;
+            var coordIndexMap = Builder.GetCoordIndexMap();
+            if (mesh == null || coordIndexMap == null || coordIndexMap.Count == 0)
             {
-                Coords.Clear();
-
-                Builder.Clear();
-                foreach (var coord in coords)
-                {
-                    Coords.Add(coord);
-                    Builder.AddHexagon(coord);
-                }
-                Instance.GetComponent<MeshFilter>().mesh = Builder.Build();
+                Update();
+                return;
             }
+
+            Vector3[] vertices = mesh.vertices;
+            var triangles = Builder.GetTriangles();
+            var predicate = Builder.GetPredicate();
+
+            foreach (var coord in coords)
+            {
+                int[] indices;
+                if (coordIndexMap.TryGetValue(coord, out indices))
+                {
+                    for (int i = 0; i < triangles.Length; i++)
+                    {
+                        vertices[indices[i]] = predicate(coord, triangles[i]).vertex;
+                    }
+                }
+            }
+
+            mesh.vertices = vertices;
         }
 
         public void Show()
@@ -215,5 +273,15 @@ public class HexMeshOverlay
             }
             return entry;
         }
+    }
+
+    public IEnumerator<Entry> GetEnumerator()
+    {
+        return Lookup.Values.GetEnumerator();
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

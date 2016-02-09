@@ -109,13 +109,14 @@ public class HexMeshEditor : Editor
                             // We always update the mesh for the updated hexagons plus an additional ring of hexagons so that
                             // their transitions can be updated.
                             terrain.UpdateMesh(HexKit.WithinRange(coord, BrushRadius, false));
+                            terrain.UpdateOverlays(HexKit.WithinRange(coord, BrushRadius, false));
 
                             overlay = terrain.Overlays[(int)TerrainOverlays.Editor][0]; // UpdateMesh could recreate the overlays so we grab this again
                         }
                     }
 
-                    overlay.Update(coord);
                     overlay.Color = Color.cyan;
+                    overlay.IncludeAndUpdate(HexKit.WithinRange(coord, BrushRadius - 1, false));
                     overlay.Show();
                 }
                 else
