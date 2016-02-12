@@ -158,7 +158,8 @@ public class RoomDetails_Menu : MonoBehaviour
             // Hide the room from other players (but still keep it open to be joined by invite)
             if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
                 SessionManager.Instance.SetRoomVisibility(false);
-            // Tell all the clients to load the level
+            
+			// Tell all the clients to load the level
             ObjPhotonView.RPC("LoadLevel", PhotonTargets.All, null);
         }
     }

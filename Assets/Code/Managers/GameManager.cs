@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public TowerManager TowerManager { get; private set; }
     public EnemySpawnManager EnemySpawnManager { get; private set; }
 
+	public int GameID = -1;
     public LevelData CurrentLevelData { get; private set; }
     public DataManager<EnemySpawnData> EnemySpawnDataManager { get; private set; }
     public DataManager<NotificationData> LevelNotificationDataManager { get; private set; }
@@ -165,14 +166,16 @@ public class GameManager : MonoBehaviour
     {
         bool success = false;
 
-        // At the moment the only data that needs to be checked is the EnemySpawnManager
-        // Add additional checks for loaded data here if necessary
+        // Ensure EnemySpawnDataManager has loaded all the data and that the game has a GameID from the server
         if (EnemySpawnDataManager != null)
-            if (EnemySpawnDataManager.FinishedLoadingData)
+		{
+			if (EnemySpawnDataManager.FinishedLoadingData && GameID != -1)
             {
                 LevelStartTime = Time.time; // Used for Analytics to keep track of level's start time
                 success = true;
             }
+		}
+
         return success;
     }
 
@@ -233,7 +236,7 @@ public class GameManager : MonoBehaviour
         MenuManager.Instance.ShowVictoryMenu();
 
         // Save player progress (won level)
-        PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, true);
+		StartCoroutine(PlayerManager.Instance.SaveLevelProgress(GameID, CurrentLevelData.LevelID, true));
 
         // Saves, sends, and resets all relevant analytics
         AnalyticsManager.Instance.PerformAnalyticsProcess();
@@ -247,7 +250,7 @@ public class GameManager : MonoBehaviour
         MenuManager.Instance.ShowLossMenu();
 
         // Save player progress (lost level)
-        StartCoroutine(PlayerManager.Instance.SaveLevelProgress(CurrentLevelData.LevelID, false));
+		StartCoroutine(PlayerManager.Instance.SaveLevelProgress(GameID, CurrentLevelData.LevelID, false));
 
         // Saves, sends, and resets all relevant analytics
         AnalyticsManager.Instance.PerformAnalyticsProcess();

@@ -234,13 +234,25 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public IEnumerator SaveLevelProgress(int levelID, bool complete)
+	/// <summary>
+	/// Sends player's stats to the server for the currently ended game
+	/// </summary>
+	/// <returns>The level progress.</returns>
+	/// <param name="gameID">Game ID.</param>
+	/// <param name="levelID">Level ID.</param>
+	/// <param name="complete">If set to <c>true</c> complete.</param>
+    public IEnumerator SaveLevelProgress(int gameID, int levelID, bool complete)
     {
         // Save a local copy of the player's progress so that they can keep playing the game and see the progress
         CurPlayer.LevelProgressDataManager.DataList.Add(new LevelProgressData(levelID, CurPlayer.Score, complete));
 
         // Call web service that saves the player's progress
-        WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_PlayedLevel.php?accountID=" + CurPlayer.AccountID.ToString() + "&levelID=" + levelID.ToString() + "&score=" + CurPlayer.Score.ToString() + "&complete=" + complete.ToString());
+		WWWForm form = new WWWForm();
+		form.AddField("accountID", CurPlayer.AccountID.ToString());
+		form.AddField("gameID", gameID.ToString());
+		form.AddField("levelID", levelID.ToString());
+		form.AddField("score", CurPlayer.Score.ToString());
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_EndGame.php");
 
         while (!www.isDone)
         {
@@ -248,6 +260,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         Log("Level Progress Saved to Server");
+
+
     }
 
     public List<TowerData> GetGameLoadOutTowers()
