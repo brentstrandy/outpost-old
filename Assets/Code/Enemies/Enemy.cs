@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public bool ShowDebugLogs = true;
+    public bool ShowDebugLogs = false;
     protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
     // Enemy Attributes/Details/Data

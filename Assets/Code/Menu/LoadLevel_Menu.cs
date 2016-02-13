@@ -11,10 +11,6 @@ public class LoadLevel_Menu : MonoBehaviour
 
     public GameObject Level_GUIText;
 
-    private bool LevelLoaded;
-    private bool DataLoaded;
-	private bool GameIDCreated;
-
 	private int GameID;
 
     private void Start()
@@ -91,13 +87,11 @@ public class LoadLevel_Menu : MonoBehaviour
 	{
 		GameID = gameID;
 
-		Log("[Client] Acquired GameID: " + gameID.ToString());
+		Log("Acquired GameID: " + gameID.ToString());
 
 		// If the GameManager has already been created, save the GameID to the GameManager so that it is remembered for the entire game
 		if(GameManager.Instance != null)
-		{
 			GameManager.Instance.GameID = GameID;
-		}
 
 		// Inform the server that you (the player) is in the game
 		AddPlayerToGame(GameID);
@@ -132,11 +126,8 @@ public class LoadLevel_Menu : MonoBehaviour
 			// Test to see that the server returned a numeric gameID
 			if(int.TryParse(www.text, out gameID))
 			{
-				Log("[Master Client] Acquired GameID: " + gameID.ToString());
 				// Share the gameID with the other players
-				ObjPhotonView.RPC("OnGameIDCreated", PhotonTargets.Others, gameID);
-				// Add Local Player (Master Client) to the game
-				AddPlayerToGame(gameID);
+				ObjPhotonView.RPC("OnGameIDCreated", PhotonTargets.All, gameID);
 			}
 			else
 			{

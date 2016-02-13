@@ -35,6 +35,7 @@ public class MenuManager : MonoBehaviour
     public GameObject InGamePanel;
     public GameObject LoadLevelPanel;
     public GameObject EndGamePanel;
+	public GameObject PostGamePanel;
 
     public GameObject CurrentMenuPanel { get; private set; }
 
@@ -161,6 +162,11 @@ public class MenuManager : MonoBehaviour
     {
         SetCurrentMenuPanel(GameplaySettingsPanel);
     }
+
+	public void ShowPostGameMenu()
+	{
+		SetCurrentMenuPanel(PostGamePanel);
+	}
 
     public void ShowVictoryMenu()
     {

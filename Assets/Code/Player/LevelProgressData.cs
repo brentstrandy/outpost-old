@@ -13,7 +13,6 @@ public class LevelProgressData
     public int LevelID;
 
     public int Score;
-    public bool Complete;
 
     [HideInInspector]
     [XmlIgnore]
@@ -23,11 +22,10 @@ public class LevelProgressData
     {
     }
 
-    public LevelProgressData(int levelID, int score, bool complete)
+    public LevelProgressData(int levelID, int score)
     {
         LevelID = levelID;
         Score = score;
-        Complete = complete;
     }
 
     public LevelProgressData(LevelProgressData obj)

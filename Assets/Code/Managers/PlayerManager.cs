@@ -18,6 +18,10 @@ public class PlayerManager : MonoBehaviour
 	// Used to limit how often game checks for returning players
 	private float LastTimeChecked;
 
+	// Delegates
+	public delegate void PlayerManagerAction();
+	public event PlayerManagerAction OnEndGameDataSaveSuccess;
+
     // Components
     private PhotonView ObjPhotonView;
 
@@ -169,7 +173,13 @@ public class PlayerManager : MonoBehaviour
 		CurrentPlayerList.Add(CurPlayer);
 	}
 
-    #endregion EVENTS
+    #endregion
+
+	public void SavePlayerGameDataToServer()
+	{
+		// Save player data to server
+		StartCoroutine(SaveDataToServer());
+	}
 
 	private void AddPlayerToCurrentList(PhotonPlayer photonPlayer)
 	{
@@ -178,7 +188,6 @@ public class PlayerManager : MonoBehaviour
 		Log("Player Joined. Downloading profile data from server.");
 		// Load player profile details
 		WWWForm form = new WWWForm();
-		// TODO: change accountID to username in PHP
 		form.AddField("accountID", photonPlayer.name);
 		StartCoroutine(p.ProfileDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_ProfileData.php", form));
 
@@ -237,31 +246,34 @@ public class PlayerManager : MonoBehaviour
 	/// <summary>
 	/// Sends player's stats to the server for the currently ended game
 	/// </summary>
-	/// <returns>The level progress.</returns>
-	/// <param name="gameID">Game ID.</param>
-	/// <param name="levelID">Level ID.</param>
-	/// <param name="complete">If set to <c>true</c> complete.</param>
-    public IEnumerator SaveLevelProgress(int gameID, int levelID, bool complete)
+	/// <returns>Nothing.</returns>
+    private IEnumerator SaveDataToServer()
     {
         // Save a local copy of the player's progress so that they can keep playing the game and see the progress
-        CurPlayer.LevelProgressDataManager.DataList.Add(new LevelProgressData(levelID, CurPlayer.Score, complete));
+		CurPlayer.LevelProgressDataManager.DataList.Add(new LevelProgressData(GameManager.Instance.CurrentLevelData.LevelID, CurPlayer.Score));
 
+		Log("Score = " + CurPlayer.Score.ToString());
         // Call web service that saves the player's progress
 		WWWForm form = new WWWForm();
 		form.AddField("accountID", CurPlayer.AccountID.ToString());
-		form.AddField("gameID", gameID.ToString());
-		form.AddField("levelID", levelID.ToString());
+		form.AddField("gameID", GameManager.Instance.GameID.ToString());
+		form.AddField("levelID", GameManager.Instance.CurrentLevelData.LevelID.ToString());
 		form.AddField("score", CurPlayer.Score.ToString());
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_EndGame.php");
+		form.AddField("kills", CurPlayer.KillCount.ToString());
+		form.AddField("victory", GameManager.Instance.Victory.ToString());
 
-        while (!www.isDone)
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_SavePlayerStats.php", form);
+	        
+		while (!www.isDone)
         {
             yield return 0;
         }
 
-        Log("Level Progress Saved to Server");
+		Log("Player Game Data and Level Progress Saved to Server");
 
-
+		// Trigger event to tell anyone listening that the data finished saving
+		if(OnEndGameDataSaveSuccess != null)
+			OnEndGameDataSaveSuccess();
     }
 
     public List<TowerData> GetGameLoadOutTowers()

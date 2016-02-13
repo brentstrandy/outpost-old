@@ -235,8 +235,8 @@ public class GameManager : MonoBehaviour
         GameRunning = false;
         MenuManager.Instance.ShowVictoryMenu();
 
-        // Save player progress (won level)
-		StartCoroutine(PlayerManager.Instance.SaveLevelProgress(GameID, CurrentLevelData.LevelID, true));
+        // Save player progress
+		PlayerManager.Instance.SavePlayerGameDataToServer();
 
         // Saves, sends, and resets all relevant analytics
         AnalyticsManager.Instance.PerformAnalyticsProcess();
@@ -249,8 +249,8 @@ public class GameManager : MonoBehaviour
         GameRunning = false;
         MenuManager.Instance.ShowLossMenu();
 
-        // Save player progress (lost level)
-		StartCoroutine(PlayerManager.Instance.SaveLevelProgress(GameID, CurrentLevelData.LevelID, false));
+		/// Save player progress
+		PlayerManager.Instance.SavePlayerGameDataToServer();
 
         // Saves, sends, and resets all relevant analytics
         AnalyticsManager.Instance.PerformAnalyticsProcess();
@@ -292,6 +292,7 @@ public class GameManager : MonoBehaviour
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
             AnalyticsManager.Instance.SetIsMaster(true);
     }
+
     #endregion EVENTS
 	
     public void AddAvailableQuadrant(Quadrant newQuadrant)

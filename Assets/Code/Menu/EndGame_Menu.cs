@@ -1,21 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Collections;
 
 public class EndGame_Menu : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
-    public float SecondsToWait = 3.0f;
+	private List<string> PlayerNames;
     public GameObject EndGameText;
-    public GameObject ContinueButton;
-    public GameObject ContinueText;
 
-    private float ContinueTimer;
     private bool Visible = false;
     private PhotonView ObjPhotonView;
 
     private void OnEnable()
     {
-        ContinueTimer = Time.time;
+		SessionManager.Instance.OnSMSwitchMaster += MasterClientQuit_Event;
+		PlayerManager.Instance.OnEndGameDataSaveSuccess += OnPlayerDataSavedSuccess;
+
         Visible = true;
 
         // Display the proper EndGame message depending on whether the player(s) won or lost
@@ -24,26 +25,27 @@ public class EndGame_Menu : MonoBehaviour
         else
             EndGameText.GetComponentInChildren<Text>().text = "DEFEAT :(";
 
-        ContinueButton.GetComponent<Button>().enabled = false;
+		PlayerNames = new List<string>();
 
-        // Determine whether to show or hide the continue button
-        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-        {
-            ContinueButton.SetActive(true);
-            ContinueText.SetActive(false);
-        }
-        else
-        {
-            ContinueButton.SetActive(false);
-            ContinueText.SetActive(true);
-        }
+		foreach (PhotonPlayer player in SessionManager.Instance.GetAllPlayersInRoom())
+			PlayerNames.Add(player.name);
 
-        SessionManager.Instance.OnSMSwitchMaster += MasterClientQuit_Event;
+		// Master Client will save overall game data to server
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			WWWForm form = new WWWForm();
+			// When creating a game, track who created it and what level they chose for the game
+			form.AddField("gameID", GameManager.Instance.GameID.ToString());
+			form.AddField("victory", GameManager.Instance.Victory.ToString());
+			WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_EndGame.php", form);
+		}
     }
 
     private void OnDisable()
     {
         Visible = false;
+
+		PlayerManager.Instance.OnEndGameDataSaveSuccess -= OnPlayerDataSavedSuccess;
 
 		if(SessionManager.Instance != null)
 		{
@@ -63,45 +65,59 @@ public class EndGame_Menu : MonoBehaviour
     {
         if (Visible)
         {
-            // Give user X seconds before allowing them to click continue
-            if (Time.time - ContinueTimer >= SecondsToWait)
-                ContinueButton.GetComponent<Button>().enabled = true;
+			// TODO: Show something interesting while data is being saved
         }
     }
 
-    #region OnClick
-
-    public void Continue_Click()
-    {
-        // Tell all clients to continue to the main menu
-        ObjPhotonView.RPC("Continue", PhotonTargets.All, null);
-    }
-
-    #endregion OnClick
+	/// <summary>
+	/// Event called when the Player finishes saving their data to the server
+	/// </summary>
+	private void OnPlayerDataSavedSuccess()
+	{
+		// Let all clients know that the player has finished loading the level (and all associated level data)
+		ObjPhotonView.RPC("PlayerDataSavingComplete", PhotonTargets.All, SessionManager.Instance.GetPlayerInfo().name);
+	}
 
     #region Events
 
     private void MasterClientQuit_Event(PhotonPlayer player)
     {
-        PlayerManager.Instance.ResetData();
+        //PlayerManager.Instance.ResetData();
 
-        MenuManager.Instance.ReturnToRoomDetailsMenu();
+        //MenuManager.Instance.ReturnToRoomDetailsMenu();
     }
 
-    #endregion Events
+    #endregion
 
     #region [PunRPC] CALLS
 
     [PunRPC]
-    private void Continue()
+	private void PlayerDataSavingComplete(string playerName)
     {
-        // Reset player Loadout data
-        PlayerManager.Instance.ResetData();
+		Log(playerName + " Finished saving data");
 
-        MenuManager.Instance.ReturnToRoomDetailsMenu();
+		// Register client as finsihed loading the level
+		PlayerNames.Remove(playerName);
+
+		// If this is the master client, check to see if everyone is ready and start the game
+		if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			// If all players are ready, move to the postgame menu
+			if (PlayerNames.Count == 0)
+			{
+				// Tell players to go to the postgame menu
+				ObjPhotonView.RPC("ShowPostGameMenu", PhotonTargets.All, null);
+			}
+		}
     }
 
-    #endregion [PunRPC] CALLS
+	[PunRPC]
+	private void ShowPostGameMenu()
+	{
+		MenuManager.Instance.ShowPostGameMenu();
+	}
+
+    #endregion
 
     #region MessageHandling
 
