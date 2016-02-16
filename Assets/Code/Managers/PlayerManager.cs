@@ -185,15 +185,6 @@ public class PlayerManager : MonoBehaviour
 		StartCoroutine(SaveDataToServer(waitForResponse));
 	}
 
-	/// <summary>
-	/// ONLY CALL WHEN GAME 
-	/// </summary>
-	/// <param name="waitForResponse">If set to <c>true</c> wait for response.</param>
-	public void SaveOtherPlayersGameDataToServer(bool waitForResponse = true)
-	{
-
-	}
-
 	private void AddPlayerToCurrentList(PhotonPlayer photonPlayer)
 	{
 		Player p = new Player(photonPlayer);
@@ -275,7 +266,7 @@ public class PlayerManager : MonoBehaviour
 		form.AddField("score", CurPlayer.Score.ToString());
 		form.AddField("kills", CurPlayer.KillCount.ToString());
 		form.AddField("victory", GameManager.Instance.Victory.ToString());
-		form.AddField("finishedGame", "1");
+		form.AddField("finishedGame", (!GameManager.Instance.GameRunning).ToString());
 
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_SavePlayerStats.php", form);
 	    
