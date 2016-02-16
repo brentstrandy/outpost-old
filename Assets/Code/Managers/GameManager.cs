@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
     {
         // Track events in order to react to Session Manager events as they happen
         SessionManager.Instance.OnSMSwitchMaster += OnSwitchMaster;
+		SessionManager.Instance.OnSMDisconnected += OnDisconnected_Event;
 
         // Store LevelData from MenuManager
         CurrentLevelData = MenuManager.Instance.CurrentLevelData;
@@ -285,6 +286,7 @@ public class GameManager : MonoBehaviour
     {
         ObjPhotonView.RPC("EndGame_LossAcrossNetwork", PhotonTargets.All, null);
     }
+
     #region EVENTS
 
     private void OnSwitchMaster(PhotonPlayer player)
@@ -293,20 +295,46 @@ public class GameManager : MonoBehaviour
             AnalyticsManager.Instance.SetIsMaster(true);
     }
 
-    #endregion EVENTS
+	/// <summary>
+	/// Called when the current game scene ends
+	/// --Called after OnApplicationQuit and OnDisconnected
+	/// </summary>
+	private void OnDestroy()
+	{
+		// Remove all references to delegate events that were created for this script
+		if(SessionManager.Instance != null)
+		{
+			SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
+			SessionManager.Instance.OnSMDisconnected -= OnDisconnected_Event;
+		}
+	}
+
+	/// <summary>
+	/// Called before the application quits
+	/// --Called before OnDisconnected and OnDestroy
+	/// </summary>
+	private void OnApplicationQuit()
+	{
+		Log("The game has quit in the middle of the game");
+
+		// Save the player's data to the server without waiting for a response from the server. 
+		PlayerManager.Instance.SavePlayerGameDataToServer(false);
+	}
+
+	/// <summary>
+	/// Called when the game disconnects from the realtime server.
+	/// --Called after OnApplicationQuit and before OnDestroy
+	/// </summary>
+	private void OnDisconnected_Event()
+	{
+		//TODO: Handle unexpectedly being disconnected from the realtime network
+	}
+
+    #endregion
 	
     public void AddAvailableQuadrant(Quadrant newQuadrant)
     {
         CurrentLevelData.AvailableQuadrants += ", " + newQuadrant.ToString();
-    }
-
-    private void OnDestroy()
-    {
-        // Remove all references to delegate events that were created for this script
-		if(SessionManager.Instance != null)
-		{
-			SessionManager.Instance.OnSMSwitchMaster -= OnSwitchMaster;
-		}
     }
 
     #region MessageHandling

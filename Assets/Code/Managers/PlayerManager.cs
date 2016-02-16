@@ -175,10 +175,23 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
-	public void SavePlayerGameDataToServer()
+	/// <summary>
+	/// Starts a coroutine that saves game data to the server
+	/// </summary>
+	/// <param name="waitForResponse">If set to <c>true</c> will fire an event to proclaim the save complete.</param>
+	public void SavePlayerGameDataToServer(bool waitForResponse = true)
 	{
 		// Save player data to server
-		StartCoroutine(SaveDataToServer());
+		StartCoroutine(SaveDataToServer(waitForResponse));
+	}
+
+	/// <summary>
+	/// ONLY CALL WHEN GAME 
+	/// </summary>
+	/// <param name="waitForResponse">If set to <c>true</c> wait for response.</param>
+	public void SaveOtherPlayersGameDataToServer(bool waitForResponse = true)
+	{
+
 	}
 
 	private void AddPlayerToCurrentList(PhotonPlayer photonPlayer)
@@ -244,15 +257,16 @@ public class PlayerManager : MonoBehaviour
     }
 
 	/// <summary>
-	/// Sends player's stats to the server for the currently ended game
+	/// Sends player's stats to the server for the currently ended game.
 	/// </summary>
 	/// <returns>Nothing.</returns>
-    private IEnumerator SaveDataToServer()
+	/// <param name="waitForResponse">If set to <c>true</c> will fire an event to proclaim the save complete.</param>
+	private IEnumerator SaveDataToServer(bool waitForResponse = true)
     {
         // Save a local copy of the player's progress so that they can keep playing the game and see the progress
-		CurPlayer.LevelProgressDataManager.DataList.Add(new LevelProgressData(GameManager.Instance.CurrentLevelData.LevelID, CurPlayer.Score));
+		if(GameManager.Instance.Victory)
+			CurPlayer.LevelProgressDataManager.DataList.Add(new LevelProgressData(GameManager.Instance.CurrentLevelData.LevelID, CurPlayer.Score));
 
-		Log("Score = " + CurPlayer.Score.ToString());
         // Call web service that saves the player's progress
 		WWWForm form = new WWWForm();
 		form.AddField("accountID", CurPlayer.AccountID.ToString());
@@ -261,19 +275,24 @@ public class PlayerManager : MonoBehaviour
 		form.AddField("score", CurPlayer.Score.ToString());
 		form.AddField("kills", CurPlayer.KillCount.ToString());
 		form.AddField("victory", GameManager.Instance.Victory.ToString());
+		form.AddField("finishedGame", "1");
 
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_SavePlayerStats.php", form);
-	        
-		while (!www.isDone)
-        {
-            yield return 0;
-        }
+	    
+		// Some requests need to happen immeidately and cannot wait for a response (quitting the game)
+		if(waitForResponse)
+		{
+			while (!www.isDone)
+	        {
+	            yield return 0;
+	        }
 
-		Log("Player Game Data and Level Progress Saved to Server");
+			Log("Player Game Data and Level Progress Saved to Server");
 
-		// Trigger event to tell anyone listening that the data finished saving
-		if(OnEndGameDataSaveSuccess != null)
-			OnEndGameDataSaveSuccess();
+			// Trigger event to tell anyone listening that the data finished saving
+			if(OnEndGameDataSaveSuccess != null)
+				OnEndGameDataSaveSuccess();
+		}
     }
 
     public List<TowerData> GetGameLoadOutTowers()
