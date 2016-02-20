@@ -224,6 +224,9 @@ public class SessionManager : MonoBehaviour
     /// <param name="typedLobby">Default or SQL - SQL allows for complex 'where' clauses.</param>
     public void CreateRoom(string name, RoomOptions roomOptions, TypedLobby typedLobby)
     {
+		if(roomOptions == null)
+			roomOptions = new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 8 };
+		
         if (!PhotonNetwork.inRoom)
             PhotonNetwork.CreateRoom(name, roomOptions, typedLobby);
     }

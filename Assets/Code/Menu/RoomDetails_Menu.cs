@@ -44,7 +44,6 @@ public class RoomDetails_Menu : MonoBehaviour
     private LevelData LevelLoadoutData;
 
     private bool LevelSelected;
-    //private string AvailableColorIndexes = "01234567";
 	private int[] PlayerColorIndexes;
 
     private PhotonView ObjPhotonView;
@@ -157,7 +156,8 @@ public class RoomDetails_Menu : MonoBehaviour
         {
             // Hide the room from other players (but still keep it open to be joined by invite)
             if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-                SessionManager.Instance.SetRoomVisibility(false);
+				SessionManager.Instance.SetRoomOpen(false);
+				//SessionManager.Instance.SetRoomVisibility(false);
             
 			// Tell all the clients to load the level
             ObjPhotonView.RPC("LoadLevel", PhotonTargets.All, null);
@@ -395,7 +395,7 @@ public class RoomDetails_Menu : MonoBehaviour
 		SetPlayerColor(colorIndex, msgInfo.sender);
 	}
 
-    #endregion [PunRPC] CALLS
+    #endregion
 
 	private void SetPlayerColor(int colorIndex, PhotonPlayer player)
 	{

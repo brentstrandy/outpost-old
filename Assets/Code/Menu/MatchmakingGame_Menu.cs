@@ -53,7 +53,7 @@ public class MatchmakingGame_Menu : MonoBehaviour
     {
         this.Log("No Rooms Available. Creating Room...");
         // If player is unable to join a random room then create a new room
-        SessionManager.Instance.CreateRoom("", new RoomOptions() { isVisible = true, isOpen = true, maxPlayers = 8 }, TypedLobby.Default);
+        SessionManager.Instance.CreateRoom("", null, TypedLobby.Default);
     }
 
     private void JoinRoomFail_Event(object[] codeAndMsg)

@@ -85,17 +85,18 @@ public class JoinGame_Menu : MonoBehaviour
         foreach (RoomInfo room in roomList)
         {
             // Instantiate row for each room and add it as a child of the JoinGame UI Panel
-            GameObject obj = Instantiate(RoomDetailsGUI_Prefab) as GameObject;
-            obj.GetComponentInChildren<Text>().text = room.name.Substring(0, room.name.IndexOf("("));
-            obj.GetComponent<Button>().onClick.AddListener(delegate { JoinRoom_Click(room.name); });
-            obj.transform.SetParent(this.transform);
-            obj.transform.localScale = new Vector3(1, 1, 1);
-            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100 + (-35 * index));
-            obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
-            obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+			RoomDetailsGUI roomDetails = Instantiate(RoomDetailsGUI_Prefab).GetComponent<RoomDetailsGUI>() as RoomDetailsGUI;
+			roomDetails.UpdateDetails(room.name.Substring(0, room.name.IndexOf("(")), room.playerCount, room.maxPlayers, (room.open ? "Open" : "Closed"));
+			//roomDetails.GetComponentInChildren<Text>().text = room.name.Substring(0, room.name.IndexOf("("));
+			roomDetails.JoinButton.onClick.AddListener(delegate { JoinRoom_Click(room.name); });
+			roomDetails.transform.SetParent(this.transform);
+			roomDetails.transform.localScale = new Vector3(1, 1, 1);
+			roomDetails.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 10 + (-35 * index));
+			roomDetails.GetComponent<RectTransform>().localPosition = new Vector3(roomDetails.GetComponent<RectTransform>().localPosition.x, roomDetails.GetComponent<RectTransform>().localPosition.y, 0);
+			roomDetails.transform.rotation = new Quaternion(0, 0, 0, 0);
 
             // Create a handle to all the prefabs that were created so we can destroy them later
-            RoomDetailsGUIList.Add(obj);
+			RoomDetailsGUIList.Add(roomDetails.gameObject);
 
             index++;
         }
