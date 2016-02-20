@@ -39,6 +39,18 @@ public class SmallThraceiumTower : Tower
         }
     }
 
+	public override void InstantiateExplosion()
+	{
+		if (ExplodingEffect)
+		{
+			GameObject effect = Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), Quaternion.Euler(0, 180, 0)) as GameObject;
+
+			effect.GetComponentInChildren<Light>().color = PlayerColor;
+			effect.GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", PlayerColor);
+			effect.GetComponent<ParticleSystemRenderer>().material.SetColor("_EmmissionColor", PlayerColor);
+		}
+	}
+
     #endregion Special Effects
 
     #region MessageHandling

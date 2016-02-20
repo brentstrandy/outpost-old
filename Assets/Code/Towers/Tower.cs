@@ -25,6 +25,7 @@ public class Tower : MonoBehaviour
     protected bool CanFire = false;
     protected bool ReadyToFire = true;
     protected bool CanMove = false;
+	protected bool Dead = false;
 
     public GameObject TurretPivot;
     public GameObject EmissionPoint;
@@ -38,8 +39,13 @@ public class Tower : MonoBehaviour
     protected HexLocation ObjHexLocation;
     protected Animator ObjAnimator;
 
-    // Effects
+    /// <summary>
+    /// Triggered when tower shoots
+    /// </summary>
     public GameObject FiringEffect;
+	/// <summary>
+	/// Triggered when tower explodes (upon death)
+	/// </summary>
     public GameObject ExplodingEffect;
 
     #region INITIALIZE
@@ -326,7 +332,6 @@ public class Tower : MonoBehaviour
         ReadyToFire = false;
 
         InstantiateFire();
-        InstantiateExplosion(); // TODO: Delay?
     }
 
     /// <summary>
@@ -383,7 +388,7 @@ public class Tower : MonoBehaviour
     public virtual void TakeDamage(float ballisticDamage, float thraceiumDamage)
     {
         // Only the master client dictates how to handle damage
-        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+        if (!Dead && SessionManager.Instance.GetPlayerInfo().isMasterClient)
         {
             // Damage dealt after defense is calculated
             float bDamageWithDefense = (ballisticDamage * (1 - TowerAttributes.BallisticDefense));
@@ -439,8 +444,9 @@ public class Tower : MonoBehaviour
         Log(string.Format("Tower[{0}] is destroyed", NetworkViewID));
 
         // Instantiate a prefab to show the tower exploding
-        if (ExplodingEffect)
-            Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+		InstantiateExplosion();
+		//if (ExplodingEffect)
+        //    Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
 
 		// Real time destruction of tower
 		if(DestructibleObject)
@@ -470,6 +476,9 @@ public class Tower : MonoBehaviour
         {
             GameManager.Instance.TowerManager.RemoveCoverage(this);
         }
+
+		Dead = true;
+		this.tag = "Dead Tower";
 
         // The GameObject must be destroyed or else the enemy will stay instantiated
         Destroy(this.gameObject, 1.5f);
@@ -550,6 +559,7 @@ public class Tower : MonoBehaviour
                 effect = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
             }
             effect.transform.LookAt(TargetedEnemy.gameObject.transform.position);
+			Debug.Break();
         }
     }
 
@@ -557,7 +567,7 @@ public class Tower : MonoBehaviour
     {
         if (ExplodingEffect)
         {
-            Instantiate(ExplodingEffect, TargetedEnemy.transform.position, TargetedEnemy.transform.rotation);
+			Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
         }
     }
 
