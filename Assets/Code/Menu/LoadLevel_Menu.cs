@@ -102,6 +102,7 @@ public class LoadLevel_Menu : MonoBehaviour
 		WWWForm form = new WWWForm();
 		form.AddField("accountID", PlayerManager.Instance.CurPlayer.AccountID);
 		form.AddField("gameID", gameID);
+		form.AddField("playerColor", (PlayerManager.Instance.CurPlayer.PlayerColor().r * 255).ToString() + "," + (PlayerManager.Instance.CurPlayer.PlayerColor().g * 255).ToString() + "," + (PlayerManager.Instance.CurPlayer.PlayerColor().b * 255).ToString());
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_AddPlayerToGame.php", form);
 	}
 
