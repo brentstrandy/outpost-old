@@ -21,7 +21,6 @@ public class DimLightOverTime : MonoBehaviour
 	{
 		if(LightComponent)
 		{
-			Debug.Log(LightComponent.intensity.ToString());
 			if(LightComponent.intensity > 0.05f)
 				LightComponent.intensity = Mathf.Lerp(StartIntensity, 0, (Time.time - StartTime) / Duration);
 			else

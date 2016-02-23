@@ -14,6 +14,11 @@ public class InGamePause_Menu : MonoBehaviour
 	{
 		YesButton.gameObject.SetActive(false);
 		QuitButton.gameObject.SetActive(true);
+
+		// Set the background of the menu equal to the player's color
+		Color tempColor = PlayerManager.Instance.CurPlayer.PlayerColor();
+		tempColor.a = 0.5f;
+		this.gameObject.GetComponent<Image>().color = tempColor;
 	}
 
 	#region OnClick
