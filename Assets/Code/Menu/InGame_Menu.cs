@@ -49,12 +49,15 @@ public class InGame_Menu : MonoBehaviour
         }
 
         // Add listeners for hotkeys
-        InputManager.Instance.OnTowerHotKeyPressed += OnTowerHotKey;
+        InputManager.Instance.OnTowerHotKeyPressed += OnTowerHotKeyPressed;
+		InputManager.Instance.OnShowMenuKeyPressed += OnShowMenuKeyPressed;
     }
 
     private void OnDisable()
     {
         FinishedLoadingLevel = false;
+		InputManager.Instance.OnTowerHotKeyPressed -= OnTowerHotKeyPressed;
+		InputManager.Instance.OnShowMenuKeyPressed -= OnShowMenuKeyPressed;
     }
 
     public void Update()
@@ -79,7 +82,8 @@ public class InGame_Menu : MonoBehaviour
         FinishedLoadingLevel = true;
     }
 
-    private void OnTowerHotKey(int towerIndex)
+	#region EVENTS
+    private void OnTowerHotKeyPressed(int towerIndex)
     {
         // Only perform the hotkey actions if there is a tower button to select
         if (TowerButtons.Count > towerIndex && towerIndex >= 0)
@@ -87,6 +91,15 @@ public class InGame_Menu : MonoBehaviour
             ExecuteEvents.Execute(TowerButtons[towerIndex], new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         }
     }
+
+	private void OnShowMenuKeyPressed()
+	{
+		// Only allow the player to access the in-game pause menu while the game is running
+		// This means the player cannot view this menu while looking at the post-game stats
+		if(GameManager.Instance.GameRunning)
+			MenuManager.Instance.ToggleInGamePauseMenu();
+	}
+	#endregion
 
     #region OnClick
 

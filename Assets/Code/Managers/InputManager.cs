@@ -13,6 +13,9 @@ public class InputManager : MonoBehaviour
     public delegate void TowerHotKey(int towerIndex);
     public event TowerHotKey OnTowerHotKeyPressed;
 
+	public delegate void ShowMenuKey();
+	public event ShowMenuKey OnShowMenuKeyPressed;
+
     #endregion EVENTS (DELEGATES)
 
     #region INSTANCE (SINGLETON)
@@ -85,6 +88,11 @@ public class InputManager : MonoBehaviour
                     if (OnTowerHotKeyPressed != null)
                         OnTowerHotKeyPressed(3);
                 }
+				else if(Input.GetKeyDown(KeyCode.Escape))
+				{
+					if(OnShowMenuKeyPressed != null)
+						OnShowMenuKeyPressed();
+				}
 
                 // Speed game up for testing purposes
 #if UNITY_EDITOR

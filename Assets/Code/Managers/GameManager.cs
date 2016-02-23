@@ -287,6 +287,30 @@ public class GameManager : MonoBehaviour
         ObjPhotonView.RPC("EndGame_LossAcrossNetwork", PhotonTargets.All, null);
     }
 
+	/// <summary>
+	/// Used when the player manually chooses to quit
+	/// </summary>
+	/// <param name="applicationQuit">If set to <c>true</c> entire application is being quit.</param>
+	public void EndGame_Quit(bool applicationQuit = false)
+	{
+		Log("The player has quit in the middle of the game.");
+
+		// Save the player's data to the server without waiting for a response from the server. 
+		PlayerManager.Instance.SavePlayerGameDataToServer(false);
+
+		Victory = false;
+		GameRunning = false;
+
+		// Go to the main menu if the player chooses to quit
+		if(!applicationQuit)
+		{
+			// Leave the multiplayer room
+			SessionManager.Instance.LeaveRoom();
+			// Go back to the Main Menu
+			MenuManager.Instance.ReturnToMainMenu();
+		}
+	}
+
     #region EVENTS
 
     private void OnSwitchMaster(PhotonPlayer player)
@@ -315,10 +339,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void OnApplicationQuit()
 	{
-		Log("The game has quit in the middle of the game");
-
-		// Save the player's data to the server without waiting for a response from the server. 
-		PlayerManager.Instance.SavePlayerGameDataToServer(false);
+		EndGame_Quit(true);
 	}
 
 	/// <summary>

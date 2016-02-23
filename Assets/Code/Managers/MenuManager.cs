@@ -33,6 +33,7 @@ public class MenuManager : MonoBehaviour
     public GameObject ControlSettingsPanel;
     public GameObject GameplaySettingsPanel;
     public GameObject InGamePanel;
+	public GameObject InGamePausePanel;
     public GameObject LoadLevelPanel;
     public GameObject EndGamePanel;
 	public GameObject PostGamePanel;
@@ -108,6 +109,18 @@ public class MenuManager : MonoBehaviour
         CurrentLevelData = null;
     }
 
+	public void ReturnToMainMenu()
+	{
+		// Return to the main game scene where th emain menu functionality takes place
+		SceneManager.LoadScene("MainGame");
+
+		// Show the Main Menu
+		SetCurrentMenuPanel(MainMenuPanel);
+
+		// No level is being played when in the menu
+		CurrentLevelData = null;
+	}
+
     public void ShowStartMenu()
     {
         SetCurrentMenuPanel(StartMenuPanel);
@@ -177,6 +190,13 @@ public class MenuManager : MonoBehaviour
     {
         SetCurrentMenuPanel(EndGamePanel);
     }
+
+	public void ToggleInGamePauseMenu()
+	{
+		// This menu acts differently, it needs to be overlayed on top of the current menu. Therefore,
+		// we do not disable other menus before showing this one. We simply toggle it off or on
+		InGamePausePanel.SetActive(!InGamePausePanel.activeSelf);
+	}
 
     #endregion MENU TRANSITIONS
 
