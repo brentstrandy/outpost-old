@@ -10,6 +10,11 @@ using UnityEngine;
 public class ProfileData
 {
     public string Username;
+	/// <summary>
+	/// If the player quit a game before it finished, this is the name of the room they quit.
+	/// This value is saved in case they want to join back into the game.
+	/// </summary>
+	public string PhotonRoomName;
 
     [HideInInspector]
     [XmlIgnore]

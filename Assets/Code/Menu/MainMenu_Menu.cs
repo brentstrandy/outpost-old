@@ -1,14 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenu_Menu : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
+
+	public Button RejoinRecentlyQuitButton;
 
     private void OnEnable()
     {
         // Establish listeners for all applicable events
         SessionManager.Instance.OnSMCreatedRoom += RoomCreated_Event;
         SessionManager.Instance.OnSMCreateRoomFail += CreateRoomFail_Event;
+		SessionManager.Instance.OnSMJoinRoomFail += JoinRoomFail_Event;
+
+		// Check to see if there's a game still running that the player recently quit
+		if(PlayerManager.Instance.CurPlayer.RecentlyQuitPhotonRoomName != "")
+			RejoinRecentlyQuitButton.gameObject.SetActive(true);
+		else
+			RejoinRecentlyQuitButton.gameObject.SetActive(false);
     }
 
     private void OnDisable()
@@ -39,6 +49,18 @@ public class MainMenu_Menu : MonoBehaviour
         // Tell the MenuManager to transition to the MatchMaking menu
         MenuManager.Instance.ShowMatchmakingGameMenu();
     }
+
+	public void RejoinRecentlyQuitGame_Click()
+	{
+		// Sanity check to make sure the player actually has a room name they want to join
+		if(PlayerManager.Instance.CurPlayer.RecentlyQuitPhotonRoomName != "")
+			SessionManager.Instance.JoinRoom(PlayerManager.Instance.CurPlayer.RecentlyQuitPhotonRoomName);
+		else
+		{
+			// TODO: Display error message saying the room could not be joined
+			RejoinRecentlyQuitButton.gameObject.SetActive(false);
+		}
+	}
 
     public void Settings_Click()
     {
@@ -122,10 +144,17 @@ public class MainMenu_Menu : MonoBehaviour
 
     private void CreateRoomFail_Event(object[] codeAndMsg)
     {
-        this.LogError("Failed to Create Room");
-        // TODO: Display an error messages that says room could not be created
+		this.LogError("Failed to Create Room: (" + codeAndMsg[0].ToString() + ") " + codeAndMsg[1].ToString());
+        // TODO: Display an error message that says room could not be created
         MenuManager.Instance.ShowRoomDetailsMenu();
     }
+
+	private void JoinRoomFail_Event(object[] codeAndMsg)
+	{
+		this.LogError("Failed to Join Room: (" + codeAndMsg[0] + ") " + codeAndMsg[1].ToString());
+		// TODO: Display an error message that says room could not be joined
+		RejoinRecentlyQuitButton.gameObject.SetActive(false);
+	}
 
     #endregion Events
 
@@ -139,8 +168,7 @@ public class MainMenu_Menu : MonoBehaviour
 
     protected void LogError(string message)
     {
-        if (ShowDebugLogs)
-            Debug.LogError("[MainMenu_Menu] " + message);
+		Debug.LogError("[MainMenu_Menu] " + message);
     }
 
     #endregion MessageHandling

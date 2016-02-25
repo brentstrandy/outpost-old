@@ -41,6 +41,18 @@ public class CurrentPlayer : Player
 		private set { }
 	}
 
+	public string RecentlyQuitPhotonRoomName
+	{
+		get
+		{
+			if(ProfileDataManager.DataList.Count > 0)
+				return ProfileDataManager.DataList[0].PhotonRoomName;
+			else
+				return "";
+		}
+		private set { }
+	}
+
 	public CurrentPlayer(PhotonPlayer photonPlayer) : base(photonPlayer)
 	{
 		AccountDataManager = new DataManager<AccountData>();

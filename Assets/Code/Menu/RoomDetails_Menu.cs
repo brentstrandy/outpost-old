@@ -156,7 +156,7 @@ public class RoomDetails_Menu : MonoBehaviour
         {
             // Hide the room from other players (but still keep it open to be joined by invite)
             if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-				SessionManager.Instance.SetRoomOpen(false);
+				SessionManager.Instance.SetRoomVisibility(false);
 				//SessionManager.Instance.SetRoomVisibility(false);
             
 			// Tell all the clients to load the level

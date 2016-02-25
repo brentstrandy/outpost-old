@@ -29,16 +29,6 @@ public class EndGame_Menu : MonoBehaviour
 
 		foreach (PhotonPlayer player in SessionManager.Instance.GetAllPlayersInRoom())
 			PlayerNames.Add(player.name);
-
-		// Master Client will save overall game data to server
-		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
-		{
-			WWWForm form = new WWWForm();
-			// When creating a game, track who created it and what level they chose for the game
-			form.AddField("gameID", GameManager.Instance.GameID.ToString());
-			form.AddField("victory", GameManager.Instance.Victory.ToString());
-			WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_EndGame.php", form);
-		}
     }
 
     private void OnDisable()

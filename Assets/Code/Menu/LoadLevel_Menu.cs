@@ -113,8 +113,8 @@ public class LoadLevel_Menu : MonoBehaviour
 		// When creating a game, track who created it and what level they chose for the game
 		form.AddField("accountID", PlayerManager.Instance.CurPlayer.AccountID);
 		form.AddField("levelID", MenuManager.Instance.CurrentLevelData.LevelID);
+		form.AddField("photonRoomName", SessionManager.Instance.GetCurrentRoomInfo().name.ToString());
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_StartGame.php", form);
-
 		// Wait until the server has sent data back
 		while(!www.isDone)
 		{

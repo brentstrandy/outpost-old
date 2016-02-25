@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
     {
         Victory = false;
         GameRunning = false;
-        MenuManager.Instance.ShowLossMenu();
+		MenuManager.Instance.ShowLossMenu();
 
 		/// Save player progress
 		PlayerManager.Instance.SavePlayerGameDataToServer();
@@ -276,6 +276,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void EndGame_Victory()
     {
+		// Master Client tells server that the game is over
+		SendEndGameToServer();
+
         ObjPhotonView.RPC("EndGame_VictoryAcrossNetwork", PhotonTargets.All, null);
     }
 
@@ -284,6 +287,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void EndGame_Loss()
     {
+		// Master Client tells server that the game is over
+		SendEndGameToServer();
+
         ObjPhotonView.RPC("EndGame_LossAcrossNetwork", PhotonTargets.All, null);
     }
 
@@ -297,6 +303,9 @@ public class GameManager : MonoBehaviour
 
 		// Save the player's data to the server without waiting for a response from the server. 
 		PlayerManager.Instance.SavePlayerGameDataToServer(false);
+		// If the quitting player is the last player left in the game, close out the game on the server
+		if(SessionManager.Instance.GetOtherPlayersInRoom().Length == 0)
+			SendEndGameToServer();
 
 		Victory = false;
 		GameRunning = false;
@@ -308,6 +317,23 @@ public class GameManager : MonoBehaviour
 			SessionManager.Instance.LeaveRoom();
 			// Go back to the Main Menu
 			MenuManager.Instance.ReturnToMainMenu();
+		}
+	}
+
+	/// <summary>
+	/// Send message to server that this game is over
+	/// </summary>
+	private void SendEndGameToServer()
+	{
+		// Master Client will save overall game data to server
+		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+		{
+			Log("Informing server that the game has ended");
+			WWWForm form = new WWWForm();
+			// When creating a game, track who created it and what level they chose for the game
+			form.AddField("gameID", GameManager.Instance.GameID.ToString());
+			form.AddField("victory", GameManager.Instance.Victory.ToString());
+			WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_EndGame.php", form);
 		}
 	}
 
