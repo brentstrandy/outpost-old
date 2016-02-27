@@ -15,7 +15,7 @@ public class EndGame_Menu : MonoBehaviour
     private void OnEnable()
     {
 		SessionManager.Instance.OnSMSwitchMaster += MasterClientQuit_Event;
-		PlayerManager.Instance.OnEndGameDataSaveSuccess += OnPlayerDataSavedSuccess;
+		PlayerManager.Instance.OnEndGameDataSaved += OnPlayerDataSavedSuccess;
 
         Visible = true;
 
@@ -35,7 +35,7 @@ public class EndGame_Menu : MonoBehaviour
     {
         Visible = false;
 
-		PlayerManager.Instance.OnEndGameDataSaveSuccess -= OnPlayerDataSavedSuccess;
+		PlayerManager.Instance.OnEndGameDataSaved -= OnPlayerDataSavedSuccess;
 
 		if(SessionManager.Instance != null)
 		{

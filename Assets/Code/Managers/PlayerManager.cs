@@ -20,7 +20,8 @@ public class PlayerManager : MonoBehaviour
 
 	// Delegates
 	public delegate void PlayerManagerAction();
-	public event PlayerManagerAction OnEndGameDataSaveSuccess;
+	public event PlayerManagerAction OnEndGameDataSaved;
+	public event PlayerManagerAction OnCurPlayerDataDownloaded;
 
     // Components
     private PhotonView ObjPhotonView;
@@ -86,11 +87,12 @@ public class PlayerManager : MonoBehaviour
 		string username = SessionManager.Instance.GetPlayerInfo().name;
 
 		CurPlayer = new CurrentPlayer(SessionManager.Instance.GetPlayerInfo());
+		CurPlayer.OnPlayerDataDownloaded += OnCurPlayerDataDownloaded_Event;
 
 		Log("Downloading Local Player Details");
-        // Load player level progress data based on the userID (aquired when logging into Diadem's server)
-		// Get Global Highscore data
+        
 		WWWForm form = new WWWForm();
+		// Load player level progress data based on the userID (aquired when logging into Diadem's server)
 		form.AddField("accountID", userID);
 		StartCoroutine(CurPlayer.LevelProgressDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_LevelProgress.php", form));
         // Load player account details
@@ -171,6 +173,12 @@ public class PlayerManager : MonoBehaviour
 		CurrentPlayerList.Clear();
 		// Keep the CurPlayer as they never leave (until the game is shutdown)
 		CurrentPlayerList.Add(CurPlayer);
+	}
+
+	private void OnCurPlayerDataDownloaded_Event()
+	{
+		if(OnCurPlayerDataDownloaded != null)
+			OnCurPlayerDataDownloaded();
 	}
 
     #endregion
@@ -281,8 +289,8 @@ public class PlayerManager : MonoBehaviour
 			Log("Player Game Data and Level Progress Saved to Server");
 
 			// Trigger event to tell anyone listening that the data finished saving
-			if(OnEndGameDataSaveSuccess != null)
-				OnEndGameDataSaveSuccess();
+			if(OnEndGameDataSaved != null)
+				OnEndGameDataSaved();
 		}
     }
 

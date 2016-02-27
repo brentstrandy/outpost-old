@@ -12,6 +12,7 @@ public class MainMenu_Menu : MonoBehaviour
         // Establish listeners for all applicable events
         SessionManager.Instance.OnSMCreatedRoom += RoomCreated_Event;
         SessionManager.Instance.OnSMCreateRoomFail += CreateRoomFail_Event;
+		SessionManager.Instance.OnSMJoinedRoom += JoinedRoom_Event;
 		SessionManager.Instance.OnSMJoinRoomFail += JoinRoomFail_Event;
 
 		// Check to see if there's a game still running that the player recently quit
@@ -26,8 +27,10 @@ public class MainMenu_Menu : MonoBehaviour
         // Remove listeners for all applicable events
 		if(SessionManager.Instance != null)
 		{
-        	SessionManager.Instance.OnSMCreatedRoom -= RoomCreated_Event;
-        	SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFail_Event;
+			SessionManager.Instance.OnSMCreatedRoom -= RoomCreated_Event;
+			SessionManager.Instance.OnSMCreateRoomFail -= CreateRoomFail_Event;
+			SessionManager.Instance.OnSMJoinedRoom -= JoinedRoom_Event;
+			SessionManager.Instance.OnSMJoinRoomFail -= JoinRoomFail_Event;
 		}
     }
 
@@ -54,7 +57,10 @@ public class MainMenu_Menu : MonoBehaviour
 	{
 		// Sanity check to make sure the player actually has a room name they want to join
 		if(PlayerManager.Instance.CurPlayer.RecentlyQuitPhotonRoomName != "")
+		{
+			// Join the game
 			SessionManager.Instance.JoinRoom(PlayerManager.Instance.CurPlayer.RecentlyQuitPhotonRoomName);
+		}
 		else
 		{
 			// TODO: Display error message saying the room could not be joined
@@ -148,6 +154,11 @@ public class MainMenu_Menu : MonoBehaviour
         // TODO: Display an error message that says room could not be created
         MenuManager.Instance.ShowRoomDetailsMenu();
     }
+
+	private void JoinedRoom_Event()
+	{
+
+	}
 
 	private void JoinRoomFail_Event(object[] codeAndMsg)
 	{

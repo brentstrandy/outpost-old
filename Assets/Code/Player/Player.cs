@@ -8,9 +8,11 @@ public class Player
 	public DataManager<ProfileData> ProfileDataManager { get; private set; }
 	public bool Connected { get; private set; }
 	private float DisconnectedTimestamp = -1;
+	protected bool ProfileDataDownlaoded = false;
 
 	private PhotonPlayer PhotonPlayerInfo;
 
+	// Username of the local player
 	public string Username
 	{
 		get
@@ -31,9 +33,19 @@ public class Player
         // Download profile data from the server
 		ProfileDataManager = new DataManager<ProfileData>();
 
-		ProfileDataManager.OnDataLoadSuccess += OnProfileDataDownloaded;
-		ProfileDataManager.OnDataLoadFailure += OnProfileDataDownloaded;
+		ProfileDataManager.OnDataLoadSuccess += OnProfileDataDownloaded_Event;
+		// TODO: Add conditions for when the data did not download - OnDataLoadFailure
     }
+
+	#region EVENTS
+
+	protected virtual void OnProfileDataDownloaded_Event()
+	{
+		Log("Downloaded Profile Data! Username: " + Username);
+		ProfileDataDownlaoded = true;
+	}
+
+	#endregion
 
 	public Color PlayerColor()
 	{
@@ -61,11 +73,6 @@ public class Player
 			return 0;
 		else
 			return Time.time - DisconnectedTimestamp;
-	}
-
-	private void OnProfileDataDownloaded()
-	{
-		Log("Downloaded Profile Data! Username: " + Username);
 	}
 
 	#region MessageHandling

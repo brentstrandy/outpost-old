@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using UnityEngine.UI;
 
 public class Start_Menu : MonoBehaviour
@@ -15,12 +16,15 @@ public class Start_Menu : MonoBehaviour
     public GameObject DataLocationButton;
     public GameObject DataLocationText;
 
+	private bool PlayerDataDownloaded = false;
+
     private void OnEnable()
     {
         // Establish listeners for all applicable events
         SessionManager.Instance.OnSMConnected += Connected_Event;
         SessionManager.Instance.OnSMConnectionFail += ConnectionFailed_Event;
         SessionManager.Instance.onSMAuthenticationFail += AuthenticationFailed_Event;
+		PlayerManager.Instance.OnCurPlayerDataDownloaded += PlayerDataDownloaded_Event;
 
         // Automatically set the username if someone has already logged in before
         if (PlayerPrefs.HasKey("Username"))
@@ -50,6 +54,7 @@ public class Start_Menu : MonoBehaviour
 		{
         	SessionManager.Instance.OnSMConnected -= Connected_Event;
         	SessionManager.Instance.OnSMConnectionFail -= ConnectionFailed_Event;
+			SessionManager.Instance.onSMAuthenticationFail -= AuthenticationFailed_Event;
 		}
     }
 
@@ -57,6 +62,9 @@ public class Start_Menu : MonoBehaviour
 
     public void Start_Click()
     {
+		// Hide the start button so the player cannot click it twice
+		StartButton.SetActive(false);
+
         // Hide error message text so that it only appears after invalid authentication
         InvalidAuthText.SetActive(false);
 
@@ -102,17 +110,17 @@ public class Start_Menu : MonoBehaviour
 
     private void Connected_Event()
     {
-        // Delete the password so that it cannot be used later
-        PasswordField.GetComponent<InputField>().text = "";
+		// Delete the password so that it cannot be used later
+		PasswordField.GetComponent<InputField>().text = "";
 
-        // Set the player's name for all to see
-        SessionManager.Instance.GetPlayerInfo().name = UsernameField.GetComponentInChildren<Text>().text;
+		// Set the player's name for all to see
+		SessionManager.Instance.GetPlayerInfo().name = UsernameField.GetComponentInChildren<Text>().text;
 
-        // Save the player's username to use the next time they login
-        PlayerPrefs.SetString("Username", UsernameField.GetComponentInChildren<Text>().text);
+		// Save the player's username to use the next time they login
+		PlayerPrefs.SetString("Username", UsernameField.GetComponentInChildren<Text>().text);
 
-        // Transition to show the main menu
-        MenuManager.Instance.ShowMainMenu();
+		// Wait for player data to finish downloading
+		StartCoroutine(WaitForPlayerData());
     }
 
     private void AuthenticationFailed_Event(string message)
@@ -130,7 +138,34 @@ public class Start_Menu : MonoBehaviour
         OfflineButton.SetActive(true);
     }
 
+	private void PlayerDataDownloaded_Event()
+	{
+		PlayerDataDownloaded = true;
+	}
+
     #endregion Events
+
+	/// <summary>
+	/// Determines whether the currently loading level (and all its data) has finished loading
+	/// </summary>
+	/// <returns><c>true</c> if the loading level is ready; otherwise, <c>false</c>.</returns>
+	private IEnumerator WaitForPlayerData()
+	{
+		// Loop until all level data has been loaded by the player
+		while (!PlayerDataDownloaded)
+		{
+			yield return 0;
+		}
+
+		// Player authentication success; player data downloaded; go to main menu
+		LoginToMainMenu();
+	}
+
+	private void LoginToMainMenu()
+	{
+		// Transition to show the main menu
+		MenuManager.Instance.ShowMainMenu();
+	}
 
     #region MessageHandling
 
