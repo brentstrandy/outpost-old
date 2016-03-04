@@ -77,6 +77,7 @@ public class RoomDetails_Menu : MonoBehaviour
         SessionManager.Instance.OnSMLeftRoom += KickedFromRoom_Event;
         SessionManager.Instance.OnSMSwitchMaster += MasterClientSwitched_Event;
 		SessionManager.Instance.OnSMPlayerPropertiesChanged += PlayerCustPropUpdated_Event;
+		SessionManager.Instance.OnSMRoomPropertiesChanged += RoomCustPropUpdated_Event;
 
         Initialize();
     }
@@ -132,16 +133,13 @@ public class RoomDetails_Menu : MonoBehaviour
 		// Get the current level loadout data
 		if(LevelLoadoutData == null)
 		{
-			if(SessionManager.Instance.GetCurrentRoomInfo().customProperties["Level"] != null)
-				NewLevelSelected(SessionManager.Instance.GetCurrentRoomInfo().customProperties["Level"].ToString());
+			if(SessionManager.Instance.GetCurrentRoomInfo().customProperties["L_ID"] != null)
+				NewLevelSelected((int)SessionManager.Instance.GetCurrentRoomInfo().customProperties["L_ID"]);
 			else
-				LogError("Unable to find Level name");
+				LogError("Unable to find Level ID");
 		}
 		else
-			NewLevelSelected(LevelLoadoutData.DisplayName);
-
-        // The towers are automatically refreshed when the level buttons are initiated
-        //RefreshTowerButtons();
+			NewLevelSelected(LevelLoadoutData.LevelID);
     }
 
     #region ON CLICK
@@ -235,10 +233,10 @@ public class RoomDetails_Menu : MonoBehaviour
         LevelLoadoutSelection.GetComponent<LevelButton>().SelectLevel();
 
         // Tell all other clients that a new level has been selected
-        ObjPhotonView.RPC("NewLevelSelected", PhotonTargets.Others, levelData.DisplayName);
+        //ObjPhotonView.RPC("NewLevelSelected", PhotonTargets.Others, levelData.DisplayName);
 
-		// Save the level name for others to see in the lobby
-		SessionManager.Instance.SetRoomCustomProperties(new Hashtable { { "Level", levelData.DisplayName } });
+		// Save the level ID for others to see in the lobby
+		SessionManager.Instance.SetRoomCustomProperties(new Hashtable { { "L_ID", levelData.LevelID } });
 
         // Sets level to be loaded
         LevelLoadoutData = levelData;
@@ -324,9 +322,9 @@ public class RoomDetails_Menu : MonoBehaviour
 	private void RoomCustPropUpdated_Event(Hashtable propertiesThatChanged)
 	{
 		// Check to see if the level changed
-		if(propertiesThatChanged["Level"] != null)
+		if(propertiesThatChanged["L_ID"] != null)
 		{
-
+			NewLevelSelected((int)propertiesThatChanged["L_ID"]);
 		}
 	}
 
@@ -353,27 +351,6 @@ public class RoomDetails_Menu : MonoBehaviour
     {
         // Add the recieved chat to the player's chat area (on the GUI)
         Chat_GUIText.GetComponent<Text>().text += System.Environment.NewLine + "[" + playerName + "]: " + msg;
-    }
-
-    /// <summary>
-    /// PunRPC call to tell the clients a new level has been selected and to update their available tower choices
-    /// </summary>
-    /// <param name="levelName">Level name.</param>
-    [PunRPC]
-    private void NewLevelSelected(string levelName)
-    {
-        LevelData levelData = GameDataManager.Instance.FindLevelDataByDisplayName(levelName);
-
-        // Display the level name for the clients
-        if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-            LevelTitle_GUILabel.GetComponent<Text>().text = "Choose Level:";
-        else
-            LevelTitle_GUILabel.GetComponent<Text>().text = "Level: " + levelName;
-
-        // Refresh the list of Towers regardless if LevelData can be found. The tower buttons will handle missing data
-        LevelLoadoutData = levelData;
-
-        RefreshTowerButtons();
     }
 
     /// <summary>
@@ -410,6 +387,26 @@ public class RoomDetails_Menu : MonoBehaviour
 				player.SetCustomProperties(new Hashtable() { { "PlayerColorIndex", colorIndex } });
 			}
 		}
+	}
+
+	/// <summary>
+	/// A new level has been selected. Update the available tower choices
+	/// </summary>
+	/// <param name="levelID">Level ID.</param>
+	private void NewLevelSelected(int levelID)
+	{
+		LevelData levelData = GameDataManager.Instance.FindLevelDataByLevelID(levelID);
+
+		// Display the level name for the clients
+		if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			LevelTitle_GUILabel.GetComponent<Text>().text = "Choose Level:";
+		else
+			LevelTitle_GUILabel.GetComponent<Text>().text = "Level: " + levelData.DisplayName;
+
+		// Refresh the list of Towers regardless if LevelData can be found. The tower buttons will handle missing data
+		LevelLoadoutData = levelData;
+
+		RefreshTowerButtons();
 	}
 
 	private void RefreshPlayerColorDropdown()

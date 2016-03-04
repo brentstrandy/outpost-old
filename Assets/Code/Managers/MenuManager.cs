@@ -82,8 +82,6 @@ public class MenuManager : MonoBehaviour
 
     public void ShowStartGame(LevelData levelData)
     {
-        // TO DO: Lock the room - no one else can join
-
         // Save a reference to the current level's data
         CurrentLevelData = levelData;
 
@@ -96,6 +94,15 @@ public class MenuManager : MonoBehaviour
         // Show the InGame menu (behind the loading menu)
         SetCurrentMenuPanel(InGamePanel);
     }
+
+	public void JoinGameInProgress()
+	{
+		// Set the CurrentLevelData (which is used by the GameManager)
+
+
+
+		LoadLevelPanel.SetActive(true);
+	}
 
     public void ReturnToRoomDetailsMenu()
     {

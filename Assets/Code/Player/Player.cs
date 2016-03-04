@@ -61,8 +61,9 @@ public class Player
 		DisconnectedTimestamp = Time.time;
 	}
 
-	public void ReconnectPlayer()
+	public void ReconnectPlayer(PhotonPlayer newPhotonPlayer)
 	{
+		PhotonPlayerInfo = newPhotonPlayer;
 		Connected = true;
 		DisconnectedTimestamp = -1;
 	}

@@ -159,6 +159,8 @@ public class SessionManager : MonoBehaviour
         // Only connect if the player is not already connected
         if (!PhotonNetwork.connected)
             PhotonNetwork.ConnectUsingSettings("v1.0");
+
+		PhotonNetwork.OnEventCall += OnEvent;
     }
 
     /// <summary>
@@ -178,6 +180,11 @@ public class SessionManager : MonoBehaviour
         PhotonNetwork.AuthValues.AddAuthParameter("username", name);
         PhotonNetwork.AuthValues.AddAuthParameter("password", password);
     }
+
+	public void RaiseEvent(byte eventCode, object eventContent, bool sendReliable, RaiseEventOptions options)
+	{
+		PhotonNetwork.RaiseEvent(eventCode, eventContent, sendReliable, options);
+	}
 
     /// <summary>
     /// Joins the default lobby (master server lobby)
@@ -319,11 +326,12 @@ public class SessionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Closes the connection of a player - KICK/BOOT player from the room. Only the Master Client can do this
+    /// Closes the connection of a player - KICK/BOOT player from the room.
     /// </summary>
     /// <param name="player">Player.</param>
     public void KickPlayer(PhotonPlayer player)
-    {
+	{
+		Log("Kicked Player: " + player.name);
         PhotonNetwork.CloseConnection(player);
     }
 
@@ -338,6 +346,11 @@ public class SessionManager : MonoBehaviour
     #endregion ACTIONS
 
     #region INFORMATION
+
+	public int AllocateNewViewID()
+	{
+		return PhotonNetwork.AllocateViewID();
+	}
 
     /// <summary>
     /// Returns if the player is currently in a room
@@ -421,13 +434,23 @@ public class SessionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets all the current custom properties applied to the character
+    /// Gets all the current custom properties applied to the player
     /// </summary>
     /// <returns>The player's custom properties</returns>
     public ExitGames.Client.Photon.Hashtable GetPlayerCustomProperties()
     {
         return PhotonNetwork.player.customProperties;
     }
+
+
+	/// <summary>
+	/// Gets all the current custom properties applied to the room
+	/// </summary>
+	/// <returns>The room's custom properties</returns>
+	public ExitGames.Client.Photon.Hashtable GetRoomCustomProperties()
+	{
+		return PhotonNetwork.room.customProperties;
+	}
 
     public void LoadGameLevel(string level)
     {
@@ -676,7 +699,28 @@ public class SessionManager : MonoBehaviour
 
     #endregion PHOTON ROOM
 
-    #region PHOTON PLAYER
+	#region PHOTON EVENT
+
+	private void OnEvent(byte eventcode, object content, int senderid)
+	{
+		switch(eventcode)
+		{
+		case (byte)RaiseEventCode.AllowPlayerToJoin:
+			// Throw event to say that level data was received.
+
+			//PhotonPlayer sender = PhotonPlayer.Find(senderid);  // who sent this?
+			//byte[] selected = (byte[])content;
+			//foreach (byte unitId in selected)
+			//{
+				// do something
+			//}
+			break;
+		}
+	}
+
+	#endregion
+
+    #region Pv vhgv gggggggggbhcnvfc n  bgf gfjbmjfmnf gfnhHOTON PLAYER
 
     /// <summary>
     /// Called when a remote player entered the room. This PhotonPlayer is already added to the playerlist at this time.
@@ -721,25 +765,6 @@ public class SessionManager : MonoBehaviour
 	}
 
     #endregion PHOTON PLAYER
-
-    /// <summary>
-    /// Called when remote player instantiates a GameObject across the server
-    /// </summary>
-    /// <param name="msg">Message.</param>
-    /*
-    public void OnPhotonInstantiate(PhotonMessageInfo info)
-    {
-        Log("Object Instantiated over server.");
-
-        // Call delegate event linked to this action
-        if(OnSMInstantiate != null)
-            OnSMInstantiate(info.photonView.gameObject);
-    }*/
-
-    public int AllocateNewViewID()
-    {
-        return PhotonNetwork.AllocateViewID();
-    }
 
     #region MessageHandling
 

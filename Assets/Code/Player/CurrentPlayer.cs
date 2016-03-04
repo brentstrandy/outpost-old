@@ -87,7 +87,7 @@ public class CurrentPlayer : Player
 
 	private void OnAccountDataDownloaded_Event()
 	{
-		Log("Downloaded Account Data! Username: " + Username);
+		Log("Downloaded Account Data. Username: " + Username);
 		AccountDataDownloaded = true;
 
 		CheckAllDataDownloaded();
@@ -95,7 +95,7 @@ public class CurrentPlayer : Player
 
 	protected override void OnProfileDataDownloaded_Event()
 	{
-		Log("Downloaded Profile Data! Username: " + Username);
+		Log("Downloaded Profile Data. Username: " + Username);
 		ProfileDataDownlaoded = true;
 
 		CheckAllDataDownloaded();
@@ -103,7 +103,7 @@ public class CurrentPlayer : Player
 
 	private void OnLevelProgressDataDownloaded_Event()
 	{
-		Log("Downloaded Level Progress Data! Username: " + Username);
+		Log("Downloaded Level Progress Data. Username: " + Username);
 		LevelProgressDataDownloaded = true;
 
 		CheckAllDataDownloaded();

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfTowerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <TowerData>
     <DisplayName>EMP Tower</DisplayName>
     <PrefabName>Heleur_EMP</PrefabName>
-    <TowerID>0</TowerID>
+    <TowerID>2</TowerID>
     <MaxHealth>15</MaxHealth>
     <RateOfFire>0.15</RateOfFire>
     <Cooldown>2</Cooldown>
@@ -39,7 +39,7 @@
   <TowerData>
     <DisplayName>Thraceium Healing Tower</DisplayName>
     <PrefabName>Heleur_THT</PrefabName>
-    <TowerID>0</TowerID>
+    <TowerID>3</TowerID>
     <MaxHealth>7</MaxHealth>
     <RateOfFire>0.65</RateOfFire>
     <Cooldown>0</Cooldown>
@@ -57,7 +57,7 @@
   <TowerData>
     <DisplayName>Thraceium Rain Tower</DisplayName>
     <PrefabName>Heleur_TRT</PrefabName>
-    <TowerID>0</TowerID>
+    <TowerID>4</TowerID>
     <MaxHealth>10</MaxHealth>
     <RateOfFire>0.25</RateOfFire>
     <Cooldown>1</Cooldown>

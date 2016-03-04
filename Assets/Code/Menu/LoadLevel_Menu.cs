@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ExitGames.Client.Photon;
 
 public class LoadLevel_Menu : MonoBehaviour
 {
@@ -21,9 +22,11 @@ public class LoadLevel_Menu : MonoBehaviour
 
     private void OnEnable()
     {
+		SessionManager.Instance.OnSMRoomPropertiesChanged += RoomCustPropUpdated_Event;
+
         PlayerNames = new List<string>();
 
-        // TO DO: Create a GUI Object for every player, showing their loading status
+        // TODO: Create a GUI Object for every player, showing their loading status
         foreach (PhotonPlayer player in SessionManager.Instance.GetAllPlayersInRoom())
             PlayerNames.Add(player.name);
 
@@ -39,9 +42,30 @@ public class LoadLevel_Menu : MonoBehaviour
 
     private void OnDisable()
     {
+		if(SessionManager.Instance != null)
+			SessionManager.Instance.OnSMRoomPropertiesChanged -= RoomCustPropUpdated_Event;
+
         // TO DO: Remove all GUI Objects previously created
         PlayerNames.Clear();
     }
+
+	private void RoomCustPropUpdated_Event(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+	{
+		// Check to see if the level changed
+		if(propertiesThatChanged["G_ID"] != null)
+		{
+			GameID = (int)propertiesThatChanged["G_ID"];
+
+			Log("Acquired GameID: " + propertiesThatChanged["G_ID"].ToString());
+
+			// If the GameManager has already been created, save the GameID to the GameManager so that it is remembered for the entire game
+			if(GameManager.Instance != null)
+				GameManager.Instance.GameID = GameID;
+
+			// Inform the server that you (the player) is in the game
+			AddPlayerToGame(GameID);
+		}
+	}
 
     public void Update()
     {
@@ -54,8 +78,6 @@ public class LoadLevel_Menu : MonoBehaviour
     [PunRPC]
     private void StartGame()
     {
-        // TO DO: Add screen fade
-
         // Tell the GameManager to begin playing the game
         GameManager.Instance.StartGame();
 
@@ -81,21 +103,6 @@ public class LoadLevel_Menu : MonoBehaviour
             }
         }
     }
-	
-	[PunRPC]
-	private void OnGameIDCreated(int gameID)
-	{
-		GameID = gameID;
-
-		Log("Acquired GameID: " + gameID.ToString());
-
-		// If the GameManager has already been created, save the GameID to the GameManager so that it is remembered for the entire game
-		if(GameManager.Instance != null)
-			GameManager.Instance.GameID = GameID;
-
-		// Inform the server that you (the player) is in the game
-		AddPlayerToGame(GameID);
-	}
 
 	private void AddPlayerToGame(int gameID)
 	{
@@ -103,9 +110,10 @@ public class LoadLevel_Menu : MonoBehaviour
 		form.AddField("accountID", PlayerManager.Instance.CurPlayer.AccountID);
 		form.AddField("gameID", gameID);
 		form.AddField("playerColor", (PlayerManager.Instance.CurPlayer.PlayerColor().r * 255).ToString() + "," + (PlayerManager.Instance.CurPlayer.PlayerColor().g * 255).ToString() + "," + (PlayerManager.Instance.CurPlayer.PlayerColor().b * 255).ToString());
+		form.AddField("towerLoadOut", PlayerManager.Instance.CurPlayer.GameLoadOut.GetTowerIDs());
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_AddPlayerToGame.php", form);
 	}
-
+		
 	private IEnumerator GetNewGameID()
 	{
 		int gameID;
@@ -127,8 +135,8 @@ public class LoadLevel_Menu : MonoBehaviour
 			// Test to see that the server returned a numeric gameID
 			if(int.TryParse(www.text, out gameID))
 			{
-				// Share the gameID with the other players
-				ObjPhotonView.RPC("OnGameIDCreated", PhotonTargets.All, gameID);
+				// Store the gameID as a value in the room so other players can see it
+				SessionManager.Instance.SetRoomCustomProperties(new ExitGames.Client.Photon.Hashtable { { "G_ID", gameID } });
 			}
 			else
 			{
@@ -136,7 +144,7 @@ public class LoadLevel_Menu : MonoBehaviour
 			}
 		}
 	}
-
+		
 	/// <summary>
 	/// Determines whether the currently loading level (and all its data) has finished loading
 	/// </summary>

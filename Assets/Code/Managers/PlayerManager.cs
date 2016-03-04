@@ -116,17 +116,32 @@ public class PlayerManager : MonoBehaviour
 
 		Log("Player joined (" + player.name + ")");
 
-		// Only add a new player if the player joining the game didn't previously leave
+		// Check to see if the player joining had previously left in the middle of this game
 		if(index == -1)
 		{
-			AddPlayerToCurrentList(player);
+			// Only add the player if the game isn't currently running (lobby), otherwise boot them out
+			if(GameManager.Instance == null)
+				AddPlayerToCurrentList(player);
+			else
+			{
+				// Only the session manager should boot a player
+				if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+					SessionManager.Instance.KickPlayer(player);
+			}
 		}
 		else
 		{
-			Log("Player Returned! Giving player their towers back");
+			Log("Player Returned: " + player.name);
 			// Reconnect the player who had previously disconnected and assign the player's towers back to them
-			CurrentPlayerList[index].ReconnectPlayer();
+			CurrentPlayerList[index].ReconnectPlayer(player);
 			GameManager.Instance.TowerManager.ReassignPlayerTowers(player.name, player);
+
+			// Have Master Client Raise an Event to give the joining player information about the game
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+			{
+				// Send the rejoining player a message telling them that they can join
+				SessionManager.Instance.RaiseEvent((byte)RaiseEventCode.AllowPlayerToJoin, true, true, new RaiseEventOptions { TargetActors = new int[] { player.ID } } );
+			}
 		}
 	}
 

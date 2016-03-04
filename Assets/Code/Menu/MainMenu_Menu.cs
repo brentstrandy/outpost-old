@@ -15,11 +15,16 @@ public class MainMenu_Menu : MonoBehaviour
 		SessionManager.Instance.OnSMJoinedRoom += JoinedRoom_Event;
 		SessionManager.Instance.OnSMJoinRoomFail += JoinRoomFail_Event;
 
+		////////////////////////////////
+		/// Commenting out this section of code because I (Brent) no longer want to include the "join game in progress" feature at this time
+		//////////////////////////////// 
+		/*
 		// Check to see if there's a game still running that the player recently quit
 		if(PlayerManager.Instance.CurPlayer.RecentlyQuitPhotonRoomName != "")
 			RejoinRecentlyQuitButton.gameObject.SetActive(true);
 		else
 			RejoinRecentlyQuitButton.gameObject.SetActive(false);
+		*/
     }
 
     private void OnDisable()
@@ -157,7 +162,8 @@ public class MainMenu_Menu : MonoBehaviour
 
 	private void JoinedRoom_Event()
 	{
-
+		// This event is triggered when the player joins a game in progress
+		MenuManager.Instance.JoinGameInProgress();
 	}
 
 	private void JoinRoomFail_Event(object[] codeAndMsg)

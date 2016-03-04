@@ -56,8 +56,11 @@ public class InGame_Menu : MonoBehaviour
     private void OnDisable()
     {
         FinishedLoadingLevel = false;
-		InputManager.Instance.OnTowerHotKeyPressed -= OnTowerHotKeyPressed;
-		InputManager.Instance.OnShowMenuKeyPressed -= OnShowMenuKeyPressed;
+		if(InputManager.Instance)
+		{
+			InputManager.Instance.OnTowerHotKeyPressed -= OnTowerHotKeyPressed;
+			InputManager.Instance.OnShowMenuKeyPressed -= OnShowMenuKeyPressed;
+		}
     }
 
     public void Update()

@@ -10,10 +10,11 @@ using UnityEngine;
 public class ThraceiumRainOrb : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
-	public GameObject Explosion;
+	public GameObject ExplosionEffect;
 
 	private Vector3 Target;
 	private bool HitTarget = false;
+	private bool Exploded = false;
 	private float HitTargetTime;
 
     private float StartTime;
@@ -30,6 +31,15 @@ public class ThraceiumRainOrb : MonoBehaviour
 		// Travelling through the air
 		if(!HitTarget)
 		{
+			// Check to see if the orb is about to hit the ground
+			if(!Exploded && this.gameObject.GetComponent<Rigidbody>().velocity.z > 0 && Mathf.Abs(this.transform.position.z - GameManager.Instance.TerrainMesh.IntersectPosition(this.transform.position).z) <= 3.0f)
+			{
+				if(ExplosionEffect)
+					Instantiate(ExplosionEffect, this.transform.position, Quaternion.identity);
+
+				Exploded = true;
+			}
+
 			// Check to see if orb has hit final target
 			if(Vector3.Distance(this.transform.position, Target) <= 0.5f)
 			{

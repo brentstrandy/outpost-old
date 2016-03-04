@@ -22,6 +22,11 @@ public enum TargetType
     Tower
 }
 
+public enum RaiseEventCode : byte
+{
+	AllowPlayerToJoin
+}
+
 // TODO: Consider going to a movement system based on the following modes:
 /*
 public enum MovementMode

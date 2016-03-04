@@ -114,6 +114,11 @@ public class GameDataManager : MonoBehaviour
         return LevelDataManager.DataList.Find(x => x.DisplayName.Equals(displayName));
     }
 
+	public LevelData FindLevelDataByLevelID(int ID)
+	{
+		return LevelDataManager.DataList.Find(x => x.LevelID == ID);
+	}
+
     // Update is called once per frame
     private void Update()
     {

@@ -15,6 +15,11 @@ public class ProfileData
 	/// This value is saved in case they want to join back into the game.
 	/// </summary>
 	public string PhotonRoomName;
+	/// <summary>
+	/// If the player quit a game before it finished, this is the TowerLoadOut from that game.
+	/// This value is saved in case they want to join back into the game.
+	/// </summary>
+	public string PreviousTowerLoadOut;
 
     [HideInInspector]
     [XmlIgnore]
