@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PostGame_Menu : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
-    public float SecondsToWait = 3.0f;
+    public float SecondsToWait = 1.0f;
     public GameObject EndGameText;
     public GameObject ContinueButton;
     public GameObject ContinueText;
+	public GameObject EndGameStatsGUI_Prefab;
+
+	private List<GameObject> EndGameStatsGUIList = new List<GameObject>();
+	private DataManager<EndGameStatsData> EndGameStatsManager;
 
     private float ContinueTimer;
     private bool Visible = false;
@@ -22,21 +27,24 @@ public class PostGame_Menu : MonoBehaviour
         if (GameManager.Instance.Victory)
             EndGameText.GetComponentInChildren<Text>().text = "VICTORY!";
         else
-            EndGameText.GetComponentInChildren<Text>().text = "DEFEAT :(";
+            EndGameText.GetComponentInChildren<Text>().text = "DEFEAT";
 
-        ContinueButton.GetComponent<Button>().enabled = false;
+		ContinueButton.SetActive(false);
+
+		Log("Getting all player data from server.");
+
+		WWWForm form = new WWWForm();
+		form.AddField("gameID", GameManager.Instance.GameID);
+		// Get the stats of all players for the current game
+		StartCoroutine(EndGameStatsManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/GameData_EndGamePlayerStats.php", form));
+
+		EndGameStatsManager.OnDataLoadSuccess += OnEndGameStatsDataDownloaded_Event;
 
         // Determine whether to show or hide the continue button
         if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-        {
-            ContinueButton.SetActive(true);
             ContinueText.SetActive(false);
-        }
         else
-        {
-            ContinueButton.SetActive(false);
             ContinueText.SetActive(true);
-        }
 
         SessionManager.Instance.OnSMSwitchMaster += MasterClientQuit_Event;
     }
@@ -56,6 +64,8 @@ public class PostGame_Menu : MonoBehaviour
     {
         // Save a handle to the photon view associated with this GameObject for use later
         ObjPhotonView = PhotonView.Get(this);
+
+		EndGameStatsManager = new DataManager<EndGameStatsData>();
     }
 
     // Update is called once per frame
@@ -64,10 +74,52 @@ public class PostGame_Menu : MonoBehaviour
         if (Visible)
         {
             // Give user X seconds before allowing them to click continue
-            if (Time.time - ContinueTimer >= SecondsToWait)
-                ContinueButton.GetComponent<Button>().enabled = true;
+			if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
+				if (Time.time - ContinueTimer >= SecondsToWait)
+					ContinueButton.SetActive(true);
         }
     }
+
+	#region EVENTS
+	private void OnEndGameStatsDataDownloaded_Event()
+	{
+		int index = 0;
+
+		Log("End Game Stats downloaded :: " + EndGameStatsManager.DataList.Count.ToString());
+
+		// Before updating the room list, destroy the current list
+		DestroyEndGameStatsGUIPrefabs();
+
+		// Display each room currently in the lobby
+		foreach (EndGameStatsData endGameStatsData in EndGameStatsManager.DataList)
+		{
+			// Instantiate row for each room and add it as a child of the JoinGame UI Panel
+			EndGameStatsGUI endGameStats = Instantiate(EndGameStatsGUI_Prefab).GetComponent<EndGameStatsGUI>() as EndGameStatsGUI;
+			endGameStats.UpdateDetails(endGameStatsData.Username, endGameStatsData.KillCount, endGameStatsData.Score);
+			//roomDetails.GetComponentInChildren<Text>().text = room.name.Substring(0, room.name.IndexOf("("));
+			endGameStats.transform.SetParent(this.transform);
+			endGameStats.transform.localScale = new Vector3(1, 1, 1);
+			endGameStats.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 10 + (-35 * index));
+			endGameStats.GetComponent<RectTransform>().localPosition = new Vector3(endGameStats.GetComponent<RectTransform>().localPosition.x, endGameStats.GetComponent<RectTransform>().localPosition.y, 0);
+			endGameStats.transform.rotation = new Quaternion(0, 0, 0, 0);
+
+			// Create a handle to all the prefabs that were created so we can destroy them later
+			EndGameStatsGUIList.Add(endGameStats.gameObject);
+
+			index++;
+		}
+	}
+	#endregion
+
+
+	/// <summary>
+	/// Destroys all prefabs created for list of joinable rooms
+	/// </summary>
+	private void DestroyEndGameStatsGUIPrefabs()
+	{
+		foreach (GameObject obj in EndGameStatsGUIList)
+			Destroy(obj);
+	}
 
     #region OnClick
 

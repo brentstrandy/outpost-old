@@ -23,12 +23,12 @@ public class RoomDetailsGUI : MonoBehaviour
 	protected void Log(string message)
 	{
 		if (ShowDebugLogs)
-			Debug.Log("[JoinGame_Menu] " + message);
+			Debug.Log("[EndGameStatsGUI] " + message);
 	}
 
 	protected void LogError(string message)
 	{
-		Debug.LogError("[JoinGame_Menu] " + message);
+		Debug.LogError("[EndGameStatsGUI] " + message);
 	}
 
 	#endregion MessageHandling
