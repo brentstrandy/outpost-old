@@ -79,7 +79,7 @@ public class EnemyDataContainerEditor : Editor
         if (File.Exists(XMLPath))
         {
             // Sort by DisplayName before loading
-            return XMLParser<EnemyData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.DisplayName).ToList();
+            return XMLParser<EnemyData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.EnemyID).ToList();
         }
         else
         {
@@ -100,7 +100,7 @@ public class EnemyDataContainerEditor : Editor
         myXML = www.text;
 
         // Sort by StartTime and PlayerCount before loading
-        return XMLParser<EnemyData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
+        return XMLParser<EnemyData>.XMLDeserializer_Server(myXML).OrderBy(o => o.EnemyID).ToList();
     }
 
     /*private List<EnemyData> LoadFromXML_Server()

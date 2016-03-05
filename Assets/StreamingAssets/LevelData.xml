@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <ArrayOfLevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LevelData>
-    <DisplayName>Colossus</DisplayName>
+    <DisplayName>Test Level</DisplayName>
     <SceneName>Level1</SceneName>
-    <LevelID>4</LevelID>
-    <EnemySpawnFilename>4_Colossus</EnemySpawnFilename>
+    <LevelID>0</LevelID>
+    <EnemySpawnFilename>TestLevel</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>Coordination is key</Description>
-    <MinimumPlayers>6</MinimumPlayers>
+    <Description>This is for testing only</Description>
+    <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower, Hammer Tower</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
-    <MaxTowersPerPlayer>1</MaxTowersPerPlayer>
-    <StartingMoney>0</StartingMoney>
+    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
+    <StartingMoney>1000</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
+  </LevelData>
+  <LevelData>
+    <DisplayName>Something New</DisplayName>
+    <SceneName>Level1</SceneName>
+    <LevelID>1</LevelID>
+    <EnemySpawnFilename>1_SomethingNew</EnemySpawnFilename>
+    <NotificationFilename>1_SomethingNew_Notif</NotificationFilename>
+    <Description>We've set up a Mining Facility on a remote planet. Protect it!</Description>
+    <MinimumPlayers>1</MinimumPlayers>
+    <MaximumPlayers>1</MaximumPlayers>
+    <AvailableQuadrants>North</AvailableQuadrants>
+    <StartingQuadrant>North</StartingQuadrant>
+    <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
+    <AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder</AvailableEnemies>
+    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
+    <StartingMoney>10</StartingMoney>
+    <IncomePerSecond>0.3</IncomePerSecond>
+    <MiningFacilityHealth>50</MiningFacilityHealth>
   </LevelData>
   <LevelData>
     <DisplayName>Desperation</DisplayName>
@@ -55,38 +73,20 @@
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>
   <LevelData>
-    <DisplayName>Something New</DisplayName>
+    <DisplayName>Colossus</DisplayName>
     <SceneName>Level1</SceneName>
-    <LevelID>1</LevelID>
-    <EnemySpawnFilename>1_SomethingNew</EnemySpawnFilename>
-    <NotificationFilename>1_SomethingNew_Notif</NotificationFilename>
-    <Description>We've set up a Mining Facility on a remote planet. Protect it!</Description>
-    <MinimumPlayers>1</MinimumPlayers>
-    <MaximumPlayers>1</MaximumPlayers>
-    <AvailableQuadrants>North</AvailableQuadrants>
-    <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
-    <AvailableEnemies>Land Drone, Light Speeder, Heavy Speeder</AvailableEnemies>
-    <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
-    <StartingMoney>10</StartingMoney>
-    <IncomePerSecond>0.3</IncomePerSecond>
-    <MiningFacilityHealth>50</MiningFacilityHealth>
-  </LevelData>
-  <LevelData>
-    <DisplayName>Test Level</DisplayName>
-    <SceneName>Level1</SceneName>
-    <LevelID>0</LevelID>
-    <EnemySpawnFilename>TestLevel</EnemySpawnFilename>
+    <LevelID>4</LevelID>
+    <EnemySpawnFilename>4_Colossus</EnemySpawnFilename>
     <NotificationFilename />
-    <Description>This is for testing only</Description>
-    <MinimumPlayers>1</MinimumPlayers>
+    <Description>Coordination is key</Description>
+    <MinimumPlayers>6</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
-    <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
-    <StartingMoney>1000</StartingMoney>
+    <MaxTowersPerPlayer>1</MaxTowersPerPlayer>
+    <StartingMoney>0</StartingMoney>
     <IncomePerSecond>1</IncomePerSecond>
     <MiningFacilityHealth>100</MiningFacilityHealth>
   </LevelData>

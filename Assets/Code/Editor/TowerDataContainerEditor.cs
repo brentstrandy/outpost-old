@@ -68,7 +68,7 @@ public class TowerDataContainerEditor : Editor
         if (File.Exists(XMLPath))
         {
             // Sort by DisplayName before loading
-            return XMLParser<TowerData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.DisplayName).ToList();//ThenBy(o => o.PlayerCount).ToList();
+            return XMLParser<TowerData>.XMLDeserializer_Local(XMLPath).OrderBy(o => o.TowerID).ToList();//ThenBy(o => o.PlayerCount).ToList();
         }
         else
         {
@@ -147,7 +147,7 @@ public class TowerDataContainerEditor : Editor
         myXML = www.text;
 
         // Sort by StartTime and PlayerCount before loading
-        return XMLParser<TowerData>.XMLDeserializer_Server(myXML).OrderBy(o => o.DisplayName).ToList();
+        return XMLParser<TowerData>.XMLDeserializer_Server(myXML).OrderBy(o => o.TowerID).ToList();
     }
 
     /// <summary>
