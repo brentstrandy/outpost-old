@@ -559,7 +559,6 @@ public class Tower : MonoBehaviour
                 effect = Instantiate(FiringEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation) as GameObject;
             }
             effect.transform.LookAt(TargetedEnemy.gameObject.transform.position);
-			Debug.Break();
         }
     }
 

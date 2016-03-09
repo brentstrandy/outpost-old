@@ -91,14 +91,10 @@ public class ThraceiumRainOrb : MonoBehaviour
                 // Only affect Enemies
                 if (other.tag == "Enemy")
                 {
-                    // Tell enemy to take damage (only the Master Client can do this)
-                    if (SessionManager.Instance.GetPlayerInfo().isMasterClient)
-                    {
-                        // load attributes of Thraceium Rain Orb here
-                        TowerData _TRT_Data = GameDataManager.Instance.FindTowerDataByDisplayName("Thraceium Rain Tower");
-                        other.gameObject.GetComponent<Enemy>().TakeDamage(_TRT_Data.BallisticDamage, _TRT_Data.ThraceiumDamage, SessionManager.Instance.GetPlayerInfo());
-                    }
-                }
+                    // load attributes of Thraceium Rain Orb here
+                    TowerData TRT_Data = GameDataManager.Instance.FindTowerDataByDisplayName("Thraceium Rain Tower");
+                    other.gameObject.GetComponent<Enemy>().TakeDamage(TRT_Data.BallisticDamage, TRT_Data.ThraceiumDamage, SessionManager.Instance.GetPlayerInfo());
+				}
             }
         }
     }

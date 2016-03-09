@@ -76,11 +76,11 @@
     <DisplayName>Hammer Tower</DisplayName>
     <PrefabName>Axiel_HAM</PrefabName>
     <TowerID>4</TowerID>
-    <MaxHealth>10</MaxHealth>
-    <RateOfFire>0.65</RateOfFire>
+    <MaxHealth>20</MaxHealth>
+    <RateOfFire>0.45</RateOfFire>
     <Cooldown>1</Cooldown>
-    <Range>1</Range>
-    <BallisticDamage>10</BallisticDamage>
+    <Range>2</Range>
+    <BallisticDamage>13</BallisticDamage>
     <ThraceiumDamage>0</ThraceiumDamage>
     <BallisticDefense>0.6</BallisticDefense>
     <ThraceiumDefense>0</ThraceiumDefense>

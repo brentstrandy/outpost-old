@@ -21,9 +21,44 @@ public class HammerTower : Tower
         base.Update();
     }
 
+	#region EVENTS
+
+	public void OnHammerImpact()
+	{
+		InstantiateFire();
+	}
+
+	#endregion
+
     #region Special Effects
 
+	public override void InstantiateFire()
+	{
+		// Instantiate prefab for firing a shot
+		if (FiringEffect)
+		{
+			Instantiate(FiringEffect, EmissionPoint.transform.position, Quaternion.identity);
+		}
+	}
+
     #endregion Special Effects
+
+	#region RPC Calls
+
+	/// <summary>
+	/// Hammer tower does not technically "fire" until the hammer hits the pads. The animation system will tell us when to fire
+	/// </summary>
+	[PunRPC]
+	protected override void FireAcrossNetwork()
+	{
+		// Tell the tower Animator the tower has fired
+		ObjAnimator.SetTrigger("Shot Fired");
+
+		// After the tower fires it loses the ability to fire again until after a cooldown period
+		ReadyToFire = false;
+	}
+
+	#endregion
 
     #region MessageHandling
 
