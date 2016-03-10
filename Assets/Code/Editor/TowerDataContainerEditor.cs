@@ -93,7 +93,7 @@ public class TowerDataContainerEditor : Editor
     /// </summary>
     private void SaveToXML_Button()
     {
-        if (GUILayout.Button("Save Data"))
+        if (GUILayout.Button("Save LOCAL Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
                 XMLParser<TowerData>.XMLSerializer_Local(MyScript.TowerDataList, XMLPath);
@@ -105,7 +105,7 @@ public class TowerDataContainerEditor : Editor
     /// </summary>
     private void LoadFromXML_Button()
     {
-        if (GUILayout.Button("Load Data"))
+        if (GUILayout.Button("Load LOCAL Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD?", "Yes", "No"))
             {
@@ -137,7 +137,7 @@ public class TowerDataContainerEditor : Editor
 
     private List<TowerData> LoadFromXML_Server()
     {
-        WWW www = new WWW("http://www.diademstudios.com/outpostdata/TowerData.xml");
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/TowerData_GetData.php");
         string myXML;
 
         while (!www.isDone)
@@ -148,20 +148,6 @@ public class TowerDataContainerEditor : Editor
 
         // Sort by StartTime and PlayerCount before loading
         return XMLParser<TowerData>.XMLDeserializer_Server(myXML).OrderBy(o => o.TowerID).ToList();
-    }
-
-    /// <summary>
-    /// Saves current Inspector List to XML.
-    /// </summary>
-    private void SaveToXML()
-    {
-        if (GUILayout.Button("Save Data"))
-        {
-            // saves file based on the level name that's loaded in scene
-            string fileName = Application.streamingAssetsPath + "/TowerData.xml";
-
-            XMLParser<TowerData>.XMLSerializer_Local(MyScript.TowerDataList, fileName);
-        }
     }
 
     #region MessageHandling

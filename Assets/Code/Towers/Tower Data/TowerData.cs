@@ -20,7 +20,6 @@ public class TowerData
     public int MaxHealth;
 
     public float RateOfFire;
-    public float Cooldown;
     public float Range;
 
     public float AdjustedRange
@@ -43,9 +42,7 @@ public class TowerData
     public float ThraceiumDamage;
     public float BallisticDefense;
     public float ThraceiumDefense;
-    public float TransitionTime;
     public int InstallCost;
-    public float MaintenanceCost;
     public float StartupTime;
     public float TrackingSpeed;
 
@@ -62,9 +59,9 @@ public class TowerData
         DisplayName = PrefabName = "";
 
         MaxHealth = 0;
-        RateOfFire = Cooldown = Range = ThraceiumDamage = BallisticDamage = TransitionTime = 0;
+        RateOfFire = Range = ThraceiumDamage = BallisticDamage = 0;
         InstallCost = 0;
-        MaintenanceCost = StartupTime = TrackingSpeed = 0;
+        StartupTime = TrackingSpeed = 0;
     }
 
     #region MessageHandling

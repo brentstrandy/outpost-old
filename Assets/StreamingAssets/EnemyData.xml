@@ -114,14 +114,14 @@
     <EnemyID>0</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
-      <r>0.647058845</r>
-      <g>0.171805277</g>
-      <b>0.3185748</b>
+      <r>0</r>
+      <g>0.792156935</g>
+      <b>1</b>
       <a>0</a>
     </HighlightColor>
-    <AttackTowers>true</AttackTowers>
+    <AttackTowers>false</AttackTowers>
     <AttackMiningFacility>false</AttackMiningFacility>
-    <AttackWhileMoving>true</AttackWhileMoving>
+    <AttackWhileMoving>false</AttackWhileMoving>
     <MaxHealth>30</MaxHealth>
     <RateOfFire>2.2</RateOfFire>
     <Acceleration>0</Acceleration>

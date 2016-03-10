@@ -34,6 +34,7 @@ public class EnemyData
     public float ThraceiumDefense;
     public float TurningSpeed;
     public int ScoreValue;
+	public int MoneyValue;
 
     [HideInInspector]
     [XmlIgnore]

@@ -94,7 +94,7 @@ public class LevelDataContainerEditor : Editor
     /// </summary>
     private void SaveToXML_Button()
     {
-        if (GUILayout.Button("Save Data"))
+        if (GUILayout.Button("Save LOCAL Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
                 XMLParser<LevelData>.XMLSerializer_Local(MyScript.LevelDataList, XMLPath);
@@ -108,7 +108,7 @@ public class LevelDataContainerEditor : Editor
     {
         if (GUILayout.Button("Load LOCAL Data"))
         {
-            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD?", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to LOAD LOCAL Data?", "Yes", "No"))
             {
                 MyScript.LevelDataList.Clear();
                 if (!Application.isPlaying)
@@ -138,7 +138,6 @@ public class LevelDataContainerEditor : Editor
 
     private List<LevelData> LoadFromXML_Server()
     {
-        //WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData.xml");
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/LevelData_GetData.php");
         string myXML;
 

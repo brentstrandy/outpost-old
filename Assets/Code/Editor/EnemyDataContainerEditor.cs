@@ -90,7 +90,7 @@ public class EnemyDataContainerEditor : Editor
 
     private List<EnemyData> LoadFromXML_Server()
     {
-        WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData.xml");
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/EnemyData_GetData.php");
         string myXML;
 
         while (!www.isDone)
@@ -113,7 +113,7 @@ public class EnemyDataContainerEditor : Editor
     /// </summary>
     private void SaveToXML_Button()
     {
-        if (GUILayout.Button("Save Data"))
+        if (GUILayout.Button("Save LOCAL Data"))
         {
             if (EditorUtility.DisplayDialog("Warning!", "You can only save to the LOCAL XML file. Are you sure you want to SAVE to the LOCAL XML file?", "Yes", "No"))
                 XMLParser<EnemyData>.XMLSerializer_Local(MyScript.EnemyDataList, XMLPath);
