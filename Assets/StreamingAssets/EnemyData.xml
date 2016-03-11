@@ -2,12 +2,12 @@
 <ArrayOfEnemyData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EnemyData>
     <DisplayName>Heavy Speeder</DisplayName>
-    <PrefabName>Heavy Speeder</PrefabName>
-    <EnemyID>0</EnemyID>
+    <PrefabName>Heleur_HVY</PrefabName>
+    <EnemyID>1</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0</r>
-      <g>0.792156935</g>
+      <g>0.7921569</g>
       <b>1</b>
       <a>0</a>
     </HighlightColor>
@@ -26,16 +26,17 @@
     <ThraceiumDefense>0.5</ThraceiumDefense>
     <TurningSpeed>1</TurningSpeed>
     <ScoreValue>10</ScoreValue>
+    <MoneyValue>10</MoneyValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Intense Heavy Speeder</DisplayName>
-    <PrefabName>Heavy Speeder</PrefabName>
-    <EnemyID>0</EnemyID>
+    <PrefabName>Heleur_HVY</PrefabName>
+    <EnemyID>2</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
-      <r>0.08207182</r>
-      <g>1</g>
-      <b>0.891269147</b>
+      <r>0.8352941</r>
+      <g>0.956862748</g>
+      <b>0.0784313753</b>
       <a>0</a>
     </HighlightColor>
     <AttackTowers>true</AttackTowers>
@@ -52,97 +53,17 @@
     <BallisticDefense>0.5</BallisticDefense>
     <ThraceiumDefense>0.5</ThraceiumDefense>
     <TurningSpeed>1</TurningSpeed>
-    <ScoreValue>10</ScoreValue>
-  </EnemyData>
-  <EnemyData>
-    <DisplayName>Intense Light Speeder</DisplayName>
-    <PrefabName>Light Speeder</PrefabName>
-    <EnemyID>0</EnemyID>
-    <PathFinding>ShortestPath</PathFinding>
-    <HighlightColor>
-      <r>0.8352942</r>
-      <g>0.9568628</g>
-      <b>0.0784313753</b>
-      <a>0</a>
-    </HighlightColor>
-    <AttackTowers>true</AttackTowers>
-    <AttackMiningFacility>true</AttackMiningFacility>
-    <AttackWhileMoving>true</AttackWhileMoving>
-    <MaxHealth>50</MaxHealth>
-    <RateOfFire>0.6</RateOfFire>
-    <Acceleration>0</Acceleration>
-    <Speed>0.26</Speed>
-    <Range>2</Range>
-    <HoverDistance>0.3</HoverDistance>
-    <BallisticDamage>0</BallisticDamage>
-    <ThraceiumDamage>3</ThraceiumDamage>
-    <BallisticDefense>0.2</BallisticDefense>
-    <ThraceiumDefense>0.2</ThraceiumDefense>
-    <TurningSpeed>3</TurningSpeed>
-    <ScoreValue>5</ScoreValue>
-  </EnemyData>
-  <EnemyData>
-    <DisplayName>Kamikaze</DisplayName>
-    <PrefabName>Kamikaze</PrefabName>
-    <EnemyID>0</EnemyID>
-    <PathFinding>ShortestPath</PathFinding>
-    <HighlightColor>
-      <r>0</r>
-      <g>1</g>
-      <b>0.08965516</b>
-      <a>0</a>
-    </HighlightColor>
-    <AttackTowers>false</AttackTowers>
-    <AttackMiningFacility>true</AttackMiningFacility>
-    <AttackWhileMoving>false</AttackWhileMoving>
-    <MaxHealth>20</MaxHealth>
-    <RateOfFire>0</RateOfFire>
-    <Acceleration>0</Acceleration>
-    <Speed>2</Speed>
-    <Range>0</Range>
-    <HoverDistance>0.3</HoverDistance>
-    <BallisticDamage>0</BallisticDamage>
-    <ThraceiumDamage>20</ThraceiumDamage>
-    <BallisticDefense>0.3</BallisticDefense>
-    <ThraceiumDefense>0.3</ThraceiumDefense>
-    <TurningSpeed>3</TurningSpeed>
-    <ScoreValue>7</ScoreValue>
-  </EnemyData>
-  <EnemyData>
-    <DisplayName>Land Drone</DisplayName>
-    <PrefabName>Land Drone</PrefabName>
-    <EnemyID>0</EnemyID>
-    <PathFinding>ShortestPath</PathFinding>
-    <HighlightColor>
-      <r>0</r>
-      <g>0.792156935</g>
-      <b>1</b>
-      <a>0</a>
-    </HighlightColor>
-    <AttackTowers>false</AttackTowers>
-    <AttackMiningFacility>false</AttackMiningFacility>
-    <AttackWhileMoving>false</AttackWhileMoving>
-    <MaxHealth>30</MaxHealth>
-    <RateOfFire>2.2</RateOfFire>
-    <Acceleration>0</Acceleration>
-    <Speed>0.3</Speed>
-    <Range>0</Range>
-    <HoverDistance>0.3</HoverDistance>
-    <BallisticDamage>0</BallisticDamage>
-    <ThraceiumDamage>1</ThraceiumDamage>
-    <BallisticDefense>0</BallisticDefense>
-    <ThraceiumDefense>0</ThraceiumDefense>
-    <TurningSpeed>4</TurningSpeed>
-    <ScoreValue>1</ScoreValue>
+    <ScoreValue>12</ScoreValue>
+    <MoneyValue>12</MoneyValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Light Speeder</DisplayName>
-    <PrefabName>Light Speeder</PrefabName>
-    <EnemyID>0</EnemyID>
+    <PrefabName>Heleur_LHT</PrefabName>
+    <EnemyID>3</EnemyID>
     <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
       <r>0</r>
-      <g>0.792156935</g>
+      <g>0.7921569</g>
       <b>1</b>
       <a>0</a>
     </HighlightColor>
@@ -161,16 +82,73 @@
     <ThraceiumDefense>0.3</ThraceiumDefense>
     <TurningSpeed>3</TurningSpeed>
     <ScoreValue>5</ScoreValue>
+    <MoneyValue>5</MoneyValue>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Intense Light Speeder</DisplayName>
+    <PrefabName>Heleur_LHT</PrefabName>
+    <EnemyID>4</EnemyID>
+    <PathFinding>ShortestPath</PathFinding>
+    <HighlightColor>
+      <r>0.8352941</r>
+      <g>0.956862748</g>
+      <b>0.0784313753</b>
+      <a>0</a>
+    </HighlightColor>
+    <AttackTowers>true</AttackTowers>
+    <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>true</AttackWhileMoving>
+    <MaxHealth>50</MaxHealth>
+    <RateOfFire>0.6</RateOfFire>
+    <Acceleration>0</Acceleration>
+    <Speed>0.26</Speed>
+    <Range>2</Range>
+    <HoverDistance>0.3</HoverDistance>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>3</ThraceiumDamage>
+    <BallisticDefense>0.2</BallisticDefense>
+    <ThraceiumDefense>0.2</ThraceiumDefense>
+    <TurningSpeed>3</TurningSpeed>
+    <ScoreValue>6</ScoreValue>
+    <MoneyValue>6</MoneyValue>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Land Drone</DisplayName>
+    <PrefabName>Heleur_LND</PrefabName>
+    <EnemyID>5</EnemyID>
+    <PathFinding>ShortestPath</PathFinding>
+    <HighlightColor>
+      <r>0</r>
+      <g>0.7921569</g>
+      <b>1</b>
+      <a>0</a>
+    </HighlightColor>
+    <AttackTowers>false</AttackTowers>
+    <AttackMiningFacility>false</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
+    <MaxHealth>30</MaxHealth>
+    <RateOfFire>0</RateOfFire>
+    <Acceleration>0</Acceleration>
+    <Speed>0.3</Speed>
+    <Range>0</Range>
+    <HoverDistance>0.3</HoverDistance>
+    <BallisticDamage>1</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
+    <BallisticDefense>0</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
+    <TurningSpeed>4</TurningSpeed>
+    <ScoreValue>1</ScoreValue>
+    <MoneyValue>1</MoneyValue>
   </EnemyData>
   <EnemyData>
     <DisplayName>Sky Drone</DisplayName>
-    <PrefabName>Sky Drone</PrefabName>
-    <EnemyID>0</EnemyID>
-    <PathFinding>TrackEnemy_IgnorePath</PathFinding>
+    <PrefabName>Heleur_SKY</PrefabName>
+    <EnemyID>6</EnemyID>
+    <PathFinding>ShortestPath</PathFinding>
     <HighlightColor>
-      <r>1</r>
-      <g>0.9724138</g>
-      <b>0</b>
+      <r>0</r>
+      <g>0.7921569</g>
+      <b>1</b>
       <a>0</a>
     </HighlightColor>
     <AttackTowers>false</AttackTowers>
@@ -188,5 +166,34 @@
     <ThraceiumDefense>0</ThraceiumDefense>
     <TurningSpeed>6</TurningSpeed>
     <ScoreValue>1</ScoreValue>
+    <MoneyValue>1</MoneyValue>
+  </EnemyData>
+  <EnemyData>
+    <DisplayName>Kamikaze</DisplayName>
+    <PrefabName>Heleur_KAM</PrefabName>
+    <EnemyID>7</EnemyID>
+    <PathFinding>ShortestPath</PathFinding>
+    <HighlightColor>
+      <r>0</r>
+      <g>0.7921569</g>
+      <b>1</b>
+      <a>0</a>
+    </HighlightColor>
+    <AttackTowers>false</AttackTowers>
+    <AttackMiningFacility>true</AttackMiningFacility>
+    <AttackWhileMoving>false</AttackWhileMoving>
+    <MaxHealth>20</MaxHealth>
+    <RateOfFire>0</RateOfFire>
+    <Acceleration>0</Acceleration>
+    <Speed>2</Speed>
+    <Range>0</Range>
+    <HoverDistance>0.3</HoverDistance>
+    <BallisticDamage>0</BallisticDamage>
+    <ThraceiumDamage>20</ThraceiumDamage>
+    <BallisticDefense>0.1</BallisticDefense>
+    <ThraceiumDefense>0.1</ThraceiumDefense>
+    <TurningSpeed>3</TurningSpeed>
+    <ScoreValue>7</ScoreValue>
+    <MoneyValue>10</MoneyValue>
   </EnemyData>
 </ArrayOfEnemyData>

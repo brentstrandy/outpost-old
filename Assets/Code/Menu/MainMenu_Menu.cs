@@ -79,6 +79,11 @@ public class MainMenu_Menu : MonoBehaviour
         MenuManager.Instance.ShowSettingsMenu();
     }
 
+	public void Armory_Click()
+	{
+		MenuManager.Instance.ShowArmoryMenu();
+	}
+
     public void Account_Click()
     {
         // Tell the MenuManager to transition to Account menu

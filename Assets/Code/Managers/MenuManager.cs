@@ -32,6 +32,7 @@ public class MenuManager : MonoBehaviour
     public GameObject VideoSettingsPanel;
     public GameObject ControlSettingsPanel;
     public GameObject GameplaySettingsPanel;
+	public GameObject ArmoryPanel;
     public GameObject InGamePanel;
 	public GameObject InGamePausePanel;
     public GameObject LoadLevelPanel;
@@ -197,6 +198,13 @@ public class MenuManager : MonoBehaviour
     {
         SetCurrentMenuPanel(EndGamePanel);
     }
+
+	public void ShowArmoryMenu()
+	{
+		SetCurrentMenuPanel(ArmoryPanel);
+
+		SceneManager.LoadScene("Armory");
+	}
 
 	public void ToggleInGamePauseMenu()
 	{
