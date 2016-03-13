@@ -1,19 +1,30 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class MeshBuilder
 {
-    public int DeduplicationCount { get; protected set; }
-    public bool FlatShaded;
-    protected List<Vector3> Vertices;
-    protected List<Vector2> UV;
-    protected List<int> Indices;
-    protected List<List<int>> SubMeshes;
-    protected Dictionary<Vector3, int> VertexLookup;
-    protected Dictionary<Vector3, Vector2> UVLookup;
+    public const int VertexLimit = 65000;
 
-    public MeshBuilder()
+    public int Reserve;
+    public bool FlatShaded;
+
+    public int DeduplicationCount { get; protected set; }
+    public List<Vector3> Vertices;
+    public List<Vector2> UV;
+    public List<int> Indices;
+    public List<List<int>> SubMeshes;
+    public Dictionary<Vector3, int> VertexLookup;
+    public Dictionary<Vector3, Vector2> UVLookup;
+
+    public MeshBuilder() : this(0, false)
+    { }
+
+    public MeshBuilder(int reserve) : this(reserve, false)
+    { }
+
+    public MeshBuilder(int reserve, bool flatShaded)
     {
+        Reserve = reserve;
         DeduplicationCount = 0;
         FlatShaded = true;
         Vertices = new List<Vector3>();
@@ -28,6 +39,11 @@ public class MeshBuilder
     {
         Indices = new List<int>();
         SubMeshes.Add(Indices);
+    }
+
+    public bool Full
+    {
+        get { return Vertices.Count + Reserve >= VertexLimit; }
     }
 
     public void AddTriangle(Vector3 v1, Vector2 uv1, Vector3 v2, Vector2 uv2, Vector3 v3, Vector2 uv3)
@@ -81,6 +97,20 @@ public class MeshBuilder
         mesh.RecalculateBounds();
         TangentSolver.Solve2(mesh);
         return mesh;
+    }
+
+    public void Apply(Mesh mesh)
+    {
+        mesh.vertices = Vertices.ToArray();
+        mesh.uv = UV.ToArray();
+        mesh.subMeshCount = SubMeshes.Count;
+        for (int subMesh = 0; subMesh < SubMeshes.Count; subMesh++)
+        {
+            mesh.SetTriangles(SubMeshes[subMesh].ToArray(), subMesh);
+        }
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        TangentSolver.Solve2(mesh);
     }
 
     public virtual void Clear()

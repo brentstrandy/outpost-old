@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     public float LevelStartTime { get; private set; }
 
     // Components
-	public HexMesh TerrainMesh { get; private set; }
+	public HexTerrain TerrainMesh { get; private set; }
 
 	public MiningFacility ObjMiningFacility;
     private PhotonView ObjPhotonView;
@@ -151,11 +151,11 @@ public class GameManager : MonoBehaviour
 
     public void OnLevelWasLoaded(int level)
     {
-        // TerrainMesh must be set when the level is started because the HexMesh object is not created
+        // TerrainMesh must be set when the level is started because the HexTerrain object is not created
         // until the level loads. All levels MUST begin with a defined prefix for this to work properly
-		if(SceneManager.GetActiveScene().name.StartsWith("Level"))
+        if (SceneManager.GetActiveScene().name.StartsWith("Level"))
         {
-            TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexMesh>() as HexMesh;
+            TerrainMesh = GameObject.FindGameObjectWithTag("Terrain").GetComponent<HexTerrain>() as HexTerrain;
         }
     }
 

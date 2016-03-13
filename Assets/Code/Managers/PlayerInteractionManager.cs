@@ -253,7 +253,7 @@ public class PlayerInteractionManager : MonoBehaviour
 		var overlay = terrain.Overlays[(int)TerrainOverlays.Highlight][PhotonNetwork.player.ID];
 
         overlay.Color = PlayerColors.colors[(int)SessionManager.Instance.GetPlayerInfo().customProperties["PlayerColorIndex"]];
-        overlay.IncludeAndUpdate(coord);
+        overlay.Set(coord);
 		overlay.Show();
 
 		if (PlayerManager.Instance.CurPlayer.Mode == PlayerMode.Placement)
@@ -325,7 +325,7 @@ public class PlayerInteractionManager : MonoBehaviour
 		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
 
         overlay.Color = PlayerColors.colors[(int)SessionManager.Instance.GetPlayerInfo().customProperties["PlayerColorIndex"]];
-        overlay.IncludeAndUpdate(coord);
+        overlay.Set(coord);
 		overlay.Show();
 
 		// Deselect the old tower
@@ -392,7 +392,7 @@ public class PlayerInteractionManager : MonoBehaviour
 		else
         {
             overlay.Color = PlayerColors.colors[(int)info.sender.customProperties["PlayerColorIndex"]];
-            overlay.IncludeAndUpdate(coord);
+            overlay.Set(coord);
 			overlay.Show();
 		}
 	}

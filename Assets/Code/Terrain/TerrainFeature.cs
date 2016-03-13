@@ -87,10 +87,10 @@ public class TerrainFeature : MonoBehaviour
         _pos = transform.localPosition;
     }
 
-    private HexMesh GetTerrain()
+    private HexTerrain GetTerrain()
     {
 #if UNITY_EDITOR
-        return GameObject.FindObjectOfType<HexMesh>();
+        return GameObject.FindObjectOfType<HexTerrain>();
 #else
 		return GameManager.Instance.TerrainMesh;
 #endif

@@ -1,7 +1,7 @@
-﻿using Settworks.Hexagons;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
+using System.Collections.Generic;
+using Settworks.Hexagons;
 
 public class HexMeshOverlaySet : IEnumerable<HexMeshOverlay>
 {
@@ -37,6 +37,32 @@ public class HexMeshOverlaySet : IEnumerable<HexMeshOverlay>
         return GetEnumerator();
     }
 
+    public bool Update()
+    {
+        bool changed = false;
+        foreach (var overlay in Overlays.Values)
+        {
+            if (overlay.Update())
+            {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    public bool Update(IEnumerable<HexCoord> coords)
+    {
+        bool changed = false;
+        foreach (var overlay in Overlays.Values)
+        {
+            if (overlay.Update(coords))
+            {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
     public void Clear()
     {
         foreach (var overlay in Overlays.Values)
@@ -49,163 +75,45 @@ public class HexMeshOverlaySet : IEnumerable<HexMeshOverlay>
 
 public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
 {
-    public class Entry
+    public class Entry : HexMesh
     {
-        private GameObject Instance;
-        private List<HexCoord> Coords;
-        private HexMeshBuilder Builder;
-
-        private static IEnumerable<HexCoord> EmptyCoordinateSet()
-        {
-            yield break;
-        }
-
-        private static IEnumerable<HexCoord> SingleCoordinateSet(HexCoord coord)
-        {
-            yield return coord;
-        }
+        private float Offset;
+        private Material Material;
 
         public Color Color
         {
             get
             {
-                var material = Instance.GetComponent<MeshRenderer>().sharedMaterial;
-                return material.GetColor("_Color");
+                return Material.GetColor("_Color");
             }
             set
             {
-                var material = Instance.GetComponent<MeshRenderer>().sharedMaterial;
-                material.SetColor("_MainTex", value);
-                material.SetColor("_Color", value);
-                material.SetColor("_TintColor", value);
+                Material.SetColor("_MainTex", value);
+                Material.SetColor("_Color", value);
+                Material.SetColor("_TintColor", value);
             }
         }
 
         public Entry(GameObject parent, string name, float offset, Shader shader, HexMeshBuilder builder)
+            : base(parent, name, LayerMask.NameToLayer("TransparentFX"), builder)
         {
-            // Remove any previous instances of this entry (this can happen in the editor)
-            var old = new List<GameObject>();
-            foreach (Transform child in parent.transform)
-            {
-                if (child.gameObject.name.Equals(name))
-                {
-                    old.Add(child.gameObject);
-                }
-            }
-            foreach (var gameObject in old)
-            {
-                Object.DestroyImmediate(gameObject);
-            }
+            Offset = offset;
+            Material = new Material(shader);
+            Color = Color.grey;
+        }
 
-            // Prepare the new instance
-            Instance = new GameObject(name);
-            Coords = new List<HexCoord>();
-            Builder = builder;
+        public override GameObject AddObject()
+        {
+            var instance = base.AddObject();
+            instance.transform.localPosition = new Vector3(0.0f, 0.0f, Offset);
 
-            Instance.layer = LayerMask.NameToLayer("TransparentFX");
-            Instance.transform.parent = parent.transform;
-            Instance.transform.localRotation = Quaternion.identity;
-            Instance.transform.localPosition = new Vector3(0.0f, 0.0f, offset);
-            Instance.transform.localScale = Vector3.one;
-
-            Instance.AddComponent<MeshFilter>();
-            var renderer = Instance.AddComponent<MeshRenderer>();
-
-            renderer.sharedMaterial = new Material(shader);
+            var renderer = instance.GetComponent<MeshRenderer>();
+            renderer.sharedMaterial = Material;
             renderer.shadowCastingMode = ShadowCastingMode.Off;
             renderer.receiveShadows = false;
             renderer.enabled = false;
 
-            Color = Color.grey;
-        }
-
-        internal void Destroy()
-        {
-            if (Instance != null)
-            {
-                //Log("Destroying " + Instance.name);
-                Object.DestroyImmediate(Instance);
-                Instance = null;
-            }
-        }
-
-        // Updates the included coordinate and updates the overlay if it differs from what was included before
-        public void IncludeAndUpdate(HexCoord coord)
-        {
-            IncludeAndUpdate(SingleCoordinateSet(coord));
-        }
-
-        // Updates the included coordinate set and updates the overlay if it differs from what was included before
-        public void IncludeAndUpdate(IEnumerable<HexCoord> coords)
-        {
-            if ((Coords as IEnumerable<HexCoord>).Compare(coords) != 0)
-            {
-                Include(coords);
-                Update();
-            }
-        }
-
-        public void Include(HexCoord coord)
-        {
-            Include(SingleCoordinateSet(coord));
-        }
-
-        public void Include(IEnumerable<HexCoord> coords)
-        {
-            Coords.Clear();
-            foreach (var coord in coords)
-            {
-                Coords.Add(coord);
-            }
-        }
-
-        public void Update()
-        {
-            Builder.Clear();
-            foreach (var coord in Coords)
-            {
-                Builder.AddHexagon(coord);
-            }
-            Instance.GetComponent<MeshFilter>().mesh = Builder.Build();
-        }
-
-        public void Update(IEnumerable<HexCoord> coords)
-        {
-            var mesh = Instance.GetComponent<MeshFilter>().sharedMesh;
-            var coordIndexMap = Builder.GetCoordIndexMap();
-            if (mesh == null || coordIndexMap == null || coordIndexMap.Count == 0)
-            {
-                Update();
-                return;
-            }
-
-            Vector3[] vertices = mesh.vertices;
-            var triangles = Builder.GetTriangles();
-            var predicate = Builder.GetPredicate();
-
-            foreach (var coord in coords)
-            {
-                int[] indices;
-                if (coordIndexMap.TryGetValue(coord, out indices))
-                {
-                    for (int i = 0; i < triangles.Length; i++)
-                    {
-                        vertices[indices[i]] = predicate(coord, triangles[i]).vertex;
-                    }
-                }
-            }
-
-            mesh.vertices = vertices;
-        }
-
-        public void Show()
-        {
-            Instance.GetComponent<MeshRenderer>().enabled = true;
-        }
-
-        public void Hide()
-        {
-            Instance.GetComponent<MeshRenderer>().enabled = false;
+            return instance;
         }
     }
 
@@ -233,6 +141,32 @@ public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
         OverlayShader = Shader.Find(shader);
         Builder = builder;
         Lookup = new Dictionary<int, Entry>(8);
+    }
+
+    public bool Update()
+    {
+        bool changed = false;
+        foreach (var entry in this)
+        {
+            if (entry.Update())
+            {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    public bool Update(IEnumerable<HexCoord> coords)
+    {
+        bool changed = false;
+        foreach (var entry in this)
+        {
+            if (entry.Update(coords))
+            {
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     public bool Remove(int index)
