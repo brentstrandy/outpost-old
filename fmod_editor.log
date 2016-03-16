@@ -1,0 +1,93 @@
+[LOG] System::create                           : Header version = 1.08.00. Current version = 1.08.00.
+[LOG] SystemI::init                            : FMOD Studio Version: 00010800 (73592)
+[LOG] SystemI::init                            : maxchannels = 256, flags = 00020000, extradriverdata = 0x0
+[LOG] SystemI::close                           : 
+[LOG] SystemI::close                           : Stop all sounds
+[LOG] SystemI::close                           : done.
+
+[LOG] OutputCoreAudio::enumerate               : Enumerating...
+[LOG] OutputCoreAudio::enumerate               : Found output driver: "Built-in Output".
+[LOG] OutputCoreAudio::enumerate               : Found output driver: "Scarlett 2i2 USB".
+[LOG] OutputCoreAudio::enumerate               : Found output driver: "Pro Tools Aggregate I/O".
+[LOG] OutputCoreAudio::enumerate               : Found output driver: "Instant On Sound Effects".
+[LOG] OutputCoreAudio::enumerate               : Done.
+[LOG] OutputCoreAudio::init                    : Output running 2 channels at 48000Hz sample rate.
+[LOG] OutputCoreAudio::init                    : Maximum hardware read size: 1024 samples, Software buffer size: 512 samples, Number of software buffers: 4.
+[LOG] Thread::initThread                       : Initializing FMOD mixer thread.  priority 3
+[LOG] Thread::initThread                       : - Stacksize 49152.  Stack pointer 0x0 : usesemaphore = 1 : sleeptime = 0
+[LOG] Thread::callback                         : * FMOD mixer thread started
+[LOG] SystemI::init                            : Set up emulated output
+[LOG] SystemI::init                            : create the channel pool
+[LOG] Thread::initThread                       : Initializing FMOD stream thread.  priority 2
+[LOG] Thread::initThread                       : - Stacksize 65536.  Stack pointer 0x0 : usesemaphore = 0 : sleeptime = 10
+[LOG] Thread::callback                         : * FMOD stream thread started
+[LOG] Thread::initThread                       : Initializing FMOD Studio sample load thread.  priority 0
+[LOG] Thread::initThread                       : - Stacksize 65536.  Stack pointer 0x0 : usesemaphore = 0 : sleeptime = 1
+[LOG] Thread::callback                         : * FMOD Studio sample load thread started
+[LOG] Thread::initThread                       : Initializing FMOD Studio bank load thread.  priority 0
+[LOG] Thread::initThread                       : - Stacksize 65536.  Stack pointer 0x0 : usesemaphore = 0 : sleeptime = 1
+[LOG] Thread::callback                         : * FMOD Studio bank load thread started
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {0381c324-9926-4d20-9cff-c8af3b50d324}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {07fd2d06-42f4-4c32-a184-b694f2848437}
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {e52f9b0e-a0ca-41f9-bb64-2409c359837a}
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {1cf76f3c-d847-48a6-9e5c-0be06fbf4dc6}
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {25139e41-a4a0-4a40-bf33-216f065c8079}
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {42233a58-5bbd-4c8e-9187-98a59fbb58c4}
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {44a0825a-9005-4bc9-b4fb-e688117123e1}
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {731756ab-aa55-420f-8e99-0ff7cdeacbf0}
+[WRN] ObjectLookup::get                        : Lookup failed for MixerStrip: {41e927b5-8904-4cc0-8077-9e33d64f73f2}
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[LOG] Manager::readBank                        : fileversion = 56, compatVersion = 50 (oldest = 44, newest = 72)
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithInputs: {6caee02d-ad14-46b8-b132-a3560fd1a677}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[WRN] ObjectLookup::get                        : Lookup failed for BusWithSends: {3d69b9e0-5ab0-495c-8514-30d04341e1b1}
+[LOG] Thread::callback                         : * FMOD Studio bank load thread finished
+[LOG] Thread::close                            : FMOD Studio bank load thread thread destroyed
+[LOG] Thread::callback                         : * FMOD Studio sample load thread finished
+[LOG] Thread::close                            : FMOD Studio sample load thread thread destroyed
+[LOG] LiveUpdate::release                      : 
+[LOG] SystemI::close                           : 
+[LOG] SystemI::close                           : Stop all sounds
+[LOG] Thread::callback                         : * FMOD stream thread finished
+[LOG] Thread::close                            : FMOD stream thread thread destroyed
+[LOG] SystemI::close                           : Stream thread destroyed
+[LOG] Thread::callback                         : * FMOD mixer thread finished
+[LOG] Thread::close                            : FMOD mixer thread thread destroyed
+[LOG] SystemI::close                           : Free master channel group.
+[LOG] SystemI::close                           : Remove 'master' sound group.
+[LOG] SystemI::close                           : Free software output.
+[LOG] SystemI::close                           : Free emulated output.
+[LOG] SystemI::close                           : Free channel pool.
+[LOG] SystemI::close                           : done.
+
+[LOG] System::create                           : Header version = 1.08.00. Current version = 1.08.00.
