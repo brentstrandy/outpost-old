@@ -139,7 +139,7 @@ public class HexMesh : MultiMesh
         return false;
     }
 
-    // Updates all of the coordinate in the mesh.
+    // Updates all of the coordinates in the mesh.
     // Returns true if a change occurred.
     public bool Update()
     {

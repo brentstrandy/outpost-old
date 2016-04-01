@@ -55,9 +55,8 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
-    public HashSet<HexCoord> Impassable = new HashSet<HexCoord>();
-
-    public HexMeshOverlaySet Overlays;
+    public TerrainLayerSet Layers;
+    public TerrainOverlaySet Overlays;
 
     //protected int[] Triangles = new int[] { 0, 1, 5, 1, 2, 5, 2, 4, 5, 2, 3, 4 };
     protected HexMeshBuilder.NodeFactory Predicate;
@@ -182,25 +181,25 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
     {
         if (Overlays == null)
         {
-            Overlays = new HexMeshOverlaySet(gameObject);
+            Overlays = new TerrainOverlaySet(gameObject);
         }
         else
         {
             Overlays.Clear();
         }
 
-        Overlays.Add((int)TerrainOverlays.Outline, "TerrainOutline", "Standard", CreateOverlayBuilder(OutlineWidth));
-        Overlays.Add((int)TerrainOverlays.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth));
-        Overlays.Add((int)TerrainOverlays.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
-        Overlays.Add((int)TerrainOverlays.Pathfinding, "TerrainPathfinding", "Standard", CreateOverlayBuilder(HighlightWidth));
-        Overlays.Add((int)TerrainOverlays.Editor, "TerrainEditor", "Standard", CreateOverlayBuilder(HighlightWidth));
+        Overlays.Add(TerrainOverlay.Outline, "TerrainOutline", "Standard", CreateOverlayBuilder(OutlineWidth));
+        Overlays.Add(TerrainOverlay.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth));
+        Overlays.Add(TerrainOverlay.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
+        Overlays.Add(TerrainOverlay.Pathfinding, "TerrainPathfinding", "Standard", CreateOverlayBuilder(HighlightWidth));
+        Overlays.Add(TerrainOverlay.Editor, "TerrainEditor", "Standard", CreateOverlayBuilder(HighlightWidth));
 
         BuildOutlines();
     }
 
     public void BuildOutlines()
     {
-        var outlines = Overlays[(int)TerrainOverlays.Outline][0];
+        var outlines = Overlays[TerrainOverlay.Outline][0];
         outlines.Color = OutlineColor;
         outlines.Set(WithinPlacementRange());
         outlines.Show();
@@ -208,13 +207,13 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
     public void UpdateOutlines()
     {
-        var outlines = Overlays[(int)TerrainOverlays.Outline][0];
+        var outlines = Overlays[TerrainOverlay.Outline][0];
         outlines.Update();
     }
 
     public void UpdateOutlines(IEnumerable<HexCoord> coords)
     {
-        var outlines = Overlays[(int)TerrainOverlays.Outline][0];
+        var outlines = Overlays[TerrainOverlay.Outline][0];
         outlines.Update(coords);
     }
 
@@ -267,7 +266,7 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
     public bool IsImpassable(HexCoord coord)
     {
-        return Impassable.Contains(coord);
+        return Layers[TerrainLayer.Impassable].Contains(coord);
     }
 
     private HexMeshBuilder CreateBaseMeshBuilder()

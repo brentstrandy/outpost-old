@@ -38,7 +38,7 @@ public class TerrainFeature : MonoBehaviour
                 foreach (var coord in HexKit.WithinRange(hexLocation.location, Radius - 1))
                 {
                     //Debug.Log("Adding " + coord.ToString() + " to impassable list on account of impassable terrain feature.");
-                    terrain.Impassable.Add(coord);
+                    terrain.Layers[TerrainLayer.Impassable].Add(coord);
                 }
             }
         }

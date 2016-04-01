@@ -151,7 +151,7 @@ public class HexMeshEditor : Editor
             {
                 terrain.CreateOverlays();
             }
-            var overlay = terrain.Overlays[(int)TerrainOverlays.Editor][0];
+            var overlay = terrain.Overlays[TerrainOverlay.Editor][0];
 
             bool shouldHaveFocus = IsEditingSurface && Event.current.control;
             if (HasFocus && !shouldHaveFocus)
@@ -252,7 +252,7 @@ public class HexMeshEditor : Editor
                             terrain.Mesh.Update(HexKit.WithinRange(coord, BrushRadius, false));
                             terrain.Overlays.Update(HexKit.WithinRange(coord, BrushRadius, false));
 
-                            overlay = terrain.Overlays[(int)TerrainOverlays.Editor][0]; // UpdateMesh could recreate the overlays so we grab this again
+                            overlay = terrain.Overlays[TerrainOverlay.Editor][0]; // UpdateMesh could recreate the overlays so we grab this again
                         }
                     }
 

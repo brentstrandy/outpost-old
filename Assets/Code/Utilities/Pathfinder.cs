@@ -231,7 +231,7 @@ public class Pathfinder : MonoBehaviour
     public void AddPathOverlay()
     {
         int id = gameObject.GetInstanceID();
-        Overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding][id];
+        Overlay = GameManager.Instance.TerrainMesh.Overlays[TerrainOverlay.Pathfinding][id];
         Overlay.Color = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), 1.0f);
         Overlay.Show();
     }
@@ -239,7 +239,7 @@ public class Pathfinder : MonoBehaviour
     public void RemovePathOverlay()
     {
         int id = gameObject.GetInstanceID();
-        GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Pathfinding].Remove(id);
+        GameManager.Instance.TerrainMesh.Overlays[TerrainOverlay.Pathfinding].Remove(id);
         Overlay = null;
     }
 

@@ -250,7 +250,7 @@ public class PlayerInteractionManager : MonoBehaviour
 	private void Highlight(HexCoord coord)
 	{
 		var terrain = GameManager.Instance.TerrainMesh;
-		var overlay = terrain.Overlays[(int)TerrainOverlays.Highlight][PhotonNetwork.player.ID];
+		var overlay = terrain.Overlays[TerrainOverlay.Highlight][PhotonNetwork.player.ID];
 
         overlay.Color = PlayerColors.colors[(int)SessionManager.Instance.GetPlayerInfo().customProperties["PlayerColorIndex"]];
         overlay.Set(coord);
@@ -265,7 +265,7 @@ public class PlayerInteractionManager : MonoBehaviour
 
 	private void RemoveHighlight()
 	{
-		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Highlight][PhotonNetwork.player.ID];
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[TerrainOverlay.Highlight][PhotonNetwork.player.ID];
 		overlay.Hide();
 	}
 	#endregion
@@ -322,7 +322,7 @@ public class PlayerInteractionManager : MonoBehaviour
 			return;
 		}
 
-		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[TerrainOverlay.Selection][PhotonNetwork.player.ID];
 
         overlay.Color = PlayerColors.colors[(int)SessionManager.Instance.GetPlayerInfo().customProperties["PlayerColorIndex"]];
         overlay.Set(coord);
@@ -361,7 +361,7 @@ public class PlayerInteractionManager : MonoBehaviour
 			return;
 		}
 
-		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][PhotonNetwork.player.ID];
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[TerrainOverlay.Selection][PhotonNetwork.player.ID];
 
 		overlay.Hide();
 
@@ -383,7 +383,7 @@ public class PlayerInteractionManager : MonoBehaviour
 	private void SelectTowerAcrossNetwork(HexCoord coord, PhotonMessageInfo info)
 	{
 		Log(info.sender.name + " selects " + coord.ToString());
-		var overlay = GameManager.Instance.TerrainMesh.Overlays[(int)TerrainOverlays.Selection][info.sender.ID];
+		var overlay = GameManager.Instance.TerrainMesh.Overlays[TerrainOverlay.Selection][info.sender.ID];
 
 		if (coord == default(HexCoord))
 		{

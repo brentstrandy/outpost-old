@@ -1,4 +1,4 @@
-﻿public enum TerrainOverlays : int
+﻿public enum TerrainOverlay : int
 {
     Outline,
     Highlight,

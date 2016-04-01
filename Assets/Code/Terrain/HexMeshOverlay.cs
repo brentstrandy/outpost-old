@@ -3,76 +3,6 @@ using UnityEngine.Rendering;
 using System.Collections.Generic;
 using Settworks.Hexagons;
 
-public class HexMeshOverlaySet : IEnumerable<HexMeshOverlay>
-{
-    private Dictionary<int, HexMeshOverlay> Overlays;
-    private GameObject Parent;
-
-    public HexMeshOverlaySet(GameObject parent)
-    {
-        Parent = parent;
-        Overlays = new Dictionary<int, HexMeshOverlay>();
-    }
-
-    public void Add(int overlayID, string name, string shader, HexMeshBuilder builder)
-    {
-        Overlays.Add(overlayID, new HexMeshOverlay(overlayID, name, Parent, shader, builder));
-    }
-
-    public HexMeshOverlay this[int overlayID]
-    {
-        get
-        {
-            return Overlays[overlayID];
-        }
-    }
-
-    public IEnumerator<HexMeshOverlay> GetEnumerator()
-    {
-        return Overlays.Values.GetEnumerator();
-    }
-
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public bool Update()
-    {
-        bool changed = false;
-        foreach (var overlay in Overlays.Values)
-        {
-            if (overlay.Update())
-            {
-                changed = true;
-            }
-        }
-        return changed;
-    }
-
-    public bool Update(IEnumerable<HexCoord> coords)
-    {
-        bool changed = false;
-        foreach (var overlay in Overlays.Values)
-        {
-            if (overlay.Update(coords))
-            {
-                changed = true;
-            }
-        }
-        return changed;
-    }
-
-    public void Clear()
-    {
-        foreach (var overlay in Overlays.Values)
-        {
-            overlay.Clear();
-        }
-        Overlays.Clear();
-    }
-}
-
 public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
 {
     public class Entry : HexMesh
@@ -117,26 +47,18 @@ public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
         }
     }
 
-    public int OverlayID { get; private set; }
     public string Name { get; private set; }
-
-    private float Offset
-    {
-        get
-        {
-            return -0.01f * (float)(OverlayID + 1);
-        }
-    }
+    public float Offset { get; private set; }
 
     private GameObject Parent;
     private Shader OverlayShader;
     private HexMeshBuilder Builder;
     private Dictionary<int, Entry> Lookup;
 
-    public HexMeshOverlay(int overlayID, string name, GameObject parent, string shader, HexMeshBuilder builder)
+    public HexMeshOverlay(string name, float offset, GameObject parent, string shader, HexMeshBuilder builder)
     {
-        OverlayID = overlayID;
         Name = name;
+        Offset = offset;
         Parent = parent;
         OverlayShader = Shader.Find(shader);
         Builder = builder;

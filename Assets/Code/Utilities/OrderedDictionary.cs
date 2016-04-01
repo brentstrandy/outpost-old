@@ -52,7 +52,7 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
     {
         for (int i = startingIndex; i < Values.Count; i++)
         {
-            Lookup.Add(KeyDelegate(Values[i]), i);
+            Lookup[KeyDelegate(Values[i])] = i;
         }
     }
 
