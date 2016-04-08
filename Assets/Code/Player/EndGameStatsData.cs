@@ -10,15 +10,7 @@ using UnityEngine;
 public class EndGameStatsData
 {
     public string Username;
-	/// <summary>
-	/// If the player quit a game before it finished, this is the name of the room they quit.
-	/// This value is saved in case they want to join back into the game.
-	/// </summary>
 	public int KillCount;
-	/// <summary>
-	/// If the player quit a game before it finished, this is the TowerLoadOut from that game.
-	/// This value is saved in case they want to join back into the game.
-	/// </summary>
 	public int Score;
 
     [HideInInspector]

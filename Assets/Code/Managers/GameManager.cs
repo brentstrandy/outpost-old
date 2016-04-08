@@ -333,7 +333,7 @@ public class GameManager : MonoBehaviour
 			// When creating a game, track who created it and what level they chose for the game
 			form.AddField("gameID", GameManager.Instance.GameID.ToString());
 			form.AddField("victory", GameManager.Instance.Victory.ToString());
-			WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_EndGame.php", form);
+			WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_EndGame.php", form);
 		}
 	}
 

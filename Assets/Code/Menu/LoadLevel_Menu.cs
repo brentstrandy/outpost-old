@@ -111,7 +111,7 @@ public class LoadLevel_Menu : MonoBehaviour
 		form.AddField("gameID", gameID);
 		form.AddField("playerColor", (PlayerManager.Instance.CurPlayer.PlayerColor().r * 255).ToString() + "," + (PlayerManager.Instance.CurPlayer.PlayerColor().g * 255).ToString() + "," + (PlayerManager.Instance.CurPlayer.PlayerColor().b * 255).ToString());
 		form.AddField("towerLoadOut", PlayerManager.Instance.CurPlayer.GameLoadOut.GetTowerIDs());
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_AddPlayerToGame.php", form);
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_AddPlayerToGame.php", form);
 	}
 		
 	private IEnumerator GetNewGameID()
@@ -122,7 +122,7 @@ public class LoadLevel_Menu : MonoBehaviour
 		form.AddField("accountID", PlayerManager.Instance.CurPlayer.AccountID);
 		form.AddField("levelID", MenuManager.Instance.CurrentLevelData.LevelID);
 		form.AddField("photonRoomName", SessionManager.Instance.GetCurrentRoomInfo().name.ToString());
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_StartGame.php", form);
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_StartGame.php", form);
 		// Wait until the server has sent data back
 		while(!www.isDone)
 		{

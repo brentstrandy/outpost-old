@@ -291,7 +291,7 @@ public class PlayerManager : MonoBehaviour
 		form.AddField("victory", GameManager.Instance.Victory.ToString());
 		form.AddField("finishedGame", (!GameManager.Instance.GameRunning).ToString());
 
-		WWW www = new WWW("http://www.diademstudios.com/outpostdata/GameData_SavePlayerStats.php", form);
+		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_SavePlayerStats.php", form);
 	    
 		// Some requests need to happen immeidately and cannot wait for a response (quitting the game)
 		if(waitForResponse)
