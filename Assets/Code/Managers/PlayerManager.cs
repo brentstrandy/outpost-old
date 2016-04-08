@@ -77,7 +77,7 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     private void Connected_Event()
     {
-		Log("Local Player Connected");
+		Log("[Local Player] Connected");
 		// For security reasons, userID should only be used by the current (local) player to authenticate their ACCOUNT (private) data
 		// All other data - like the LEVEL PROGRESS or PROFILE data can be attained with just the username
 		
@@ -89,15 +89,17 @@ public class PlayerManager : MonoBehaviour
 		CurPlayer = new CurrentPlayer(SessionManager.Instance.GetPlayerInfo());
 		CurPlayer.OnPlayerDataDownloaded += OnCurPlayerDataDownloaded_Event;
 
-		Log("Downloading Local Player Details");
+		Log("Downloading [Local Player] Details from Diadem's server");
         
 		WWWForm form = new WWWForm();
-		// Load player level progress data based on the userID (aquired when logging into Diadem's server)
+		// Load player level progress data - based on the userID (aquired when logging into Diadem's server)
 		form.AddField("accountID", userID);
 		StartCoroutine(CurPlayer.LevelProgressDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_LevelProgress.php", form));
-        // Load player account details
+		// Load player tower progress data - based on the userID (acquired when loggin into Diadem's server)
+		StartCoroutine(CurPlayer.TowerProgressDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_TowerProgress.php", form));
+		// Load player account details - based on the userID (acquired when loggin into Diadem's server)
 		StartCoroutine(CurPlayer.AccountDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_AccountData.php", form));
-		// Load player profile details
+		// Load player profile details - based on the userID (acquired when loggin into Diadem's server)
 		StartCoroutine(CurPlayer.ProfileDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/PlayerData_ProfileData.php", form));
     }
 
@@ -279,7 +281,7 @@ public class PlayerManager : MonoBehaviour
     {
         // Save a local copy of the player's progress so that they can keep playing the game and see the progress
 		if(GameManager.Instance.Victory)
-			CurPlayer.LevelProgressDataManager.DataList.Add(new LevelProgressData(GameManager.Instance.CurrentLevelData.LevelID, CurPlayer.Score));
+			CurPlayer.LevelProgressDataManager.DataList.Add(new PlayerLevelProgressData(GameManager.Instance.CurrentLevelData.LevelID, CurPlayer.Score));
 
         // Call web service that saves the player's progress
 		WWWForm form = new WWWForm();

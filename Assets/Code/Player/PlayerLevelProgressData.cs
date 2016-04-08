@@ -7,7 +7,7 @@ using UnityEngine;
 /// Owner: Brent Strandy
 /// </summary>
 [Serializable]
-public class LevelProgressData
+public class PlayerLevelProgressData
 {
     // Level Details
     public int LevelID;
@@ -18,17 +18,17 @@ public class LevelProgressData
     [XmlIgnore]
     public bool ShowDebugLogs = true;
 
-    public LevelProgressData()
+    public PlayerLevelProgressData()
     {
     }
 
-    public LevelProgressData(int levelID, int score)
+    public PlayerLevelProgressData(int levelID, int score)
     {
         LevelID = levelID;
         Score = score;
     }
 
-    public LevelProgressData(LevelProgressData obj)
+    public PlayerLevelProgressData(PlayerLevelProgressData obj)
     {
         LevelID = obj.LevelID;
     }

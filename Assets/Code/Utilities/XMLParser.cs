@@ -18,7 +18,7 @@ using UnityEngine;
 public static class XMLParser<T>
 {
     private static bool ShowDebugLogs = false;
-    private static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata", "levelprogressdata", "accountdata", "profiledata", "endgamestatsdata" };
+    private static string[] AvailableClasses = { "enemyspawndata", "towerdata", "enemydata", "leveldata", "notificationdata", "playerlevelprogressdata", "playertowerprogressdata", "accountdata", "profiledata", "endgamestatsdata" };
 
     #region LIST DE/SERIALIZERS
 

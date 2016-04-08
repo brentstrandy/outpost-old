@@ -4,12 +4,14 @@ using System.Collections;
 public class CurrentPlayer : Player
 {
 	public DataManager<AccountData> AccountDataManager { get; private set; }
-	public DataManager<LevelProgressData> LevelProgressDataManager { get; private set; }
+	public DataManager<PlayerLevelProgressData> LevelProgressDataManager { get; private set; }
+	public DataManager<PlayerTowerProgressData> TowerProgressDataManager { get; private set; }
 
 	private GameObject PlayerLocator;
 
 	private bool AccountDataDownloaded = false;
 	private bool LevelProgressDataDownloaded = false;
+	private bool TowerProgressDataDownloaded = false;
 
 	// Player's score in the most recent game
 	public int Score { get; private set; }
@@ -70,7 +72,8 @@ public class CurrentPlayer : Player
 	public CurrentPlayer(PhotonPlayer photonPlayer) : base(photonPlayer)
 	{
 		AccountDataManager = new DataManager<AccountData>();
-		LevelProgressDataManager = new DataManager<LevelProgressData>();
+		LevelProgressDataManager = new DataManager<PlayerLevelProgressData>();
+		TowerProgressDataManager = new DataManager<PlayerTowerProgressData>();
 
 		Score = 0;
 		Money = 0.0f;
@@ -81,6 +84,7 @@ public class CurrentPlayer : Player
 		// Add event listeners to know when the player's data is done downloading
 		AccountDataManager.OnDataLoadSuccess += OnAccountDataDownloaded_Event;
 		LevelProgressDataManager.OnDataLoadSuccess += OnLevelProgressDataDownloaded_Event;
+		TowerProgressDataManager.OnDataLoadSuccess += OnTowerProgressDataDownloaded_Event;
 	}
 
 	#region EVENTS
@@ -109,12 +113,23 @@ public class CurrentPlayer : Player
 		CheckAllDataDownloaded();
 	}
 
-	#endregion
+	private void OnTowerProgressDataDownloaded_Event()
+	{
+		Log("Downloaded Tower Progress Data. Username: " + Username);
+		TowerProgressDataDownloaded = true;
 
+		CheckAllDataDownloaded();
+	}
+
+	#endregion
+	/// <summary>
+	/// Checks to see if all of the player's data has downloaded. If downloaded, it will broadcast a message saying all
+	/// data has successfully downloaded
+	/// </summary>
 	private void CheckAllDataDownloaded()
 	{
 		// Check to see if all data has been downloaded
-		if(AccountDataDownloaded && ProfileDataDownlaoded && LevelProgressDataDownloaded)
+		if(AccountDataDownloaded && ProfileDataDownlaoded && LevelProgressDataDownloaded && TowerProgressDataDownloaded)
 		{
 			// Broadcast event that all of the player's data has been downloaded.
 			if(OnPlayerDataDownloaded != null)
