@@ -25,12 +25,14 @@ public class RoomDetails_Menu : MonoBehaviour
     public GameObject LevelTitle_GUILabel;
 	public Dropdown PlayerColor_GUIDropdown;
 
+	public TowerLoadoutButtonManager TowerLoadoutButtonMngr;
+
     /// <summary>
     /// Tracks GUI objects for each tower that is selected for the Loadout
     /// </summary>
-    private List<GameObject> SelectedTowerButtonList;
+    //private List<GameObject> SelectedTowerButtonList;
 
-    private List<GameObject> TowerButtonList;
+    //private List<GameObject> TowerButtonList;
     private GameObject LevelLoadoutSelection;
 
     /// <summary>
@@ -50,8 +52,8 @@ public class RoomDetails_Menu : MonoBehaviour
 
     public void Awake()
     {
-        TowerButtonList = new List<GameObject>();
-        SelectedTowerButtonList = new List<GameObject>();
+        //TowerButtonList = new List<GameObject>();
+        //SelectedTowerButtonList = new List<GameObject>();
         TowerLoadoutData = new List<TowerData>();
 		
 		PlayerColorIndexes = new int[PlayerColors.colors.Length];
@@ -197,13 +199,13 @@ public class RoomDetails_Menu : MonoBehaviour
     /// <param name="towerData">Tower data.</param>
     public void TowerButton_Click(GameObject towerButton, TowerData towerData)
     {
-        if (towerButton.GetComponent<TowerButton>().Selected)
+        /*if (towerButton.GetComponent<TowerLoadoutButton>().Selected)
         {
             SelectedTowerButtonList.Remove(towerButton);
             TowerLoadoutData.Remove(towerData);
 
             // Tell the button to unselect itself
-            towerButton.GetComponent<TowerButton>().UnselectTower();
+            towerButton.GetComponent<TowerLoadoutButton>().UnselectTower();
         }
         else
         {
@@ -212,8 +214,8 @@ public class RoomDetails_Menu : MonoBehaviour
             TowerLoadoutData.Add(towerData);
 
             // Tell the button to select itself
-            towerButton.GetComponent<TowerButton>().SelectTower();
-        }
+            towerButton.GetComponent<TowerLoadoutButton>().SelectTower();
+        }*/
     }
 
     /// <summary>
@@ -232,10 +234,7 @@ public class RoomDetails_Menu : MonoBehaviour
         // Tell the button to select itself
         LevelLoadoutSelection.GetComponent<LevelButton>().SelectLevel();
 
-        // Tell all other clients that a new level has been selected
-        //ObjPhotonView.RPC("NewLevelSelected", PhotonTargets.Others, levelData.DisplayName);
-
-		// Save the level ID for others to see in the lobby
+		// Inform players in the room a new level has been selected (This also saves the level ID for others to see in the lobby)
 		SessionManager.Instance.SetRoomCustomProperties(new Hashtable { { "L_ID", levelData.LevelID } });
 
         // Sets level to be loaded
@@ -243,7 +242,7 @@ public class RoomDetails_Menu : MonoBehaviour
         LevelSelected = true;
 
         // Update the available Towers to choose from
-        RefreshTowerButtons();
+        //RefreshTowerButtons();
 
         // Update whether or not the start button is enabled based on the current number of players in the room
         RefreshStartGameButton();
@@ -289,6 +288,7 @@ public class RoomDetails_Menu : MonoBehaviour
         // Unassign color given to the player
         UnassignColorIndex((int)player.customProperties["PlayerColorIndex"]);
 
+		// Player has left the room, update the list of current players
         RefreshPlayerNames();
 
         // Update whether or not the start button is enabled based on the current number of players in the room
@@ -324,7 +324,9 @@ public class RoomDetails_Menu : MonoBehaviour
 		// Check to see if the level changed
 		if(propertiesThatChanged["L_ID"] != null)
 		{
-			NewLevelSelected((int)propertiesThatChanged["L_ID"]);
+			// Only select a new level if the selected level is new
+			if(LevelLoadoutData != null && LevelLoadoutData.LevelID != (int)propertiesThatChanged["L_ID"])
+				NewLevelSelected((int)propertiesThatChanged["L_ID"]);
 		}
 	}
 
@@ -360,7 +362,7 @@ public class RoomDetails_Menu : MonoBehaviour
     private void LoadLevel()
     {
         // Record the Loadouts chosen by the player
-        PlayerManager.Instance.CurPlayer.SetGameLoadOut(new LoadOut(TowerLoadoutData));
+		PlayerManager.Instance.CurPlayer.SetGameLoadOut(new LoadOut(TowerLoadoutButtonMngr.GetSelectedTowerList()));
 
         // Start the game
         MenuManager.Instance.ShowStartGame(LevelLoadoutData);
@@ -552,6 +554,9 @@ public class RoomDetails_Menu : MonoBehaviour
 
     private void RefreshTowerButtons()
     {
+		TowerLoadoutButtonMngr.UpdateAvailableTowers(LevelLoadoutData);
+
+		/*
         int index = 0;
 
         // Delete all previously created buttons (and their associated data
@@ -576,7 +581,7 @@ public class RoomDetails_Menu : MonoBehaviour
                     // Instantiate a button for each tower
                     GameObject obj = Instantiate(Resources.Load("GUI/GUI_TowerDetails")) as GameObject;
 
-                    obj.GetComponent<TowerButton>().SetTowerData(td);
+                    obj.GetComponent<TowerLoadoutButton>().SetTowerData(td);
                     obj.GetComponent<Button>().onClick.AddListener(delegate { TowerButton_Click(obj, td); });
                     obj.transform.SetParent(this.transform);
                     obj.transform.localScale = new Vector3(1, 1, 1);
@@ -596,14 +601,7 @@ public class RoomDetails_Menu : MonoBehaviour
                     index++;
                 }
             }
-
-            // Disable all toggles if the player does not have an option to pick different towers
-            /*if(SelectedTowerButtonList.Count <= LevelLoadoutData.MaxTowersPerPlayer)
-            {
-                foreach(GameObject obj in SelectedTowerButtonList)
-                    obj.GetComponent<Toggle>().enabled = false;
-            }*/
-        }
+        }*/
     }
 
     private void InitiateLevelButtons()

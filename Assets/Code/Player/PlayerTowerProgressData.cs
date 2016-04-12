@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 public class PlayerTowerProgressData
 {
-	public string TowerID;
+	public int TowerID;
 	public int KillCount;
 	public int XP;
 	public float BallisticDamageDealt;
