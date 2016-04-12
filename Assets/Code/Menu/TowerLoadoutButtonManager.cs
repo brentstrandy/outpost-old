@@ -52,8 +52,6 @@ public class TowerLoadoutButtonManager : MonoBehaviour
 	/// <param name="levelData">LevelData of the currently selected level</param>
 	public void UpdateAvailableTowers(LevelData levelData)
 	{
-		Log("Updating Available Tower Loadout Buttons for [" + levelData.DisplayName + "]");
-
 		AvailableTowerList.Clear();
 
 		// Get a list of every tower the player can choose from

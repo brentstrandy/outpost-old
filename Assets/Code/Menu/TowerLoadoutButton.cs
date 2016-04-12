@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class TowerLoadoutButton : MonoBehaviour
 {
-	public bool ShowDebugLogs = true;
+	public bool ShowDebugLogs = false;
 
 	public bool Active = false;
 	public GameObject BackgroundImage;
@@ -38,8 +38,6 @@ public class TowerLoadoutButton : MonoBehaviour
 	{
 		string towerDescription = "";
 
-		Log("Setting Tower Loadout Button for [" + towerData.PrefabName + "]");
-
 		Active = true;
 		SelectedTowerData = towerData;
 		
@@ -61,8 +59,6 @@ public class TowerLoadoutButton : MonoBehaviour
 	/// </summary>
 	public void SetButtonInactive()
 	{
-		Log("Setting Tower Loadout Button Inactive");
-
 		Active = false;
 		BackgroundImage.SetActive(false);
 

@@ -36,11 +36,6 @@ public class RoomDetails_Menu : MonoBehaviour
     private GameObject LevelLoadoutSelection;
 
     /// <summary>
-    /// Tracks TowerData for each tower that is selected for the loadout
-    /// </summary>
-    private List<TowerData> TowerLoadoutData;
-
-    /// <summary>
     /// Tracks LevelData for the level that is selected for the Loadout
     /// </summary>
     private LevelData LevelLoadoutData;
@@ -52,10 +47,6 @@ public class RoomDetails_Menu : MonoBehaviour
 
     public void Awake()
     {
-        //TowerButtonList = new List<GameObject>();
-        //SelectedTowerButtonList = new List<GameObject>();
-        TowerLoadoutData = new List<TowerData>();
-		
 		PlayerColorIndexes = new int[PlayerColors.colors.Length];
 		// Initialize all player colors
 		for(int i = 0; i < PlayerColors.colors.Length; i++)
