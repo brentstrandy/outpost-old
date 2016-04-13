@@ -1,39 +1,38 @@
 fileFormatVersion: 2
-guid: 6e635de5b90794d3185e3ea214e2ae5d
-timeCreated: 1435707524
+guid: 1b75bb9a687564402aaab9130f141b54
+timeCreated: 1460509100
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: pPipe1
-    100002: pPipe2
-    100004: pSphere1
-    100006: STT_Side1
-    100008: STT_Side2
-    100010: //RootNode
-    400000: pPipe1
-    400002: pPipe2
-    400004: pSphere1
-    400006: STT_Side1
-    400008: STT_Side2
-    400010: //RootNode
-    2300000: pPipe1
-    2300002: pPipe2
-    2300004: pSphere1
-    2300006: STT_Side1
-    2300008: STT_Side2
-    3300000: pPipe1
-    3300002: pPipe2
-    3300004: pSphere1
-    3300006: STT_Side1
-    3300008: STT_Side2
-    4300000: pSphere1
-    4300002: pPipe1
-    4300004: pPipe2
-    4300006: STT_Side1
-    4300008: STT_Side2
+    100000: Gun_Barrel
+    100002: Gun_Casing
+    100004: //RootNode
+    100006: Sphere
+    100008: STT_Left_Side
+    100010: STT_Right_Side
+    400000: Gun_Barrel
+    400002: Gun_Casing
+    400004: //RootNode
+    400006: Sphere
+    400008: STT_Left_Side
+    400010: STT_Right_Side
+    2300000: Gun_Barrel
+    2300002: Gun_Casing
+    2300004: Sphere
+    2300006: STT_Left_Side
+    2300008: STT_Right_Side
+    3300000: Gun_Barrel
+    3300002: Gun_Casing
+    3300004: Sphere
+    3300006: STT_Left_Side
+    3300008: STT_Right_Side
+    4300000: STT_Right_Side
+    4300002: STT_Left_Side
+    4300004: Gun_Barrel
+    4300006: Sphere
+    4300008: Gun_Casing
     9500000: //RootNode
-    11100000: //RootNode
   materials:
     importMaterials: 0
     materialName: 0
@@ -48,7 +47,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
