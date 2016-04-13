@@ -72,7 +72,22 @@
     <BallisticDefense>0.6</BallisticDefense>
     <ThraceiumDefense>0</ThraceiumDefense>
     <InstallCost>8</InstallCost>
-    <StartupTime>5</StartupTime>
+    <StartupTime>1</StartupTime>
     <TrackingSpeed>0</TrackingSpeed>
+  </TowerData>
+  <TowerData>
+    <DisplayName>Machine Gun Turret</DisplayName>
+    <PrefabName>Axiel_MGT</PrefabName>
+    <TowerID>6</TowerID>
+    <MaxHealth>10</MaxHealth>
+    <RateOfFire>2</RateOfFire>
+    <Range>3</Range>
+    <BallisticDamage>10</BallisticDamage>
+    <ThraceiumDamage>0</ThraceiumDamage>
+    <BallisticDefense>0.3</BallisticDefense>
+    <ThraceiumDefense>0</ThraceiumDefense>
+    <InstallCost>8</InstallCost>
+    <StartupTime>1</StartupTime>
+    <TrackingSpeed>4</TrackingSpeed>
   </TowerData>
 </ArrayOfTowerData>
