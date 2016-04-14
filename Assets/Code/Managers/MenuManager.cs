@@ -22,6 +22,7 @@ public class MenuManager : MonoBehaviour
     public GameObject SplashPanel;
 
     public GameObject StartMenuPanel;
+	public GameObject FirstLoginPanel;
     public GameObject MainMenuPanel;
     public GameObject RoomDetailsPanel;
     public GameObject JoinGamePanel;
@@ -100,8 +101,6 @@ public class MenuManager : MonoBehaviour
 	{
 		// Set the CurrentLevelData (which is used by the GameManager)
 
-
-
 		LoadLevelPanel.SetActive(true);
 	}
 
@@ -133,6 +132,11 @@ public class MenuManager : MonoBehaviour
     {
         SetCurrentMenuPanel(StartMenuPanel);
     }
+
+	public void ShowFirstLoginPanel()
+	{
+		SetCurrentMenuPanel(FirstLoginPanel);
+	}
 
     public void ShowJoinGameMenu()
     {

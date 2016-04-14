@@ -26,6 +26,9 @@ public class Start_Menu : MonoBehaviour
         SessionManager.Instance.onSMAuthenticationFail += AuthenticationFailed_Event;
 		PlayerManager.Instance.OnCurPlayerDataDownloaded += PlayerDataDownloaded_Event;
 
+		// When navigating back to the Start Menu the button needs to be re-activated
+		StartButton.SetActive(true);
+
         // Automatically set the username if someone has already logged in before
         if (PlayerPrefs.HasKey("Username"))
         {
@@ -163,8 +166,11 @@ public class Start_Menu : MonoBehaviour
 
 	private void LoginToMainMenu()
 	{
-		// Transition to show the main menu
-		MenuManager.Instance.ShowMainMenu();
+		// Check to see if this is the player's first time logging in. If so, redirect to an introduction screen
+		if(PlayerManager.Instance.CurPlayer.LevelProgressDataManager.DataList.Exists(x => x.LevelID == 1))
+			MenuManager.Instance.ShowMainMenu();
+		else
+			MenuManager.Instance.ShowFirstLoginPanel();
 	}
 
     #region MessageHandling
