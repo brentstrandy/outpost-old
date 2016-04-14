@@ -15,6 +15,7 @@ public class EnemySpawnData
     public float StartTime;
     public int StartAngle;
     public int PlayerCount;
+	public int SpawnArea;
 
     [HideInInspector]
     [XmlIgnore]
@@ -30,14 +31,16 @@ public class EnemySpawnData
         StartTime = obj.StartTime;
         StartAngle = obj.StartAngle;
         PlayerCount = obj.PlayerCount;
+		SpawnArea = obj.SpawnArea;
     }
 
-    public EnemySpawnData(string enemyName, float startTime, int startAngle, int playerCount)
+	public EnemySpawnData(string enemyName, float startTime, int startAngle, int playerCount, int spawnArea)
     {
         EnemyName = enemyName;
         StartTime = startTime;
         StartAngle = startAngle;
         PlayerCount = playerCount;
+		SpawnArea = spawnArea;
     }
 
     #region MessageHandling

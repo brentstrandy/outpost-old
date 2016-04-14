@@ -309,6 +309,20 @@ public class PlayerManager : MonoBehaviour
 			if(OnEndGameDataSaved != null)
 				OnEndGameDataSaved();
 		}
+
+		// TODO: Loop through each tower in the current player's loadout and save the stats to the server
+		foreach(TowerData td in CurPlayer.GameLoadOut.Towers)
+		{
+			form = new WWWForm();
+			form.AddField("accountID", CurPlayer.AccountID.ToString());
+			form.AddField("towerID", td.TowerID.ToString());
+			form.AddField("killCount", "0");
+			form.AddField("ballisticDamage", "0");
+			form.AddField("thraceiumDamage", "0");
+			form.AddField("xp", "100");
+
+			www = new WWW("http://www.diademstudios.com/outpostdata/Action_UpdatePlayerTowerProgress.php", form);
+		}
     }
 
     public List<TowerData> GetGameLoadOutTowers()
