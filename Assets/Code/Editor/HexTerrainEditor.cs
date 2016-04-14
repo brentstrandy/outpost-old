@@ -93,18 +93,26 @@ public class HexMeshEditor : Editor
 
             GUILayout.EndHorizontal();
 
+            terrain.HideLayers();
+
             // Trigger the setters
             IsEditingSurface = GUILayout.Toggle(IsEditingSurface, "Edit Surface", "Button");
             if (IsEditingSurface)
             {
                 GUILayout.Label("Boundary Brushes");
-                Brush = Brush.Toolbar(GUILayout.MinWidth(50f), HexMeshBrush.Inclusion);
+                Brush = Brush.Toolbar(GUILayout.MinWidth(50f), HexMeshBrush.Inclusion, HexMeshBrush.Passable, HexMeshBrush.Buildable);
 
                 GUILayout.Label("Basic Brushes");
                 Brush = Brush.Toolbar(GUILayout.ExpandWidth(false), HexMeshBrush.Flat, HexMeshBrush.Hill, HexMeshBrush.Smoothing, HexMeshBrush.Noise);
 
                 GUILayout.Label("Tilt Brushes");
                 Brush = Brush.Toolbar(GUILayout.ExpandWidth(false), HexMeshBrush.TiltAdditive, HexMeshBrush.TiltExclusive);
+
+                if (Brush.IsLayerBrush())
+                {
+                    terrain.BuildLayer(Brush.Layer());
+                    terrain.BuildLayer(TerrainLayer.Obstacle);
+                }
 
                 //GUILayout.SelectionGrid(0, new string[] { "Flat", "Hill", "Smoothing", "Noise", "Tilt (Additive)" }, 3, GUILayout.MinWidth(200f), GUILayout.ExpandWidth(false));
 
@@ -221,6 +229,28 @@ public class HexMeshEditor : Editor
                                         terrain.Mesh.Remove(coords);
                                     }
                                     break;
+                                case HexMeshBrush.Passable:
+                                    if (state)
+                                    {
+                                        terrain.Layers[TerrainLayer.Passable].UnionWith(coords);
+                                    }
+                                    else
+                                    {
+                                        terrain.Layers[TerrainLayer.Passable].ExceptWith(coords);
+                                    }
+                                    terrain.BuildLayer(Brush.Layer());
+                                    break;
+                                case HexMeshBrush.Buildable:
+                                    if (state)
+                                    {
+                                        terrain.Layers[TerrainLayer.Buildable].UnionWith(coords);
+                                    }
+                                    else
+                                    {
+                                        terrain.Layers[TerrainLayer.Buildable].ExceptWith(coords);
+                                    }
+                                    terrain.BuildLayer(Brush.Layer());
+                                    break;
                                 case HexMeshBrush.Flat:
                                     terrain.Map.Surface.ChangeDistance(coords, offset);
                                     break;
@@ -256,7 +286,6 @@ public class HexMeshEditor : Editor
                         }
                     }
 
-                    overlay.Color = Color.cyan;
                     overlay.Set(HexKit.WithinRange(coord, BrushRadius - 1, false));
                     overlay.Show();
                 }

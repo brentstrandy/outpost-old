@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(HexLocation))]
 public class TerrainFeature : MonoBehaviour
 {
-    public bool Impassable = true;
+    public bool Obstacle = true;
     public int Radius = 1;
 
     public TerrainPinningMode TerrainPinning
@@ -28,20 +28,20 @@ public class TerrainFeature : MonoBehaviour
 
     private void Start()
     {
-        if (Application.isPlaying)
-        {
+        //if (Application.isPlaying)
+        //{
             var hexLocation = GetComponent<HexLocation>();
             hexLocation.ApplyPosition();
-            if (Impassable)
+            if (Obstacle)
             {
                 var terrain = GetTerrain();
                 foreach (var coord in HexKit.WithinRange(hexLocation.location, Radius - 1))
                 {
                     //Debug.Log("Adding " + coord.ToString() + " to impassable list on account of impassable terrain feature.");
-                    terrain.Layers[TerrainLayer.Impassable].Add(coord);
+                    terrain.Layers[TerrainLayer.Obstacle].Add(coord);
                 }
             }
-        }
+        //}
     }
 
     private void Update()

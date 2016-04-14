@@ -213,13 +213,7 @@ public class PlayerInteractionManager : MonoBehaviour
 		}
 
 		// Is the coordinate within the placement range of our facility?
-		if (!GameManager.Instance.TerrainMesh.InPlacementRange(coord))
-		{
-			return false;
-		}
-
-		// Is the terrain impassable?
-		if (GameManager.Instance.TerrainMesh.IsImpassable(coord))
+		if (!GameManager.Instance.TerrainMesh.IsBuildable(coord))
 		{
 			return false;
 		}
@@ -429,13 +423,7 @@ public class PlayerInteractionManager : MonoBehaviour
 		}
 
 		// Is the coordinate within the placement range of our facility?
-		if (!GameManager.Instance.TerrainMesh.InPlacementRange(coord))
-		{
-			return false;
-		}
-
-		// Is the terrain impassable?
-		if (GameManager.Instance.TerrainMesh.IsImpassable(coord))
+		if (!GameManager.Instance.TerrainMesh.IsBuildable(coord))
 		{
 			return false;
 		}

@@ -20,6 +20,12 @@ public class HexMeshOverlayDictionary<TKey> : IEnumerable<HexMeshOverlay> where 
         Overlays.Add(key, new HexMeshOverlay(name, offset, Parent, shader, builder));
     }
 
+    public void Add(TKey key, string name, string shader, HexMeshBuilder builder, Color defaultColor)
+    {
+        float offset = -0.01f * (float)(Convert.ToInt32(key) + 1);
+        Overlays.Add(key, new HexMeshOverlay(name, offset, Parent, shader, builder, defaultColor));
+    }
+
     public HexMeshOverlay this[TKey key]
     {
         get

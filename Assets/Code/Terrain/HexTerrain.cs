@@ -44,6 +44,10 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
     public Color OutlineColor = Color.yellow;
     public float HighlightWidth = 0.1f;
     public Color HighlightColor = Color.red;
+    private Color EditorColor = Color.cyan;
+    private Color PassableColor = Color.green;
+    private Color BuildableColor = Color.blue;
+    private Color ObstacleColor = Color.red;
 
     public HexTerrainMesh Mesh;
 
@@ -188,11 +192,14 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
             Overlays.Clear();
         }
 
-        Overlays.Add(TerrainOverlay.Outline, "TerrainOutline", "Standard", CreateOverlayBuilder(OutlineWidth));
-        Overlays.Add(TerrainOverlay.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth));
+        Overlays.Add(TerrainOverlay.Outline, "TerrainOutline", "Standard", CreateOverlayBuilder(OutlineWidth), OutlineColor);
+        Overlays.Add(TerrainOverlay.Highlight, "TerrainHighlight", "Standard", CreateOverlayBuilder(HighlightWidth), HighlightColor);
         Overlays.Add(TerrainOverlay.Selection, "TerrainSelection", "Standard", CreateOverlayBuilder(HighlightWidth));
         Overlays.Add(TerrainOverlay.Pathfinding, "TerrainPathfinding", "Standard", CreateOverlayBuilder(HighlightWidth));
-        Overlays.Add(TerrainOverlay.Editor, "TerrainEditor", "Standard", CreateOverlayBuilder(HighlightWidth));
+        Overlays.Add(TerrainOverlay.Editor, "TerrainEditor", "Standard", CreateOverlayBuilder(HighlightWidth), EditorColor);
+        Overlays.Add(TerrainOverlay.Passable, "TerrainPassable", "Standard", CreateOverlayBuilder(Map.DetailWidth), PassableColor);
+        Overlays.Add(TerrainOverlay.Buildable, "TerrainBuildable", "Standard", CreateOverlayBuilder(Map.DetailWidth), BuildableColor);
+        Overlays.Add(TerrainOverlay.Obstacle, "TerrainObstacle", "Standard", CreateOverlayBuilder(Map.DetailWidth), ObstacleColor);
 
         BuildOutlines();
     }
@@ -200,7 +207,6 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
     public void BuildOutlines()
     {
         var outlines = Overlays[TerrainOverlay.Outline][0];
-        outlines.Color = OutlineColor;
         outlines.Set(WithinPlacementRange());
         outlines.Show();
     }
@@ -215,6 +221,53 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
     {
         var outlines = Overlays[TerrainOverlay.Outline][0];
         outlines.Update(coords);
+    }
+
+    public void BuildLayers()
+    {
+        foreach (TerrainLayer layer in Enum.GetValues(typeof(TerrainLayer)))
+        {
+            BuildLayer(layer);
+        }
+    }
+
+    public void BuildLayer(TerrainLayer layer)
+    {
+        var overlay = Overlays[layer.Overlay()][0];
+        overlay.Set(Layers[layer]);
+        overlay.Show();
+    }
+
+    public void UpdateLayer(TerrainLayer layer)
+    {
+        var overlay = Overlays[layer.Overlay()][0];
+        overlay.Update(Layers[layer]);
+    }
+
+    public void ShowLayers()
+    {
+        foreach (TerrainLayer layer in Enum.GetValues(typeof(TerrainLayer)))
+        {
+            ShowLayer(layer);
+        }
+    }
+
+    public void ShowLayer(TerrainLayer layer)
+    {
+        Overlays[layer.Overlay()][0].Show();
+    }
+
+    public void HideLayers()
+    {
+        foreach (TerrainLayer layer in Enum.GetValues(typeof(TerrainLayer)))
+        {
+            HideLayer(layer);
+        }
+    }
+
+    public void HideLayer(TerrainLayer layer)
+    {
+        Overlays[layer.Overlay()][0].Hide();
     }
 
     /*
@@ -264,9 +317,14 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
-    public bool IsImpassable(HexCoord coord)
+    public bool IsPassable(HexCoord coord)
     {
-        return Layers[TerrainLayer.Impassable].Contains(coord);
+        return Map.Coords.Contains(coord) && Layers[TerrainLayer.Passable].Contains(coord) && !Layers[TerrainLayer.Obstacle].Contains(coord);
+    }
+
+    public bool IsBuildable(HexCoord coord)
+    {
+        return Map.Coords.Contains(coord) && Layers[TerrainLayer.Buildable].Contains(coord) && !Layers[TerrainLayer.Obstacle].Contains(coord);
     }
 
     private HexMeshBuilder CreateBaseMeshBuilder()

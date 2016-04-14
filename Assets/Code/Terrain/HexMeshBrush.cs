@@ -4,6 +4,8 @@ using System.Collections;
 public enum HexMeshBrush
 {
     Inclusion,
+    Passable,
+    Buildable,
     Flat,
     Hill,
     TiltAdditive,
@@ -34,5 +36,30 @@ public static class HexMeshBrushExtensions
         }
         selection = GUILayout.Toolbar(selection, labels);
         return selection >= 0 ? types[selection] : brush;
+    }
+
+    public static bool IsLayerBrush(this HexMeshBrush brush)
+    {
+        switch (brush)
+        {
+            case HexMeshBrush.Passable:
+            case HexMeshBrush.Buildable:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static TerrainLayer Layer(this HexMeshBrush brush)
+    {
+        switch (brush)
+        {
+            case HexMeshBrush.Passable:
+                return TerrainLayer.Passable;
+            case HexMeshBrush.Buildable:
+                return TerrainLayer.Buildable;
+            default:
+                return TerrainLayer.Passable;
+        }
     }
 }

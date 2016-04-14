@@ -49,6 +49,7 @@ public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
 
     public string Name { get; private set; }
     public float Offset { get; private set; }
+    public Color DefaultColor { get; private set; }
 
     private GameObject Parent;
     private Shader OverlayShader;
@@ -56,12 +57,17 @@ public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
     private Dictionary<int, Entry> Lookup;
 
     public HexMeshOverlay(string name, float offset, GameObject parent, string shader, HexMeshBuilder builder)
+        : this(name, offset, parent, shader, builder, default(Color))
+    {}
+
+    public HexMeshOverlay(string name, float offset, GameObject parent, string shader, HexMeshBuilder builder, Color defaultColor)
     {
         Name = name;
         Offset = offset;
         Parent = parent;
         OverlayShader = Shader.Find(shader);
         Builder = builder;
+        DefaultColor = defaultColor;
         Lookup = new Dictionary<int, Entry>(8);
     }
 
@@ -125,6 +131,7 @@ public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
             {
                 string name = Name + " " + index.ToString();
                 entry = new Entry(Parent, name, Offset, OverlayShader, Builder);
+                entry.Color = DefaultColor;
                 Lookup.Add(index, entry);
             }
             return entry;

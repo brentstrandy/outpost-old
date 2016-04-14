@@ -4,5 +4,8 @@
     Highlight,
     Selection,
     Pathfinding,
-    Editor
+    Passable,
+    Buildable,
+    Obstacle,
+    Editor,
 }

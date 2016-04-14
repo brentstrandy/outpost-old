@@ -141,7 +141,7 @@ public class Pathfinder : MonoBehaviour
             return true;
         }
 
-        if (GameManager.Instance.TerrainMesh.IsImpassable(coord))
+        if (!GameManager.Instance.TerrainMesh.IsPassable(coord))
         {
             return true;
         }
