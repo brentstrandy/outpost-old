@@ -14,14 +14,23 @@ public class Pathfinder : MonoBehaviour
 {
     public delegate void PathfindingFailureHandler();
 
+    public const int MaxPathfindingDistance = 96;
+
     public bool ShowDebugLogs = false;
     public bool ShowPath = false;
 
     [SerializeField]
-    public bool AvoidTowers;
+    public int ObstacleCost = 100000;
 
     [SerializeField]
-    public bool AvoidTowerCoverage;
+    public int TowerCost = 1000;
+
+    [SerializeField]
+    public int TowerCoverageCost = 1;
+
+    [SerializeField]
+    [Range(1, 1000)]
+    public int BaseCost = 3;
 
     [SerializeField]
     public bool AvoidEnemies;
@@ -29,11 +38,23 @@ public class Pathfinder : MonoBehaviour
     [SerializeField]
     public HexCoord Target;
 
+    /*
     [SerializeField]
     public int MaxDistanceFromTarget = 24;
 
     [SerializeField]
     public int MaxDistanceFromLocation = 24;
+    */
+
+    [SerializeField]
+    public float MaxUphill = 0.5f;
+
+    [SerializeField]
+    public float MaxDownhill = 2f;
+
+    [SerializeField]
+    [Range(1, 12)]
+    public int Precision = 6;
 
     public HexPathNode[] Path;
 
@@ -60,15 +81,11 @@ public class Pathfinder : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        if (AvoidTowers || AvoidTowerCoverage)
+        int towerState = GameManager.Instance.TowerManager.State;
+        if (SolvedTowerState != towerState)
         {
-            int towerState = GameManager.Instance.TowerManager.State;
-            if (SolvedTowerState != towerState)
-            {
-                SolvedTowerState = towerState;
-                Log("Solving after tower change");
-                Solve();
-            }
+            SolvedTowerState = towerState;
+            Solve();
         }
 
         // If the state of the pathfinder overlay has changed, update the overlay
@@ -87,20 +104,9 @@ public class Pathfinder : MonoBehaviour
     public bool Solve()
     {
         HexCoord origin = ObjHexLocation.location;
-        bool success = false;
+        bool success = HexKit.Path(out Path, origin, IsTarget, MoveCost);
 
-        // If we're configured to avoid tower coverage, make an attempt to find a path that avoids both obstacles and tower coverage
-        if (AvoidTowerCoverage && HexKit.Path(out Path, origin, Target, (n, c) => MoveCost(n, c, avoidObstacles: true, avoidTowers: true, avoidTowerCoverage: true)))
-        {
-            success = true;
-        }
-        // If we're configured to avoid towers, make an attempt to find a path that avoids both obstacles and towers
-        else if (AvoidTowers && HexKit.Path(out Path, origin, Target, (n, c) => MoveCost(n, c, avoidObstacles: true, avoidTowers: true, avoidTowerCoverage: false)))
-        {
-            success = true;
-        }
-        // If all else fails, attempt to find a path that at least avoids obstacles
-        else if (HexKit.Path(out Path, origin, Target, (n, c) => MoveCost(n, c, avoidObstacles: true, avoidTowers: false, avoidTowerCoverage: false)))
+        if (HexKit.Path(out Path, origin, Target, MoveCost))
         {
             success = true;
         }
@@ -118,7 +124,7 @@ public class Pathfinder : MonoBehaviour
         // Update our pathfinding overlay
         UpdatePathOverlay();
 
-        if (success)
+        if (!success)
         {
             if (OnPathfindingFailure != null)
             {
@@ -129,21 +135,34 @@ public class Pathfinder : MonoBehaviour
         return success;
     }
 
-    public uint MoveCost(HexPathNode node, HexCoord coord, bool avoidObstacles, bool avoidTowers, bool avoidTowerCoverage)
+    public bool IsTarget(HexCoord coord)
     {
-        if (avoidObstacles && IsObstacle(coord))
+        return coord == Target;
+    }
+
+    public uint MoveCost(HexPathNode node, HexCoord coord)
+    {
+        if (HexCoord.Distance(ObjHexLocation.location, coord) > MaxPathfindingDistance)
         {
             return 0;
         }
 
-        if (avoidTowers && GameManager.Instance.TowerManager.HasTower(coord))
+        int cost = 1;
+
+        if (IsObstacle(coord))
         {
-            return 0;
+            cost += ObstacleCost;
         }
 
-        if (avoidTowerCoverage && GameManager.Instance.TowerManager.Coverage(coord) > 0)
+        if (GameManager.Instance.TowerManager.HasTower(coord))
         {
-            return 0;
+            cost += TowerCost;
+        }
+
+        int coverage = GameManager.Instance.TowerManager.Coverage(coord);
+        if (coverage > 0)
+        {
+            cost += TowerCoverageCost * coverage;
         }
 
         if (node.Ancestor != coord)
@@ -156,69 +175,22 @@ public class Pathfinder : MonoBehaviour
             // everything to use the same max elevation change.
 
             var surface = GameManager.Instance.TerrainMesh.Map.Surface;
-            float elevationChange = surface[coord].distance - surface[node.Ancestor].distance; // Uphill movements will will be negative because -z is up
-            if (elevationChange < -0.6f)
+            foreach (float change in surface.Diff(node.Ancestor, coord, Precision))
             {
-                return 0;
+                float c = -change; // Invert because -z is up
+                if (c > MaxUphill || c < -MaxDownhill)
+                {
+                    cost += ObstacleCost;
+                }
             }
         }
 
-        return 1;
+        return (uint)cost;
     }
 
     public bool IsObstacle(HexCoord coord)
     {
-        if (HexCoord.Distance(ObjHexLocation.location, coord) > MaxDistanceFromLocation)
-        {
-            return true;
-        }
-
-        if (HexCoord.Distance(coord, Target) > MaxDistanceFromTarget)
-        {
-            return true;
-        }
-
         if (!GameManager.Instance.TerrainMesh.IsPassable(coord))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool IsObstacleOrTower(HexCoord coord)
-    {
-        if (IsObstacle(coord))
-        {
-            return true;
-        }
-
-        if (GameManager.Instance.TowerManager.HasTower(coord))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool IsObstacleOrTowerCoverage(HexCoord coord)
-    {
-        if (AvoidTowers)
-        {
-            if (IsObstacleOrTower(coord))
-            {
-                return true;
-            }
-        }
-        else
-        {
-            if (IsObstacle(coord))
-            {
-                return true;
-            }
-        }
-
-        if (GameManager.Instance.TowerManager.Coverage(coord) > 0)
         {
             return true;
         }
@@ -258,6 +230,7 @@ public class Pathfinder : MonoBehaviour
                 AddPathOverlay();
             }
             Overlay.Set(EnumeratePath());
+            Overlay.Show();
         }
         else if (Overlay != null)
         {
@@ -303,6 +276,8 @@ public class Pathfinder : MonoBehaviour
                 output += " ";
             }
             output += Path[i].Location.ToString();
+            output += ":";
+            output += Path[i].PathCost.ToString();
         }
         return output;
     }

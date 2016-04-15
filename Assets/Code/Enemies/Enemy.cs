@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour
             var destination = (Vector3)DestinationHex;
             if (GameManager.Instance.TerrainMesh != null)
             {
-                destination = GameManager.Instance.TerrainMesh.IntersectPosition(destination, EnemyAttributes.HoverDistance);
+                destination.z = GameManager.Instance.TerrainMesh.Map.Surface.Intersect(DestinationHex) - EnemyAttributes.HoverDistance; // Note: Up is negative Z
             }
             return destination;
         }
@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour
                 ObjPathfinder = gameObject.GetComponent<Pathfinder>();
 
             // By default, avoid towers
-            ObjPathfinder.AvoidTowers = true;
+            //ObjPathfinder.AvoidTowers = true;
             ObjPathfinder.OnPathfindingFailure = OnPathfindingFailure;
 
             if (gameObject.GetComponent<HexLocation>() == null)
