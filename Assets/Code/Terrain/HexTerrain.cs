@@ -73,6 +73,8 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
         MakeReady();
         //UpdateOutlines();
+        Layers[TerrainLayer.Passable].UnionWith(Map.Coords);
+        Layers[TerrainLayer.Buildable].UnionWith(WithinPlacementRange());
     }
 
     public Vector3 IntersectPosition(Vector3 pos, float offset = 0f)
