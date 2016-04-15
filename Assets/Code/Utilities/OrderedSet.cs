@@ -56,7 +56,7 @@ public class OrderedSet<T> : ICollection<T>, IEnumerable<T>, IEnumerable, ISeria
     {
         for (int i = startingIndex; i < Values.Count; i++)
         {
-            Lookup.Add(Values[i], i);
+            Lookup[Values[i]] = i;
         }
     }
 
