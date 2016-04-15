@@ -8,6 +8,11 @@ public class HexMeshOverlayDictionary<TKey> : IEnumerable<HexMeshOverlay> where 
     private Dictionary<TKey, HexMeshOverlay> Overlays;
     private GameObject Parent;
 
+    public int Count
+    {
+        get { return Overlays.Count; }
+    }
+
     public HexMeshOverlayDictionary(GameObject parent)
     {
         Parent = parent;

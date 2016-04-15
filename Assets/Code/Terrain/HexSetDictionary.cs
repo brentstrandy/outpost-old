@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using UnityEngine;
+using System;
 
 [Serializable]
 public class HexSetDictionary<TKey> : OrderedDictionary<TKey, HexSetDictionary<TKey>.Entry> where TKey : struct, IConvertible

@@ -71,9 +71,7 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
     {
         gameObject.layer = LayerMask.NameToLayer("Terrain");
 
-        CreateMesh();
-        Mesh.Set(Map.Coords);
-        CreateOverlays();
+        MakeReady();
         //UpdateOutlines();
     }
 
@@ -103,6 +101,8 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
     public bool IntersectRay(Ray ray, out RaycastHit hit, out HexCoord coord)
     {
+        MakeReady();
+
         // TODO: Use Physics.Raycast instead, which should work correctly even when more than one mesh intersects the ray
         foreach (var obj in Mesh.Objects)
         {
@@ -157,7 +157,7 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
         Map.Coords.UnionWith(HexKit.WithinRect(bounds[0], bounds[1]));
 
         Mesh.Set(Map.Coords);
-        CreateOverlays();
+        BuildOverlays();
         //UpdateOutlines();
     }
 
@@ -173,15 +173,21 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
-    public void CreateMesh()
+    public void MakeReady()
     {
         if (Mesh == null)
         {
             Mesh = new HexTerrainMesh(gameObject, "TerrainMesh", CreateBaseMeshBuilder());
+            Mesh.Set(Map.Coords);
+        }
+
+        if (Overlays == null)
+        {
+            BuildOverlays();
         }
     }
 
-    public void CreateOverlays()
+    public void BuildOverlays()
     {
         if (Overlays == null)
         {
@@ -267,7 +273,10 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
     public void HideLayer(TerrainLayer layer)
     {
-        Overlays[layer.Overlay()][0].Hide();
+        if (Overlays != null && Overlays.Count > 0)
+        {
+            Overlays[layer.Overlay()][0].Hide();
+        }
     }
 
     /*
@@ -577,6 +586,7 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
     public void OnBeforeSerialize()
     {
+
     }
 
     public void OnAfterDeserialize()

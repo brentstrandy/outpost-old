@@ -73,6 +73,9 @@ public class HexMeshEditor : Editor
         {
             HexTerrain terrain = (HexTerrain)target;
 
+            terrain.MakeReady();
+            terrain.HideLayers();
+
             GUILayout.BeginHorizontal();
 
             // Trigger the setters
@@ -92,8 +95,6 @@ public class HexMeshEditor : Editor
             }
 
             GUILayout.EndHorizontal();
-
-            terrain.HideLayers();
 
             // Trigger the setters
             IsEditingSurface = GUILayout.Toggle(IsEditingSurface, "Edit Surface", "Button");
@@ -155,10 +156,8 @@ public class HexMeshEditor : Editor
 
             HexTerrain terrain = (HexTerrain)target;
 
-            if (terrain.Overlays == null)
-            {
-                terrain.CreateOverlays();
-            }
+            terrain.MakeReady();
+
             var overlay = terrain.Overlays[TerrainOverlay.Editor][0];
 
             bool shouldHaveFocus = IsEditingSurface && Event.current.control;
