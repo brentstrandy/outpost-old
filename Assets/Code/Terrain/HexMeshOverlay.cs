@@ -43,6 +43,8 @@ public class HexMeshOverlay : IEnumerable<HexMeshOverlay.Entry>
             renderer.receiveShadows = false;
             renderer.enabled = false;
 
+            instance.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
+
             return instance;
         }
     }
