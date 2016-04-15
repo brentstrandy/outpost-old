@@ -49,6 +49,42 @@ public class HexSurface : OrderedDictionary<HexCoord, HexPlane>
         }
     }
 
+    public float Intersect(Vector2 pos)
+    {
+        return this[HexCoord.AtPosition(pos)].Intersect(pos);
+    }
+
+    // Diff returns the difference in elevation between from and to.
+    public float Diff(HexCoord from, HexCoord to)
+    {
+        float a = this[from].distance;
+        float b = this[to].distance;
+        return b - a;
+    }
+
+    // Diff returns the differences in elevation between from and to when moving
+    // on a straight line between them and taking the specified number of steps.
+    public IEnumerable<float> Diff(HexCoord from, HexCoord to, int steps)
+    {
+        if (steps < 1)
+        {
+            throw new ArgumentOutOfRangeException("steps", steps, "cannot be less than 1");
+        }
+
+        Vector2 start = from.Position();
+        Vector2 end = to.Position();
+
+        float stride = 1.0f / (float)steps;
+        float last = Intersect(start);
+
+        for (float t = stride; t <= 1.00001f; t += stride) // Handles rounding errors
+        {
+            float current = Intersect(Vector2.Lerp(start, end, t));
+            yield return current - last;
+            last = current;
+        }
+    }
+
     public Vector3 Normal(HexCoord coord)
     {
         return this[coord].normal;
