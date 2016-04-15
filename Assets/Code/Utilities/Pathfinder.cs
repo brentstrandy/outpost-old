@@ -146,6 +146,23 @@ public class Pathfinder : MonoBehaviour
             return 0;
         }
 
+        if (node.Ancestor != coord)
+        {
+            // TODO: Performa a series of HexPlane.Intersect calls along a straight line between
+            // the two plots, checking the elevation change between each step. This will allow
+            // oblique surfaces that are actually a smooth hill to be evaluated properly.
+
+            // TODO: Cache viable directions for each plot on scene load? This would require
+            // everything to use the same max elevation change.
+
+            var surface = GameManager.Instance.TerrainMesh.Map.Surface;
+            float elevationChange = surface[coord].distance - surface[node.Ancestor].distance; // Uphill movements will will be negative because -z is up
+            if (elevationChange < -0.6f)
+            {
+                return 0;
+            }
+        }
+
         return 1;
     }
 
