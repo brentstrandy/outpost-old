@@ -59,7 +59,10 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
+    [SerializeField]
     public TerrainLayerSet Layers;
+
+    [NonSerialized]
     public TerrainOverlaySet Overlays;
 
     //protected int[] Triangles = new int[] { 0, 1, 5, 1, 2, 5, 2, 4, 5, 2, 3, 4 };

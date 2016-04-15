@@ -6,6 +6,7 @@ using Settworks.Hexagons;
 public struct HexPlane
 {
     public static readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
+    public static readonly Vector3 Down = new Vector3(0.0f, 0.0f, 1.0f);
 
     public HexCoord coord;
     public float distance;
@@ -49,7 +50,7 @@ public struct HexPlane
 
         // Prepare a ray from p that fires straight down toward the plane
         // The large offset is here to be sure we always start on the correct side of the plane (otherwise the raycast will fail)
-        Ray ray = new Ray(new Vector3(p.x, p.y, -1000.0f), Vector3.forward);
+        Ray ray = new Ray(new Vector3(p.x, p.y, -1000.0f), Down);
 
         // Raycast the ray against the loosely fit plane, and then use the intersection as our distance
         float hit;
