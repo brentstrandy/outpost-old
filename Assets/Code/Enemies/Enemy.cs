@@ -698,7 +698,7 @@ public class Enemy : MonoBehaviour
     {
         // Instantiate a prefab containing an FMOD_OneShot of enemy's explosion sound.
         if (ExplodingEffect)
-            Instantiate(ExplodingEffect, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1.32f), this.transform.rotation);
+			Instantiate(ExplodingEffect, this.transform.position, Quaternion.identity);
 
         // Tell the enemy manager this enemy is being destroyed
         GameManager.Instance.EnemyManager.RemoveActiveEnemy(this);
