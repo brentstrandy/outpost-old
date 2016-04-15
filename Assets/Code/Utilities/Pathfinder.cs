@@ -90,17 +90,17 @@ public class Pathfinder : MonoBehaviour
         bool success = false;
 
         // If we're configured to avoid tower coverage, make an attempt to find a path that avoids both obstacles and tower coverage
-        if (AvoidTowerCoverage && HexKit.Path(out Path, origin, Target, IsObstacleOrTowerCoverage))
+        if (AvoidTowerCoverage && HexKit.Path(out Path, origin, Target, (n, c) => MoveCost(n, c, avoidObstacles: true, avoidTowers: true, avoidTowerCoverage: true)))
         {
             success = true;
         }
         // If we're configured to avoid towers, make an attempt to find a path that avoids both obstacles and towers
-        else if (AvoidTowers && HexKit.Path(out Path, origin, Target, IsObstacleOrTower))
+        else if (AvoidTowers && HexKit.Path(out Path, origin, Target, (n, c) => MoveCost(n, c, avoidObstacles: true, avoidTowers: true, avoidTowerCoverage: false)))
         {
             success = true;
         }
         // If all else fails, attempt to find a path that at least avoids obstacles
-        else if (HexKit.Path(out Path, origin, Target, IsObstacle))
+        else if (HexKit.Path(out Path, origin, Target, (n, c) => MoveCost(n, c, avoidObstacles: true, avoidTowers: false, avoidTowerCoverage: false)))
         {
             success = true;
         }
@@ -127,6 +127,26 @@ public class Pathfinder : MonoBehaviour
         }
 
         return success;
+    }
+
+    public uint MoveCost(HexPathNode node, HexCoord coord, bool avoidObstacles, bool avoidTowers, bool avoidTowerCoverage)
+    {
+        if (avoidObstacles && IsObstacle(coord))
+        {
+            return 0;
+        }
+
+        if (avoidTowers && GameManager.Instance.TowerManager.HasTower(coord))
+        {
+            return 0;
+        }
+
+        if (avoidTowerCoverage && GameManager.Instance.TowerManager.Coverage(coord) > 0)
+        {
+            return 0;
+        }
+
+        return 1;
     }
 
     public bool IsObstacle(HexCoord coord)
