@@ -1,15 +1,42 @@
 fileFormatVersion: 2
-guid: 35c3ccfd26f944acd88cb2b6834ec9ae
-timeCreated: 1452231554
+guid: f1ab58ff50935440894d7a44dcf405e4
+timeCreated: 1461043281
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Landdrone_1
+    100000: Cockpit
+    100002: Engine_Armor_Left
+    100004: Engine_Armor_Right
+    100006: Engines
+    100008: //RootNode
+    100010: Middle_Cockpit
+    100012: Rear_Cockpit
+    400000: Cockpit
+    400002: Engine_Armor_Left
+    400004: Engine_Armor_Right
+    400006: Engines
+    400008: //RootNode
+    400010: Middle_Cockpit
+    400012: Rear_Cockpit
+    2300000: Cockpit
+    2300002: Engine_Armor_Left
+    2300004: Engine_Armor_Right
+    2300006: Engines
+    2300008: Middle_Cockpit
+    2300010: Rear_Cockpit
+    3300000: Cockpit
+    3300002: Engine_Armor_Left
+    3300004: Engine_Armor_Right
+    3300006: Engines
+    3300008: Middle_Cockpit
+    3300010: Rear_Cockpit
+    4300000: Cockpit
+    4300002: Middle_Cockpit
+    4300004: Engine_Armor_Left
+    4300006: Engines
+    4300008: Engine_Armor_Right
+    4300010: Rear_Cockpit
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -35,7 +62,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.5
+    globalScale: 0.7
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
