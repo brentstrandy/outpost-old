@@ -122,6 +122,7 @@ public class CurrentPlayer : Player
 	}
 
 	#endregion
+
 	/// <summary>
 	/// Checks to see if all of the player's data has downloaded. If downloaded, it will broadcast a message saying all
 	/// data has successfully downloaded
@@ -135,6 +136,27 @@ public class CurrentPlayer : Player
 			if(OnPlayerDataDownloaded != null)
 				OnPlayerDataDownloaded();
 		}
+	}
+
+	/// <summary>
+	/// Gets the Player's progress data for the specified levelID. Will return null if the player has no progress for this level
+	/// </summary>
+	/// <returns>The PlayerLevelProgressData</returns>
+	/// <param name="levelID">Level ID for the level to find</param>
+	public PlayerLevelProgressData LevelProgressData(string levelID)
+	{
+		int intLevelID;
+
+		// Attempt to convert the string to an int and find the PlayerLevelProgressData
+		if(int.TryParse(levelID, out intLevelID) != false)
+			return LevelProgressData(intLevelID);
+		else
+			return null;
+	}
+
+	public PlayerLevelProgressData LevelProgressData(int levelID)
+	{
+		return LevelProgressDataManager.DataList.Find(x => x.LevelID == levelID);
 	}
 
 	public void PurchaseTower(int price)

@@ -5,6 +5,8 @@ public class LevelButton : MonoBehaviour
 {
     public bool ShowDebugLogs = true;
 
+	public bool Selectable { get; private set; }
+
     public GameObject BackgroundImage;
     public GameObject LevelText;
     public GameObject SelectedImage;
@@ -17,24 +19,37 @@ public class LevelButton : MonoBehaviour
     {
         string levelDescription = "";
 
-        // Set background image based on level
-        BackgroundImage.GetComponent<Image>().sprite = Resources.Load("GUI/" + levelData.SceneName + "_Mug", typeof(Sprite)) as Sprite;
+		// Set background image based on level
+		BackgroundImage.GetComponent<Image>().sprite = Resources.Load("GUI/" + levelData.SceneName + "_Mug", typeof(Sprite)) as Sprite;
 
-        // Set level details
-        if (levelData.MinimumPlayers == 1 && levelData.MaximumPlayers == 1)
-            levelDescription = levelData.DisplayName + "\n[1 Player]";
-        else if (levelData.MinimumPlayers == levelData.MaximumPlayers)
-            levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " Players]";
-        else
-            levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
+		// Check to see if the player has met the requirements for playing this level
+		if(levelData.PrereqLevel == "NONE" || PlayerManager.Instance.CurPlayer.LevelProgressData(levelData.PrereqLevel) != null)
+		{
+			Selectable = true;
 
-        PlayerLevelProgressData lpd = PlayerManager.Instance.CurPlayer.LevelProgressDataManager.DataList.Find(x => x.LevelID == levelData.LevelID);
-        if (lpd != null)
-            levelDescription += "\n[Score: " + lpd.Score.ToString() + "]";
-        else
-            levelDescription += "\n[Not Played]";
+	        // Set level details
+	        if (levelData.MinimumPlayers == 1 && levelData.MaximumPlayers == 1)
+	            levelDescription = levelData.DisplayName + "\n[1 Player]";
+	        else if (levelData.MinimumPlayers == levelData.MaximumPlayers)
+	            levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " Players]";
+	        else
+	            levelDescription = levelData.DisplayName + "\n[" + levelData.MinimumPlayers + " - " + levelData.MaximumPlayers + " Players]";
 
-        LevelText.GetComponent<Text>().text = levelDescription;
+        	PlayerLevelProgressData lpd = PlayerManager.Instance.CurPlayer.LevelProgressData(levelData.LevelID);
+        
+			if (lpd != null)
+            	levelDescription += "\n[Score: " + lpd.Score.ToString() + "]";
+        	else
+            	levelDescription += "\n[Not Played]";
+		}
+		else
+		{
+			levelDescription = "Level Locked";
+
+			Selectable = false;
+		}
+
+		LevelText.GetComponent<Text>().text = levelDescription;
     }
 
     #endregion INITIALIZATION

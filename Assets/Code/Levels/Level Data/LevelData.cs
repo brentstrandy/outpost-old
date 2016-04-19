@@ -19,6 +19,7 @@ public class LevelData : IComparable<LevelData>
     public string Description;
     public int MinimumPlayers;
     public int MaximumPlayers;
+	public string PrereqLevel;
     public string AvailableQuadrants;
     public Quadrant StartingQuadrant;
     public string AvailableTowers;

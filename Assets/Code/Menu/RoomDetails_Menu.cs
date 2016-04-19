@@ -215,28 +215,36 @@ public class RoomDetails_Menu : MonoBehaviour
     //public void LevelButton_Click(GameObject levelButton, LevelData levelData)
     private void LevelButton_Click(GameObject levelButton, LevelData levelData)
     {
-        // Unselect the previous level (if there was a previously selected level)
-        if (LevelLoadoutSelection != null)
-            LevelLoadoutSelection.GetComponent<LevelButton>().UnselectLevel();
+		// Only proceed if this level CAN be clicked
+		if(levelButton.GetComponent<LevelButton>().Selectable)
+		{
+	        // Unselect the previous level (if there was a previously selected level)
+	        if (LevelLoadoutSelection != null)
+	            LevelLoadoutSelection.GetComponent<LevelButton>().UnselectLevel();
 
-        // Updates currently selected level
-        LevelLoadoutSelection = levelButton;
+	        // Updates currently selected level
+	        LevelLoadoutSelection = levelButton;
 
-        // Tell the button to select itself
-        LevelLoadoutSelection.GetComponent<LevelButton>().SelectLevel();
+	        // Tell the button to select itself
+	        LevelLoadoutSelection.GetComponent<LevelButton>().SelectLevel();
 
-		// Inform players in the room a new level has been selected (This also saves the level ID for others to see in the lobby)
-		SessionManager.Instance.SetRoomCustomProperties(new Hashtable { { "L_ID", levelData.LevelID } });
+			// Inform players in the room a new level has been selected (This also saves the level ID for others to see in the lobby)
+			SessionManager.Instance.SetRoomCustomProperties(new Hashtable { { "L_ID", levelData.LevelID } });
 
-        // Sets level to be loaded
-        LevelLoadoutData = levelData;
-        LevelSelected = true;
+	        // Sets level to be loaded
+	        LevelLoadoutData = levelData;
+	        LevelSelected = true;
 
-        // Update the available Towers to choose from
-        //RefreshTowerButtons();
+	        // Update the available Towers to choose from
+	        //RefreshTowerButtons();
 
-        // Update whether or not the start button is enabled based on the current number of players in the room
-        RefreshStartGameButton();
+	        // Update whether or not the start button is enabled based on the current number of players in the room
+	        RefreshStartGameButton();
+		}
+		else
+		{
+			// TODO: Respond to player saying level is not selectable
+		}
     }
 
     public void KickPlayerButton_Click(PhotonPlayer player)
@@ -610,37 +618,21 @@ public class RoomDetails_Menu : MonoBehaviour
             {
                 LevelData ld = levelData;
 
-                GameObject obj = Instantiate(Resources.Load("GUI/GUI_LevelDetails")) as GameObject;
-                obj.GetComponent<LevelButton>().SetLevelData(ld);
-                obj.GetComponent<Button>().onClick.AddListener(delegate { LevelButton_Click(obj, ld); });
-                obj.transform.SetParent(this.transform);
-                obj.transform.localScale = new Vector3(1, 1, 1);
-                obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-100 + (128 * index), 360);
-                obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
-                obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
-                obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
-                obj.transform.rotation = new Quaternion(0, 0, 0, 0);
+				GameObject obj = Instantiate(Resources.Load("GUI/GUI_LevelDetails")) as GameObject;
+				obj.GetComponent<LevelButton>().SetLevelData(ld);
+				obj.GetComponent<Button>().onClick.AddListener(delegate { LevelButton_Click(obj, ld); });
+				obj.transform.SetParent(this.transform);
+				obj.transform.localScale = new Vector3(1, 1, 1);
+				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-100 + (128 * index), 360);
+				obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
+				obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
+				obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
+				obj.transform.rotation = new Quaternion(0, 0, 0, 0); 
 
                 if (index == 0)
                     LevelButton_Click(obj, ld);
 
                 index++;
-
-                /*
-                //if(previousLevelComplete)
-                //	obj.SetActive(true);
-                //else
-                //	obj.SetActive(false);
-
-                // select Level1 by default (hacked way)
-                if (!LevelLoadoutSelection)
-                    obj.GetComponent<Toggle>().isOn = true;
-
-                if(PlayerManager.Instance.LevelComplete(levelData.DisplayName))
-                    previousLevelComplete = true;
-                else
-                    previousLevelComplete = false;
-                */
             }
         }
     }

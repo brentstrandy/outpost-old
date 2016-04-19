@@ -290,7 +290,7 @@ public class PlayerManager : MonoBehaviour
 		form.AddField("levelID", GameManager.Instance.CurrentLevelData.LevelID.ToString());
 		form.AddField("score", CurPlayer.Score.ToString());
 		form.AddField("kills", CurPlayer.KillCount.ToString());
-		form.AddField("victory", GameManager.Instance.Victory.ToString());
+		form.AddField("victory", GameManager.Instance.Victory == true ? "1" : "0");
 		form.AddField("finishedGame", (!GameManager.Instance.GameRunning).ToString());
 
 		WWW www = new WWW("http://www.diademstudios.com/outpostdata/Action_SavePlayerStats.php", form);
