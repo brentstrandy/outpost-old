@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class TowerLoadoutButton : MonoBehaviour
@@ -14,41 +15,33 @@ public class TowerLoadoutButton : MonoBehaviour
 
 	public TowerData SelectedTowerData;
 
-	/// <summary>
-	/// Reference to the Tower Loadout Button Manager. Used to determine the next and previous towers to choose from
-	/// </summary>
-	private TowerLoadoutButtonManager TowerLoadoutButtonMngr;
+	private List<TowerData> AvailableTowerList;
 	
 	#region INITIALIZATION
-
-	/// <summary>
-	/// Initialize the Tower Loadout Button
-	/// </summary>
-	/// <param name="tlbm">Reference to the TowerLoadoutButtonManager needed by the button</param>
-	public void Init(TowerLoadoutButtonManager tlbm)
-	{
-		TowerLoadoutButtonMngr = tlbm;
-	}
 
 	/// <summary>
 	/// Sets the TowerData for the LoadoutButton
 	/// </summary>
 	/// <param name="towerData">TowerData used to set the LoadoutButton</param>
-	public void SetTowerData(TowerData towerData)
+	public void SetTowerData(int selectedIndex, List<TowerData> availableTowers = null)
 	{
 		string towerDescription = "";
 
+		// Set/Reset the available towers if there's a list
+		if(availableTowers != null)
+			AvailableTowerList = availableTowers;
+
 		Active = true;
-		SelectedTowerData = towerData;
+		SelectedTowerData = AvailableTowerList[selectedIndex];
 		
 		// Set background image based on level
 		BackgroundImage.SetActive(true);
-		BackgroundImage.GetComponent<Image>().sprite = Resources.Load("GUI/" + towerData.PrefabName + "_Mug", typeof(Sprite)) as Sprite;
+		BackgroundImage.GetComponent<Image>().sprite = Resources.Load("GUI/" + SelectedTowerData.PrefabName + "_Mug", typeof(Sprite)) as Sprite;
 
-		int stringIndex = towerData.DisplayName.IndexOf(" Tower");
-		towerDescription = stringIndex != -1 ? towerData.DisplayName.Remove(stringIndex) : towerData.DisplayName;
+		int stringIndex = SelectedTowerData.DisplayName.IndexOf(" Tower");
+		towerDescription = stringIndex != -1 ? SelectedTowerData.DisplayName.Remove(stringIndex) : SelectedTowerData.DisplayName;
 
-		TowerText.GetComponent<Text>().text = towerDescription + "\n($" + towerData.InstallCost.ToString() + ")";
+		TowerText.GetComponent<Text>().text = towerDescription + "\n($" + SelectedTowerData.InstallCost.ToString() + ")";
 
 		PrevButton.gameObject.SetActive(true);
 		NextButton.gameObject.SetActive(true);
@@ -69,13 +62,47 @@ public class TowerLoadoutButton : MonoBehaviour
 	}
 	#endregion
 
+	/// <summary>
+	/// Gets the next tower in a list of available towers based on the TowerID of the currently selected tower
+	/// </summary>
+	/// <returns>TowerData for the next Tower</returns>
+	/// <param name="currentTowerID">ID of the currently selected Tower.</param>
+	private int GetNextTowerID()
+	{
+		// Determines the next tower index based on the current TowerID
+		int index = AvailableTowerList.FindIndex(x => x.TowerID == SelectedTowerData.TowerID) + 1;
+
+		// Allow the list to loop from the end to the beginning
+		if(index >= AvailableTowerList.Count)
+			index = 0;
+
+		return index;
+	}
+
+	/// <summary>
+	/// Gets the previous tower in a list of available towers based on the TowerID of the currently selected tower
+	/// </summary>
+	/// <returns>TowerData for the previous Tower</returns>
+	/// <param name="currentTowerID">ID of the currently selected Tower.</param>
+	private int GetPrevTowerID()
+	{
+		// Determines the previous tower index based on the current TowerID
+		int index = AvailableTowerList.FindIndex(x => x.TowerID == SelectedTowerData.TowerID) - 1;
+
+		// Allows the list to loop from the beginning to the end
+		if(index < 0)
+			index = AvailableTowerList.Count - 1;
+
+		return index;
+	}
+
 	#region EVENTS
 	/// <summary>
 	/// Click Event Handler called when player clicks the Next Tower button
 	/// </summary>
 	public void NextTower_Click()
 	{
-		SetTowerData(TowerLoadoutButtonMngr.GetNextTower(SelectedTowerData.TowerID));
+		SetTowerData(GetNextTowerID());
 	}
 
 	/// <summary>
@@ -83,7 +110,7 @@ public class TowerLoadoutButton : MonoBehaviour
 	/// </summary>
 	public void PrevTower_Click()
 	{
-		SetTowerData(TowerLoadoutButtonMngr.GetPrevTower(SelectedTowerData.TowerID));
+		SetTowerData(GetPrevTowerID());
 	}
 	#endregion
 

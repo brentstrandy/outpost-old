@@ -10,17 +10,6 @@ public class TowerLoadoutButtonManager : MonoBehaviour
 	public List<TowerLoadoutButton> TowerLoadoutButtonList;
 	public List<TowerData> AvailableTowerList;
 
-	// Use this for initialization
-	void Start ()
-	{
-		// Initialize the tower buttons by giving them all a reference to this Button Manager
-		// This will allow the button manager to tell the button the next/prev available tower
-		foreach(TowerLoadoutButton tlb in TowerLoadoutButtonList)
-		{
-			tlb.Init(this);
-		}
-	}
-
 	public void OnEnable()
 	{
 
@@ -38,7 +27,7 @@ public class TowerLoadoutButtonManager : MonoBehaviour
 		{
 			// Only activate enough Tower Loadout Buttons if there are available Towers
 			if(AvailableTowerList.Count > index)
-				tlb.SetTowerData(AvailableTowerList[index]);
+				tlb.SetTowerData(index, AvailableTowerList);
 			else
 				tlb.SetButtonInactive();
 
@@ -65,40 +54,6 @@ public class TowerLoadoutButtonManager : MonoBehaviour
 		}
 
 		SetTowerButtonData();
-	}
-
-	/// <summary>
-	/// Gets the next tower in a list of available towers based on the TowerID of the currently selected tower
-	/// </summary>
-	/// <returns>TowerData for the next Tower</returns>
-	/// <param name="currentTowerID">ID of the currently selected Tower.</param>
-	public TowerData GetNextTower(int currentTowerID)
-	{
-		// Determines the next tower index based on the current TowerID
-		int index = AvailableTowerList.FindIndex(x => x.TowerID == currentTowerID) + 1;
-
-		// Allow the list to loop from the end to the beginning
-		if(index >= AvailableTowerList.Count)
-			index = 0;
-
-		return AvailableTowerList[index];
-	}
-
-	/// <summary>
-	/// Gets the previous tower in a list of available towers based on the TowerID of the currently selected tower
-	/// </summary>
-	/// <returns>TowerData for the previous Tower</returns>
-	/// <param name="currentTowerID">ID of the currently selected Tower.</param>
-	public TowerData GetPrevTower(int currentTowerID)
-	{
-		// Determines the previous tower index based on the current TowerID
-		int index = AvailableTowerList.FindIndex(x => x.TowerID == currentTowerID) - 1;
-
-		// Allows the list to loop from the beginning to the end
-		if(index < 0)
-			index = AvailableTowerList.Count - 1;
-
-		return AvailableTowerList[index];
 	}
 
 	/// <summary>
