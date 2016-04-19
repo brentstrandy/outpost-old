@@ -9,9 +9,10 @@
     <Description>This is for testing only</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
+    <PrereqLevel>NONE</PrereqLevel>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower, Hammer Tower</AvailableTowers>
+    <AvailableTowers>ALL</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
     <MaxTowersPerPlayer>5</MaxTowersPerPlayer>
     <StartingMoney>1000</StartingMoney>
@@ -27,6 +28,7 @@
     <Description>We've set up a Mining Facility on a remote planet. Protect it!</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
+    <PrereqLevel>NONE</PrereqLevel>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower, EMP Tower</AvailableTowers>
@@ -45,9 +47,10 @@
     <Description>Land of the lifeless</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>6</MaximumPlayers>
+    <PrereqLevel>1</PrereqLevel>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, Thraceium Healing Tower, EMP Tower, Thraceium Rain Tower</AvailableTowers>
+    <AvailableTowers>ALL</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
     <MaxTowersPerPlayer>2</MaxTowersPerPlayer>
     <StartingMoney>25</StartingMoney>
@@ -63,9 +66,10 @@
     <Description>Planet from Cerulean Rising</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>5</MaximumPlayers>
+    <PrereqLevel>2</PrereqLevel>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <AvailableTowers>ALL</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
     <MaxTowersPerPlayer>3</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
@@ -81,9 +85,10 @@
     <Description>Coordination is key</Description>
     <MinimumPlayers>6</MinimumPlayers>
     <MaximumPlayers>8</MaximumPlayers>
+    <PrereqLevel>2</PrereqLevel>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
-    <AvailableTowers>Small Thraceium Tower, EMP Tower, Thraceium Rain Tower, Temp Tower, Thraceium Healing Tower</AvailableTowers>
+    <AvailableTowers>ALL</AvailableTowers>
     <AvailableEnemies>Sky Drone, Land Drone, Light Speeder, Heavy Speeder, Intense Light Speeder, Kamikaze</AvailableEnemies>
     <MaxTowersPerPlayer>1</MaxTowersPerPlayer>
     <StartingMoney>0</StartingMoney>
@@ -99,6 +104,7 @@
     <Description>Solo mission only. Can you survive The Grind?</Description>
     <MinimumPlayers>1</MinimumPlayers>
     <MaximumPlayers>1</MaximumPlayers>
+    <PrereqLevel>2</PrereqLevel>
     <AvailableQuadrants>North</AvailableQuadrants>
     <StartingQuadrant>North</StartingQuadrant>
     <AvailableTowers>Small Thraceium Tower</AvailableTowers>
