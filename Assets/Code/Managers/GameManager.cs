@@ -89,6 +89,11 @@ public class GameManager : MonoBehaviour
 				StartCoroutine(LevelNotificationDataManager.LoadDataFromServer("http://www.diademstudios.com/outpostdata/Notifications/" + CurrentLevelData.NotificationFilename + ".xml"));
         }
 
+		// Initialize the mining facility
+		ObjMiningFacility = GameObject.FindGameObjectWithTag("Mining Facility").GetComponent<MiningFacility>();
+		ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
+		AnalyticsManager.Instance.SetMiningFacilityLocation(ObjMiningFacility.transform.position);
+
         GameRunning = false;
         Victory = false;
     }
@@ -113,11 +118,6 @@ public class GameManager : MonoBehaviour
     {
         GameRunning = true;
 
-        // Set the player's initial quadrant
-        //PlayerManager.Instance.CurrentQuadrant = CurrentLevelData.StartingQuadrant;
-        // Inform the Camera of the new quadrant
-        //CameraManager.Instance.SetStartQuadrant(CurrentLevelData.StartingQuadrant);
-
         // Start Game is called once all data has been loaded. We can now tell the EnemySpawnManager to start
         // spawning enemies based on the previously loaded spawn data.
 		EnemySpawnManager.Instance.StartSpawning();
@@ -126,14 +126,11 @@ public class GameManager : MonoBehaviour
         if (LevelNotificationDataManager != null)
             StartCoroutine(NotificationManager.Instance.DisplayLevelNotifications(LevelNotificationDataManager.DataList));
 
+
+		CameraManager.Instance.GetComponent<Animator>().enabled = false;
         // Initializes Analytics
         string[] assetSuperTypes = { "Tower", "Enemy" };
         AnalyticsManager.Instance.InitializePlayerAnalytics(assetSuperTypes);
-
-        // Initialize the mining facility
-        ObjMiningFacility = GameObject.FindGameObjectWithTag("Mining Facility").GetComponent<MiningFacility>();
-        ObjMiningFacility.InitializeFromLevelData(CurrentLevelData);
-        AnalyticsManager.Instance.SetMiningFacilityLocation(ObjMiningFacility.transform.position);
     }
 
     public void OnLevelWasLoaded(int level)

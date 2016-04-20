@@ -14,6 +14,9 @@ public class InGame_Menu : MonoBehaviour
 	public Text KillsText;
     public Text TimeText;
 
+	public Text TitleText;
+	public Text DescriptionText;
+
     private bool FinishedLoadingLevel = false;
 
     private void OnEnable()
@@ -47,6 +50,10 @@ public class InGame_Menu : MonoBehaviour
 
             index++;
         }
+
+		// Display the level's name and description
+		TitleText.text = MenuManager.Instance.CurrentLevelData.DisplayName;
+		DescriptionText.text = MenuManager.Instance.CurrentLevelData.Description;
 
         // Add listeners for hotkeys
         InputManager.Instance.OnTowerHotKeyPressed += OnTowerHotKeyPressed;

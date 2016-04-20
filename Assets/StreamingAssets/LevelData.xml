@@ -21,7 +21,7 @@
   </LevelData>
   <LevelData>
     <DisplayName>Something New</DisplayName>
-    <SceneName>Level1</SceneName>
+    <SceneName>Level3</SceneName>
     <LevelID>1</LevelID>
     <EnemySpawnFilename>1_SomethingNew</EnemySpawnFilename>
     <NotificationFilename>1_SomethingNew_Notif</NotificationFilename>

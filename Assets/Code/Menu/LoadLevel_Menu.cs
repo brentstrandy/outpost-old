@@ -31,7 +31,7 @@ public class LoadLevel_Menu : MonoBehaviour
             PlayerNames.Add(player.name);
 
         // Show the name and description of the level being loaded
-        Level_GUIText.GetComponent<Text>().text = MenuManager.Instance.CurrentLevelData.DisplayName + "\n\n" + MenuManager.Instance.CurrentLevelData.Description;
+		Level_GUIText.GetComponent<Text>().text = "Loading Level...";//MenuManager.Instance.CurrentLevelData.DisplayName + "\n\n" + MenuManager.Instance.CurrentLevelData.Description;
 
 		// If this is the MasterClient, have them request the server provide a GameID for this game
 		if(SessionManager.Instance.GetPlayerInfo().isMasterClient)
@@ -79,7 +79,7 @@ public class LoadLevel_Menu : MonoBehaviour
     private void StartGame()
     {
         // Tell the GameManager to begin playing the game
-        GameManager.Instance.StartGame();
+        //GameManager.Instance.StartGame();
 
         this.gameObject.SetActive(false);
     }

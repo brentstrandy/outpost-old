@@ -11,16 +11,10 @@ public class MenuManager : MonoBehaviour
 
     public bool ShowDebugLogs = true;
 
-    // Need a handle to the GUI camera in order to transition back to the camera
-    public Camera GUICamera;
-
-    public Camera GameCamera;
-
     public LevelData CurrentLevelData { get; private set; }
 
     // Menu Panels
     public GameObject SplashPanel;
-
     public GameObject StartMenuPanel;
 	public GameObject FirstLoginPanel;
     public GameObject MainMenuPanel;
@@ -41,6 +35,9 @@ public class MenuManager : MonoBehaviour
 	public GameObject PostGamePanel;
 
     public GameObject CurrentMenuPanel { get; private set; }
+
+	// Reference to the Animation Controller that handles menu transitions
+	public Animator AnimationController;
 
     #region INSTANCE (SINGLETON)
 
@@ -92,6 +89,8 @@ public class MenuManager : MonoBehaviour
 
         // Show the loading screen as the level is loaded
         LoadLevelPanel.SetActive(true);
+
+		AnimationController.SetTrigger("Menu_InGame");
 
         // Show the InGame menu (behind the loading menu)
         SetCurrentMenuPanel(InGamePanel);

@@ -12,22 +12,7 @@ public class CameraManager : MonoBehaviour
 	public Transform[] CameraPositions;
 	private int CurrentPosition;
 
-    /*public Transform DirectionNorth;
-    public Vector3 PositionNorth;
-    public Transform DirectionEast;
-    public Vector3 PositionEast;
-    public Transform DirectionSouth;
-    public Vector3 PositionSouth;
-    public Transform DirectionWest;
-    public Vector3 PositionWest;
-	*/
-
 	public float TurningSpeed;
-
-    private int DirectionIndex;
-    //private Vector3 TargetDirection;
-    //private Vector3 TargetPosition;
-    //private readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
     private float Smooth; // use for camera lerp
 
@@ -65,17 +50,6 @@ public class CameraManager : MonoBehaviour
 		CurrentPosition = 0;
 		transform.position = CameraPositions[CurrentPosition].position;
 		transform.rotation = CameraPositions[CurrentPosition].rotation;
-
-		/*
-        // North
-        PositionNorth = new Vector3(DirectionNorth.position.x, 1.0f, this.transform.position.z - 5);
-        // East
-        PositionEast = new Vector3(1.0f, DirectionEast.position.y, this.transform.position.z - 5);
-        // South
-        PositionSouth = new Vector3(DirectionSouth.position.x, -1.0f, this.transform.position.z - 5);
-        // West
-        PositionWest = new Vector3(-1.0f, DirectionWest.position.y, this.transform.position.z - 5);
-        */
     }
 
     private void Update()
@@ -104,38 +78,10 @@ public class CameraManager : MonoBehaviour
 		}
 	}
 
-    public void SetStartQuadrant(Quadrant quadrant)
-    {
-        //UpdateCameraQuadrant(quadrant);
-        //transform.rotation = Quaternion.LookRotation(TargetDirection - transform.position, Up);
-        //transform.position = TargetPosition;
-    }
-
-    public void UpdateCameraQuadrant(Quadrant newQuadrant)
-    {
-		/*
-        if (newQuadrant == Quadrant.North)
-        {
-            TargetDirection = DirectionNorth.position;
-            TargetPosition = PositionNorth;
-        }
-        else if (newQuadrant == Quadrant.East)
-        {
-            TargetDirection = DirectionEast.position;
-            TargetPosition = PositionEast;
-        }
-        else if (newQuadrant == Quadrant.South)
-        {
-            TargetDirection = DirectionSouth.position;
-            TargetPosition = PositionSouth;
-        }
-        else if (newQuadrant == Quadrant.West)
-        {
-            TargetDirection = DirectionWest.position;
-            TargetPosition = PositionWest;
-        }
-        */
-    }
+	public void OnIntroAnimationComplete()
+	{
+		GameManager.Instance.StartGame();
+	}
 
 	private void OnDestroy()
 	{
