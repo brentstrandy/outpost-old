@@ -26,6 +26,7 @@ public class RoomDetails_Menu : MonoBehaviour
 	public Dropdown PlayerColor_GUIDropdown;
 
 	public TowerLoadoutButtonManager TowerLoadoutButtonMngr;
+	public GameObject LevelButtons;
 
     /// <summary>
     /// Tracks GUI objects for each tower that is selected for the Loadout
@@ -621,9 +622,9 @@ public class RoomDetails_Menu : MonoBehaviour
 				GameObject obj = Instantiate(Resources.Load("GUI/GUI_LevelDetails")) as GameObject;
 				obj.GetComponent<LevelButton>().SetLevelData(ld);
 				obj.GetComponent<Button>().onClick.AddListener(delegate { LevelButton_Click(obj, ld); });
-				obj.transform.SetParent(this.transform);
+				obj.transform.SetParent(LevelButtons.transform);
 				obj.transform.localScale = new Vector3(1, 1, 1);
-				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-100 + (128 * index), 360);
+				obj.GetComponent<RectTransform>().localPosition = new Vector2(-248 + (128 * index), 46);
 				obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0);
 				obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0);
 				obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y, 0);
