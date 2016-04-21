@@ -6,6 +6,7 @@ using UnityEditor;
 
 #endif
 
+using System;
 using System.Collections.Generic;
 using Settworks.Hexagons;
 
@@ -23,14 +24,17 @@ public class Pathfinder : MonoBehaviour
     public int ObstacleCost = 100000;
 
     [SerializeField]
-    public int TowerCost = 1000;
+    public int SlopeCost = 1000;
 
     [SerializeField]
-    public int TowerCoverageCost = 1;
+    public int TowerCost = 100;
+
+    [SerializeField]
+    public int TowerCoverageCost = 0;
 
     [SerializeField]
     [Range(1, 1000)]
-    public int BaseCost = 3;
+    public int BaseCost = 1;
 
     [SerializeField]
     public bool AvoidEnemies;
@@ -38,23 +42,8 @@ public class Pathfinder : MonoBehaviour
     [SerializeField]
     public HexCoord Target;
 
-    /*
     [SerializeField]
-    public int MaxDistanceFromTarget = 24;
-
-    [SerializeField]
-    public int MaxDistanceFromLocation = 24;
-    */
-
-    [SerializeField]
-    public float MaxUphill = 0.5f;
-
-    [SerializeField]
-    public float MaxDownhill = 2f;
-
-    [SerializeField]
-    [Range(1, 12)]
-    public int Precision = 6;
+    public float MaxSlope = 3f;
 
     public HexPathNode[] Path;
 
@@ -63,6 +52,9 @@ public class Pathfinder : MonoBehaviour
     protected HexLocation ObjHexLocation;
     protected int SolvedTowerState = 0;
     protected HexMeshOverlay.Entry Overlay;
+
+    [NonSerialized]
+    protected int CalculationCount;
 
     public virtual void Awake()
     {
@@ -104,12 +96,12 @@ public class Pathfinder : MonoBehaviour
     public bool Solve()
     {
         HexCoord origin = ObjHexLocation.location;
-        bool success = HexKit.Path(out Path, origin, IsTarget, MoveCost);
-
-        if (HexKit.Path(out Path, origin, Target, MoveCost))
-        {
-            success = true;
-        }
+        //bool success = HexKit.Path(out Path, origin, IsTarget, MoveCost);
+        CalculationCount = 0;
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        bool success = HexKit.Path(out Path, origin, Target, MoveCost, true);
+        watch.Stop();
+        Log("Move Cost: " + CalculationCount.ToString() + " calcs : " + watch.ElapsedMilliseconds.ToString() + " ms : " + watch.ElapsedTicks.ToString() + " ticks");
 
         // Log success/failure
         if (success)
@@ -142,12 +134,20 @@ public class Pathfinder : MonoBehaviour
 
     public uint MoveCost(HexPathNode node, HexCoord coord)
     {
+        var map = GameManager.Instance.TerrainMesh.Map;
+        if (!map.Coords.Contains(coord))
+        {
+            return 0;
+        }
+
         if (HexCoord.Distance(ObjHexLocation.location, coord) > MaxPathfindingDistance)
         {
             return 0;
         }
 
-        int cost = 1;
+        CalculationCount++;
+
+        int cost = BaseCost;
 
         if (IsObstacle(coord))
         {
@@ -159,29 +159,21 @@ public class Pathfinder : MonoBehaviour
             cost += TowerCost;
         }
 
-        int coverage = GameManager.Instance.TowerManager.Coverage(coord);
-        if (coverage > 0)
+        if (TowerCoverageCost != 0)
         {
-            cost += TowerCoverageCost * coverage;
+            int coverage = GameManager.Instance.TowerManager.Coverage(coord);
+            if (coverage > 0)
+            {
+                cost += TowerCoverageCost * coverage;
+            }
         }
 
         if (node.Ancestor != coord)
         {
-            // TODO: Performa a series of HexPlane.Intersect calls along a straight line between
-            // the two plots, checking the elevation change between each step. This will allow
-            // oblique surfaces that are actually a smooth hill to be evaluated properly.
-
-            // TODO: Cache viable directions for each plot on scene load? This would require
-            // everything to use the same max elevation change.
-
-            var surface = GameManager.Instance.TerrainMesh.Map.Surface;
-            foreach (float change in surface.Diff(node.Ancestor, coord, Precision))
+            float slope = map.Slope.Get(node.Ancestor, node.FromDirection - 3);
+            if (slope > MaxSlope)
             {
-                float c = -change; // Invert because -z is up
-                if (c > MaxUphill || c < -MaxDownhill)
-                {
-                    cost += ObstacleCost;
-                }
+                cost += SlopeCost * Mathf.Min(Mathf.FloorToInt(slope / MaxSlope), 10);
             }
         }
 

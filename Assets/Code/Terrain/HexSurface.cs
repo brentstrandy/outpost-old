@@ -85,6 +85,42 @@ public class HexSurface : OrderedDictionary<HexCoord, HexPlane>
         }
     }
 
+    public float Slope(HexCoord from, HexCoord to, int steps)
+    {
+        if (steps < 1)
+        {
+            throw new ArgumentOutOfRangeException("steps", steps, "cannot be less than 1");
+        }
+
+        if (from == to)
+        {
+            throw new ArgumentException("from and to cannot be the same");
+        }
+
+        Vector2 start = from.Position();
+        Vector2 end = to.Position();
+
+        float stride = 1.0f / (float)steps;
+
+        Vector2 previousPosition = start;
+        float previousElevation = Intersect(start);
+
+        float maxSlope = 0.0f;
+
+        for (float t = stride; t <= 1.00001f; t += stride) // Handles rounding errors
+        {
+            Vector2 position = Vector2.Lerp(start, end, t);
+            float distance = Vector2.Distance(previousPosition, position);
+            float elevation = Intersect(position);
+            float slope = Mathf.Abs(elevation / distance);
+            previousPosition = position;
+            previousElevation = elevation;
+            maxSlope = Mathf.Max(maxSlope, slope);
+        }
+
+        return maxSlope;
+    }
+
     public Vector3 Normal(HexCoord coord)
     {
         return this[coord].normal;

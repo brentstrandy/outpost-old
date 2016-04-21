@@ -5,6 +5,19 @@ using Settworks.Hexagons;
 
 public static class HexCoordExtensions
 {
+    public static void Bounds(this IEnumerable<HexCoord> coords, out HexCoord min, out HexCoord max)
+    {
+        min = default(HexCoord);
+        max = default(HexCoord);
+        foreach (var coord in coords)
+        {
+            min.q = Mathf.Min(min.q, coord.q);
+            min.r = Mathf.Min(min.r, coord.r);
+            max.q = Mathf.Max(max.q, coord.q);
+            max.r = Mathf.Max(max.r, coord.r);
+        }
+    }
+
     public static Vector2 CartesianBounds(this IEnumerable<HexCoord> coords)
     {
         Vector2 min = Vector2.zero;

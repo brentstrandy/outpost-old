@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Settworks.Hexagons;
 
 [Serializable]
-public class Map
+public class Map : ISerializationCallbackReceiver
 {
     public Map()
     {
         Coords = new HexSet();
         Surface = new HexSurface();
+        Slope = new SlopeCache(Surface, SlopeSampling);
     }
+
+    public const int SlopeSampling = 3;
 
     public List<HeightMap> HeightMaps = new List<HeightMap>();
 
@@ -44,4 +46,28 @@ public class Map
 
     [HideInInspector]
     public HexSurface Surface;
+
+    [HideInInspector]
+    [NonSerialized]
+    public SlopeCache Slope;
+
+    public void CalculateSlopes()
+    {
+        Slope.Build(Coords);
+        foreach (var coord in Coords)
+        {
+            Slope.Update(coord);
+        }
+        Debug.Log("Calculated " + Slope.Count.ToString() + " slopes for " + Coords.Count.ToString() + " coordinates using a cache of " + Slope.SizeInBytes.ToString() + " bytes.");
+    }
+
+    public void OnBeforeSerialize()
+    {
+
+    }
+
+    public void OnAfterDeserialize()
+    {
+        CalculateSlopes();
+    }
 }
