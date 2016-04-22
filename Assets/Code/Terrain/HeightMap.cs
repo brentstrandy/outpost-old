@@ -9,21 +9,11 @@ public class HeightMap
     protected readonly Vector3 Up = new Vector3(0.0f, 0.0f, -1.0f);
 
     public Texture2D Texture;
-
-    public float SurfaceHeightScale = 5.0f;
+    public HexMeshSurfaceStyle SurfaceStyle;
+    public float Height = 5.0f;
     public float AttenuationMultiplier = 0.0f;
     public float AttenuationExponent = 0.0f;
     public HexMeshAttentuationStyle AttenuationStyle;
-    public HexMeshSurfaceStyle SurfaceStyle;
-
-    [Range(0.0f, 1.0f)]
-    public float SurfaceStyleInterpolation = 1.0f;
-
-    public bool SurfaceStyleAttenuation = false;
-    public HexMeshNeighborStyle NeighborStyle;
-
-    [Range(0.0f, 1.0f)]
-    public float NeighborStyleInterpolation = 1.0f;
 
     public HexSurface Build(IEnumerable<HexCoord> coords, float inset)
     {
@@ -83,7 +73,7 @@ public class HeightMap
         float result = Texture.GetPixelBilinear(uv.x, uv.y).grayscale;
 
         // Apply the height scale (inverted because up is in negative Z)
-        result *= -SurfaceHeightScale;
+        result *= -Height;
 
         // Apply the attenuation factor
         result *= 1.0f + Attenuation(uv);

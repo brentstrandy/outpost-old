@@ -33,7 +33,6 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
     // Properties adjustable in the inspector
     //public bool GenerateNoise = true;
-    public Texture2D HeightMap;
 
     public bool ShowDebugLogs = true;
     public bool FlatShaded = true;
@@ -60,6 +59,7 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
     }
 
     [SerializeField]
+    [HideInInspector]
     public TerrainLayerSet Layers;
 
     [NonSerialized]
@@ -163,7 +163,6 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
         Mesh.Set(Map.Coords);
         BuildOverlays();
-        //UpdateOutlines();
     }
 
     public void BakeHeightMaps()
@@ -397,59 +396,7 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
     private Func<Vector2, HexCoord, float> GetHeightPredicate()
     {
         return (Vector2 uv, HexCoord hex) => Map.Surface[hex].Intersect(uv);
-        /*
-        if (HeightMap == null)
-        {
-            //Log("No HeightMap Specified");
-            return (Vector2 uv, HexCoord hex) => Map.Surface[hex].Intersect(uv);
-        }
-
-        //Log("Using HeightMap");
-        return (Vector2 uv, HexCoord hex) =>
-        {
-            // Fetch the value from the height map
-            float result = HeightMap.GetPixelBilinear(uv.x, uv.y).grayscale;
-
-            // Apply the height scale (inverted because up is in negative Z)
-            result *= -Map.SurfaceHeightScale;
-
-            // Apply the attenuation factor
-            result *= 1.0f + GetAttenuationFactor(uv);
-
-            // Apply the offset
-            result += Map.Surface.Distance(hex);
-
-            return result;
-        };
-        */
     }
-
-    /*
-    private float GetAttenuationFactor(Vector2 uv)
-    {
-        // Translate and scale to the coodinate space between (-1,-1) and (1,1)
-        Vector2 offset = new Vector2(0.5f, 0.5f);
-        Vector2 scale = new Vector2(2.0f, 2.0f);
-
-        Vector2 pos = Vector2.Scale(uv - offset, scale);
-
-        // Calculate attenuation value
-        float attenuationValue = 0.0f;
-        switch (Map.AttenuationStyle)
-        {
-            case HexMeshAttentuationStyle.DistanceFromCenter:
-                attenuationValue = pos.magnitude;
-                break;
-
-            case HexMeshAttentuationStyle.DistanceFromEdge:
-                attenuationValue = Mathf.Max(Mathf.Abs(pos.x), Mathf.Abs(pos.y));
-                break;
-        }
-
-        // Calculate attenuation factor
-        return Map.AttenuationMultiplier * Mathf.Pow(attenuationValue, Map.AttenuationExponent);
-    }
-    */
 
     private CartesianScaler GetUVPredicate()
     {
@@ -484,8 +431,13 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
         Vector2 uv = tex(c);
         float h = height(uv, hex);
         float z = h;
-
-        if (i < 6)
+        
+        if (i > 5)
+        {
+            // Interior vertex
+            z = Map.Surface[hex].Intersect(c);
+        }
+        else
         {
             // Exterior vertex
             if (Map.NeighborStyleInterpolation > 0.0f)
@@ -528,60 +480,6 @@ public class HexTerrain : MonoBehaviour, ISerializationCallbackReceiver
 
                 z = Mathf.Lerp(h, z, Map.NeighborStyleInterpolation);
             }
-        }
-        else
-        {
-            z = Map.Surface[hex].Intersect(c);
-            // Interior vertex
-            /*
-            switch (Map.SurfaceStyle)
-            {
-                case HexMeshSurfaceStyle.FlatCenter:
-                    float center = height(tex(hex.Position()), hex);
-                    z = Mathf.Lerp(h, center, Map.SurfaceStyleInterpolation);
-                    break;
-
-                case HexMeshSurfaceStyle.FlatCentroid:
-                    float centroid = 0.0f;
-                    for (int s = 0; s < 6; s++)
-                    {
-                        Vector2 sc = HexCoord.CornerVector(s) * inner + hex.Position();
-                        centroid += height(tex(sc), hex);
-                    }
-                    centroid *= 0.166666666667f; // Divide by six
-                    z = Mathf.Lerp(h, centroid, Map.SurfaceStyleInterpolation);
-                    break;
-
-                case HexMeshSurfaceStyle.Oblique:
-                    // Loosely fit plane based an a sampling of three corners
-                    Plane plane = new Plane();
-                    Vector2 c0 = HexCoord.CornerVector(0) * inner + hex.Position();
-                    Vector2 c2 = HexCoord.CornerVector(2) * inner + hex.Position();
-                    Vector2 c4 = HexCoord.CornerVector(4) * inner + hex.Position();
-                    Vector3 p0 = new Vector3(c0.x, c0.y, height(tex(c0), hex));
-                    Vector3 p2 = new Vector3(c2.x, c2.y, height(tex(c2), hex));
-                    Vector3 p4 = new Vector3(c4.x, c4.y, height(tex(c4), hex));
-                    plane.Set3Points(p4, p2, p0);
-
-                    // Prepare a ray from p that fires straight down toward the plane
-                    // The offset is here to be sure we always start on the correct side of the plane (otherwise the raycast will fail)
-                    Ray ray = new Ray(new Vector3(c.x, c.y, h - 100.0f), Vector3.forward);
-
-                    // Raycast the ray against the loosely fit plane, and then use the intersection as our point
-                    float distance;
-                    if (plane.Raycast(ray, out distance))
-                    {
-                        float intersection = ray.GetPoint(distance).z;
-                        z = Mathf.Lerp(h, intersection, Map.SurfaceStyleInterpolation);
-                    }
-                    break;
-            }
-
-            if (Map.SurfaceStyleAttenuation)
-            {
-                z = Mathf.Lerp(z, h, GetAttenuationFactor(uv));
-            }
-            */
         }
 
         Vector3 p = new Vector3(c.x, c.y, z);

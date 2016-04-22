@@ -21,18 +21,6 @@ public class Map : ISerializationCallbackReceiver
     public int FacilityRadius = 5;
     public int PeripheralRadius = 12;
 
-    public string SurfaceHeightMap;
-
-    public float SurfaceHeightScale = 5.0f;
-    public float AttenuationMultiplier = 0.0f;
-    public float AttenuationExponent = 0.0f;
-    public HexMeshAttentuationStyle AttenuationStyle;
-    public HexMeshSurfaceStyle SurfaceStyle;
-
-    [Range(0.0f, 1.0f)]
-    public float SurfaceStyleInterpolation = 1.0f;
-
-    public bool SurfaceStyleAttenuation = false;
     public HexMeshNeighborStyle NeighborStyle;
 
     [Range(0.0f, 1.0f)]
