@@ -14,6 +14,7 @@ namespace FMODUnity
         public String CollisionTag;
         public bool AllowFadeout = true;
         public bool TriggerOnce = false;
+        public bool Preload = false;
 
         public ParamRef[] Params;
         
@@ -25,7 +26,20 @@ namespace FMODUnity
         void Start() 
         {
             RuntimeUtils.EnforceLibraryOrder();
-            HandleGameEvent(EmitterGameEvent.LevelStart);
+            if (Preload)
+            {
+                Lookup();
+                eventDescription.loadSampleData();
+                RuntimeManager.StudioSystem.update();
+                FMOD.Studio.LOADING_STATE loadingState;
+                eventDescription.getSampleLoadingState(out loadingState);
+                while(loadingState == FMOD.Studio.LOADING_STATE.LOADING)
+                {
+                    System.Threading.Thread.Sleep(1);
+                    eventDescription.getSampleLoadingState(out loadingState);
+                }
+            }
+            HandleGameEvent(EmitterGameEvent.ObjectStart);
         }
 
         void OnApplicationQuit()
@@ -37,10 +51,15 @@ namespace FMODUnity
         {
             if (!isQuitting)
             {
-                HandleGameEvent(EmitterGameEvent.LevelEnd);
+                HandleGameEvent(EmitterGameEvent.ObjectDestroy);
                 if (instance != null && instance.isValid())
                 {
                     RuntimeManager.DetachInstanceFromGameObject(instance);
+                }
+
+                if (Preload)
+                {
+                    eventDescription.unloadSampleData();
                 }
             }
         }

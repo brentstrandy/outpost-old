@@ -31,7 +31,7 @@ namespace FMODUnity
         void Start()
         {
             RuntimeUtils.EnforceLibraryOrder();
-            HandleGameEvent(LoaderGameEvent.LevelStart);
+            HandleGameEvent(LoaderGameEvent.ObjectStart);
         }
 
         void OnApplicationQuit()
@@ -43,7 +43,7 @@ namespace FMODUnity
         {
             if (!isQuitting)
             {
-                HandleGameEvent(LoaderGameEvent.LevelEnd);
+                HandleGameEvent(LoaderGameEvent.ObjectDestroy);
             }
         }
 
@@ -75,7 +75,8 @@ namespace FMODUnity
                 {
                     UnityEngine.Debug.LogException(e);
                 }
-            }            
+            }
+            RuntimeManager.WaitForAllLoads();     
         }
 
         public void Unload()

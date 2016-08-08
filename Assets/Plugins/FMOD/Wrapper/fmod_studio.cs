@@ -231,7 +231,7 @@ namespace FMOD.Studio
     {
         IntPtr name_or_data;
         MODE mode;
-        CREATESOUNDEXINFO exinfo;
+        CREATESOUNDEXINFO_INTERNAL exinfo;
         int subsoundIndex;
 
         // Helper functions
@@ -240,7 +240,7 @@ namespace FMOD.Studio
             publicInfo = new SOUND_INFO();
 
             publicInfo.mode = mode;
-            publicInfo.exinfo = exinfo;
+            publicInfo.exinfo = CREATESOUNDEXINFO_INTERNAL.CreateFromInternal(ref exinfo);
 
             // Somewhat hacky: we know the inclusion list always points to subsoundIndex, so recreate it here
             #if NETFX_CORE
@@ -463,6 +463,8 @@ namespace FMOD.Studio
         PLUGIN_DESTROYED         = 0x00000400,  /* Called when a DSP plugin instance is about to be destroyed. Parameters = FMOD_STUDIO_PLUGIN_INSTANCE_PROPERTIES. */
         TIMELINE_MARKER          = 0x00000800,  /* Called when the timeline passes a named marker.  Parameters = FMOD_STUDIO_TIMELINE_MARKER_PROPERTIES. */
         TIMELINE_BEAT            = 0x00001000,  /* Called when the timeline hits a beat in a tempo section.  Parameters = FMOD_STUDIO_TIMELINE_BEAT_PROPERTIES. */
+        SOUND_PLAYED             = 0x00002000,  /* Called when the event plays a sound.  Parameters = FMOD::Sound. */
+        SOUND_STOPPED            = 0x00004000,  /* Called when the event finishes playing a sound.  Parameters = FMOD::Sound. */
 
         ALL                      = 0xFFFFFFFF,  /* Pass this mask to Studio::EventDescription::setCallback or Studio::EventInstance::setCallback to receive all callback types. */
     }
@@ -753,16 +755,19 @@ namespace FMOD.Studio
         }
         public RESULT getSoundInfo(string key, out SOUND_INFO info)
         {
-            SOUND_INFO_INTERNAL internalInfo;
-
-            RESULT result = FMOD_Studio_System_GetSoundInfo(rawPtr, Encoding.UTF8.GetBytes(key + Char.MinValue), out internalInfo);
+            var size = Marshal.SizeOf(typeof(SOUND_INFO_INTERNAL));
+            IntPtr infoPtr = Marshal.AllocHGlobal(size);
+            
+            RESULT result = FMOD_Studio_System_GetSoundInfo(rawPtr, Encoding.UTF8.GetBytes(key + Char.MinValue), infoPtr);
             if (result != RESULT.OK)
             {
+                Marshal.FreeHGlobal(infoPtr);
                 info = new SOUND_INFO();
                 return result;
             }
-
+            SOUND_INFO_INTERNAL internalInfo = (SOUND_INFO_INTERNAL)Marshal.PtrToStructure(infoPtr, typeof(SOUND_INFO_INTERNAL));
             internalInfo.assign(out info);
+            Marshal.FreeHGlobal(infoPtr);
 
             return result;
         }
@@ -991,7 +996,7 @@ namespace FMOD.Studio
         [DllImport (STUDIO_VERSION.dll)]
 		private static extern RESULT FMOD_Studio_System_GetBankByID             (IntPtr studiosystem, byte[] guid, out IntPtr bank);
         [DllImport (STUDIO_VERSION.dll)]
-        private static extern RESULT FMOD_Studio_System_GetSoundInfo            (IntPtr studiosystem, byte[] key, out SOUND_INFO_INTERNAL info);
+        private static extern RESULT FMOD_Studio_System_GetSoundInfo            (IntPtr studiosystem, byte[] key, IntPtr info);
         [DllImport (STUDIO_VERSION.dll)]
 		private static extern RESULT FMOD_Studio_System_LookupID                (IntPtr studiosystem, byte[] path, [Out] byte[] guid);
         [DllImport(STUDIO_VERSION.dll)]
@@ -1162,6 +1167,14 @@ namespace FMOD.Studio
         {
             return FMOD_Studio_EventDescription_GetMaximumDistance(rawPtr, out distance);
         }
+        public RESULT getSoundSize(out float size)
+        {
+            return FMOD_Studio_EventDescription_GetSoundSize(rawPtr, out size);
+        }
+        public RESULT isSnapshot(out bool snapshot)
+        {
+            return FMOD_Studio_EventDescription_IsSnapshot(rawPtr, out snapshot);
+        }
         public RESULT isOneshot(out bool oneshot)
         {
             return FMOD_Studio_EventDescription_IsOneshot(rawPtr, out oneshot);
@@ -1292,6 +1305,10 @@ namespace FMOD.Studio
         private static extern RESULT FMOD_Studio_EventDescription_GetMinimumDistance(IntPtr eventdescription, out float distance);
         [DllImport (STUDIO_VERSION.dll)]
         private static extern RESULT FMOD_Studio_EventDescription_GetMaximumDistance(IntPtr eventdescription, out float distance);
+        [DllImport(STUDIO_VERSION.dll)]
+        private static extern RESULT FMOD_Studio_EventDescription_GetSoundSize(IntPtr eventdescription, out float size);
+        [DllImport(STUDIO_VERSION.dll)]
+        private static extern RESULT FMOD_Studio_EventDescription_IsSnapshot(IntPtr eventdescription, out bool snapshot);
         [DllImport (STUDIO_VERSION.dll)]
         private static extern RESULT FMOD_Studio_EventDescription_IsOneshot(IntPtr eventdescription, out bool oneshot);
         [DllImport (STUDIO_VERSION.dll)]
@@ -1371,9 +1388,17 @@ namespace FMOD.Studio
         {
             return FMOD_Studio_EventInstance_Get3DAttributes(rawPtr, out attributes);
         }
-        public RESULT set3DAttributes               (ATTRIBUTES_3D attributes)
+        public RESULT set3DAttributes(ATTRIBUTES_3D attributes)
         {
             return FMOD_Studio_EventInstance_Set3DAttributes(rawPtr, ref attributes);
+        }
+        public RESULT getListenerMask(out uint mask)
+        {
+            return FMOD_Studio_EventInstance_GetListenerMask(rawPtr, out mask);
+        }
+        public RESULT setListenerMask(uint mask)
+        {
+            return FMOD_Studio_EventInstance_SetListenerMask(rawPtr, mask);
         }
         public RESULT getProperty(EVENT_PROPERTY index, out float value)
         {
@@ -1516,6 +1541,10 @@ namespace FMOD.Studio
         private static extern RESULT FMOD_Studio_EventInstance_Get3DAttributes      (IntPtr _event, out ATTRIBUTES_3D attributes);
         [DllImport(STUDIO_VERSION.dll)]
         private static extern RESULT FMOD_Studio_EventInstance_Set3DAttributes      (IntPtr _event, ref ATTRIBUTES_3D attributes);
+        [DllImport(STUDIO_VERSION.dll)]
+        private static extern RESULT FMOD_Studio_EventInstance_GetListenerMask      (IntPtr _event, out uint mask);
+        [DllImport(STUDIO_VERSION.dll)]
+        private static extern RESULT FMOD_Studio_EventInstance_SetListenerMask      (IntPtr _event, uint mask);
         [DllImport(STUDIO_VERSION.dll)]
         private static extern RESULT FMOD_Studio_EventInstance_GetProperty          (IntPtr _event, EVENT_PROPERTY index, out float value);
         [DllImport(STUDIO_VERSION.dll)]

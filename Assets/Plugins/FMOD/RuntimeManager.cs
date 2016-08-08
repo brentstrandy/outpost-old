@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -237,6 +238,9 @@ namespace FMODUnity
             else
             {
                 // Load plugins (before banks)
+		    	#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
+				FmodUnityNativePluginInit(lowlevelSystem.getRaw());
+				#else
                 foreach (var pluginName in fmodSettings.Plugins)
                 {
                     string pluginPath = RuntimeUtils.GetPluginPath(pluginName);
@@ -246,45 +250,51 @@ namespace FMODUnity
                     // Add a "64" suffix and try again
                     if (result == FMOD.RESULT.ERR_FILE_BAD || result == FMOD.RESULT.ERR_FILE_NOTFOUND)
                     {
-                        pluginPath = RuntimeUtils.GetPluginPath(pluginName + "64");
-                        result = lowlevelSystem.loadPlugin(pluginPath, out handle);
+                        string pluginPath64 = RuntimeUtils.GetPluginPath(pluginName + "64");
+                        result = lowlevelSystem.loadPlugin(pluginPath64, out handle);
                     }
                     #endif
                     CheckInitResult(result, String.Format("Loading plugin '{0}' from '{1}'", pluginName, pluginPath));
                     loadedPlugins.Add(pluginName, handle);
                 }
+                #endif
 
-                // Always load strings bank
-                try
-                { 
-                    LoadBank(fmodSettings.MasterBank + ".strings", fmodSettings.AutomaticSampleLoading);
-                }
-                catch (BankLoadException e)
+                if (fmodSettings.ImportType == ImportType.StreamingAssets)
                 {
-                    UnityEngine.Debug.LogException(e);
-                }
-
-                if (fmodSettings.AutomaticEventLoading)
-                {
+                    // Always load strings bank
                     try
                     {
-                        LoadBank(fmodSettings.MasterBank, fmodSettings.AutomaticSampleLoading);
+                        LoadBank(fmodSettings.MasterBank + ".strings", fmodSettings.AutomaticSampleLoading);
                     }
                     catch (BankLoadException e)
                     {
                         UnityEngine.Debug.LogException(e);
                     }
 
-                    foreach (var bank in fmodSettings.Banks)
+                    if (fmodSettings.AutomaticEventLoading)
                     {
                         try
                         {
-                            LoadBank(bank, fmodSettings.AutomaticSampleLoading);
+                            LoadBank(fmodSettings.MasterBank, fmodSettings.AutomaticSampleLoading);
                         }
                         catch (BankLoadException e)
                         {
                             UnityEngine.Debug.LogException(e);
                         }
+
+                        foreach (var bank in fmodSettings.Banks)
+                        {
+                            try
+                            {
+                                LoadBank(bank, fmodSettings.AutomaticSampleLoading);
+                            }
+                            catch (BankLoadException e)
+                            {
+                                UnityEngine.Debug.LogException(e);
+                            }
+                        }
+
+                        WaitForAllLoads();
                     }
                 }
             };
@@ -303,6 +313,10 @@ namespace FMODUnity
         }
 
         List<AttachedInstance> attachedInstances = new List<AttachedInstance>(128);
+
+        #if UNITY_EDITOR
+        Dictionary<IntPtr, bool> warnedInvalidInstances = new Dictionary<IntPtr, bool>(2048);
+        #endif
 
         bool listenerWarningIssued = false;
         void Update()
@@ -331,6 +345,49 @@ namespace FMODUnity
                     }
                     attachedInstances[i].instance.set3DAttributes(RuntimeUtils.To3DAttributes(attachedInstances[i].transform, attachedInstances[i].rigidBody));
                 }
+
+
+                #if UNITY_EDITOR
+                // Catch any 3D events that are being played at the origin
+                foreach(FMOD.Studio.EventDescription desc in cachedDescriptions.Values)
+                {
+                    if (!desc.isValid())
+                    {
+                        continue;
+                    }
+                    bool is3d;
+                    desc.is3D(out is3d);
+                    if (!is3d)
+                    {
+                        continue;
+                    }
+
+                    string path;
+                    desc.getPath(out path);
+
+                    int instanceCount;
+                    desc.getInstanceCount(out instanceCount);
+                    FMOD.Studio.EventInstance[] instances = new FMOD.Studio.EventInstance[instanceCount];
+                    desc.getInstanceList(out instances);
+                    for (int i = 0; i < instanceCount; i++)
+                    {
+                        if (warnedInvalidInstances.ContainsKey(instances[i].getRaw()))
+                        {
+                            continue;
+                        }
+
+                        FMOD.ATTRIBUTES_3D attributes = new FMOD.ATTRIBUTES_3D();
+                        instances[i].get3DAttributes(out attributes);
+                        if (attributes.position.x == 0 &&
+                            attributes.position.y == 0 &&
+                            attributes.position.z == 0)
+                        {
+                            warnedInvalidInstances.Add(instances[i].getRaw(), true);
+                            Debug.LogWarningFormat("FMOD Studio: Instance of Event {0} found playing at the origin. EventInstance.set3DAttributes() should be called on all 3D events", path);
+                        }
+                    }
+                }
+                #endif
             }
         }
 
@@ -439,6 +496,8 @@ namespace FMODUnity
         {
             if (studioSystem != null && studioSystem.isValid())
 			{
+                PauseAllEvents(pauseStatus);
+
 				if (pauseStatus)
 				{
 					lowlevelSystem.mixerSuspend();
@@ -513,6 +572,48 @@ namespace FMODUnity
             }
         }
 
+        public static void LoadBank(TextAsset asset, bool loadSamples = false)
+        {
+            string bankName = asset.name;
+            if (Instance.loadedBanks.ContainsKey(bankName))
+            {
+                LoadedBank loadedBank = Instance.loadedBanks[bankName];
+                loadedBank.RefCount++;
+
+                if (loadSamples)
+                {
+                    loadedBank.Bank.loadSampleData();
+                }
+            }
+            else
+            {
+                LoadedBank loadedBank = new LoadedBank();
+                FMOD.RESULT loadResult = Instance.studioSystem.loadBankMemory(asset.bytes, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
+
+                if (loadResult == FMOD.RESULT.OK)
+                {
+                    loadedBank.RefCount = 1;
+                    Instance.loadedBanks.Add(bankName, loadedBank);
+
+                    if (loadSamples)
+                    {
+                        loadedBank.Bank.loadSampleData();
+                    }
+                }
+                else if (loadResult == FMOD.RESULT.ERR_EVENT_ALREADY_LOADED)
+                {
+                    // someone loaded this bank directly using the studio API
+                    // TODO: will the null bank handle be an issue
+                    loadedBank.RefCount = 2;
+                    Instance.loadedBanks.Add(bankName, loadedBank);
+                }
+                else
+                {
+                    throw new BankLoadException(bankName, loadResult);
+                }
+            }
+        }
+
         public static void UnloadBank(string bankName)
         {
             LoadedBank loadedBank;
@@ -525,6 +626,23 @@ namespace FMODUnity
                     Instance.loadedBanks.Remove(bankName);
                 }
             }
+        }
+
+        public static bool AnyBankLoading()
+        {
+            bool loading = false;
+            foreach (LoadedBank bank in Instance.loadedBanks.Values)
+            {
+                FMOD.Studio.LOADING_STATE loadingState;
+                bank.Bank.getSampleLoadingState(out loadingState);
+                loading |= (loadingState == FMOD.Studio.LOADING_STATE.LOADING);
+            }
+            return loading;
+        }
+        
+        public static void WaitForAllLoads()
+        {
+            Instance.studioSystem.flushSampleLoading();
         }
 
         public static Guid PathToGUID(string path)
@@ -667,7 +785,7 @@ namespace FMODUnity
             result = StudioSystem.getBus(path, out bus);
             if (result != FMOD.RESULT.OK)
             {
-
+                throw new BusNotFoundException(path);
             }
             return bus;
         }
@@ -679,9 +797,32 @@ namespace FMODUnity
             result = StudioSystem.getVCA(path, out vca);
             if (result != FMOD.RESULT.OK)
             {
-
+                throw new VCANotFoundException(path);
             }
             return vca;
         }
+
+        public static void PauseAllEvents(bool paused)
+        {
+            GetBus("bus:/").setPaused(paused);
+        }
+
+        public static void MuteAllEvents(bool muted)
+        {
+            GetBus("bus:/").setMute(muted);
+            }
+
+        public static bool IsInitialized
+        {
+            get
+            {
+                return instance != null && instance.studioSystem != null;
+            }
+        }
+
+	    #if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
+	    [DllImport("__Internal")]
+	    private static extern FMOD.RESULT FmodUnityNativePluginInit(IntPtr system);
+	    #endif
     }
 }
